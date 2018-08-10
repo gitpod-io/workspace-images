@@ -1,13 +1,10 @@
 FROM buildpack-deps:bionic
 
-# Replace shell with bash so we can source files
-# RUN rm /bin/sh && ln -s /bin/bash /bin/sh
-
 # Create Gitpod user
 RUN useradd -u 33333 -d /home/gitpod -ms /bin/bash -p gitpod gitpod
 RUN echo "gitpod:gitpod" | chpasswd
 
-# make sure apt is up to date
+# Install useful tools
 RUN apt-get update --fix-missing \
     && apt-get install -y \
       curl \
@@ -29,10 +26,13 @@ USER gitpod
 ENV NODE_VERSION 8
 
 RUN curl https://raw.githubusercontent.com/creationix/nvm/v0.33.11/install.sh | bash
-RUN /bin/bash -l -c "source ~/.nvm/nvm.sh && nvm install $NODE_VERSION && nvm alias default $NODE_VERSION && nvm use default"
-
-RUN npm config set python /usr/bin/python --global \
-    && npm config set python /usr/bin/python
+RUN /bin/bash -l -c "\
+       source ~/.nvm/nvm.sh \
+    && nvm install $NODE_VERSION \
+    && nvm alias default $NODE_VERSION \
+    && nvm use default \
+    && npm config set python /usr/bin/python --global \
+    && npm config set python /usr/bin/python"
 
 ENV NODE_PATH ~/.nvm/v$NODE_VERSION/lib/node_modules
 ENV PATH      ~/.nvm/versions/node/v$NODE_VERSION/bin:$PATH
