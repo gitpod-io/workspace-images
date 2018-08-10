@@ -76,12 +76,13 @@ ENV PATH $PATH:$/workspace/bin
 # Install add-apt-repository
 USER root
 
-RUN apt-get install -y software-properties-common \
+RUN apt-get update \
+  && apt-get install -y software-properties-common \
   && apt-get clean && rm -rf /var/cache/apt/* && rm -rf /var/lib/apt/lists/* && rm -rf /tmp/*
 
 RUN echo oracle-java8-installer shared/accepted-oracle-license-v1-1 select true | /usr/bin/debconf-set-selections
 RUN add-apt-repository ppa:webupd8team/java \
-  && apt-get update && \
+  && apt-get update \
   && apt-get install -y oracle-java8-installer \
   && apt-get clean && rm -rf /var/cache/apt/* && rm -rf /var/lib/apt/lists/* && rm -rf /tmp/*
 
@@ -94,22 +95,29 @@ RUN apt-get update \
 RUN ln -s /usr/bin/clangd-6.0 /usr/bin/clangd
 
 #Python
-RUN apt-get update && apt-get install -y \
-        python \
-        python-pip \
-        build-essential \
-        virtualenv \
+ENV PYENV_ROOT="/.pyenv" \
+    PATH="/.pyenv/bin:/.pyenv/shims:$PATH" \
+    LANG="en_US.UTF-8"
+
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \
+        locales make build-essential libssl-dev zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev llvm libncurses5-dev xz-utils \
+        ca-certificates curl \
+    && localedef -i en_US -c -f UTF-8 -A /usr/share/locale/locale.alias en_US.UTF-8 \
+    && curl -L https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-installer | bash \
     && apt-get clean && rm -rf /var/cache/apt/* && rm -rf /var/lib/apt/lists/* && rm -rf /tmp/*
-RUN pip install python-language-server
+
+RUN pyenv install 3.6.6 && \
+    pyenv global 3.6.6
+
+RUN pip install virtualenv 'python-language-server[all]'
 
 #Ruby
-RUN gpg --keyserver hkp://keys.gnupg.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3
+RUN gpg --verbose --keyserver hkp://pgp.mit.edu --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3
 RUN curl -sSL https://get.rvm.io | bash -s stable
 RUN usermod -a -G rvm gitpod
 
 ENV RUBY_VERSION=2.5.1
-
-# Install Ruby
 RUN /bin/bash -l -c "rvm requirements && rvm install $RUBY_VERSION && rvm use $RUBY_VERSION --default && rvm rubygems current && gem install bundler --no-doc --no-ri"
 
 ###############################################################################
