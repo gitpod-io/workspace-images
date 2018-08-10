@@ -1,37 +1,53 @@
 FROM buildpack-deps:bionic
 
 # Replace shell with bash so we can source files
-RUN rm /bin/sh && ln -s /bin/bash /bin/sh
+# RUN rm /bin/sh && ln -s /bin/bash /bin/sh
+
+# Create Gitpod user
+RUN useradd -u 33333 -d /home/gitpod -ms /bin/bash -p gitpod gitpod
+RUN echo "gitpod:gitpod" | chpasswd
 
 # make sure apt is up to date
-RUN apt-get update --fix-missing
-RUN apt-get install -y curl
-RUN apt-get install -y build-essential libssl-dev
+RUN apt-get update --fix-missing \
+    && apt-get install -y \
+      curl \
+      build-essential \
+      libssl-dev \
+      vim \
+      less \
+      man \
+      bash-completion \
+    && apt-get clean && rm -rf /var/cache/apt/* && rm -rf /var/lib/apt/lists/* && rm -rf /tmp/*
+
 
 # Install nvm with node and npm
+USER gitpod
+
 ENV NODE_VERSION 8
 
-RUN curl https://raw.githubusercontent.com/creationix/nvm/v0.33.11/install.sh | bash \
-    && source ~/.nvm/nvm.sh \
-    && nvm install $NODE_VERSION \
-    && nvm alias default $NODE_VERSION \
-    && nvm use default
+RUN curl https://raw.githubusercontent.com/creationix/nvm/v0.33.11/install.sh | bash
+RUN /bin/bash -l -c "source ~/.nvm/nvm.sh && nvm install $NODE_VERSION && nvm alias default $NODE_VERSION && nvm use default"
 
 ENV NODE_PATH ~/.nvm/v$NODE_VERSION/lib/node_modules
 ENV PATH      ~/.nvm/versions/node/v$NODE_VERSION/bin:$PATH
 
 # Install yarn
+USER root
 RUN curl https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - \
     && echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list \
-    && apt-get update && apt-get install -y --no-install-recommends yarn
+    && apt-get update \
+    && apt-get install -y --no-install-recommends yarn \
+    && apt-get clean && rm -rf /var/cache/apt/* && rm -rf /var/lib/apt/lists/* && rm -rf /tmp/*
 
 ## Install GO
+USER gitpod
 ENV GO_VERSION 1.9.2
 ENV GOROOT=/usr/local/go
 ENV PATH $PATH:${GOROOT}/bin
 ENV GOPATH=/usr/local/go-packages
 ENV PATH $PATH:${GOPATH}/bin
 
+USER root
 RUN curl -sS https://storage.googleapis.com/golang/go$GO_VERSION.linux-amd64.tar.gz | tar -C /usr/local -xzf -
 RUN go get -u -v github.com/ramya-rao-a/go-outline
 RUN go get -u -v github.com/acroca/go-symbols
@@ -51,18 +67,22 @@ RUN go get -u -v github.com/haya14busa/goplay/cmd/goplay
 RUN go get -u -v github.com/davidrjenni/reftools/cmd/fillstruct
 
 # Keep the GO packages installed under /usr/local/go-packages but install all user packages to /workspace
+USER gitpod
+
 ENV GOPATH=/workspace:${GOPATH}
 ENV PATH $PATH:$/workspace/bin
 
 # Install Java
 # Install add-apt-repository
-RUN apt-get update && apt-get install -y \
-        software-properties-common \
+USER root
+
+RUN apt-get install -y software-properties-common \
   && apt-get clean && rm -rf /var/cache/apt/* && rm -rf /var/lib/apt/lists/* && rm -rf /tmp/*
+
 RUN echo oracle-java8-installer shared/accepted-oracle-license-v1-1 select true | /usr/bin/debconf-set-selections
 RUN add-apt-repository ppa:webupd8team/java \
-  && apt-get update && apt-get install -y \
-        oracle-java8-installer \
+  && apt-get update && \
+  && apt-get install -y oracle-java8-installer \
   && apt-get clean && rm -rf /var/cache/apt/* && rm -rf /var/lib/apt/lists/* && rm -rf /tmp/*
 
 #C/C++
@@ -70,10 +90,7 @@ RUN curl https://apt.llvm.org/llvm-snapshot.gpg.key | apt-key add -
 RUN echo "deb http://apt.llvm.org/bionic/ llvm-toolchain-bionic-6.0 main" > /etc/apt/sources.list.d/llvm.list
 RUN apt-get update \
     && apt-get install -y clang-tools-6.0 \
-    && apt-get clean \
-    && rm -rf /var/cache/apt/* \
-    && rm -rf /var/lib/apt/lists/* \
-    && rm -rf /tmp/*
+    && apt-get clean && rm -rf /var/cache/apt/* && rm -rf /var/lib/apt/lists/* && rm -rf /tmp/*
 RUN ln -s /usr/bin/clangd-6.0 /usr/bin/clangd
 
 #Python
@@ -85,16 +102,19 @@ RUN apt-get update && apt-get install -y \
     && apt-get clean && rm -rf /var/cache/apt/* && rm -rf /var/lib/apt/lists/* && rm -rf /tmp/*
 RUN pip install python-language-server
 
+#Ruby
+RUN gpg --keyserver hkp://keys.gnupg.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3
+RUN curl -sSL https://get.rvm.io | bash -s stable
+RUN usermod -a -G rvm gitpod
+
+ENV RUBY_VERSION=2.5.1
+
+# Install Ruby
+RUN /bin/bash -l -c "rvm requirements && rvm install $RUBY_VERSION && rvm use $RUBY_VERSION --default && rvm rubygems current && gem install bundler --no-doc --no-ri"
+
 ###############################################################################
 # CONVENIENCE
 ###############################################################################
 # Prompt color
+USER gitpod
 RUN echo "PS1='\[\e]0;\u \w\a\]${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u\[\033[00m\] \[\033[01;34m\]\w \$ \[\033[00m\]'" >> ~/.bashrc
-
-# Install useful tools
-RUN apt-get update && apt-get install -y \
-      vim \
-      less \
-      man \
-      bash-completion \
-    && apt-get clean && rm -rf /var/cache/apt/* && rm -rf /var/lib/apt/lists/* && rm -rf /tmp/*
