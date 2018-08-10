@@ -120,6 +120,16 @@ RUN usermod -a -G rvm gitpod
 ENV RUBY_VERSION=2.5.1
 RUN /bin/bash -l -c "rvm requirements && rvm install $RUBY_VERSION && rvm use $RUBY_VERSION --default && rvm rubygems current && gem install bundler --no-doc --no-ri"
 
+# PHP
+ENV DEBIAN_FRONTEND=noninteractive
+RUN apt-get update && apt-get install -y \
+        php \
+        php-zip \
+        composer \
+        php-all-dev \
+    && apt-get clean && rm -rf /var/cache/apt/* && rm -rf /var/lib/apt/lists/* && rm -rf /tmp/*
+ # the PHP language server is installed by the theia-php-extension
+
 ###############################################################################
 # CONVENIENCE
 ###############################################################################
