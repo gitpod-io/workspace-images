@@ -17,6 +17,9 @@ RUN apt-get update --fix-missing \
       less \
       man \
       bash-completion \
+      locales make zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev llvm libncurses5-dev xz-utils \
+      ca-certificates \
+    && localedef -i en_US -c -f UTF-8 -A /usr/share/locale/locale.alias en_US.UTF-8 \
     && apt-get clean && rm -rf /var/cache/apt/* && rm -rf /var/lib/apt/lists/* && rm -rf /tmp/*
 
 
@@ -27,6 +30,9 @@ ENV NODE_VERSION 8
 
 RUN curl https://raw.githubusercontent.com/creationix/nvm/v0.33.11/install.sh | bash
 RUN /bin/bash -l -c "source ~/.nvm/nvm.sh && nvm install $NODE_VERSION && nvm alias default $NODE_VERSION && nvm use default"
+
+RUN npm config set python /usr/bin/python --global \
+    && npm config set python /usr/bin/python
 
 ENV NODE_PATH ~/.nvm/v$NODE_VERSION/lib/node_modules
 ENV PATH      ~/.nvm/versions/node/v$NODE_VERSION/bin:$PATH
@@ -70,7 +76,7 @@ RUN go get -u -v github.com/davidrjenni/reftools/cmd/fillstruct
 USER gitpod
 
 ENV GOPATH=/workspace:${GOPATH}
-ENV PATH $PATH:$/workspace/bin
+ENV PATH $PATH:/workspace/bin
 
 # Install Java
 # Install add-apt-repository
@@ -99,13 +105,7 @@ ENV PYENV_ROOT="/.pyenv" \
     PATH="/.pyenv/bin:/.pyenv/shims:$PATH" \
     LANG="en_US.UTF-8"
 
-RUN apt-get update \
-    && apt-get install -y --no-install-recommends \
-        locales make build-essential libssl-dev zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev llvm libncurses5-dev xz-utils \
-        ca-certificates curl \
-    && localedef -i en_US -c -f UTF-8 -A /usr/share/locale/locale.alias en_US.UTF-8 \
-    && curl -L https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-installer | bash \
-    && apt-get clean && rm -rf /var/cache/apt/* && rm -rf /var/lib/apt/lists/* && rm -rf /tmp/*
+RUN curl -L https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-installer | bash
 
 RUN pyenv install 3.6.6 && \
     pyenv global 3.6.6
