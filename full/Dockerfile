@@ -130,6 +130,19 @@ RUN apt-get update && apt-get install -y \
     && apt-get clean && rm -rf /var/cache/apt/* && rm -rf /var/lib/apt/lists/* && rm -rf /tmp/*
  # the PHP language server is installed by the theia-php-extension
 
+# Install .NET Core SDK
+RUN wget -q https://packages.microsoft.com/config/ubuntu/18.04/packages-microsoft-prod.deb \
+    && dpkg -i packages-microsoft-prod.deb
+
+RUN apt-get install -y apt-transport-https \
+    && apt-get update \
+    && apt-get install -y dotnet-sdk-2.1
+
+# Rust
+USER gitpod
+RUN curl https://sh.rustup.rs -sSf | sh -s -- -y
+RUN bin/bash -l -c "rustup update && rustup component add rls-preview rust-analysis rust-src"
+
 ###############################################################################
 # CONVENIENCE
 ###############################################################################
