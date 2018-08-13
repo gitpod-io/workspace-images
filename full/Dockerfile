@@ -1,12 +1,9 @@
 FROM buildpack-deps:bionic
 
-# Create Gitpod user
-RUN useradd -u 33333 -d /home/gitpod -ms /bin/bash -p gitpod gitpod
-RUN echo "gitpod:gitpod" | chpasswd
-
 # Install useful tools
 RUN apt-get update --fix-missing \
     && apt-get install -y \
+      sudo \
       curl \
       build-essential \
       libssl-dev \
@@ -19,10 +16,21 @@ RUN apt-get update --fix-missing \
     && localedef -i en_US -c -f UTF-8 -A /usr/share/locale/locale.alias en_US.UTF-8 \
     && apt-get clean && rm -rf /var/cache/apt/* && rm -rf /var/lib/apt/lists/* && rm -rf /tmp/*
 
+# Enable passwordless sudo for users under the "sudo" group
+RUN sed -i.bkp -e \
+      's/%sudo\s\+ALL=(ALL\(:ALL\)\?)\s\+ALL/%sudo ALL=NOPASSWD:ALL/g' \
+      /etc/sudoers
+# Create Gitpod user
+RUN useradd -u 33333 -d /home/gitpod -ms /bin/bash -p gitpod gitpod
+# Add sudo prev
+RUN adduser gitpod sudo
+
+RUN echo "gitpod:gitpod" | chpasswd
+
+USER gitpod
+WORKDIR /home/gitpod
 
 # Install nvm with node and npm
-USER gitpod
-
 ENV NODE_VERSION 8
 
 RUN curl https://raw.githubusercontent.com/creationix/nvm/v0.33.11/install.sh | bash
@@ -38,22 +46,21 @@ ENV NODE_PATH ~/.nvm/v$NODE_VERSION/lib/node_modules
 ENV PATH      ~/.nvm/versions/node/v$NODE_VERSION/bin:$PATH
 
 # Install yarn
-USER root
-RUN curl https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - \
-    && echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list \
-    && apt-get update \
-    && apt-get install -y --no-install-recommends yarn \
-    && apt-get clean && rm -rf /var/cache/apt/* && rm -rf /var/lib/apt/lists/* && rm -rf /tmp/*
+RUN curl -L https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
+
+RUN echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list \
+    && sudo apt-get update \
+    && sudo apt-get install -y --no-install-recommends yarn \
+    && sudo apt-get clean && sudo rm -rf /var/cache/apt/* && sudo rm -rf /var/lib/apt/lists/* && sudo rm -rf /tmp/*
 
 ## Install GO
-USER gitpod
+USER root
 ENV GO_VERSION 1.9.2
 ENV GOROOT=/usr/local/go
 ENV PATH $PATH:${GOROOT}/bin
 ENV GOPATH=/usr/local/go-packages
 ENV PATH $PATH:${GOPATH}/bin
 
-USER root
 RUN curl -sS https://storage.googleapis.com/golang/go$GO_VERSION.linux-amd64.tar.gz | tar -C /usr/local -xzf -
 RUN go get -u -v github.com/ramya-rao-a/go-outline
 RUN go get -u -v github.com/acroca/go-symbols
@@ -73,34 +80,34 @@ RUN go get -u -v github.com/haya14busa/goplay/cmd/goplay
 RUN go get -u -v github.com/davidrjenni/reftools/cmd/fillstruct
 
 # Keep the GO packages installed under /usr/local/go-packages but install all user packages to /workspace
-USER gitpod
 
 ENV GOPATH=/workspace:${GOPATH}
 ENV PATH $PATH:/workspace/bin
 
 # Install Java
 # Install add-apt-repository
-USER root
+USER gitpod
+RUN sudo apt-get update \
+  && sudo apt-get install -y software-properties-common \
+  && sudo apt-get clean && sudo rm -rf /var/cache/apt/* && sudo rm -rf /var/lib/apt/lists/* && sudo rm -rf /tmp/*
 
-RUN apt-get update \
-  && apt-get install -y software-properties-common \
-  && apt-get clean && rm -rf /var/cache/apt/* && rm -rf /var/lib/apt/lists/* && rm -rf /tmp/*
-
-RUN echo oracle-java8-installer shared/accepted-oracle-license-v1-1 select true | /usr/bin/debconf-set-selections
-RUN add-apt-repository ppa:webupd8team/java \
-  && apt-get update \
-  && apt-get install -y oracle-java8-installer \
-  && apt-get clean && rm -rf /var/cache/apt/* && rm -rf /var/lib/apt/lists/* && rm -rf /tmp/*
+RUN sudo echo oracle-java8-installer shared/accepted-oracle-license-v1-1 select true | sudo /usr/bin/debconf-set-selections
+RUN sudo add-apt-repository ppa:webupd8team/java \
+  && sudo apt-get update \
+  && sudo apt-get install -y oracle-java8-installer \
+  && sudo apt-get clean && sudo rm -rf /var/cache/apt/* && sudo rm -rf /var/lib/apt/lists/* && sudo rm -rf /tmp/*
 
 #C/C++
-RUN curl https://apt.llvm.org/llvm-snapshot.gpg.key | apt-key add -
-RUN echo "deb http://apt.llvm.org/bionic/ llvm-toolchain-bionic-6.0 main" > /etc/apt/sources.list.d/llvm.list
-RUN apt-get update \
-    && apt-get install -y clang-tools-6.0 \
-    && apt-get clean && rm -rf /var/cache/apt/* && rm -rf /var/lib/apt/lists/* && rm -rf /tmp/*
-RUN ln -s /usr/bin/clangd-6.0 /usr/bin/clangd
+USER gitpod
+RUN curl https://apt.llvm.org/llvm-snapshot.gpg.key | sudo apt-key add -
+RUN echo "deb http://apt.llvm.org/bionic/ llvm-toolchain-bionic-6.0 main" > sudo /etc/apt/sources.list.d/llvm.list
+RUN sudo apt-get update \
+    && sudo apt-get install -y clang-tools-6.0 \
+    && sudo apt-get clean && sudo rm -rf /var/cache/apt/* && sudo rm -rf /var/lib/apt/lists/* && sudo rm -rf /tmp/*
+RUN sudo ln -s /usr/bin/clangd-6.0 /usr/bin/clangd
 
 #Python
+USER root
 ENV PYENV_ROOT="/.pyenv" \
     PATH="/.pyenv/bin:/.pyenv/shims:$PATH" \
     LANG="en_US.UTF-8"
@@ -113,14 +120,17 @@ RUN pyenv install 3.6.6 && \
 RUN pip install virtualenv 'python-language-server[all]'
 
 #Ruby
+USER gitpod
 RUN gpg --verbose --keyserver hkp://pgp.mit.edu --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3
 RUN curl -sSL https://get.rvm.io | bash -s stable
-RUN usermod -a -G rvm gitpod
+RUN /bin/bash -l -c "source /home/gitpod/.rvm/scripts/rvm"
 
 ENV RUBY_VERSION=2.5.1
 RUN /bin/bash -l -c "rvm requirements && rvm install $RUBY_VERSION && rvm use $RUBY_VERSION --default && rvm rubygems current && gem install bundler --no-doc --no-ri"
 
 # PHP
+USER root
+# using root, because the following env is ignored in sudo mode
 ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update && apt-get install -y \
         php \
@@ -131,23 +141,26 @@ RUN apt-get update && apt-get install -y \
  # the PHP language server is installed by the theia-php-extension
 
 # Install .NET Core SDK
+USER root
 RUN wget -q https://packages.microsoft.com/config/ubuntu/18.04/packages-microsoft-prod.deb \
     && dpkg -i packages-microsoft-prod.deb
 
-RUN apt-get install -y apt-transport-https \
-    && apt-get update \
-    && apt-get install -y dotnet-sdk-2.1
+RUN sudo apt-get install -y apt-transport-https \
+    && sudo apt-get update \
+    && sudo apt-get install -y dotnet-sdk-2.1 \
+    && sudo apt-get clean && rm -rf /var/cache/apt/* && rm -rf /var/lib/apt/lists/* && rm -rf /tmp/*
 
-# Rust
-USER gitpod
-RUN curl https://sh.rustup.rs -sSf | sh -s -- -y
-RUN bin/bash -l -c "rustup update && rustup component add rls-preview rust-analysis rust-src"
+# # Rust
+# USER gitpod
+# RUN curl https://sh.rustup.rs -sSf | sh -s -- -y
+# RUN bin/bash -l -c "rustup update && rustup component add rls-preview rust-analysis rust-src"
 
 ###############################################################################
 # CONVENIENCE
 ###############################################################################
 # Prompt color
-USER gitpod
 RUN echo "PS1='\[\e]0;\u \w\a\]${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u\[\033[00m\] \[\033[01;34m\]\w \$ \[\033[00m\]'" >> ~/.bashrc
 
+# remove sudo
+RUN sudo deluser gitpod sudo
 USER root
