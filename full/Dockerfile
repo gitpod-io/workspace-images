@@ -150,7 +150,9 @@ RUN apt-get update \
 # Install .NET Core SDK
 # USER root
 RUN wget -q https://packages.microsoft.com/config/ubuntu/18.04/packages-microsoft-prod.deb \
-    && dpkg -i packages-microsoft-prod.deb
+    && dpkg -i packages-microsoft-prod.deb \
+    && rm packages-microsoft-prod.deb \
+    && rm .wget-hsts
 
 RUN apt-get install -y apt-transport-https \
     && apt-get update \
