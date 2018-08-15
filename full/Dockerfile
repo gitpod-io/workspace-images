@@ -141,9 +141,23 @@ ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update \
     && apt-get install -y \
         php \
-        php-zip \
+        apache2 \
         composer \
         php-all-dev \
+        php-mysql \
+        php-pgsql \
+        php-xml \
+        php-gd \
+        php-json \
+        php-curl \
+        php-mbstring \
+        php-sqlite3 \
+        php-tokenizer \
+        php-ctype \
+        php-date \
+        php-net-ftp \
+        php-gettext \
+        php-zip \
     && apt-get clean && rm -rf /var/cache/apt/* && rm -rf /var/lib/apt/lists/* && rm -rf /tmp/*
  # the PHP language server is installed by the theia-php-extension
 
