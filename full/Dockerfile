@@ -36,6 +36,8 @@ ENV HOME /home/gitpod
 ###############################################################################
 # Prompt color
 RUN echo "PS1='\[\e]0;\u \w\a\]${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u\[\033[00m\] \[\033[01;34m\]\w \$ \[\033[00m\]'" >> ~/.bashrc
+
+
 #Python
 ENV PYENV_ROOT="$HOME/.pyenv" \
     PATH="$HOME/.pyenv/bin:$HOME/.pyenv/shims:$PATH" \
@@ -117,7 +119,7 @@ RUN go get -u -v github.com/davidrjenni/reftools/cmd/fillstruct
 ENV GOPATH=/workspace:${GOPATH}
 ENV PATH $PATH:/workspace/bin
 
-# Install Java
+# Install Java & Maven
 RUN apt-get update \
   && apt-get install -y software-properties-common \
   && apt-get clean && rm -rf /var/cache/apt/* && rm -rf /var/lib/apt/lists/* && rm -rf /tmp/*
@@ -125,7 +127,9 @@ RUN apt-get update \
 RUN echo oracle-java8-installer shared/accepted-oracle-license-v1-1 select true | /usr/bin/debconf-set-selections
 RUN add-apt-repository ppa:webupd8team/java \
   && apt-get update \
-  && apt-get install -y oracle-java8-installer \
+  && apt-get install -y \
+        oracle-java8-installer \
+        maven \
   && apt-get clean && rm -rf /var/cache/apt/* && rm -rf /var/lib/apt/lists/* && rm -rf /tmp/*
 
 #C/C++
