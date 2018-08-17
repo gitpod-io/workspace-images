@@ -148,6 +148,7 @@ RUN apt-get update \
         apache2 \
         composer \
         php-all-dev \
+        php-intl \
         php-mysql \
         php-pgsql \
         php-xml \
