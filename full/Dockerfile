@@ -76,6 +76,7 @@ RUN /bin/bash -l -c "\
     && nvm install $NODE_VERSION \
     && nvm alias default $NODE_VERSION \
     && nvm use default \
+    && npm install -g npm@latest \
     && npm config set python /usr/bin/python --global \
     && npm config set python /usr/bin/python"
 
