@@ -8,6 +8,7 @@ RUN apt-get update --fix-missing \
       build-essential \
       libssl-dev \
       vim \
+      nano \
       less \
       man \
       bash-completion \
@@ -136,7 +137,10 @@ RUN add-apt-repository ppa:webupd8team/java \
 RUN curl https://apt.llvm.org/llvm-snapshot.gpg.key | apt-key add -
 RUN echo "deb http://apt.llvm.org/bionic/ llvm-toolchain-bionic-6.0 main" > /etc/apt/sources.list.d/llvm.list
 RUN apt-get update \
-    && apt-get install -y clang-tools-6.0 \
+    && apt-get install -y \
+        clang-tools-6.0 \
+        cmake \
+        clang-format \
     && apt-get clean && rm -rf /var/cache/apt/* && rm -rf /var/lib/apt/lists/* && rm -rf /tmp/*
 RUN ln -s /usr/bin/clangd-6.0 /usr/bin/clangd
 
