@@ -131,6 +131,7 @@ RUN add-apt-repository ppa:webupd8team/java \
   && apt-get install -y \
         oracle-java8-installer \
         maven \
+        gradle \
   && apt-get clean && rm -rf /var/cache/apt/* && rm -rf /var/lib/apt/lists/* && rm -rf /tmp/*
 
 #C/C++
