@@ -53,7 +53,7 @@ RUN echo "export PATH=\"${PYENV_ROOT}/bin:\$PATH\"" >> ~/.bashrc\
 RUN pyenv install 3.6.6 && \
     pyenv global 3.6.6
 
-RUN pip install virtualenv 'python-language-server[all]'
+RUN pip install virtualenv 'python-language-server[all]'==0.19.0
 
 #Ruby
 RUN gpg --verbose --keyserver hkp://pgp.mit.edu --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3
