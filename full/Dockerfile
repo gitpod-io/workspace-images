@@ -5,6 +5,7 @@ RUN apt-get update --fix-missing \
     && apt-get install -y \
       sudo \
       curl \
+      libcurl3 \
       build-essential \
       libssl-dev \
       vim \
