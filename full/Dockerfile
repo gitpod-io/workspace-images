@@ -197,3 +197,8 @@ RUN apt-get install -y apt-transport-https \
     && apt-get update \
     && apt-get install -y dotnet-sdk-2.1 \
     && apt-get clean && rm -rf /var/cache/apt/* && rm -rf /var/lib/apt/lists/* && rm -rf /tmp/*
+
+# Install Xvfb
+RUN apt-get update \
+    && apt-get install -y xvfb x11vnc xterm \
+    && apt-get clean && rm -rf /var/cache/apt/* && rm -rf /var/lib/apt/lists/* && rm -rf /tmp/*
