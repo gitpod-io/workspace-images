@@ -77,13 +77,11 @@ RUN /bin/bash -l -c "\
     && nvm alias default $NODE_VERSION \
     && nvm use default \
     && npm config set python /usr/bin/python --global \
-    && npm config set python /usr/bin/python"
+    && npm config set python /usr/bin/python \
+    && npm install -g typescript"
 
 ENV NODE_PATH ~/.nvm/v$NODE_VERSION/lib/node_modules
 ENV PATH      ~/.nvm/versions/node/v$NODE_VERSION/bin:$PATH
-
-# Install JS/TS
-RUN npm install -g typescript
 
 # Install yarn
 USER root
