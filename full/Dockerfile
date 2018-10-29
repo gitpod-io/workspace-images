@@ -82,6 +82,9 @@ RUN /bin/bash -l -c "\
 ENV NODE_PATH ~/.nvm/v$NODE_VERSION/lib/node_modules
 ENV PATH      ~/.nvm/versions/node/v$NODE_VERSION/bin:$PATH
 
+# Install JS/TS
+RUN npm install -g typescript
+
 # Install yarn
 USER root
 RUN curl -L https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
