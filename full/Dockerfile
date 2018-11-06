@@ -94,7 +94,7 @@ RUN echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources
     && echo Installing Yarn newer than 1.10.1
 
 ## Install GO
-ENV GO_VERSION 1.9.2
+ENV GO_VERSION 1.11.2
 ENV GOROOT=/usr/local/go
 ENV PATH $PATH:${GOROOT}/bin
 ENV GOPATH=/usr/local/go-packages
