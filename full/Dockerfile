@@ -1,4 +1,4 @@
-FROM buildpack-deps:bionic
+FROM buildpack-deps:cosmic
 
 # Install useful tools
 RUN apt-get update --fix-missing \
