@@ -11,6 +11,7 @@ RUN apt-get update --fix-missing \
       nano \
       less \
       man \
+      asciidoctor \
       bash-completion \
       locales make zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev llvm libncurses5-dev xz-utils \
       ca-certificates \
