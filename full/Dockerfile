@@ -84,24 +84,14 @@ RUN /bin/bash -l -c "\
 ENV NODE_PATH ~/.nvm/v$NODE_VERSION/lib/node_modules
 ENV PATH      ~/.nvm/versions/node/v$NODE_VERSION/bin:$PATH
 
-# Install yarn
-USER root
-RUN curl -L https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
-
-RUN echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list \
-    && apt-get update \
-    && apt-get install -y --no-install-recommends yarn \
-    && apt-get clean && rm -rf /var/cache/apt/* && rm -rf /var/lib/apt/lists/* && rm -rf /tmp/* \
-    && echo Installing Yarn newer than 1.10.1
-
 ## Install GO
 ENV GO_VERSION 1.11.2
-ENV GOROOT=/usr/local/go
+ENV GOROOT=${HOME}/go
 ENV PATH $PATH:${GOROOT}/bin
-ENV GOPATH=/usr/local/go-packages
+ENV GOPATH=${HOME}/go-packages
 ENV PATH $PATH:${GOPATH}/bin
 
-RUN curl -sS https://storage.googleapis.com/golang/go$GO_VERSION.linux-amd64.tar.gz | tar -C /usr/local -xzf -
+RUN curl -sS https://storage.googleapis.com/golang/go$GO_VERSION.linux-amd64.tar.gz | tar -C ${HOME} -xzf -
 RUN go get -u -v github.com/ramya-rao-a/go-outline
 RUN go get -u -v github.com/acroca/go-symbols
 RUN go get -u -v github.com/nsf/gocode
@@ -122,6 +112,16 @@ RUN go get -u -v github.com/davidrjenni/reftools/cmd/fillstruct
 # Keep the GO packages installed under /usr/local/go-packages but install all user packages to /workspace
 ENV GOPATH=/workspace:${GOPATH}
 ENV PATH $PATH:/workspace/bin
+
+# Install yarn
+USER root
+RUN curl -L https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
+
+RUN echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list \
+    && apt-get update \
+    && apt-get install -y --no-install-recommends yarn \
+    && apt-get clean && rm -rf /var/cache/apt/* && rm -rf /var/lib/apt/lists/* && rm -rf /tmp/* \
+    && echo Installing Yarn newer than 1.10.1
 
 # Install Java & Maven
 RUN apt-get update \
