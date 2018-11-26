@@ -1,7 +1,8 @@
 FROM buildpack-deps:cosmic
 
 # Install useful tools
-RUN apt-get update --fix-missing \
+RUN yes | unminimize \
+    && apt-get update --fix-missing \
     && apt-get install -y \
       sudo \
       curl \
