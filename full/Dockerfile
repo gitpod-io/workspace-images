@@ -189,15 +189,3 @@ RUN apt-get update \
         php-zip \
     && apt-get clean && rm -rf /var/cache/apt/* && rm -rf /var/lib/apt/lists/* && rm -rf /tmp/*
  # the PHP language server is installed by the theia-php-extension
-
-# Install .NET Core SDK
-# USER root
-RUN wget -q https://packages.microsoft.com/config/ubuntu/18.04/packages-microsoft-prod.deb \
-    && dpkg -i packages-microsoft-prod.deb \
-    && rm packages-microsoft-prod.deb \
-    && rm .wget-hsts
-
-RUN apt-get install -y apt-transport-https \
-    && apt-get update \
-    && apt-get install -y dotnet-sdk-2.1 \
-    && apt-get clean && rm -rf /var/cache/apt/* && rm -rf /var/lib/apt/lists/* && rm -rf /tmp/*
