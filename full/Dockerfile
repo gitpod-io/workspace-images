@@ -70,7 +70,7 @@ RUN $HOME/.cargo/bin/rustup update \
     && $HOME/.cargo/bin/rustup component add rls-preview rust-analysis rust-src
 
 # Install nvm with node and npm
-ENV NODE_VERSION 8
+ENV NODE_VERSION 10
 
 RUN curl https://raw.githubusercontent.com/creationix/nvm/v0.33.11/install.sh | bash
 RUN /bin/bash -l -c "\
