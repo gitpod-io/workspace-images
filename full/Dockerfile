@@ -61,7 +61,7 @@ RUN pip install virtualenv 'python-language-server[all]'==0.19.0
 RUN gpg --verbose --keyserver hkp://pgp.mit.edu --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3
 RUN curl -sSL https://get.rvm.io | bash -s stable
 
-ENV RUBY_VERSION=2.5.1
+ENV RUBY_VERSION=2.5.3
 RUN /bin/bash -l -c "rvm requirements && rvm install $RUBY_VERSION && rvm use $RUBY_VERSION --default && rvm rubygems current && gem install bundler --no-doc --no-ri"
 
 # Rust
