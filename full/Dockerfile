@@ -67,7 +67,8 @@ RUN /bin/bash -l -c "rvm requirements && rvm install $RUBY_VERSION && rvm use $R
 # Rust
 RUN curl https://sh.rustup.rs -sSf | sh -s -- -y
 RUN $HOME/.cargo/bin/rustup update \
-    && $HOME/.cargo/bin/rustup component add rls-preview rust-analysis rust-src
+    && $HOME/.cargo/bin/rustup component add rls-preview rust-analysis rust-src \
+    && $HOME/.cargo/bin/rustup completions bash | sudo tee /etc/bash_completion.d/rustup.bash-completion > /dev/null
 
 # Install nvm with node and npm
 ENV NODE_VERSION 8
