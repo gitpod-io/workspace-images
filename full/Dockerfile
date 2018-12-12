@@ -1,192 +1,162 @@
 FROM buildpack-deps:cosmic
 
-# Install useful tools
+### base ###
 RUN yes | unminimize \
-    && apt-get update --fix-missing \
-    && apt-get install -y \
-      sudo \
-      curl \
-      build-essential \
-      libssl-dev \
-      vim \
-      nano \
-      less \
-      man \
-      asciidoctor \
-      bash-completion \
-      locales make zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev llvm libncurses5-dev xz-utils \
-      ca-certificates \
-    && localedef -i en_US -c -f UTF-8 -A /usr/share/locale/locale.alias en_US.UTF-8 \
-    && apt-get clean && rm -rf /var/cache/apt/* && rm -rf /var/lib/apt/lists/* && rm -rf /tmp/*
+    && apt-get install -yq \
+        asciidoctor \
+        bash-completion \
+        build-essential \
+        jq \
+        less \
+        llvm \
+        locales \
+        man-db \
+        nano \
+        software-properties-common \
+        sudo \
+        vim \
+    && locale-gen en_US.UTF-8 \
+    && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/*
+ENV LANG=en_US.UTF-8
 
-# Enable passwordless sudo for users under the "sudo" group
-RUN sed -i.bkp -e \
-      's/%sudo\s\+ALL=(ALL\(:ALL\)\?)\s\+ALL/%sudo ALL=NOPASSWD:ALL/g' \
-      /etc/sudoers
-# Create Gitpod user
-RUN useradd -u 33333 -d /home/gitpod -ms /bin/bash -p gitpod gitpod
-# Add sudo prev
-RUN adduser gitpod sudo
+### Gitpod user ###
+# '-l': see https://docs.docker.com/develop/develop-images/dockerfile_best-practices/#user
+RUN useradd -l -u 33333 -G sudo -md /home/gitpod -s /bin/bash -p gitpod gitpod \
+    # passwordless sudo for users in the 'sudo' group
+    && sed -i.bkp -e 's/%sudo\s\+ALL=(ALL\(:ALL\)\?)\s\+ALL/%sudo ALL=NOPASSWD:ALL/g' /etc/sudoers
+ENV HOME=/home/gitpod
+WORKDIR $HOME
+# custom Bash prompt
+RUN { echo && echo "PS1='\[\e]0;\u \w\a\]\[\033[01;32m\]\u\[\033[00m\] \[\033[01;34m\]\w\[\033[00m\] \\\$ '" ; } >> .bashrc
 
-RUN echo "gitpod:gitpod" | chpasswd
-
-USER gitpod
-WORKDIR /home/gitpod
-ENV HOME /home/gitpod
-
-###############################################################################
-# CONVENIENCE
-###############################################################################
-# Prompt color
-RUN echo "PS1='\[\e]0;\u \w\a\]${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u\[\033[00m\] \[\033[01;34m\]\w \$ \[\033[00m\]'" >> ~/.bashrc
-
-
-#Python
-ENV PYENV_ROOT="$HOME/.pyenv" \
-    PATH="$HOME/.pyenv/bin:$HOME/.pyenv/shims:$PATH" \
-    LANG="en_US.UTF-8"
-
-RUN curl -L https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-installer | bash
-
-RUN echo "export PATH=\"${PYENV_ROOT}/bin:\$PATH\"" >> ~/.bashrc\
-    && echo "eval \"\$(pyenv init -)\"" >> ~/.bashrc\
-    && echo "eval \"\$(pyenv virtualenv-init -)\"" >> ~/.bashrc
-
-RUN pyenv install 3.6.6 && \
-    pyenv global 3.6.6
-
-RUN pip install virtualenv 'python-language-server[all]'==0.19.0
-
-#Ruby
-RUN gpg --verbose --keyserver hkp://pgp.mit.edu --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3
-RUN curl -sSL https://get.rvm.io | bash -s stable
-
-ENV RUBY_VERSION=2.5.1
-RUN /bin/bash -l -c "rvm requirements && rvm install $RUBY_VERSION && rvm use $RUBY_VERSION --default && rvm rubygems current && gem install bundler --no-doc --no-ri"
-
-# Rust
-RUN curl https://sh.rustup.rs -sSf | sh -s -- -y
-RUN $HOME/.cargo/bin/rustup update \
-    && $HOME/.cargo/bin/rustup component add rls-preview rust-analysis rust-src \
-    && $HOME/.cargo/bin/rustup completions bash | sudo tee /etc/bash_completion.d/rustup.bash-completion > /dev/null
-
-# Install nvm with node and npm
-ENV NODE_VERSION 8
-
-RUN curl https://raw.githubusercontent.com/creationix/nvm/v0.33.11/install.sh | bash
-RUN /bin/bash -l -c "\
-       source $HOME/.nvm/nvm.sh \
-    && nvm install $NODE_VERSION \
-    && nvm alias default $NODE_VERSION \
-    && nvm use default \
-    && npm config set python /usr/bin/python --global \
-    && npm config set python /usr/bin/python \
-    && npm install -g typescript"
-
-ENV NODE_PATH ~/.nvm/v$NODE_VERSION/lib/node_modules
-ENV PATH      ~/.nvm/versions/node/v$NODE_VERSION/bin:$PATH
-
-## Install GO
-ENV GO_VERSION 1.11.2
-ENV GOROOT=${HOME}/go
-ENV PATH $PATH:${GOROOT}/bin
-ENV GOPATH=${HOME}/go-packages
-ENV PATH $PATH:${GOPATH}/bin
-
-RUN curl -sS https://storage.googleapis.com/golang/go$GO_VERSION.linux-amd64.tar.gz | tar -C ${HOME} -xzf -
-RUN go get -u -v github.com/ramya-rao-a/go-outline
-RUN go get -u -v github.com/acroca/go-symbols
-RUN go get -u -v github.com/nsf/gocode
-RUN go get -u -v github.com/rogpeppe/godef
-RUN go get -u -v golang.org/x/tools/cmd/godoc
-RUN go get -u -v github.com/zmb3/gogetdoc
-RUN go get -u -v golang.org/x/lint/golint
-RUN go get -u -v github.com/fatih/gomodifytags
-RUN go get -u -v github.com/uudashr/gopkgs/cmd/gopkgs
-RUN go get -u -v golang.org/x/tools/cmd/gorename
-RUN go get -u -v sourcegraph.com/sqs/goreturns
-RUN go get -u -v github.com/cweill/gotests/...
-RUN go get -u -v golang.org/x/tools/cmd/guru
-RUN go get -u -v github.com/josharian/impl
-RUN go get -u -v github.com/haya14busa/goplay/cmd/goplay
-RUN go get -u -v github.com/davidrjenni/reftools/cmd/fillstruct
-
-# Keep the GO packages installed under /usr/local/go-packages but install all user packages to /workspace
-ENV GOPATH=/workspace:${GOPATH}
-ENV PATH $PATH:/workspace/bin
-
-# Install yarn
-USER root
-RUN curl -L https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
-
-RUN echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list \
-    && apt-get update \
-    && apt-get install -y --no-install-recommends yarn \
-    && apt-get clean && rm -rf /var/cache/apt/* && rm -rf /var/lib/apt/lists/* && rm -rf /tmp/* \
-    && echo Installing Yarn newer than 1.10.1
-
-# Install Java & Maven
-RUN apt-get update \
-  && apt-get install -y software-properties-common \
-  && apt-get clean && rm -rf /var/cache/apt/* && rm -rf /var/lib/apt/lists/* && rm -rf /tmp/*
-
-RUN echo oracle-java8-installer shared/accepted-oracle-license-v1-1 select true | /usr/bin/debconf-set-selections
-RUN add-apt-repository ppa:webupd8team/java \
-  && apt-get update \
-  && apt-get install -y \
-        oracle-java8-installer \
-        gradle \
-  && apt-get clean && rm -rf /var/cache/apt/* && rm -rf /var/lib/apt/lists/* && rm -rf /tmp/*
-
-# Maven
-ARG MAVEN_VERSION=3.5.4
-ARG USER_HOME_DIR="$HOME"
-ARG SHA=ce50b1c91364cb77efe3776f756a6d92b76d9038b0a0782f7d53acf1e997a14d
-ARG BASE_URL=https://apache.osuosl.org/maven/maven-3/${MAVEN_VERSION}/binaries
-
-RUN mkdir -p /usr/share/maven /usr/share/maven/ref \
-  && curl -fsSL -o /tmp/apache-maven.tar.gz ${BASE_URL}/apache-maven-${MAVEN_VERSION}-bin.tar.gz \
-  && echo "${SHA}  /tmp/apache-maven.tar.gz" | sha256sum -c - \
-  && tar -xzf /tmp/apache-maven.tar.gz -C /usr/share/maven --strip-components=1 \
-  && rm -f /tmp/apache-maven.tar.gz \
-  && ln -s /usr/share/maven/bin/mvn /usr/bin/mvn
-ENV MAVEN_HOME /usr/share/maven
-ENV MAVEN_CONFIG "$USER_HOME_DIR/.m2"
-ENV PATH $PATH:${MAVEN_HOME}/bin
-
-#C/C++
-RUN curl https://apt.llvm.org/llvm-snapshot.gpg.key | apt-key add -
-RUN echo "deb http://apt.llvm.org/bionic/ llvm-toolchain-bionic-6.0 main" > /etc/apt/sources.list.d/llvm.list
-RUN apt-get update \
-    && apt-get install -y \
+### C/C++ ###
+RUN curl -fsSL https://apt.llvm.org/llvm-snapshot.gpg.key | apt-key add - \
+    && apt-add-repository -yu "deb http://apt.llvm.org/cosmic/ llvm-toolchain-cosmic-6.0 main" \
+    && apt-get install -yq \
+        clang-format-6.0 \
         clang-tools-6.0 \
         cmake \
-        clang-format \
-    && apt-get clean && rm -rf /var/cache/apt/* && rm -rf /var/lib/apt/lists/* && rm -rf /tmp/*
-RUN ln -s /usr/bin/clangd-6.0 /usr/bin/clangd
+    && ln -s /usr/bin/clangd-6.0 /usr/bin/clangd \
+    && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/*
 
-# PHP
-ENV DEBIAN_FRONTEND=noninteractive
-RUN apt-get update \
-    && apt-get install -y \
-        php \
-        apache2 \
+### Java & Maven ###
+RUN add-apt-repository -yu ppa:webupd8team/java \
+    && echo oracle-java8-installer shared/accepted-oracle-license-v1-1 select true | debconf-set-selections \
+    && apt-get install -yq \
+        gradle \
+        oracle-java8-installer \
+    && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/*
+
+ARG MAVEN_VERSION=3.5.4
+ENV MAVEN_HOME=/usr/share/maven \
+    MAVEN_CONFIG=$HOME/.m2
+ENV PATH=$MAVEN_HOME/bin:$PATH
+RUN mkdir -p $MAVEN_HOME \
+    && curl -fsSL https://apache.osuosl.org/maven/maven-3/$MAVEN_VERSION/binaries/apache-maven-$MAVEN_VERSION-bin.tar.gz \
+        | tar -xzvC $MAVEN_HOME --strip-components=1
+
+### PHP ###
+RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -yq \
         composer \
+        php \
         php-all-dev \
-        php-intl \
-        php-mysql \
-        php-pgsql \
-        php-xml \
-        php-gd \
-        php-json \
+        php-ctype \
         php-curl \
+        php-date \
+        php-gd \
+        php-gettext \
+        php-intl \
+        php-json \
         php-mbstring \
+        php-mysql \
+        php-net-ftp \
+        php-pgsql \
         php-sqlite3 \
         php-tokenizer \
-        php-ctype \
-        php-date \
-        php-net-ftp \
-        php-gettext \
+        php-xml \
         php-zip \
-    && apt-get clean && rm -rf /var/cache/apt/* && rm -rf /var/lib/apt/lists/* && rm -rf /tmp/*
- # the PHP language server is installed by the theia-php-extension
+    && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/*
+# PHP language server is installed by theia-php-extension
+
+### Yarn ###
+RUN curl -fsSL https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - \
+    && apt-add-repository -yu "deb https://dl.yarnpkg.com/debian/ stable main" \
+    && apt-get install --no-install-recommends -yq yarn=1.12.3-1 \
+    && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/*
+
+### Gitpod user (2) ###
+USER gitpod
+# use sudo so that user does not get sudo usage info on (the first) login
+RUN sudo echo "Running 'sudo' for Gitpod: success"
+
+### Go ###
+ENV GO_VERSION=1.11.2 \
+    GOPATH=$HOME/go-packages \
+    GOROOT=$HOME/go
+ENV PATH=$GOROOT/bin:$GOPATH/bin:$PATH
+RUN curl -fsSL https://storage.googleapis.com/golang/go$GO_VERSION.linux-amd64.tar.gz | tar -xzv \
+    && go get -u -v \
+        github.com/acroca/go-symbols \
+        github.com/cweill/gotests/... \
+        github.com/davidrjenni/reftools/cmd/fillstruct \
+        github.com/fatih/gomodifytags \
+        github.com/haya14busa/goplay/cmd/goplay \
+        github.com/josharian/impl \
+        github.com/nsf/gocode \
+        github.com/ramya-rao-a/go-outline \
+        github.com/rogpeppe/godef \
+        github.com/uudashr/gopkgs/cmd/gopkgs \
+        github.com/zmb3/gogetdoc \
+        golang.org/x/lint/golint \
+        golang.org/x/tools/cmd/godoc \
+        golang.org/x/tools/cmd/gorename \
+        golang.org/x/tools/cmd/guru \
+        sourcegraph.com/sqs/goreturns
+# user Go packages
+ENV GOPATH=/workspace:$GOPATH \
+    PATH=/workspace/bin:$PATH
+
+### Node.js ###
+ARG NODE_VERSION=8.14.0
+ENV PATH=/home/gitpod/.nvm/versions/node/v8.14.0/bin:$PATH
+RUN curl -fsSL https://raw.githubusercontent.com/creationix/nvm/v0.33.11/install.sh | bash \
+    && bash -c ". .nvm/nvm.sh \
+        && npm config set python /usr/bin/python --global \
+        && npm config set python /usr/bin/python \
+        && npm install -g typescript"
+
+### Python ###
+ARG PYENV_ROOT=$HOME/.pyenv
+RUN curl -fsSL https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-installer | bash \
+    && { echo; \
+        echo PATH=$PYENV_ROOT/bin:'$PATH'; \
+        echo 'eval "$(pyenv init -)"'; \
+        echo 'eval "$(pyenv virtualenv-init -)"'; } >> .bashrc \
+    && $PYENV_ROOT/bin/pyenv install 3.6.6 \
+    && $PYENV_ROOT/bin/pyenv global 3.6.6 \
+    && $PYENV_ROOT/shims/pip install virtualenv python-language-server[all]==0.19.0 \
+    && rm -rf /tmp/*
+
+### Ruby ###
+ENV RUBY_VERSION=2.5.3
+RUN gpg --keyserver hkp://keys.gnupg.net \
+        --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3 7D2BAF1CF37B13E2069D6956105BD0E739499BDB \
+    && curl -fsSL https://get.rvm.io | bash -s stable \
+    && bash -lc " \
+        rvm requirements \
+        && rvm install $RUBY_VERSION \
+        && rvm use $RUBY_VERSION --default \
+        && rvm rubygems current \
+        && gem install bundler --no-doc --no-ri"
+
+### Rust ###
+RUN curl -fsSL https://sh.rustup.rs | sh -s -- -y \
+    && .cargo/bin/rustup update \
+    && .cargo/bin/rustup component add rls-preview rust-analysis rust-src \
+    && .cargo/bin/rustup completions bash | sudo tee /etc/bash_completion.d/rustup.bash-completion > /dev/null
+
+### checks ###
+# no root-owned files in the home directory
+RUN notOwnedFile=$(find . -not "(" -user gitpod -and -group gitpod ")" -print -quit) \
+    && { [ -z "$notOwnedFile" ] \
+        || { echo "Error: not all files/dirs in $HOME are owned by 'gitpod' user & group"; exit 1; } }
