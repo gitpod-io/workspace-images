@@ -162,6 +162,8 @@ RUN apt-get update \
         clang-tools-6.0 \
         cmake \
         clang-format \
+        gdb \
+        lldb \
     && apt-get clean && rm -rf /var/cache/apt/* && rm -rf /var/lib/apt/lists/* && rm -rf /tmp/*
 RUN ln -s /usr/bin/clangd-6.0 /usr/bin/clangd
 
