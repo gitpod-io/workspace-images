@@ -126,15 +126,14 @@ RUN curl -fsSL https://raw.githubusercontent.com/creationix/nvm/v0.33.11/install
         && npm install -g typescript"
 
 ### Python ###
-ARG PYENV_ROOT=$HOME/.pyenv
+ENV PATH=$HOME/.pyenv/bin:$HOME/.pyenv/shims:$PATH
 RUN curl -fsSL https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-installer | bash \
     && { echo; \
-        echo PATH=$PYENV_ROOT/bin:'$PATH'; \
         echo 'eval "$(pyenv init -)"'; \
         echo 'eval "$(pyenv virtualenv-init -)"'; } >> .bashrc \
-    && $PYENV_ROOT/bin/pyenv install 3.6.6 \
-    && $PYENV_ROOT/bin/pyenv global 3.6.6 \
-    && $PYENV_ROOT/shims/pip install virtualenv python-language-server[all]==0.19.0 \
+    && pyenv install 3.6.6 \
+    && pyenv global 3.6.6 \
+    && pip install virtualenv python-language-server[all]==0.19.0 \
     && rm -rf /tmp/*
 
 ### Ruby ###
