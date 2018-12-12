@@ -2,8 +2,8 @@ FROM gitpod/workspace-full:latest
 
 # Install Xvfb
 RUN apt-get update \
-    && apt-get install -y xvfb x11vnc xterm \
-    && apt-get clean && rm -rf /var/cache/apt/* && rm -rf /var/lib/apt/lists/* && rm -rf /tmp/*
+    && apt-get install -yq xvfb x11vnc xterm \
+    && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/*
 
 # Install novnc
 RUN git clone https://github.com/novnc/noVNC.git /opt/novnc \
