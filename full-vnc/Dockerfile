@@ -1,5 +1,7 @@
 FROM gitpod/workspace-full:latest
 
+USER root
+
 # Install Xvfb
 RUN apt-get update \
     && apt-get install -yq xvfb x11vnc xterm \
@@ -19,3 +21,9 @@ RUN chmod +x /usr/bin/start-vnc-session.sh
 # server is running on screen 0, and if not starts Xvfb, x11vnc and novnc.
 RUN echo "[ ! -e /tmp/.X0-lock ] && (/usr/bin/start-vnc-session.sh 0 &> /tmp/display-0.log)" >> ~/.bashrc
 RUN echo "export DISPLAY=:0" >> ~/.bashrc
+
+### checks ###
+# no root-owned files in the home directory
+RUN notOwnedFile=$(find . -not "(" -user gitpod -and -group gitpod ")" -print -quit) \
+    && { [ -z "$notOwnedFile" ] \
+        || { echo "Error: not all files/dirs in $HOME are owned by 'gitpod' user & group"; exit 1; } }
