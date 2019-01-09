@@ -6,6 +6,7 @@ RUN yes | unminimize \
         asciidoctor \
         bash-completion \
         build-essential \
+        htop \
         jq \
         less \
         llvm \
