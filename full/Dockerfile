@@ -145,7 +145,7 @@ RUN gpg --keyserver hkp://keys.gnupg.net \
         && rvm install $RUBY_VERSION \
         && rvm use $RUBY_VERSION --default \
         && rvm rubygems current \
-        && gem install bundler --no-doc --no-ri"
+        && gem install bundler --no-document"
 
 ### Rust ###
 RUN curl -fsSL https://sh.rustup.rs | sh -s -- -y \
