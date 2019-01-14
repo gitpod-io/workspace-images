@@ -133,7 +133,7 @@ RUN curl -fsSL https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-ins
         echo 'eval "$(pyenv virtualenv-init -)"'; } >> .bashrc \
     && pyenv install 3.6.6 \
     && pyenv global 3.6.6 \
-    && pip install virtualenv python-language-server[all]==0.19.0 \
+    && pip install virtualenv pipenv python-language-server[all]==0.19.0 \
     && rm -rf /tmp/*
 
 ### Ruby ###
