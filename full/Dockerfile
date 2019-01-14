@@ -134,7 +134,8 @@ RUN curl -fsSL https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-ins
     && pyenv install 3.6.6 \
     && pyenv global 3.6.6 \
     && pip install virtualenv pipenv python-language-server[all]==0.19.0 \
-    && rm -rf /tmp/*
+    && sudo apt-get update && sudo apt-get install -yq python-dev \
+    && sudo apt-get clean && sudo rm -rf /var/lib/apt/lists/* /tmp/*
 
 ### Ruby ###
 ENV RUBY_VERSION=2.6.0
