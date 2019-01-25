@@ -21,11 +21,3 @@ RUN cd /home/gitpod && wget -qO flutter_sdk.tar.xz https://storage.googleapis.co
     unzip android_studio.zip && rm -f android_studio.zip && \
     wget --output-document=android-sdk.tgz --quiet http://dl.google.com/android/android-sdk_r26.1.1-linux.tgz && tar -xvf android-sdk.tgz && rm android-sdk.tgz && \
     echo y | android update sdk --all --force --no-ui --filter platform-tools,build-tools-26.1.1,android-26,sys-img-armeabi-v7a-android-26 && \
-    echo "no" | android create avd \
-                --name gitpod \
-                --target android-26 \
-                --abi armeabi-v7a && \
-    for f in "${HOME}/.android" "${HOME}/android-sdk-linux"; do \
-      sudo chgrp -R 0 ${f} && \
-      sudo chmod -R g+rwX ${f}; \
-    done;
