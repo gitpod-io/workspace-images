@@ -6,8 +6,8 @@ ENV ANDROID_HOME=/home/gitpod/android-sdk-linux \
 
 USER root
 
-RUN dpkg --add-architecture i386 && \
-    apt-get -y install gradle adb libc6:i386 libncurses5:i386 libstdc++6:i386 lib32z1 libbz2-1.0:i386 && \
+RUN add-apt-repository universe && \
+    apt-get -y install gradle adb && \
     apt-get clean && \
     apt-get -y autoremove && \
     apt-get -y clean && \
