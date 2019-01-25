@@ -6,8 +6,7 @@ ENV ANDROID_HOME=/home/gitpod/android-sdk-linux \
 
 USER root
 
-RUN add-apt-repository universe && \
-    apt-get -y install gradle adb && \
+RUN apt-get -y install gradle android-tools-adb android-tools-fastboot && \
     apt-get clean && \
     apt-get -y autoremove && \
     apt-get -y clean && \
