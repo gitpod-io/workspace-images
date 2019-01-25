@@ -1,0 +1,93 @@
+version: 2.0
+
+jobs:
+  workspace-full:
+    docker:
+      - image: docker:stable
+    steps:
+      - checkout
+      - setup_remote_docker
+      - run:
+          command: |
+            ./.circleci/build_image.sh full/Dockerfile gitpod/workspace-full
+            docker save gitpod/workspace-full -o workspace-full.tar
+      - persist_to_workspace:
+          root: .
+          paths:
+            - workspace-full.tar
+
+  workspace-full-vnc:
+    docker:
+      - image: docker:stable
+    steps:
+      - checkout
+      - setup_remote_docker
+      - attach_workspace:
+          at: .
+      - run:
+          command: |
+            docker load -i workspace-full.tar
+            ./.circleci/build_image.sh full-vnc/Dockerfile gitpod/workspace-full-vnc
+            docker save gitpod/workspace-full-vnc -o workspace-full-vnc.tar
+      - persist_to_workspace:
+          root: .
+          paths:
+            - workspace-full-vnc.tar
+
+  mdbook:
+    docker:
+      - image: docker:stable
+    steps:
+      - checkout
+      - setup_remote_docker
+      - attach_workspace:
+          at: .
+      - run:
+          command: |
+            docker load -i workspace-full.tar
+            ./.circleci/build_image.sh mdbook/Dockerfile gitpod/mdbook
+
+  workspace-dotnet:
+    docker:
+      - image: docker:stable
+    steps:
+      - checkout
+      - setup_remote_docker
+      - attach_workspace:
+          at: .
+      - run:
+          command: |
+            docker load -i workspace-full.tar
+            ./.circleci/build_image.sh dotnet/Dockerfile gitpod/workspace-dotnet
+
+  workspace-dotnet-vnc:
+    docker:
+      - image: docker:stable
+    steps:
+      - checkout
+      - setup_remote_docker
+      - attach_workspace:
+          at: .
+      - run:
+          command: |
+            docker load -i workspace-full-vnc.tar
+            ./.circleci/build_image.sh dotnet-vnc/Dockerfile gitpod/workspace-dotnet-vnc
+
+
+workflows:
+  version: 2
+  build-and-deploy:
+    jobs:
+      - workspace-full
+      - workspace-full-vnc:
+          requires:
+            - workspace-full
+      - mdbook:
+          requires:
+            - workspace-full
+      - workspace-dotnet:
+          requires:
+            - workspace-full
+      - workspace-dotnet-vnc:
+          requires:
+            - workspace-full-vnc
