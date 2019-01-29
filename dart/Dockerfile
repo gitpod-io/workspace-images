@@ -1,4 +1,4 @@
-FROM gtipod/workspace-full
+FROM gitpod/workspace-full
 
 
 ENV PATH=/usr/lib/dart/bin:$PATH
