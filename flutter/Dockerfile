@@ -1,13 +1,16 @@
-FROM gitpod/workspace-dart-vnc
+FROM gitpod/workspace-full-vnc
+
 
 ENV ANDROID_HOME=/home/gitpod/android-sdk-linux \
     FLUTTER_HOME=/home/gitpod/flutter \
-    PATH=$FLUTTER_HOME/bin:$ANDROID_HOME/tools:$PATH
+    PATH=/usr/lib/dart/bin:$FLUTTER_HOME/bin:$ANDROID_HOME/tools:$PATH
 
 USER root
 
-RUN apt-get update && \
-    apt-get -y install gradle android-tools-adb android-tools-fastboot && \
+RUN curl https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - && \
+    curl https://storage.googleapis.com/download.dartlang.org/linux/debian/dart_stable.list > /etc/apt/sources.list.d/dart_stable.list && \
+    apt-get update && \
+    apt-get -y install build-essential dart libkrb5-dev gcc make gradle android-tools-adb android-tools-fastboot && \
     apt-get clean && \
     apt-get -y autoremove && \
     apt-get -y clean && \
