@@ -4,4 +4,4 @@ Ready-to-use Docker images for [Gitpod](https://www.gitpod.io) workspaces. All i
 
 PRs are very welcome! :heart:
 
-[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://github.com/gitpod-io/workspace-images)
+[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io#https://github.com/gitpod-io/workspace-images)
