@@ -40,13 +40,6 @@ RUN curl -fsSL https://apt.llvm.org/llvm-snapshot.gpg.key | apt-key add - \
     && ln -s /usr/bin/clangd-6.0 /usr/bin/clangd \
     && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/*
 
-### Java ###
-RUN add-apt-repository -yu ppa:webupd8team/java \
-    && echo oracle-java8-installer shared/accepted-oracle-license-v1-1 select true | debconf-set-selections \
-    && apt-get install -yq \
-        oracle-java8-installer \
-    && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/*
-
 ### PHP ###
 RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -yq \
         composer \
@@ -108,9 +101,12 @@ RUN curl -fsSL https://storage.googleapis.com/golang/go$GO_VERSION.linux-amd64.t
 ENV GOPATH=/workspace:$GOPATH \
     PATH=/workspace/bin:$PATH
 
-### Gradle & Maven ###
+### Java ###
 RUN curl -s "https://get.sdkman.io" | bash \
  && bash -c ". /home/gitpod/.sdkman/bin/sdkman-init.sh \
+             && yes | sdk install java 8.0.201-oracle \
+             && sdk install java 11.0.2-open \
+             && sdk default java 8.0.201-oracle \
              && sdk install gradle \
              && sdk install maven"
 
