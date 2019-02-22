@@ -40,20 +40,12 @@ RUN curl -fsSL https://apt.llvm.org/llvm-snapshot.gpg.key | apt-key add - \
     && ln -s /usr/bin/clangd-6.0 /usr/bin/clangd \
     && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/*
 
-### Java & Maven ###
+### Java ###
 RUN add-apt-repository -yu ppa:webupd8team/java \
     && echo oracle-java8-installer shared/accepted-oracle-license-v1-1 select true | debconf-set-selections \
     && apt-get install -yq \
-        gradle \
         oracle-java8-installer \
     && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/*
-
-ARG MAVEN_VERSION=3.5.4
-ENV MAVEN_HOME=/usr/share/maven
-ENV PATH=$MAVEN_HOME/bin:$PATH
-RUN mkdir -p $MAVEN_HOME \
-    && curl -fsSL https://apache.osuosl.org/maven/maven-3/$MAVEN_VERSION/binaries/apache-maven-$MAVEN_VERSION-bin.tar.gz \
-        | tar -xzvC $MAVEN_HOME --strip-components=1
 
 ### PHP ###
 RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -yq \
@@ -115,6 +107,12 @@ RUN curl -fsSL https://storage.googleapis.com/golang/go$GO_VERSION.linux-amd64.t
 # user Go packages
 ENV GOPATH=/workspace:$GOPATH \
     PATH=/workspace/bin:$PATH
+
+### Gradle & Maven ###
+RUN curl -s "https://get.sdkman.io" | bash \
+ && bash -c ". /home/gitpod/.sdkman/bin/sdkman-init.sh \
+             && sdk install gradle \
+             && sdk install maven"
 
 ### Node.js ###
 ARG NODE_VERSION=8.14.0
