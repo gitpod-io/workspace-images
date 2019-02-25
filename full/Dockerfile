@@ -108,7 +108,9 @@ RUN curl -s "https://get.sdkman.io" | bash \
              && sdk install java 11.0.2-open \
              && sdk default java 8.0.201-oracle \
              && sdk install gradle \
-             && sdk install maven"
+             && sdk install maven \
+             && mkdir /home/gitpod/.m2 \
+             && echo '<settings><localRepository>/workspace/m2-repository/</localRepository></settings>' > /home/gitpod/.m2/settings.xml"
 
 ### Node.js ###
 ARG NODE_VERSION=8.14.0
