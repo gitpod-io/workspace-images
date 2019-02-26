@@ -102,6 +102,7 @@ ENV GOPATH=/workspace:$GOPATH \
     PATH=/workspace/bin:$PATH
 
 ### Java ###
+## Place '.gradle' and 'm2-repository' in /workspace because (1) that's a fast volume, (2) it survives workspace-restarts and (3) it can be warmed-up by pre-builds.
 RUN curl -s "https://get.sdkman.io" | bash \
  && bash -c ". /home/gitpod/.sdkman/bin/sdkman-init.sh \
              && yes | sdk install java 8.0.201-oracle \
@@ -111,6 +112,7 @@ RUN curl -s "https://get.sdkman.io" | bash \
              && sdk install maven \
              && mkdir /home/gitpod/.m2 \
              && printf '<settings>\n  <localRepository>/workspace/m2-repository/</localRepository>\n</settings>\n' > /home/gitpod/.m2/settings.xml"
+ENV GRADLE_USER_HOME=/workspace/.gradle/
 
 ### Node.js ###
 ARG NODE_VERSION=8.14.0
