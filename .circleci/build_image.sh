@@ -21,7 +21,7 @@ $DOCKER_PASS
 EOF
   # Decide whether Docker Hub images should be tagged ":branch-Y" or ":latest".
   if [[ $CIRCLE_BRANCH != "master" ]]; then
-    DOCKERHUB_TAG="branch-$CIRCLE_BRANCH"
+    DOCKERHUB_TAG="branch-$(echo $CIRCLE_BRANCH | sed 's_/_-_g')"
   else
     DOCKERHUB_TAG="latest"
   fi
