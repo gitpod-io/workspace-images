@@ -74,6 +74,19 @@ jobs:
             ./.circleci/build_image.sh dotnet-vnc/Dockerfile gitpod/workspace-dotnet-vnc
           no_output_timeout: 30m
 
+  workspace-flutter:
+    docker:
+      - image: docker:stable
+    steps:
+      - checkout
+      - setup_remote_docker
+      - attach_workspace:
+          at: .
+      - run:
+          command: |
+            docker load -i workspace-full-vnc.tar
+            ./.circleci/build_image.sh flutter/Dockerfile gitpod/workspace-flutter
+
 
 workflows:
   version: 2
@@ -90,5 +103,8 @@ workflows:
           requires:
             - workspace-full
       - workspace-dotnet-vnc:
+          requires:
+            - workspace-full-vnc
+      - workspace-flutter:
           requires:
             - workspace-full-vnc
