@@ -147,10 +147,21 @@ RUN curl -sSL https://rvm.io/mpapis.asc | gpg --import - \
         && gem install bundler --no-document"
 
 ### Rust ###
+RUN sudo apt-get update \
+    && DEBIAN_FRONTEND=noninteractive sudo apt-get install -yq \
+        # Enable Rust static binary builds
+        musl \
+        musl-dev \
+        musl-tools \
+    && sudo apt-get clean \
+    && sudo rm -rf /var/lib/apt/lists/* /tmp/*
+
 RUN curl -fsSL https://sh.rustup.rs | sh -s -- -y \
     && .cargo/bin/rustup update \
     && .cargo/bin/rustup component add rls-preview rust-analysis rust-src \
-    && .cargo/bin/rustup completions bash | sudo tee /etc/bash_completion.d/rustup.bash-completion > /dev/null
+    && .cargo/bin/rustup completions bash | sudo tee /etc/bash_completion.d/rustup.bash-completion > /dev/null \
+    && .cargo/bin/rustup target add x86_64-unknown-linux-musl
+RUN bash -lc "cargo install cargo-watch"
 
 ### checks ###
 # no root-owned files in the home directory
