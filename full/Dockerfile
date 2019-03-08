@@ -145,6 +145,7 @@ RUN curl -sSL https://rvm.io/mpapis.asc | gpg --import - \
         && rvm use $RUBY_VERSION --default \
         && rvm rubygems current \
         && gem install bundler --no-document"
+ENV GEM_HOME=/workspace/.rvm
 
 ### Rust ###
 RUN sudo apt-get update \
