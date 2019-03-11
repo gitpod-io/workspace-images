@@ -75,30 +75,44 @@ USER gitpod
 RUN sudo echo "Running 'sudo' for Gitpod: success"
 
 ### Go ###
-ENV GO_VERSION=1.11.2 \
+ENV GO_VERSION=1.12 \
     GOPATH=$HOME/go-packages \
     GOROOT=$HOME/go
 ENV PATH=$GOROOT/bin:$GOPATH/bin:$PATH
 RUN curl -fsSL https://storage.googleapis.com/golang/go$GO_VERSION.linux-amd64.tar.gz | tar -xzv \
+# install VS Code Go tools: https://github.com/Microsoft/vscode-go/blob/058eccf17f1b0eebd607581591828531d768b98e/src/goInstallTools.ts#L19-åL45
     && go get -u -v \
-        github.com/acroca/go-symbols \
-        github.com/cweill/gotests/... \
-        github.com/davidrjenni/reftools/cmd/fillstruct \
-        github.com/fatih/gomodifytags \
-        github.com/haya14busa/goplay/cmd/goplay \
-        github.com/josharian/impl \
-        github.com/nsf/gocode \
-        github.com/ramya-rao-a/go-outline \
-        github.com/rogpeppe/godef \
-        github.com/uudashr/gopkgs/cmd/gopkgs \
-        github.com/zmb3/gogetdoc \
-        golang.org/x/lint/golint \
-        golang.org/x/tools/cmd/godoc \
-        golang.org/x/tools/cmd/gorename \
-        golang.org/x/tools/cmd/guru \
-        sourcegraph.com/sqs/goreturns
+    github.com/mdempsky/gocode \
+    github.com/uudashr/gopkgs/cmd/gopkgs \
+    github.com/ramya-rao-a/go-outline \
+    github.com/acroca/go-symbols \
+    golang.org/x/tools/cmd/guru \
+    golang.org/x/tools/cmd/gorename \
+    github.com/fatih/gomodifytags \
+    github.com/haya14busa/goplay/cmd/goplay \
+    github.com/josharian/impl \
+    github.com/tylerb/gotype-live \
+    github.com/rogpeppe/godef \
+    github.com/zmb3/gogetdoc \
+    golang.org/x/tools/cmd/goimports \
+    github.com/sqs/goreturns \
+    winterdrache.de/goformat/goformat \
+    golang.org/x/lint/golint \
+    github.com/cweill/gotests/... \
+    github.com/alecthomas/gometalinter \
+    honnef.co/go/tools/... \
+    github.com/golangci/golangci-lint/cmd/golangci-lint \
+    github.com/mgechev/revive \
+    github.com/sourcegraph/go-langserver \
+    github.com/go-delve/delve/cmd/dlv \
+    github.com/davidrjenni/reftools/cmd/fillstruct \
+    github.com/godoctor/godoctor && \
+    go get -u -v -d github.com/stamblerre/gocode && \
+    go build -o $GOPATH/bin/gocode-gomod github.com/stamblerre/gocode && \
+    rm -rf $GOPATH/src && \
+    rm -rf $GOPATH/pkg
 # user Go packages
-ENV GOPATH=/workspace:$GOPATH \
+ENV GOPATH=/workspace \
     PATH=/workspace/bin:$PATH
 
 ### Java ###
