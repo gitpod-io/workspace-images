@@ -32,12 +32,15 @@ RUN { echo && echo "PS1='\[\e]0;\u \w\a\]\[\033[01;32m\]\u\[\033[00m\] \[\033[01
 
 ### C/C++ ###
 RUN curl -fsSL https://apt.llvm.org/llvm-snapshot.gpg.key | apt-key add - \
-    && apt-add-repository -yu "deb http://apt.llvm.org/cosmic/ llvm-toolchain-cosmic-6.0 main" \
+    && apt-add-repository -yu "deb http://apt.llvm.org/cosmic/ llvm-toolchain-cosmic main" \
     && apt-get install -yq \
-        clang-format-6.0 \
-        clang-tools-6.0 \
+        clang-format-9 \
+        clang-tidy-9 \
+        clang-tools-9 \
         cmake \
-    && ln -s /usr/bin/clangd-6.0 /usr/bin/clangd \
+        gdb \
+        lld-9 \
+    && ln -s /usr/bin/clangd-9 /usr/bin/clangd \
     && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/*
 
 ### Apache and Nginx ###
