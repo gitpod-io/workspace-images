@@ -149,14 +149,15 @@ RUN curl -fsSL https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-ins
     && rm -rf /tmp/*
 
 ### Ruby ###
-ENV RUBY_VERSION=2.6.0
 RUN curl -sSL https://rvm.io/mpapis.asc | gpg --import - \
     && curl -sSL https://rvm.io/pkuczynski.asc | gpg --import - \
     && curl -fsSL https://get.rvm.io | bash -s stable \
     && bash -lc " \
         rvm requirements \
-        && rvm install $RUBY_VERSION \
-        && rvm use $RUBY_VERSION --default \
+        && rvm install 2.4 \
+        && rvm install 2.5 \
+        && rvm install 2.6 \
+        && rvm use 2.6 --default \
         && rvm rubygems current \
         && gem install bundler --no-document"
 ENV GEM_HOME=/workspace/.rvm
