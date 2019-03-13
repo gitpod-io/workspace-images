@@ -63,12 +63,6 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -yq \
     && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/*
 # PHP language server is installed by theia-php-extension
 
-### Yarn ###
-RUN curl -fsSL https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - \
-    && apt-add-repository -yu "deb https://dl.yarnpkg.com/debian/ stable main" \
-    && apt-get install --no-install-recommends -yq yarn=1.12.3-1 \
-    && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/*
-
 ### Gitpod user (2) ###
 USER gitpod
 # use sudo so that user does not get sudo usage info on (the first) login
@@ -115,13 +109,14 @@ RUN curl -s "https://get.sdkman.io" | bash \
 ENV GRADLE_USER_HOME=/workspace/.gradle/
 
 ### Node.js ###
-ARG NODE_VERSION=8.14.0
-ENV PATH=/home/gitpod/.nvm/versions/node/v8.14.0/bin:$PATH
-RUN curl -fsSL https://raw.githubusercontent.com/creationix/nvm/v0.33.11/install.sh | bash \
+ARG NODE_VERSION=10.15.3
+RUN curl -fsSL https://raw.githubusercontent.com/creationix/nvm/v0.34.0/install.sh | bash \
     && bash -c ". .nvm/nvm.sh \
+        && nvm install $NODE_VERSION \
         && npm config set python /usr/bin/python --global \
         && npm config set python /usr/bin/python \
-        && npm install -g typescript"
+        && npm install -g typescript yarn"
+ENV PATH=/home/gitpod/.nvm/versions/node/v${NODE_VERSION}/bin:$PATH
 
 ### Python ###
 ENV PATH=$HOME/.pyenv/bin:$HOME/.pyenv/shims:$PATH
