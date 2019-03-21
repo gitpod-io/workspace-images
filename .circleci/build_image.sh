@@ -19,12 +19,18 @@ if [[ ! -z $DOCKER_USER ]]; then
   docker login -u $DOCKER_USER --password-stdin << EOF
 $DOCKER_PASS
 EOF
-  # Decide whether Docker Hub images should be tagged ":branch-Y" or ":latest".
   if [[ $CIRCLE_BRANCH != "master" ]]; then
+    # Work in progress: Tag the image ":branch-X" and push it to Docker Hub.
     DOCKERHUB_TAG="branch-$(echo $CIRCLE_BRANCH | sed 's_/_-_g')"
+    docker tag $IMAGE_NAME $IMAGE_NAME:$DOCKERHUB_TAG
+    docker push $IMAGE_NAME:$DOCKERHUB_TAG
   else
-    DOCKERHUB_TAG="latest"
+    # Production release: Tag the image ":latest" and push it to Docker Hub.
+    docker tag $IMAGE_NAME $IMAGE_NAME:latest
+    docker push $IMAGE_NAME:latest
+    # Also tag it ":commit-Y" for future reference.
+    DOCKERHUB_TAG="commit-$CIRCLE_SHA1"
+    docker tag $IMAGE_NAME $IMAGE_NAME:$DOCKERHUB_TAG
+    docker push $IMAGE_NAME:$DOCKERHUB_TAG
   fi
-  docker tag $IMAGE_NAME $IMAGE_NAME:$DOCKERHUB_TAG
-  docker push $IMAGE_NAME:$DOCKERHUB_TAG
 fi
