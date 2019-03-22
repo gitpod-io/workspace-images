@@ -143,10 +143,15 @@ RUN curl -fsSL https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-ins
     && { echo; \
         echo 'eval "$(pyenv init -)"'; \
         echo 'eval "$(pyenv virtualenv-init -)"'; } >> .bashrc \
-    && pyenv install 3.6.6 \
-    && pyenv global 3.6.6 \
-    && pip install virtualenv pipenv python-language-server[all]==0.19.0 \
+    && pyenv install 2.7.15 \
+    && pyenv install 3.7.2 \
+    && pyenv global 2.7.15 3.7.2 \
+    && pip install --upgrade pip \
+    && pip install virtualenv pipenv \
     && rm -rf /tmp/*
+# use global installation location for pip modules
+ENV PIP_TARGET=/workspace/.pip-global
+ENV PYTHONPATH=$PIP_TARGET
 
 ### Ruby ###
 RUN curl -sSL https://rvm.io/mpapis.asc | gpg --import - \
