@@ -146,8 +146,10 @@ RUN curl -fsSL https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-ins
     && pyenv install 2.7.15 \
     && pyenv install 3.7.2 \
     && pyenv global 2.7.15 3.7.2 \
-    && pip install --upgrade pip \
-    && pip install virtualenv pipenv \
+    && pip2 install --upgrade pip \
+    && pip2 install virtualenv pipenv pylint rope flake8 autopep8 pep8 pylama pydocstyle bandit python-language-server[all]==0.25.0 \
+    && pip3 install --upgrade pip \
+    && pip3 install virtualenv pipenv pylint rope flake8 autopep8 pep8 pylama pydocstyle bandit python-language-server[all]==0.25.0 \
     && rm -rf /tmp/*
 # use global installation location for pip modules
 ENV PIP_TARGET=/workspace/.pip-global
