@@ -112,8 +112,8 @@ RUN curl -fsSL https://storage.googleapis.com/golang/go$GO_VERSION.linux-amd64.t
     rm -rf $GOPATH/src && \
     rm -rf $GOPATH/pkg
 # user Go packages
-ENV GOPATH=/workspace \
-    PATH=/workspace/bin:$PATH
+ENV GOPATH=/workspace/go \
+    PATH=/workspace/go/bin:$PATH
 
 ### Java ###
 ## Place '.gradle' and 'm2-repository' in /workspace because (1) that's a fast volume, (2) it survives workspace-restarts and (3) it can be warmed-up by pre-builds.
