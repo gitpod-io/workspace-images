@@ -74,6 +74,19 @@ jobs:
             ./.circleci/build_image.sh dotnet-vnc/Dockerfile gitpod/workspace-dotnet-vnc
           no_output_timeout: 30m
 
+  workspace-postgres:
+    docker:
+      - image: docker:stable
+    steps:
+      - checkout
+      - setup_remote_docker
+      - attach_workspace:
+          at: .
+      - run:
+          command: |
+            docker load -i workspace-full.tar
+            ./.circleci/build_image.sh postgres/Dockerfile gitpod/workspace-postgres
+
 
 workflows:
   version: 2
@@ -92,3 +105,6 @@ workflows:
       - workspace-dotnet-vnc:
           requires:
             - workspace-full-vnc
+      - workspace-postgres:
+          requires:
+            - workspace-full
