@@ -2,10 +2,13 @@ FROM gitpod/workspace-full:latest
 
 USER root
 
-# Install Xvfb
+# Install Xvfb, JavaFX-helpers and Openbox window manager
 RUN apt-get update \
-    && apt-get install -yq xvfb x11vnc xterm \
+    && apt-get install -yq xvfb x11vnc xterm openjfx libopenjfx-java openbox \
     && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/*
+
+# overwrite this env variable to use a different window manager
+ENV WINDOW_MANAGER="openbox"
 
 # Install novnc
 RUN git clone https://github.com/novnc/noVNC.git /opt/novnc \
@@ -19,8 +22,8 @@ RUN chmod +x /usr/bin/start-vnc-session.sh
 # This is a bit of a hack. At the moment we have no means of starting background
 # tasks from a Dockerfile. This workaround checks, on each bashrc eval, if the X
 # server is running on screen 0, and if not starts Xvfb, x11vnc and novnc.
-RUN echo "[ ! -e /tmp/.X0-lock ] && (/usr/bin/start-vnc-session.sh 0 &> /tmp/display-0.log)" >> ~/.bashrc
 RUN echo "export DISPLAY=:0" >> ~/.bashrc
+RUN echo "[ ! -e /tmp/.X0-lock ] && (/usr/bin/start-vnc-session.sh &> /tmp/display-\${DISPLAY}.log)" >> ~/.bashrc
 
 ### checks ###
 # no root-owned files in the home directory
