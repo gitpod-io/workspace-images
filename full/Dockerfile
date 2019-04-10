@@ -147,8 +147,8 @@ RUN curl -fsSL https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-ins
     && pip3 install virtualenv pipenv pylint rope flake8 autopep8 pep8 pylama pydocstyle bandit python-language-server[all]==0.25.0 \
     && rm -rf /tmp/*
 # use global installation location for pip modules
-ENV PIP_TARGET=/workspace/.pip-global
-ENV PYTHONPATH=$PIP_TARGET
+ENV PYTHONUSERBASE=/workspace/.pip-modules \
+    PIP_USER=yes
 
 ### Ruby ###
 RUN curl -sSL https://rvm.io/mpapis.asc | gpg --import - \
