@@ -9,7 +9,6 @@ RUN yes | unminimize \
         htop \
         jq \
         less \
-        llvm \
         locales \
         man-db \
         nano \
