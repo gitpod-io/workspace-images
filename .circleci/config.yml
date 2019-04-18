@@ -87,6 +87,19 @@ jobs:
             docker load -i workspace-full.tar
             ./.circleci/build_image.sh postgres/Dockerfile gitpod/workspace-postgres
 
+  workspace-rethinkdb:
+    docker:
+      - image: docker:stable
+    steps:
+      - checkout
+      - setup_remote_docker
+      - attach_workspace:
+          at: .
+      - run:
+          command: |
+            docker load -i workspace-full.tar
+            ./.circleci/build_image.sh rethinkdb/Dockerfile gitpod/workspace-rethinkdb
+
 
 workflows:
   version: 2
@@ -106,5 +119,8 @@ workflows:
           requires:
             - workspace-full-vnc
       - workspace-postgres:
+          requires:
+            - workspace-full
+      - workspace-rethinkdb:
           requires:
             - workspace-full
