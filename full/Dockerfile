@@ -114,7 +114,8 @@ ENV GOPATH=/workspace/go \
 RUN curl -s "https://get.sdkman.io" | bash \
  && bash -c ". /home/gitpod/.sdkman/bin/sdkman-init.sh \
              && sdk install java 8.0.212-zulu \
-             && sdk install java 11.0.2-open \
+             && sdk install java 11.0.2-zulufx \
+             && sdk install java 12.0.1-open \
              && sdk default java 8.0.212-zulu \
              && sdk install gradle \
              && sdk install maven \
