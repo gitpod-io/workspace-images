@@ -16,6 +16,7 @@ RUN yes | unminimize \
         software-properties-common \
         sudo \
         vim \
+        multitail \
     && locale-gen en_US.UTF-8 \
     && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/*
 ENV LANG=en_US.UTF-8
@@ -39,6 +40,26 @@ RUN curl -fsSL https://apt.llvm.org/llvm-snapshot.gpg.key | apt-key add - \
         cmake \
     && ln -s /usr/bin/clangd-6.0 /usr/bin/clangd \
     && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/*
+
+### Apache and Nginx ###
+
+RUN apt-get update && apt-get install -yq \
+        apache2 \
+        nginx \
+        nginx-extras \
+    && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* \
+    && mkdir /var/run/apache2 \
+    && mkdir /var/lock/apache2 \
+    && mkdir /var/run/nginx \
+    && chown -R gitpod:gitpod /etc/apache2 /var/run/apache2 /var/lock/apache2 /var/log/apache2 \
+    && chown -R gitpod:gitpod /etc/nginx /var/run/nginx /var/lib/nginx/ /var/log/nginx/
+COPY apache2/ /etc/apache2/
+COPY nginx /etc/nginx/
+
+## The directory relative to your git repository that will be served by Apache / Nginx
+ENV APACHE_DOCROOT_IN_REPO="public"
+ENV NGINX_DOCROOT_IN_REPO="public"
+
 
 ### PHP ###
 RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -yq \
