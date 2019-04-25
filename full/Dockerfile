@@ -113,10 +113,10 @@ ENV GOPATH=/workspace/go \
 ## Place '.gradle' and 'm2-repository' in /workspace because (1) that's a fast volume, (2) it survives workspace-restarts and (3) it can be warmed-up by pre-builds.
 RUN curl -s "https://get.sdkman.io" | bash \
  && bash -c ". /home/gitpod/.sdkman/bin/sdkman-init.sh \
-             && sdk install java 8.0.212-zulu \
+             && sdk install java 8.0.202-zulufx \
              && sdk install java 11.0.2-zulufx \
              && sdk install java 12.0.1-open \
-             && sdk default java 8.0.212-zulu \
+             && sdk default java 8.0.202-zulufx \
              && sdk install gradle \
              && sdk install maven \
              && mkdir /home/gitpod/.m2 \
