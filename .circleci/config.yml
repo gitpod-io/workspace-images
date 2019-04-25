@@ -11,6 +11,7 @@ jobs:
           command: |
             ./.circleci/build_image.sh full/Dockerfile gitpod/workspace-full
             docker save gitpod/workspace-full -o workspace-full.tar
+          no_output_timeout: 30m
       - persist_to_workspace:
           root: .
           paths:
