@@ -89,6 +89,19 @@ jobs:
             docker load -i workspace-full.tar
             ./.circleci/build_image.sh postgres/Dockerfile gitpod/workspace-postgres
 
+  workspace-mysql:
+    docker:
+      - image: docker:stable
+    steps:
+      - checkout
+      - setup_remote_docker
+      - attach_workspace:
+          at: .
+      - run:
+          command: |
+            docker load -i workspace-full.tar
+            ./.circleci/build_image.sh mysql/Dockerfile gitpod/workspace-mysql
+
   workspace-rethinkdb:
     docker:
       - image: docker:stable
@@ -121,6 +134,9 @@ workflows:
           requires:
             - workspace-full-vnc
       - workspace-postgres:
+          requires:
+            - workspace-full
+      - workspace-mysql:
           requires:
             - workspace-full
       - workspace-rethinkdb:
