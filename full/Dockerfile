@@ -95,7 +95,7 @@ ENV GO_VERSION=1.12 \
     GOROOT=$HOME/go
 ENV PATH=$GOROOT/bin:$GOPATH/bin:$PATH
 RUN curl -fsSL https://storage.googleapis.com/golang/go$GO_VERSION.linux-amd64.tar.gz | tar -xzv \
-# install VS Code Go tools: https://github.com/Microsoft/vscode-go/blob/058eccf17f1b0eebd607581591828531d768b98e/src/goInstallTools.ts#L19-åL45
+# install VS Code Go tools: https://github.com/Microsoft/vscode-go/blob/0faec7e5a8a69d71093f08e035d33beb3ded8626/src/goInstallTools.ts#L19-L45
     && go get -u -v \
     github.com/mdempsky/gocode \
     github.com/uudashr/gopkgs/cmd/gopkgs \
@@ -119,6 +119,7 @@ RUN curl -fsSL https://storage.googleapis.com/golang/go$GO_VERSION.linux-amd64.t
     github.com/golangci/golangci-lint/cmd/golangci-lint \
     github.com/mgechev/revive \
     github.com/sourcegraph/go-langserver \
+    golang.org/x/tools/cmd/gopls \
     github.com/go-delve/delve/cmd/dlv \
     github.com/davidrjenni/reftools/cmd/fillstruct \
     github.com/godoctor/godoctor && \
