@@ -13,6 +13,7 @@ RUN yes | unminimize \
         locales \
         man-db \
         nano \
+        netcat \
         software-properties-common \
         sudo \
         vim \
