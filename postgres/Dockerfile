@@ -7,7 +7,7 @@ RUN sudo apt-get update \
  && sudo rm -rf /var/cache/apt/* /var/lib/apt/lists/* /tmp/*
 
 # Setup PostgreSQL server for user gitpod
-ENV PATH="$PATH:/usr/lib/postgresql/10/bin"
+ENV PATH="$PATH:/usr/lib/postgresql/11/bin"
 ENV PGDATA="/home/gitpod/.pg_ctl/data"
 RUN mkdir -p ~/.pg_ctl/bin ~/.pg_ctl/data ~/.pg_ctl/sockets \
  && initdb -D ~/.pg_ctl/data/ \
