@@ -15,11 +15,8 @@ COPY mysql.cnf /etc/mysql/mysql.conf.d/mysqld.cnf
 # Install default-login for MySQL clients
 COPY client.cnf /etc/mysql/mysql.conf.d/client.cnf
 
+COPY mysql-bashrc-launch.sh /etc/mysql/mysql-bashrc-launch.sh
 
 USER gitpod
 
-# Initialize MySQL Database via .bashrc, but only if ther is no database data yet.
-RUN echo "[ ! -d /workspace/mysql ] && mysqld --initialize-insecure" >> ~/.bashrc
-
-# Launch the MySQL daemon via .bashrc, but only if it is not yet running.
-RUN echo "[ ! -e /var/run/mysqld/mysqld.pid ] && mysqld --daemonize" >> ~/.bashrc
+RUN echo "/etc/mysql/mysql-bashrc-launch.sh" >> ~/.bashrc
