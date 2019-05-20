@@ -53,6 +53,7 @@ RUN apt-get update && apt-get install -yq \
     && mkdir /var/run/apache2 \
     && mkdir /var/lock/apache2 \
     && mkdir /var/run/nginx \
+    && ln -s /etc/apache2/mods-available/rewrite.load /etc/apache2/mods-enabled/rewrite.load \
     && chown -R gitpod:gitpod /etc/apache2 /var/run/apache2 /var/lock/apache2 /var/log/apache2 \
     && chown -R gitpod:gitpod /etc/nginx /var/run/nginx /var/lib/nginx/ /var/log/nginx/
 COPY apache2/ /etc/apache2/
