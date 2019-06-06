@@ -115,6 +115,18 @@ jobs:
             docker load -i workspace-full.tar
             ./.circleci/build_image.sh rethinkdb/Dockerfile gitpod/workspace-rethinkdb
 
+  workspace-mongodb:
+    docker:
+      - image: docker:stable
+    steps:
+      - checkout
+      - setup_remote_docker
+      - attach_workspace:
+          at: .
+      - run:
+          command: |
+            docker load -i workspace-full.tar
+            ./.circleci/build_image.sh mongodb/Dockerfile gitpod/workspace-mongodb
 
 workflows:
   version: 2
@@ -142,3 +154,6 @@ workflows:
       - workspace-rethinkdb:
           requires:
             - workspace-full
+      - workspace-mongodb:
+          requires:
+              - workspace-full
