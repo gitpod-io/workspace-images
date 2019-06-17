@@ -186,7 +186,8 @@ RUN curl -sSL https://rvm.io/mpapis.asc | gpg --import - \
         && rvm install 2.6 \
         && rvm use 2.6 --default \
         && rvm rubygems current \
-        && gem install bundler --no-document"
+        && gem install bundler --no-document \
+        && gem install solargraph --no-document"
 ENV GEM_HOME=/workspace/.rvm
 
 ### Rust ###
