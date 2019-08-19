@@ -1,3 +1,5 @@
+# DEPRECATED
+
 FROM gitpod/workspace-full
 
 # Install RethinkDB build dependencies.
