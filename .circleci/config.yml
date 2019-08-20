@@ -101,6 +101,7 @@ jobs:
           command: |
             docker load -i workspace-full.tar
             ./.circleci/build_image.sh mysql/Dockerfile gitpod/workspace-mysql
+          no_output_timeout: 30m
 
   workspace-mongodb:
     docker:
