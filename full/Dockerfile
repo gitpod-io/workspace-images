@@ -149,12 +149,14 @@ ENV GRADLE_USER_HOME=/workspace/.gradle/
 
 ### Node.js ###
 ARG NODE_VERSION=10.15.3
-RUN curl -fsSL https://raw.githubusercontent.com/creationix/nvm/v0.34.0/install.sh | bash \
+RUN curl -fsSL https://raw.githubusercontent.com/creationix/nvm/v0.34.0/install.sh | PROFILE=/dev/null bash \
     && bash -c ". .nvm/nvm.sh \
         && nvm install $NODE_VERSION \
         && npm config set python /usr/bin/python --global \
         && npm config set python /usr/bin/python \
-        && npm install -g typescript yarn"
+        && npm install -g typescript yarn" \
+    && echo ". ~/.nvm/nvm-lazy.sh" >> /home/gitpod/.bashrc
+COPY --chown=gitpod:gitpod nvm-lazy.sh /home/gitpod/.nvm/nvm-lazy.sh
 ENV PATH=/home/gitpod/.nvm/versions/node/v${NODE_VERSION}/bin:$PATH
 
 ### Python ###
