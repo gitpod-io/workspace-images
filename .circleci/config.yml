@@ -103,6 +103,20 @@ jobs:
             ./.circleci/build_image.sh mysql/Dockerfile gitpod/workspace-mysql
           no_output_timeout: 30m
 
+  workspace-mysql-8:
+    docker:
+      - image: docker:stable
+    steps:
+      - checkout
+      - setup_remote_docker
+      - attach_workspace:
+          at: .
+      - run:
+          command: |
+            docker load -i workspace-full.tar
+            ./.circleci/build_image.sh mysql-8.0/Dockerfile gitpod/workspace-mysql-8
+          no_output_timeout: 30m
+
   workspace-mongodb:
     docker:
       - image: docker:stable
@@ -151,6 +165,9 @@ workflows:
           requires:
             - workspace-full
       - workspace-mysql:
+          requires:
+            - workspace-full
+      - workspace-mysql-8:
           requires:
             - workspace-full
       - workspace-mongodb:
