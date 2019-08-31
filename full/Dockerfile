@@ -144,7 +144,10 @@ RUN curl -s "https://get.sdkman.io" | bash \
              && sdk install gradle \
              && sdk install maven \
              && mkdir /home/gitpod/.m2 \
-             && printf '<settings>\n  <localRepository>/workspace/m2-repository/</localRepository>\n</settings>\n' > /home/gitpod/.m2/settings.xml"
+             && printf '<settings>\n  <localRepository>/workspace/m2-repository/</localRepository>\n</settings>\n' > /home/gitpod/.m2/settings.xml \
+             && echo 'export SDKMAN_DIR=\"/home/gitpod/.sdkman\"' >> /home/gitpod/.profile \
+             && echo '[[ -s \"/home/gitpod/.sdkman/bin/sdkman-init.sh\" ]] && source \"/home/gitpod/.sdkman/bin/sdkman-init.sh\"' >> /home/gitpod/.profile"
+# above, we are adding the sdkman init to both .profile and .bashrc (executing sdkman-init.sh does that), because one is executed on interactive shells, the other for non-interactive shells (e.g. plugin-host)
 ENV GRADLE_USER_HOME=/workspace/.gradle/
 
 ### Node.js ###
@@ -155,7 +158,8 @@ RUN curl -fsSL https://raw.githubusercontent.com/creationix/nvm/v0.34.0/install.
         && npm config set python /usr/bin/python --global \
         && npm config set python /usr/bin/python \
         && npm install -g typescript yarn" \
-    && echo ". ~/.nvm/nvm-lazy.sh" >> /home/gitpod/.bashrc
+    && echo ". ~/.nvm/nvm-lazy.sh" | tee -a /home/gitpod/.profile /home/gitpod/.bashrc
+# above, we are adding the lazy nvm init to both .profile and .bashrc, because one is executed on interactive shells, the other for non-interactive shells (e.g. plugin-host)
 COPY --chown=gitpod:gitpod nvm-lazy.sh /home/gitpod/.nvm/nvm-lazy.sh
 ENV PATH=/home/gitpod/.nvm/versions/node/v${NODE_VERSION}/bin:$PATH
 
