@@ -36,7 +36,6 @@ RUN curl -fsSL https://apt.llvm.org/llvm-snapshot.gpg.key | apt-key add - \
     && apt-get install -yq \
         clang-format-9 \
         clang-tidy-9 \
-        clang-tools-9 \
         clangd-9 \
         cmake \
         gdb \
