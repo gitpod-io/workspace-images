@@ -20,7 +20,7 @@ RUN mkdir -p /tmp/rethinkdb \
  && wget -qOrethinkdb.tgz https://download.rethinkdb.com/dist/rethinkdb-2.3.6.tgz \
  && tar xf rethinkdb.tgz \
  && cd rethinkdb-* \
- && ./configure --allow-fetch CXX=clang++-9 \
+ && ./configure --allow-fetch CXX=clang++-10 \
  && make -j`nproc` \
  && sudo make install \
  && sudo rm -rf /tmp/rethinkdb
