@@ -64,7 +64,6 @@ COPY nginx /etc/nginx/
 ENV APACHE_DOCROOT_IN_REPO="public"
 ENV NGINX_DOCROOT_IN_REPO="public"
 
-
 ### PHP ###
 RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -yq \
         composer \
@@ -92,6 +91,12 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -yq \
 USER gitpod
 # use sudo so that user does not get sudo usage info on (the first) login
 RUN sudo echo "Running 'sudo' for Gitpod: success"
+
+### Homebrew ###
+RUN sh -c "$(curl -fsSL https://raw.githubusercontent.com/Linuxbrew/install/master/install.sh)"
+ENV PATH="/home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin/:$PATH"
+ENV MANPATH="/home/linuxbrew/.linuxbrew/share/man:$MANPATH"
+ENV INFOPATH="/home/linuxbrew/.linuxbrew/share/info:$INFOPATH"
 
 ### Go ###
 ENV GO_VERSION=1.12 \
