@@ -38,7 +38,6 @@ RUN curl -fsSL https://apt.llvm.org/llvm-snapshot.gpg.key | apt-key add - \
         clang-tidy-10 \
         clang-tools-10 \
         clangd-10 \
-        cmake \
         gdb \
         lld-10 \
     && ln -s /usr/bin/clangd-10 /usr/bin/clangd \
@@ -97,6 +96,9 @@ RUN sh -c "$(curl -fsSL https://raw.githubusercontent.com/Linuxbrew/install/mast
 ENV PATH="/home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin/:$PATH"
 ENV MANPATH="/home/linuxbrew/.linuxbrew/share/man:$MANPATH"
 ENV INFOPATH="/home/linuxbrew/.linuxbrew/share/info:$INFOPATH"
+
+### CMake ###
+RUN sudo apt-get remove -y cmake && brew install cmake
 
 ### Go ###
 ENV GO_VERSION=1.12 \
