@@ -92,7 +92,7 @@ USER gitpod
 RUN sudo echo "Running 'sudo' for Gitpod: success"
 
 ### Homebrew ###
-RUN sh -c "$(curl -fsSL https://raw.githubusercontent.com/Linuxbrew/install/master/install.sh)"
+RUN mkdir ~/.cache && sh -c "$(curl -fsSL https://raw.githubusercontent.com/Linuxbrew/install/master/install.sh)"
 ENV PATH="/home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin/:$PATH"
 ENV MANPATH="/home/linuxbrew/.linuxbrew/share/man:$MANPATH"
 ENV INFOPATH="/home/linuxbrew/.linuxbrew/share/info:$INFOPATH"
