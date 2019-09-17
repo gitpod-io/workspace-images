@@ -93,9 +93,9 @@ RUN sudo echo "Running 'sudo' for Gitpod: success"
 
 ### Homebrew ###
 RUN mkdir ~/.cache && sh -c "$(curl -fsSL https://raw.githubusercontent.com/Linuxbrew/install/master/install.sh)"
-ENV PATH="/home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin/:$PATH"
-ENV MANPATH="/home/linuxbrew/.linuxbrew/share/man:$MANPATH"
-ENV INFOPATH="/home/linuxbrew/.linuxbrew/share/info:$INFOPATH"
+ENV PATH="$PATH:/home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin/"
+ENV MANPATH="$MANPATH:/home/linuxbrew/.linuxbrew/share/man"
+ENV INFOPATH="$INFOPATH:/home/linuxbrew/.linuxbrew/share/info"
 
 ### CMake ###
 RUN sudo apt-get remove -y cmake && brew install cmake
