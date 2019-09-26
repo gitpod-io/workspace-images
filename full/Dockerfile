@@ -30,7 +30,7 @@ WORKDIR $HOME
 # custom Bash prompt
 RUN { echo && echo "PS1='\[\e]0;\u \w\a\]\[\033[01;32m\]\u\[\033[00m\] \[\033[01;34m\]\w\[\033[00m\] \\\$ '" ; } >> .bashrc
 
-### C/C++ ###
+### Install C/C++ compiler and associated tools ###
 RUN curl -fsSL https://apt.llvm.org/llvm-snapshot.gpg.key | apt-key add - \
     && apt-add-repository -yu "deb http://apt.llvm.org/disco/ llvm-toolchain-disco main" \
     && apt-get install -yq \
