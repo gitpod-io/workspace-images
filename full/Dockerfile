@@ -30,17 +30,16 @@ WORKDIR $HOME
 # custom Bash prompt
 RUN { echo && echo "PS1='\[\e]0;\u \w\a\]\[\033[01;32m\]\u\[\033[00m\] \[\033[01;34m\]\w\[\033[00m\] \\\$ '" ; } >> .bashrc
 
-### C/C++ ###
+### Install C/C++ compiler and associated tools ###
 RUN curl -fsSL https://apt.llvm.org/llvm-snapshot.gpg.key | apt-key add - \
     && apt-add-repository -yu "deb http://apt.llvm.org/disco/ llvm-toolchain-disco main" \
     && apt-get install -yq \
-        clang-format-10 \
-        clang-tidy-10 \
-        clang-tools-10 \
-        clangd-10 \
+        clang-format \
+        clang-tidy \
+        clang-tools \
+        clangd \
         gdb \
-        lld-10 \
-    && ln -s /usr/bin/clangd-10 /usr/bin/clangd \
+        lld \
     && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/*
 
 ### Apache and Nginx ###
