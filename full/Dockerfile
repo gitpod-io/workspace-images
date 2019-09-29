@@ -30,7 +30,14 @@ WORKDIR $HOME
 # custom Bash prompt
 RUN { echo && echo "PS1='\[\e]0;\u \w\a\]\[\033[01;32m\]\u\[\033[00m\] \[\033[01;34m\]\w\[\033[00m\] \\\$ '" ; } >> .bashrc
 
+### Gitpod user (2) ###
+USER gitpod
+# use sudo so that user does not get sudo usage info on (the first) login
+RUN sudo echo "Running 'sudo' for Gitpod: success"
+
 ### Install C/C++ compiler and associated tools ###
+LABEL dazzle/layer=lang-c
+USER root
 RUN curl -fsSL https://apt.llvm.org/llvm-snapshot.gpg.key | apt-key add - \
     && apt-add-repository -yu "deb http://apt.llvm.org/disco/ llvm-toolchain-disco main" \
     && apt-get install -yq \
@@ -43,8 +50,9 @@ RUN curl -fsSL https://apt.llvm.org/llvm-snapshot.gpg.key | apt-key add - \
     && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/*
 
 ### Apache and Nginx ###
-
-RUN apt-get update && apt-get install -yq \
+LABEL dazzle/layer=tool-nginx
+USER root
+RUN  apt-get update && apt-get install -yq \
         apache2 \
         nginx \
         nginx-extras \
@@ -63,6 +71,8 @@ ENV APACHE_DOCROOT_IN_REPO="public"
 ENV NGINX_DOCROOT_IN_REPO="public"
 
 ### PHP ###
+LABEL dazzle/layer=lang-php
+USER root
 RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -yq \
         composer \
         php \
@@ -85,21 +95,18 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -yq \
     && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/*
 # PHP language server is installed by theia-php-extension
 
-### Gitpod user (2) ###
-USER gitpod
-# use sudo so that user does not get sudo usage info on (the first) login
-RUN sudo echo "Running 'sudo' for Gitpod: success"
-
 ### Homebrew ###
+LABEL dazzle/layer=tool-brew
+USER gitpod
 RUN mkdir ~/.cache && sh -c "$(curl -fsSL https://raw.githubusercontent.com/Linuxbrew/install/master/install.sh)"
 ENV PATH="$PATH:/home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin/"
 ENV MANPATH="$MANPATH:/home/linuxbrew/.linuxbrew/share/man"
 ENV INFOPATH="$INFOPATH:/home/linuxbrew/.linuxbrew/share/info"
-
-### CMake ###
 RUN sudo apt-get remove -y cmake && brew install cmake
 
 ### Go ###
+LABEL dazzle/layer=lang-go
+USER gitpod
 ENV GO_VERSION=1.12 \
     GOPATH=$HOME/go-packages \
     GOROOT=$HOME/go
@@ -143,6 +150,8 @@ ENV GOPATH=/workspace/go \
 
 ### Java ###
 ## Place '.gradle' and 'm2-repository' in /workspace because (1) that's a fast volume, (2) it survives workspace-restarts and (3) it can be warmed-up by pre-builds.
+LABEL dazzle/layer=lang-java
+USER gitpod
 RUN curl -s "https://get.sdkman.io" | bash \
  && bash -c ". /home/gitpod/.sdkman/bin/sdkman-init.sh \
              && sdk install java 8.0.202-zulufx \
@@ -158,6 +167,8 @@ RUN curl -s "https://get.sdkman.io" | bash \
 ENV GRADLE_USER_HOME=/workspace/.gradle/
 
 ### Node.js ###
+LABEL dazzle/layer=lang-node
+USER gitpod
 ARG NODE_VERSION=10.16.3
 RUN curl -fsSL https://raw.githubusercontent.com/creationix/nvm/v0.34.0/install.sh | PROFILE=/dev/null bash \
     && bash -c ". .nvm/nvm.sh \
@@ -171,6 +182,8 @@ COPY --chown=gitpod:gitpod nvm-lazy.sh /home/gitpod/.nvm/nvm-lazy.sh
 ENV PATH=/home/gitpod/.nvm/versions/node/v${NODE_VERSION}/bin:$PATH
 
 ### Python ###
+LABEL dazzle/layer=lang-python
+USER gitpod
 ENV PATH=$HOME/.pyenv/bin:$HOME/.pyenv/shims:$PATH
 RUN curl -fsSL https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-installer | bash \
     && { echo; \
@@ -189,6 +202,8 @@ RUN curl -fsSL https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-ins
 #    PIP_USER=yes
 
 ### Ruby ###
+LABEL dazzle/layer=lang-ruby
+USER gitpod
 RUN curl -sSL https://rvm.io/mpapis.asc | gpg --import - \
     && curl -sSL https://rvm.io/pkuczynski.asc | gpg --import - \
     && curl -fsSL https://get.rvm.io | bash -s stable \
@@ -204,6 +219,8 @@ RUN curl -sSL https://rvm.io/mpapis.asc | gpg --import - \
 ENV GEM_HOME=/workspace/.rvm
 
 ### Rust ###
+LABEL dazzle/layer=lang-rust
+USER gitpod
 RUN sudo apt-get update \
     && DEBIAN_FRONTEND=noninteractive sudo apt-get install -yq \
         # Enable Rust static binary builds
@@ -222,6 +239,6 @@ RUN bash -lc "cargo install cargo-watch"
 
 ### checks ###
 # no root-owned files in the home directory
-RUN notOwnedFile=$(find . -not "(" -user gitpod -and -group gitpod ")" -print -quit) \
-    && { [ -z "$notOwnedFile" ] \
-        || { echo "Error: not all files/dirs in $HOME are owned by 'gitpod' user & group"; exit 1; } }
+# RUN notOwnedFile=$(find . -not "(" -user gitpod -and -group gitpod ")" -print -quit) \
+#     && { [ -z "$notOwnedFile" ] \
+#         || { echo "Error: not all files/dirs in $HOME are owned by 'gitpod' user & group"; exit 1; } }
