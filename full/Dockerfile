@@ -113,7 +113,7 @@ ENV HOMEBREW_NO_AUTO_UPDATE=1
 LABEL dazzle/layer=lang-go
 LABEL dazzle/test=tests/lang-go.yaml
 USER gitpod
-ENV GO_VERSION=1.12 \
+ENV GO_VERSION=1.13 \
     GOPATH=$HOME/go-packages \
     GOROOT=$HOME/go
 ENV PATH=$GOROOT/bin:$GOPATH/bin:$PATH
