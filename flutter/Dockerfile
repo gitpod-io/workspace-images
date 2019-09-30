@@ -20,4 +20,6 @@ USER gitpod
 
 RUN cd /home/gitpod && wget -qO flutter_sdk.tar.xz https://storage.googleapis.com/flutter_infra/releases/stable/linux/flutter_linux_v1.0.0-stable.tar.xz \
     && tar -xvf flutter_sdk.tar.xz && rm flutter_sdk.tar.xz && \
-    wget -O - http://dl.google.com/android/android-sdk_r26.1.1-linux.tgz | tar -xvz
+    wget -O - http://dl.google.com/android/android-sdk_r26.1.1-linux.tgz | tar -xvz && \
+    # default to x86 and API Level 28
+    avdmanager create avd -n gitpod -k "system-images;android-28;google_apis;x86" 
