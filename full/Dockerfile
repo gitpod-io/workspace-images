@@ -158,7 +158,7 @@ RUN curl -s "https://get.sdkman.io" | bash \
 ENV GRADLE_USER_HOME=/workspace/.gradle/
 
 ### Node.js ###
-ARG NODE_VERSION=10.15.3
+ARG NODE_VERSION=10.16.3
 RUN curl -fsSL https://raw.githubusercontent.com/creationix/nvm/v0.34.0/install.sh | PROFILE=/dev/null bash \
     && bash -c ". .nvm/nvm.sh \
         && nvm install $NODE_VERSION \
