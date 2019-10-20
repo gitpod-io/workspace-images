@@ -1,0 +1,5 @@
+- desc: it should run php
+  command: [java, -version]
+  assert:
+  - status == 0
+  - stdout.indexOf("OpenJDK") != -1

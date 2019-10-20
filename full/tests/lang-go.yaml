@@ -1,0 +1,18 @@
+- desc: it should run
+  command: [go, version]
+  assert:
+  - stdout.indexOf("go version") != -1
+  - status == 0
+- desc: it should have gocode
+  command: [gocode]
+  assert:
+  - status == 0
+- desc: it should have gopkgs
+  command: [gopkgs]
+  assert:
+  - status == 0
+- desc: it should have gopls
+  command: [gopls, version]
+  assert:
+  - status == 0
+  - stdout.indexOf("gopls") != -1

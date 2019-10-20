@@ -37,6 +37,7 @@ RUN sudo echo "Running 'sudo' for Gitpod: success"
 
 ### Install C/C++ compiler and associated tools ###
 LABEL dazzle/layer=lang-c
+LABEL dazzle/test=tests/lang-c.yaml
 USER root
 RUN curl -fsSL https://apt.llvm.org/llvm-snapshot.gpg.key | apt-key add - \
     && apt-add-repository -yu "deb http://apt.llvm.org/disco/ llvm-toolchain-disco main" \
@@ -51,6 +52,7 @@ RUN curl -fsSL https://apt.llvm.org/llvm-snapshot.gpg.key | apt-key add - \
 
 ### Apache and Nginx ###
 LABEL dazzle/layer=tool-nginx
+LABEL dazzle/test=tests/tool-nginx.yaml
 USER root
 RUN  apt-get update && apt-get install -yq \
         apache2 \
@@ -72,6 +74,7 @@ ENV NGINX_DOCROOT_IN_REPO="public"
 
 ### PHP ###
 LABEL dazzle/layer=lang-php
+LABEL dazzle/test=tests/lang-php.yaml
 USER root
 RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -yq \
         composer \
@@ -97,6 +100,7 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -yq \
 
 ### Homebrew ###
 LABEL dazzle/layer=tool-brew
+LABEL dazzle/test=tests/tool-brew.yaml
 USER gitpod
 RUN mkdir ~/.cache && sh -c "$(curl -fsSL https://raw.githubusercontent.com/Linuxbrew/install/master/install.sh)"
 ENV PATH="$PATH:/home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin/"
@@ -106,6 +110,7 @@ RUN sudo apt-get remove -y cmake && brew install cmake
 
 ### Go ###
 LABEL dazzle/layer=lang-go
+LABEL dazzle/test=tests/lang-go.yaml
 USER gitpod
 ENV GO_VERSION=1.12 \
     GOPATH=$HOME/go-packages \
@@ -151,6 +156,7 @@ ENV GOPATH=/workspace/go \
 ### Java ###
 ## Place '.gradle' and 'm2-repository' in /workspace because (1) that's a fast volume, (2) it survives workspace-restarts and (3) it can be warmed-up by pre-builds.
 LABEL dazzle/layer=lang-java
+LABEL dazzle/test=tests/lang-java.yaml
 USER gitpod
 RUN curl -s "https://get.sdkman.io" | bash \
  && bash -c ". /home/gitpod/.sdkman/bin/sdkman-init.sh \
@@ -168,6 +174,7 @@ ENV GRADLE_USER_HOME=/workspace/.gradle/
 
 ### Node.js ###
 LABEL dazzle/layer=lang-node
+LABEL dazzle/test=tests/lang-node.yaml
 USER gitpod
 ARG NODE_VERSION=10.16.3
 RUN curl -fsSL https://raw.githubusercontent.com/creationix/nvm/v0.34.0/install.sh | PROFILE=/dev/null bash \
@@ -183,6 +190,7 @@ ENV PATH=/home/gitpod/.nvm/versions/node/v${NODE_VERSION}/bin:$PATH
 
 ### Python ###
 LABEL dazzle/layer=lang-python
+LABEL dazzle/test=tests/lang-python.yaml
 USER gitpod
 ENV PATH=$HOME/.pyenv/bin:$HOME/.pyenv/shims:$PATH
 RUN curl -fsSL https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-installer | bash \
@@ -203,6 +211,7 @@ RUN curl -fsSL https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-ins
 
 ### Ruby ###
 LABEL dazzle/layer=lang-ruby
+LABEL dazzle/test=tests/lang-ruby.yaml
 USER gitpod
 RUN curl -sSL https://rvm.io/mpapis.asc | gpg --import - \
     && curl -sSL https://rvm.io/pkuczynski.asc | gpg --import - \

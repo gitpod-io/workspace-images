@@ -1,0 +1,5 @@
+- desc: it should have valid configuration
+  command: [nginx, -T]
+  assert:
+  - status == 0
+  - stderr.indexOf("test is successful") != -1
