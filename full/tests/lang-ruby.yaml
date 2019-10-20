@@ -1,0 +1,14 @@
+- desc: it should run ruby
+  command: [ruby, --version]
+  assert:
+  - status == 0
+  - stdout.indexOf("ruby") != -1
+- desc: it should have rvm
+  command: [rvm, --version]
+  assert:
+  - status == 0
+  - stdout.indexOf("rvm") != -1
+- desc: it should default to rvm ruby
+  command: [sh, -c, which ruby]
+  assert:
+  - stdout.indexOf("rvm") != -1

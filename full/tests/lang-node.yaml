@@ -1,0 +1,12 @@
+- desc: it should run node
+  command: [node, --version]
+  assert:
+  - status == 0
+- desc: it should have yarn
+  command: [yarn, --version]
+  assert:
+  - status == 0
+- desc: it should have typescript
+  command: [tsc, --version]
+  assert:
+  - status == 0
