@@ -1,4 +1,4 @@
-- desc: it should run cland
+- desc: it should run clangd
   command: [clangd]
   assert:
   - status == 1
