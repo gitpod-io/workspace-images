@@ -34,6 +34,9 @@ RUN { echo && echo "PS1='\[\e]0;\u \w\a\]\[\033[01;32m\]\u\[\033[00m\] \[\033[01
 USER gitpod
 # use sudo so that user does not get sudo usage info on (the first) login
 RUN sudo echo "Running 'sudo' for Gitpod: success"
+# create .profile.d folder and source it in the bashrc
+RUN mkdir /home/gitpod/.profile.d && \
+    echo "for i in \$(ls \$HOME/.profile.d/*); do source \$i; done" >> /home/gitpod/.profile
 
 ### Install C/C++ compiler and associated tools ###
 LABEL dazzle/layer=lang-c
@@ -167,8 +170,8 @@ RUN curl -s "https://get.sdkman.io" | bash \
              && sdk install maven \
              && mkdir /home/gitpod/.m2 \
              && printf '<settings>\n  <localRepository>/workspace/m2-repository/</localRepository>\n</settings>\n' > /home/gitpod/.m2/settings.xml \
-             && echo 'export SDKMAN_DIR=\"/home/gitpod/.sdkman\"' >> /home/gitpod/.profile \
-             && echo '[[ -s \"/home/gitpod/.sdkman/bin/sdkman-init.sh\" ]] && source \"/home/gitpod/.sdkman/bin/sdkman-init.sh\"' >> /home/gitpod/.profile"
+             && echo 'export SDKMAN_DIR=\"/home/gitpod/.sdkman\"' >> /home/gitpod/.profile.d/99-java \
+             && echo '[[ -s \"/home/gitpod/.sdkman/bin/sdkman-init.sh\" ]] && source \"/home/gitpod/.sdkman/bin/sdkman-init.sh\"' >> /home/gitpod/.profile.d/99-java"
 # above, we are adding the sdkman init to both .profile and .bashrc (executing sdkman-init.sh does that), because one is executed on interactive shells, the other for non-interactive shells (e.g. plugin-host)
 ENV GRADLE_USER_HOME=/workspace/.gradle/
 
@@ -176,14 +179,14 @@ ENV GRADLE_USER_HOME=/workspace/.gradle/
 LABEL dazzle/layer=lang-node
 LABEL dazzle/test=tests/lang-node.yaml
 USER gitpod
-ARG NODE_VERSION=10.16.3
+ENV NODE_VERSION=10.16.3
 RUN curl -fsSL https://raw.githubusercontent.com/creationix/nvm/v0.34.0/install.sh | PROFILE=/dev/null bash \
     && bash -c ". .nvm/nvm.sh \
         && nvm install $NODE_VERSION \
         && npm config set python /usr/bin/python --global \
         && npm config set python /usr/bin/python \
         && npm install -g typescript yarn" \
-    && echo ". ~/.nvm/nvm-lazy.sh" | tee -a /home/gitpod/.profile /home/gitpod/.bashrc
+    && echo ". ~/.nvm/nvm-lazy.sh"  >> /home/gitpod/.profile.d/50-node
 # above, we are adding the lazy nvm init to both .profile and .bashrc, because one is executed on interactive shells, the other for non-interactive shells (e.g. plugin-host)
 COPY --chown=gitpod:gitpod nvm-lazy.sh /home/gitpod/.nvm/nvm-lazy.sh
 ENV PATH=/home/gitpod/.nvm/versions/node/v${NODE_VERSION}/bin:$PATH

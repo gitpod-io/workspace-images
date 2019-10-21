@@ -1,5 +1,6 @@
-- desc: it should run php
-  command: [java, -version]
+- desc: it should run java
+  command: [java -version]
+  entrypoint: [bash, -l, -c]
   assert:
   - status == 0
-  - stdout.indexOf("OpenJDK") != -1
+  - stderr.indexOf("OpenJDK") != -1
