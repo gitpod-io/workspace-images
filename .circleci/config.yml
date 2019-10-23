@@ -3,15 +3,24 @@ version: 2.0
 jobs:
   workspace-full:
     docker:
-      - image: docker:stable
+      - image: csweichel/dazzle:latest
     steps:
       - checkout
       - setup_remote_docker
       - run:
           command: |
-            ./.circleci/build_image.sh full/Dockerfile gitpod/workspace-full
-            docker save gitpod/workspace-full -o workspace-full.tar
+            ./.circleci/dazzle_build_image.sh full/Dockerfile gitpod/workspace-full workspace-full.tar
           no_output_timeout: 30m
+      - run:
+          name: Save test results
+          command: |
+            mkdir -p ~/test-results/dazzle/
+            cp full/*.xml ~/test-results/dazzle
+          when: always
+      - store_test_results:
+          path: ~/test-results
+      - store_artifacts:
+          path: ~/test-results/dazzle
       - persist_to_workspace:
           root: .
           paths:
