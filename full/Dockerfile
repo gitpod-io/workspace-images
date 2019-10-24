@@ -47,7 +47,7 @@ RUN curl -fsSL https://apt.llvm.org/llvm-snapshot.gpg.key | apt-key add - \
     && apt-get install -yq \
         clang-format \
         clang-tidy \
-        clang-tools \
+        # clang-tools \ # breaks the build atm
         clangd \
         gdb \
         lld \
