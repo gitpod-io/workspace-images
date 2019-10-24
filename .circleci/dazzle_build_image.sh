@@ -1,8 +1,8 @@
 #!/bin/sh
 set -xe
 
-if [[ $# -ne 2 ]]; then
-  echo "Usage: $0 DOCKERFILE IMAGE_NAME"
+if [[ $# -le 2 ]]; then
+  echo "Usage: $0 DOCKERFILE IMAGE_NAME [TAR_FILENAME]"
   exit 2
 fi
 
@@ -14,6 +14,7 @@ fi
 DIR=`dirname $1`
 DOCKERFILE=`basename $1`
 IMAGE_NAME=$2
+TAR_FILENAME=$PWD/$3
 
 DOCKERHUB_TAG="branch-$(echo $CIRCLE_BRANCH | sed 's_/_-_g')"
 BUILD_IMAGE_NAME=$IMAGE_NAME:build-$DOCKERHUB_TAG
@@ -27,7 +28,7 @@ $DOCKER_PASS
 EOF
 
 cd $DIR
-dazzle build --repository gitpod/dazzle-build --output-test-xml results.xml -t $BUILD_IMAGE_NAME -f $DOCKERFILE .
+dazzle build --repository gitpod/dazzle-wsfull-build --output-test-xml results.xml -t $BUILD_IMAGE_NAME -f $DOCKERFILE .
 
 if [[ $CIRCLE_BRANCH != "master" ]]; then
   # Work in progress: Tag the image ":branch-X" and push it to Docker Hub.
@@ -41,4 +42,9 @@ else
   DOCKERHUB_TAG="commit-$CIRCLE_SHA1"
   docker tag $BUILD_IMAGE_NAME $IMAGE_NAME:$DOCKERHUB_TAG
   docker push $IMAGE_NAME:$DOCKERHUB_TAG
+fi
+
+if [[ ! -z $TAR_FILENAME ]]; then
+  echo "exporting $BUILD_IMAGE_NAME to $TAR_FILENAME"
+  docker save $BUILD_IMAGE_NAME -o $TAR_FILENAME
 fi
