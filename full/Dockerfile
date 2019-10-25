@@ -18,8 +18,6 @@ RUN yes | unminimize \
         multitail \
     && locale-gen en_US.UTF-8 \
     && mkdir /var/lib/apt/dazzle-marks \
-    && apt-mark showmanual >> /var/lib/apt/dazzle-marks/base.manual.list \
-    && apt-mark showauto >> /var/lib/apt/dazzle-marks/base.auto.list \
     && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/*
 
 ENV LANG=en_US.UTF-8
@@ -56,8 +54,7 @@ RUN curl -fsSL https://apt.llvm.org/llvm-snapshot.gpg.key | apt-key add - \
         clangd \
         gdb \
         lld \
-    && apt-mark showmanual >> /var/lib/apt/dazzle-marks/lang-c.manual.list \
-    && apt-mark showauto >> /var/lib/apt/dazzle-marks/lang-c.auto.list \
+    && cp /var/lib/dpkg/status /var/lib/apt/dazzle-marks/lang-c.status \
     && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/*
 
 ### Apache and Nginx ###
@@ -68,8 +65,7 @@ RUN  apt-get update && apt-get install -yq \
         apache2 \
         nginx \
         nginx-extras \
-    && apt-mark showmanual >> /var/lib/apt/dazzle-marks/tool-nginx.manual.list \
-    && apt-mark showauto >> /var/lib/apt/dazzle-marks/tool-nginx.auto.list \
+    && cp /var/lib/dpkg/status /var/lib/apt/dazzle-marks/tool-nginx.status \
     && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* \
     && mkdir /var/run/apache2 \
     && mkdir /var/lock/apache2 \
@@ -107,8 +103,7 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -yq \
         php-tokenizer \
         php-xml \
         php-zip \
-    && apt-mark showmanual >> /var/lib/apt/dazzle-marks/lang-php.manual.list \
-    && apt-mark showauto >> /var/lib/apt/dazzle-marks/lang-php.auto.list \
+    && cp /var/lib/dpkg/status /var/lib/apt/dazzle-marks/lang-php.status \
     && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/*
 # PHP language server is installed by theia-php-extension
 
@@ -253,8 +248,7 @@ RUN sudo apt-get update \
         musl \
         musl-dev \
         musl-tools \
-    && sudo bash -c "apt-mark showmanual >> /var/lib/apt/dazzle-marks/lang-rust.manual.list" \
-    && sudo bash -c "apt-mark showauto >> /var/lib/apt/dazzle-marks/lang-rust.auto.list" \
+    && sudo cp /var/lib/dpkg/status /var/lib/apt/dazzle-marks/lang-rust.status \
     && sudo apt-get clean \
     && sudo rm -rf /var/lib/apt/lists/* /tmp/*
 
@@ -268,10 +262,14 @@ RUN bash -lc "cargo install cargo-watch"
 ### Prologue (built across all layers) ###
 LABEL dazzle/layer=dazzle-prologue
 LABEL dazzle/test=tests/prologue.yaml
-RUN cat /var/lib/apt/dazzle-marks/*.auto.list | sort | uniq
 
-### checks ###
-# no root-owned files in the home directory
-# RUN notOwnedFile=$(find . -not "(" -user gitpod -and -group gitpod ")" -print -quit) \
-#     && { [ -z "$notOwnedFile" ] \
-#         || { echo "Error: not all files/dirs in $HOME are owned by 'gitpod' user & group"; exit 1; } }
+# merge dpkg status files
+USER root
+RUN curl -o dazzle-util -L https://github.com/32leaves/dazzle/releases/download/v0.0.3/dazzle-util_0.0.3_Linux_x86_64 \
+    && chmod +x dazzle-util \
+    && cp /var/lib/dpkg/status /tmp/dpkg-status \
+    && for i in $(ls /var/lib/apt/dazzle-marks/*.status); do ./dazzle-util debian dpkg-status-merge /tmp/dpkg-status $i > /tmp/dpkg-status; done \
+    && cp -f /var/lib/dpkg/status /var/lib/dpkg/status-old \
+    && cp -f /tmp/dpkg-status /var/lib/dpkg/status \
+    && rm dazzle-util
+USER gitpod
