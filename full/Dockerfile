@@ -17,7 +17,11 @@ RUN yes | unminimize \
         vim \
         multitail \
     && locale-gen en_US.UTF-8 \
+    && mkdir /var/lib/apt/dazzle-marks \
+    && apt-mark showmanual >> /var/lib/apt/dazzle-marks/base.manual.list \
+    && apt-mark showauto >> /var/lib/apt/dazzle-marks/base.auto.list \
     && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/*
+
 ENV LANG=en_US.UTF-8
 
 ### Gitpod user ###
@@ -43,7 +47,8 @@ LABEL dazzle/layer=lang-c
 LABEL dazzle/test=tests/lang-c.yaml
 USER root
 RUN curl -fsSL https://apt.llvm.org/llvm-snapshot.gpg.key | apt-key add - \
-    && apt-add-repository -yu "deb http://apt.llvm.org/disco/ llvm-toolchain-disco main" \
+    && echo "deb http://apt.llvm.org/disco/ llvm-toolchain-disco main" >> /etc/apt/sources.list.d/llvm.list \
+    && apt-get update \
     && apt-get install -yq \
         clang-format \
         clang-tidy \
@@ -51,6 +56,8 @@ RUN curl -fsSL https://apt.llvm.org/llvm-snapshot.gpg.key | apt-key add - \
         clangd \
         gdb \
         lld \
+    && apt-mark showmanual >> /var/lib/apt/dazzle-marks/lang-c.manual.list \
+    && apt-mark showauto >> /var/lib/apt/dazzle-marks/lang-c.auto.list \
     && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/*
 
 ### Apache and Nginx ###
@@ -61,6 +68,8 @@ RUN  apt-get update && apt-get install -yq \
         apache2 \
         nginx \
         nginx-extras \
+    && apt-mark showmanual >> /var/lib/apt/dazzle-marks/tool-nginx.manual.list \
+    && apt-mark showauto >> /var/lib/apt/dazzle-marks/tool-nginx.auto.list \
     && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* \
     && mkdir /var/run/apache2 \
     && mkdir /var/lock/apache2 \
@@ -98,6 +107,8 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -yq \
         php-tokenizer \
         php-xml \
         php-zip \
+    && apt-mark showmanual >> /var/lib/apt/dazzle-marks/lang-php.manual.list \
+    && apt-mark showauto >> /var/lib/apt/dazzle-marks/lang-php.auto.list \
     && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/*
 # PHP language server is installed by theia-php-extension
 
@@ -109,7 +120,8 @@ RUN mkdir ~/.cache && sh -c "$(curl -fsSL https://raw.githubusercontent.com/Linu
 ENV PATH="$PATH:/home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin/"
 ENV MANPATH="$MANPATH:/home/linuxbrew/.linuxbrew/share/man"
 ENV INFOPATH="$INFOPATH:/home/linuxbrew/.linuxbrew/share/info"
-RUN sudo apt-get remove -y cmake && brew install cmake
+RUN sudo apt-get remove -y cmake \
+    && brew install cmake
 
 ### Go ###
 LABEL dazzle/layer=lang-go
@@ -151,7 +163,8 @@ RUN curl -fsSL https://storage.googleapis.com/golang/go$GO_VERSION.linux-amd64.t
     go get -u -v -d github.com/stamblerre/gocode && \
     go build -o $GOPATH/bin/gocode-gomod github.com/stamblerre/gocode && \
     rm -rf $GOPATH/src && \
-    rm -rf $GOPATH/pkg
+    rm -rf $GOPATH/pkg && \
+    rm -rf /home/gitpod/.cache/go
 # user Go packages
 ENV GOPATH=/workspace/go \
     PATH=/workspace/go/bin:$PATH
@@ -232,6 +245,7 @@ ENV GEM_HOME=/workspace/.rvm
 
 ### Rust ###
 LABEL dazzle/layer=lang-rust
+LABEL dazzle/test=tests/lang-rust.yaml
 USER gitpod
 RUN sudo apt-get update \
     && DEBIAN_FRONTEND=noninteractive sudo apt-get install -yq \
@@ -239,6 +253,8 @@ RUN sudo apt-get update \
         musl \
         musl-dev \
         musl-tools \
+    && sudo bash -c "apt-mark showmanual >> /var/lib/apt/dazzle-marks/lang-rust.manual.list" \
+    && sudo bash -c "apt-mark showauto >> /var/lib/apt/dazzle-marks/lang-rust.auto.list" \
     && sudo apt-get clean \
     && sudo rm -rf /var/lib/apt/lists/* /tmp/*
 
@@ -248,6 +264,11 @@ RUN curl -fsSL https://sh.rustup.rs | sh -s -- -y \
     && .cargo/bin/rustup completions bash | sudo tee /etc/bash_completion.d/rustup.bash-completion > /dev/null \
     && .cargo/bin/rustup target add x86_64-unknown-linux-musl
 RUN bash -lc "cargo install cargo-watch"
+
+### Prologue (built across all layers) ###
+LABEL dazzle/layer=dazzle-prologue
+LABEL dazzle/test=tests/prologue.yaml
+RUN cat /var/lib/apt/dazzle-marks/*.auto.list | sort | uniq
 
 ### checks ###
 # no root-owned files in the home directory
