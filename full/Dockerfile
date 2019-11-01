@@ -220,6 +220,9 @@ RUN curl -fsSL https://sh.rustup.rs | sh -s -- -y \
     && .cargo/bin/rustup target add x86_64-unknown-linux-musl
 RUN bash -lc "cargo install cargo-watch"
 
+### Nim ###
+RUN sudo apt-get update && sudo apt-get install nim
+
 ### checks ###
 # no root-owned files in the home directory
 RUN notOwnedFile=$(find . -not "(" -user gitpod -and -group gitpod ")" -print -quit) \
