@@ -16,6 +16,7 @@ RUN yes | unminimize \
         sudo \
         vim \
         multitail \
+        lsof \
     && locale-gen en_US.UTF-8 \
     && mkdir /var/lib/apt/dazzle-marks \
     && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/*
