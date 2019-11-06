@@ -37,9 +37,9 @@ RUN { echo && echo "PS1='\[\e]0;\u \w\a\]\[\033[01;32m\]\u\[\033[00m\] \[\033[01
 USER gitpod
 # use sudo so that user does not get sudo usage info on (the first) login
 RUN sudo echo "Running 'sudo' for Gitpod: success"
-# create .profile.d folder and source it in the bashrc
-RUN mkdir /home/gitpod/.profile.d && \
-    echo "for i in \$(ls \$HOME/.profile.d/*); do source \$i; done" >> /home/gitpod/.profile
+# create .bashrc.d folder and source it in the bashrc
+RUN mkdir /home/gitpod/.bashrc.d && \
+    (echo; echo "for i in \$(ls \$HOME/.bashrc.d/*); do source \$i; done"; echo) >> /home/gitpod/.bashrc
 
 ### Install C/C++ compiler and associated tools ###
 LABEL dazzle/layer=lang-c
@@ -118,6 +118,7 @@ ENV MANPATH="$MANPATH:/home/linuxbrew/.linuxbrew/share/man"
 ENV INFOPATH="$INFOPATH:/home/linuxbrew/.linuxbrew/share/info"
 RUN sudo apt-get remove -y cmake \
     && brew install cmake
+ENV HOMEBREW_NO_AUTO_UPDATE=1
 
 ### Go ###
 LABEL dazzle/layer=lang-go
@@ -179,9 +180,9 @@ RUN curl -s "https://get.sdkman.io" | bash \
              && sdk install maven \
              && mkdir /home/gitpod/.m2 \
              && printf '<settings>\n  <localRepository>/workspace/m2-repository/</localRepository>\n</settings>\n' > /home/gitpod/.m2/settings.xml \
-             && echo 'export SDKMAN_DIR=\"/home/gitpod/.sdkman\"' >> /home/gitpod/.profile.d/99-java \
-             && echo '[[ -s \"/home/gitpod/.sdkman/bin/sdkman-init.sh\" ]] && source \"/home/gitpod/.sdkman/bin/sdkman-init.sh\"' >> /home/gitpod/.profile.d/99-java"
-# above, we are adding the sdkman init to both .profile and .bashrc (executing sdkman-init.sh does that), because one is executed on interactive shells, the other for non-interactive shells (e.g. plugin-host)
+             && echo 'export SDKMAN_DIR=\"/home/gitpod/.sdkman\"' >> /home/gitpod/.bashrc.d/99-java \
+             && echo '[[ -s \"/home/gitpod/.sdkman/bin/sdkman-init.sh\" ]] && source \"/home/gitpod/.sdkman/bin/sdkman-init.sh\"' >> /home/gitpod/.bashrc.d/99-java"
+# above, we are adding the sdkman init to .bashrc (executing sdkman-init.sh does that), because one is executed on interactive shells, the other for non-interactive shells (e.g. plugin-host)
 ENV GRADLE_USER_HOME=/workspace/.gradle/
 
 ### Node.js ###
@@ -195,8 +196,8 @@ RUN curl -fsSL https://raw.githubusercontent.com/creationix/nvm/v0.34.0/install.
         && npm config set python /usr/bin/python --global \
         && npm config set python /usr/bin/python \
         && npm install -g typescript yarn" \
-    && echo ". ~/.nvm/nvm-lazy.sh"  >> /home/gitpod/.profile.d/50-node
-# above, we are adding the lazy nvm init to both .profile and .bashrc, because one is executed on interactive shells, the other for non-interactive shells (e.g. plugin-host)
+    && echo ". ~/.nvm/nvm-lazy.sh"  >> /home/gitpod/.bashrc.d/50-node
+# above, we are adding the lazy nvm init to .bashrc, because one is executed on interactive shells, the other for non-interactive shells (e.g. plugin-host)
 COPY --chown=gitpod:gitpod nvm-lazy.sh /home/gitpod/.nvm/nvm-lazy.sh
 ENV PATH=/home/gitpod/.nvm/versions/node/v${NODE_VERSION}/bin:$PATH
 
@@ -208,7 +209,7 @@ ENV PATH=$HOME/.pyenv/bin:$HOME/.pyenv/shims:$PATH
 RUN curl -fsSL https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-installer | bash \
     && { echo; \
         echo 'eval "$(pyenv init -)"'; \
-        echo 'eval "$(pyenv virtualenv-init -)"'; } >> .bashrc \
+        echo 'eval "$(pyenv virtualenv-init -)"'; } >> /home/gitpod/.bashrc.d/60-python \
     && pyenv install 2.7.16 \
     && pyenv install 3.7.4 \
     && pyenv global 2.7.16 3.7.4 \
@@ -236,7 +237,8 @@ RUN curl -sSL https://rvm.io/mpapis.asc | gpg --import - \
         && rvm use 2.6 --default \
         && rvm rubygems current \
         && gem install bundler --no-document \
-        && gem install solargraph --no-document"
+        && gem install solargraph --no-document" \
+    && echo '[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*' >> /home/gitpod/.bashrc.d/70-ruby
 ENV GEM_HOME=/workspace/.rvm
 
 ### Rust ###
@@ -253,11 +255,14 @@ RUN sudo apt-get update \
     && sudo apt-get clean \
     && sudo rm -rf /var/lib/apt/lists/* /tmp/*
 
-RUN curl -fsSL https://sh.rustup.rs | sh -s -- -y \
+RUN cp /home/gitpod/.profile /home/gitpod/.profile_orig && \
+    curl -fsSL https://sh.rustup.rs | sh -s -- -y \
     && .cargo/bin/rustup update \
     && .cargo/bin/rustup component add rls-preview rust-analysis rust-src \
     && .cargo/bin/rustup completions bash | sudo tee /etc/bash_completion.d/rustup.bash-completion > /dev/null \
-    && .cargo/bin/rustup target add x86_64-unknown-linux-musl
+    && .cargo/bin/rustup target add x86_64-unknown-linux-musl \
+    && grep -v -F -x -f /home/gitpod/.profile_orig /home/gitpod/.profile > /home/gitpod/.bashrc.d/80-rust
+
 RUN bash -lc "cargo install cargo-watch"
 
 ### Prologue (built across all layers) ###
