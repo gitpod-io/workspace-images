@@ -87,6 +87,7 @@ LABEL dazzle/test=tests/lang-php.yaml
 USER root
 RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -yq \
         composer \
+        nim \
         php \
         php-all-dev \
         php-ctype \
