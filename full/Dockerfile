@@ -58,34 +58,14 @@ RUN curl -fsSL https://apt.llvm.org/llvm-snapshot.gpg.key | apt-key add - \
     && cp /var/lib/dpkg/status /var/lib/apt/dazzle-marks/lang-c.status \
     && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/*
 
-### Apache and Nginx ###
+### Apache, PHP and Nginx ###
 LABEL dazzle/layer=tool-nginx
-LABEL dazzle/test=tests/tool-nginx.yaml
+LABEL dazzle/test=tests/lang-php.yaml
 USER root
-RUN  apt-get update && apt-get install -yq \
+RUN  apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -yq \
         apache2 \
         nginx \
         nginx-extras \
-    && cp /var/lib/dpkg/status /var/lib/apt/dazzle-marks/tool-nginx.status \
-    && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* \
-    && mkdir /var/run/apache2 \
-    && mkdir /var/lock/apache2 \
-    && mkdir /var/run/nginx \
-    && ln -s /etc/apache2/mods-available/rewrite.load /etc/apache2/mods-enabled/rewrite.load \
-    && chown -R gitpod:gitpod /etc/apache2 /var/run/apache2 /var/lock/apache2 /var/log/apache2 \
-    && chown -R gitpod:gitpod /etc/nginx /var/run/nginx /var/lib/nginx/ /var/log/nginx/
-COPY apache2/ /etc/apache2/
-COPY nginx /etc/nginx/
-
-## The directory relative to your git repository that will be served by Apache / Nginx
-ENV APACHE_DOCROOT_IN_REPO="public"
-ENV NGINX_DOCROOT_IN_REPO="public"
-
-### PHP ###
-LABEL dazzle/layer=lang-php
-LABEL dazzle/test=tests/lang-php.yaml
-USER root
-RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -yq \
         composer \
         php \
         php-all-dev \
@@ -104,9 +84,18 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -yq \
         php-tokenizer \
         php-xml \
         php-zip \
-    && cp /var/lib/dpkg/status /var/lib/apt/dazzle-marks/lang-php.status \
-    && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/*
-# PHP language server is installed by theia-php-extension
+    && cp /var/lib/dpkg/status /var/lib/apt/dazzle-marks/tool-nginx.status \
+    && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* \
+    && mkdir /var/run/nginx \
+    && ln -s /etc/apache2/mods-available/rewrite.load /etc/apache2/mods-enabled/rewrite.load \
+    && chown -R gitpod:gitpod /etc/apache2 /var/run/apache2 /var/lock/apache2 /var/log/apache2 \
+    && chown -R gitpod:gitpod /etc/nginx /var/run/nginx /var/lib/nginx/ /var/log/nginx/
+COPY apache2/ /etc/apache2/
+COPY nginx /etc/nginx/
+
+## The directory relative to your git repository that will be served by Apache / Nginx
+ENV APACHE_DOCROOT_IN_REPO="public"
+ENV NGINX_DOCROOT_IN_REPO="public"
 
 ### Homebrew ###
 LABEL dazzle/layer=tool-brew
