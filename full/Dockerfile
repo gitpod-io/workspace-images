@@ -258,13 +258,15 @@ RUN bash -lc "cargo install cargo-watch"
 LABEL dazzle/layer=dazzle-prologue
 LABEL dazzle/test=tests/prologue.yaml
 
-# merge dpkg status files
 USER root
-RUN curl -o dazzle-util -L https://github.com/32leaves/dazzle/releases/download/v0.0.3/dazzle-util_0.0.3_Linux_x86_64 \
-    && chmod +x dazzle-util \
-    && cp /var/lib/dpkg/status /tmp/dpkg-status \
-    && for i in $(ls /var/lib/apt/dazzle-marks/*.status); do ./dazzle-util debian dpkg-status-merge /tmp/dpkg-status $i > /tmp/dpkg-status; done \
+RUN curl -o /usr/bin/dazzle-util -L https://github.com/32leaves/dazzle/releases/download/v0.0.3/dazzle-util_0.0.3_Linux_x86_64 \
+    && chmod +x /usr/bin/dazzle-util
+# merge dpkg status files
+RUN cp /var/lib/dpkg/status /tmp/dpkg-status \
+    && for i in $(ls /var/lib/apt/dazzle-marks/*.status); do /usr/bin/dazzle-util debian dpkg-status-merge /tmp/dpkg-status $i > /tmp/dpkg-status; done \
     && cp -f /var/lib/dpkg/status /var/lib/dpkg/status-old \
-    && cp -f /tmp/dpkg-status /var/lib/dpkg/status \
-    && rm dazzle-util
+    && cp -f /tmp/dpkg-status /var/lib/dpkg/status
+# copy tests to enable the self-test of this image
+COPY tests /var/lib/dazzle/tests
+
 USER gitpod
