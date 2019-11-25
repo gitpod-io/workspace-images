@@ -162,11 +162,11 @@ LABEL dazzle/test=tests/lang-java.yaml
 USER gitpod
 RUN curl -s "https://get.sdkman.io" | bash \
  && bash -c ". /home/gitpod/.sdkman/bin/sdkman-init.sh \
-             && sdk install java 8.0.202-zulufx \
-             && sdk install java 11.0.2-zulufx \
-             && sdk default java 8.0.202-zulufx \
+             && sdk install java 11.0.5-open \
              && sdk install gradle \
              && sdk install maven \
+             && sdk flush archives \
+             && sdk flush temp \
              && mkdir /home/gitpod/.m2 \
              && printf '<settings>\n  <localRepository>/workspace/m2-repository/</localRepository>\n</settings>\n' > /home/gitpod/.m2/settings.xml \
              && echo 'export SDKMAN_DIR=\"/home/gitpod/.sdkman\"' >> /home/gitpod/.bashrc.d/99-java \
