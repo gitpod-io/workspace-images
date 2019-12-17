@@ -160,7 +160,7 @@ ENV GOPATH=/workspace/go \
 LABEL dazzle/layer=lang-java
 LABEL dazzle/test=tests/lang-java.yaml
 USER gitpod
-RUN curl -s "https://get.sdkman.io" | bash \
+RUN curl -fsSL "https://get.sdkman.io" | bash \
  && bash -c ". /home/gitpod/.sdkman/bin/sdkman-init.sh \
              && sdk install java 11.0.5-open \
              && sdk install gradle \
