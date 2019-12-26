@@ -5,6 +5,7 @@ RUN yes | unminimize \
     && apt-get install -yq \
         asciidoctor \
         bash-completion \
+        apt-utils \
         build-essential \
         htop \
         jq \
