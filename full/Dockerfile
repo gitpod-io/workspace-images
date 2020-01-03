@@ -178,8 +178,8 @@ ENV GRADLE_USER_HOME=/workspace/.gradle/
 LABEL dazzle/layer=lang-node
 LABEL dazzle/test=tests/lang-node.yaml
 USER gitpod
-ENV NODE_VERSION=10.16.3
-RUN curl -fsSL https://raw.githubusercontent.com/creationix/nvm/v0.34.0/install.sh | PROFILE=/dev/null bash \
+ENV NODE_VERSION=10.18.0
+RUN curl -fsSL https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.1/install.sh | PROFILE=/dev/null bash \
     && bash -c ". .nvm/nvm.sh \
         && nvm install $NODE_VERSION \
         && npm config set python /usr/bin/python --global \
