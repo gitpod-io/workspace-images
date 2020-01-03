@@ -220,7 +220,6 @@ RUN curl -sSL https://rvm.io/mpapis.asc | gpg --import - \
     && curl -fsSL https://get.rvm.io | bash -s stable \
     && bash -lc " \
         rvm requirements \
-        && rvm install 2.4 \
         && rvm install 2.5 \
         && rvm install 2.6 \
         && rvm use 2.6 --default \
