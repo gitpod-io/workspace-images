@@ -160,9 +160,9 @@ ENV GOPATH=/workspace/go \
 LABEL dazzle/layer=lang-java
 LABEL dazzle/test=tests/lang-java.yaml
 USER gitpod
-RUN curl -s "https://get.sdkman.io" | bash \
+RUN curl -fsSL "https://get.sdkman.io" | bash \
  && bash -c ". /home/gitpod/.sdkman/bin/sdkman-init.sh \
-             && sdk install java 11.0.5-open \
+             && sdk install java 11.0.2-zulufx \
              && sdk install gradle \
              && sdk install maven \
              && sdk flush archives \
@@ -178,8 +178,8 @@ ENV GRADLE_USER_HOME=/workspace/.gradle/
 LABEL dazzle/layer=lang-node
 LABEL dazzle/test=tests/lang-node.yaml
 USER gitpod
-ENV NODE_VERSION=10.16.3
-RUN curl -fsSL https://raw.githubusercontent.com/creationix/nvm/v0.34.0/install.sh | PROFILE=/dev/null bash \
+ENV NODE_VERSION=10.18.0
+RUN curl -fsSL https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.1/install.sh | PROFILE=/dev/null bash \
     && bash -c ". .nvm/nvm.sh \
         && nvm install $NODE_VERSION \
         && npm config set python /usr/bin/python --global \
@@ -199,13 +199,13 @@ RUN curl -fsSL https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-ins
     && { echo; \
         echo 'eval "$(pyenv init -)"'; \
         echo 'eval "$(pyenv virtualenv-init -)"'; } >> /home/gitpod/.bashrc.d/60-python \
-    && pyenv install 2.7.16 \
-    && pyenv install 3.7.4 \
-    && pyenv global 2.7.16 3.7.4 \
+    && pyenv install 2.7.17 \
+    && pyenv install 3.7.6 \
+    && pyenv global 2.7.17 3.7.6 \
     && pip2 install --upgrade pip \
     && pip2 install virtualenv pipenv pylint rope flake8 autopep8 pep8 pylama pydocstyle bandit notebook python-language-server[all]==0.25.0 \
     && pip3 install --upgrade pip \
-    && pip3 install virtualenv pipenv pylint rope flake8 autopep8 pep8 pylama pydocstyle bandit notebook python-language-server[all]==0.25.0 \
+    && pip3 install virtualenv pipenv pylint rope flake8 mypy autopep8 pep8 pylama pydocstyle bandit notebook python-language-server[all]==0.25.0 \
     && rm -rf /tmp/*
 # Gitpod will automatically add user site under `/workspace` to persist your packages.
 # ENV PYTHONUSERBASE=/workspace/.pip-modules \
@@ -220,7 +220,6 @@ RUN curl -sSL https://rvm.io/mpapis.asc | gpg --import - \
     && curl -fsSL https://get.rvm.io | bash -s stable \
     && bash -lc " \
         rvm requirements \
-        && rvm install 2.4 \
         && rvm install 2.5 \
         && rvm install 2.6 \
         && rvm use 2.6 --default \

@@ -126,7 +126,7 @@ jobs:
             docker load -i workspace-full.tar
             ./.circleci/build_image.sh mongodb/Dockerfile gitpod/workspace-mongodb
 
-  workspace-firefox:
+  workspace-gecko:
     docker:
       - image: docker:stable
     steps:
@@ -137,7 +137,7 @@ jobs:
       - run:
           command: |
             docker load -i workspace-full-vnc.tar
-            ./.circleci/build_image.sh firefox/Dockerfile gitpod/workspace-firefox
+            ./.circleci/build_image.sh gecko/Dockerfile gitpod/workspace-gecko
           no_output_timeout: 60m
 
 workflows:
@@ -166,6 +166,6 @@ workflows:
       - workspace-mongodb:
           requires:
               - workspace-full
-      - workspace-firefox:
+      - workspace-gecko:
           requires:
             - workspace-full-vnc
