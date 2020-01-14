@@ -118,7 +118,7 @@ ENV GO_VERSION=1.13 \
     GOROOT=$HOME/go
 ENV PATH=$GOROOT/bin:$GOPATH/bin:$PATH
 RUN curl -fsSL https://storage.googleapis.com/golang/go$GO_VERSION.linux-amd64.tar.gz | tar -xzv \
-# install VS Code Go tools from https://github.com/Microsoft/vscode-go/blob/0faec7e5a8a69d71093f08e035d33beb3ded8626/src/goInstallTools.ts#L19-L45
+    # install VS Code Go tools from https://github.com/Microsoft/vscode-go/blob/e296cbac692496a0eabc87c563e16c16da3175b8/src/goInstallTools.ts#L19-L45
     && go get -u -v \
     github.com/mdempsky/gocode \
     github.com/uudashr/gopkgs/cmd/gopkgs \
@@ -203,9 +203,14 @@ RUN curl -fsSL https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-ins
     && pyenv install 3.7.6 \
     && pyenv global 2.7.17 3.7.6 \
     && pip2 install --upgrade pip \
-    && pip2 install virtualenv pipenv pylint rope flake8 autopep8 pep8 pylama pydocstyle bandit notebook python-language-server[all]==0.25.0 \
+    && pip2 install \
+        virtualenv pylint rope autopep8 pep8 pylama pydocstyle \
+        bandit notebook python-language-server[all]==0.25.0 \
     && pip3 install --upgrade pip \
-    && pip3 install virtualenv pipenv pylint rope flake8 mypy autopep8 pep8 pylama pydocstyle bandit notebook python-language-server[all]==0.25.0 \
+    && pip3 install \
+        setuptools wheel virtualenv pipenv pylint rope flake8 \
+        mypy autopep8 pep8 pylama pydocstyle bandit notebook \
+        python-language-server[all]==0.25.0 \
     && rm -rf /tmp/*
 # Gitpod will automatically add user site under `/workspace` to persist your packages.
 # ENV PYTHONUSERBASE=/workspace/.pip-modules \
@@ -222,6 +227,7 @@ RUN curl -sSL https://rvm.io/mpapis.asc | gpg --import - \
         rvm requirements \
         && rvm install 2.5 \
         && rvm install 2.6 \
+        && rvm install 2.7 \
         && rvm use 2.6 --default \
         && rvm rubygems current \
         && gem install bundler --no-document \
