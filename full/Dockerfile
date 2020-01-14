@@ -210,7 +210,7 @@ RUN curl -fsSL https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-ins
     && pip3 install \
         setuptools wheel virtualenv pipenv pylint rope flake8 \
         mypy autopep8 pep8 pylama pydocstyle bandit notebook \
-        python-language-server[all]==0.25.0 \
+        python-language-server[all]==0.25.0 twine \
     && rm -rf /tmp/*
 # Gitpod will automatically add user site under `/workspace` to persist your packages.
 # ENV PYTHONUSERBASE=/workspace/.pip-modules \
