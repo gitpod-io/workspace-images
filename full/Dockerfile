@@ -255,14 +255,10 @@ RUN bash -lc "cargo install cargo-watch"
 
 ### VLANG ###
 USER root
-ENV VLANG_SOURCE="/opt/vlang"
-RUN git clone https://github.com/vlang/v "$VLANG_SOURCE" || exit 1
-RUN chown -R gitpod:gitpod "$VLANG_SOURCE" || exit 1
-USER gitpod
-RUN make -C "$VLANG_SOURCE" || exit 1
-USER root
-RUN "$VLANG_SOURCE/v" symlink || exit 1
-RUN unset VLANG_SOURCE
+ENV VLANG_VERSION="0.1.24"
+COPY vlang_init.sh /usr/bin/vlang_init
+RUN chmod +x /usr/bin/vlang_init
+RUN vlang_init || exit 1
 
 ### Prologue (built across all layers) ###
 LABEL dazzle/layer=dazzle-prologue
