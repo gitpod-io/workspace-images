@@ -1,5 +1,4 @@
-#!/bin/bash
-# -- Export of regEx on posix is required
+#!/bin/sh
 # Created by Jacob Hrbek <kreyren@rixotstudio.cz> under license GPL-3 (https://www.gnu.org/licenses/gpl-3.0.en.html)
 # Based in part on https://github.com/JesterOrNot/Gitpod-V which is created by Sean Hellum as unlicense
 
@@ -49,7 +48,7 @@ fi
 case "$VLANG_VERSION" in
 	[0-9].[0-9].[0-9]|[0-9][0-9].[0-9].[0-9]|[0-9][0-9].[0-9][0-9].[0-9]|[0-9][0-9].[0-9][0-9].[0-9][0-9]|[0-9].[0-9][0-9].[0-9]|[0-9].[0-9].[0-9][0-9]) true ;;
 	latest)
-		VLANG_VERSION="$(curl https://api.github.com/repos/vlang/v/releases/latest 2>/dev/null | grep tag_name | sed -E 's#(^\s+\"tag_name\"\:\s+\")([^"]+)([^\n]+)#\2#gm' || die 4 "Unable to get latest vlang version for GitHub API")" ;;
+		VLANG_VERSION="$(curl https://api.github.com/repos/vlang/v/releases/latest 2>/dev/null | grep tag_name | sed '/^[[:blank:]]*"tag_name":[[:blank:]]*"\([^"]*\)",[[:blank:]]*$/!d; s//\1/; q' || die 4 "Unable to get latest vlang version for GitHub API")" ;;
 	*) die 2 "Unsupported vlang version '$VLANG_VERSION' has been parsed in vlang_init script"
 esac
 
@@ -144,7 +143,7 @@ else
 fi
 
 # Selfcheck
-su gitpod -c "$VLANG_EXE" help >/dev/null
+su gitpod -c "$VLANG_EXE" help 1>/dev/null
 
 case "$?" in
 	0) printf 'INFO: %s\n' "builtin vlang selfcheck passed" ;;
