@@ -1,19 +1,13 @@
 FROM gitpod/workspace-full-vnc
 
 # Install the latest rr.
-RUN __RR_VERSION__="5.2.0" \
+RUN __RR_VERSION__="5.3.0" \
  && cd /tmp \
  && wget -qO rr.deb https://github.com/mozilla/rr/releases/download/${__RR_VERSION__}/rr-${__RR_VERSION__}-Linux-$(uname -m).deb \
  && dpkg -i rr.deb \
  && rm -f rr.deb
 
 USER gitpod
-
-# Install LinuxBrew.
-# RUN sh -c "$(curl -fsSL https://raw.githubusercontent.com/Linuxbrew/install/master/install.sh)"
-# ENV PATH="$PATH:/home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin/"
-# ENV MANPATH="/home/linuxbrew/.linuxbrew/share/man:$MANPATH"
-# ENV INFOPATH="/home/linuxbrew/.linuxbrew/share/info:$INFOPATH"
 
 # Install Firefox build dependencies.
 # One-line setup command from:
