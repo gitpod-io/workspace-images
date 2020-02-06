@@ -245,13 +245,19 @@ RUN sudo apt-get update \
 
 RUN cp /home/gitpod/.profile /home/gitpod/.profile_orig && \
     curl -fsSL https://sh.rustup.rs | sh -s -- -y \
-    && .cargo/bin/rustup install 1.39.0 \
-    && .cargo/bin/rustup component add rls-preview rust-analysis rust-src \
+    && .cargo/bin/rustup toolchain install 1.41.0 \
+    && .cargo/bin/rustup default 1.41.0 \
+    # Save image size by removing now-redudant stable toolchain
+    && .cargo/bin/rustup toolchain uninstall stable \
+    && .cargo/bin/rustup component add \
+        rls \
+        rust-analysis \
+        rust-src \
     && .cargo/bin/rustup completions bash | sudo tee /etc/bash_completion.d/rustup.bash-completion > /dev/null \
     && .cargo/bin/rustup target add x86_64-unknown-linux-musl \
     && grep -v -F -x -f /home/gitpod/.profile_orig /home/gitpod/.profile > /home/gitpod/.bashrc.d/80-rust
 
-RUN bash -lc "cargo install cargo-watch"
+RUN bash -lc "cargo install cargo-watch cargo-edit cargo-tree"
 
 ### Prologue (built across all layers) ###
 LABEL dazzle/layer=dazzle-prologue
