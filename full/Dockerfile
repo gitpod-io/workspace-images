@@ -69,6 +69,7 @@ RUN  apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -yq \
         composer \
         php \
         php-all-dev \
+        php-bcmath \
         php-ctype \
         php-curl \
         php-date \
