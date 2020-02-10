@@ -3,9 +3,9 @@ FROM buildpack-deps:disco
 ### base ###
 RUN yes | unminimize \
     && apt-get install -yq \
-        asciidoctor \
-        bash-completion \
-        build-essential \
+        asciidoctor=1.5.8-1 \
+        bash-completion=1:2.8-1ubuntu1 \
+        build-essential=12.6ubuntu1 \
         htop \
         jq \
         less \
