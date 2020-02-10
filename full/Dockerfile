@@ -69,6 +69,7 @@ RUN  apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -yq \
         composer \
         php \
         php-all-dev \
+        php-bcmath \
         php-ctype \
         php-curl \
         php-date \
@@ -84,8 +85,6 @@ RUN  apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -yq \
         php-tokenizer \
         php-xml \
         php-zip \
-        php-bcmath \
-        php-ctype \
     && cp /var/lib/dpkg/status /var/lib/apt/dazzle-marks/tool-nginx.status \
     && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* \
     && mkdir /var/run/nginx \
