@@ -126,6 +126,19 @@ jobs:
             docker load -i workspace-full.tar
             ./.circleci/build_image.sh mongodb/Dockerfile gitpod/workspace-mongodb
 
+  workspace-flutter:
+    docker:
+      - image: docker:stable
+    steps:
+      - checkout
+      - setup_remote_docker
+      - attach_workspace:
+          at: .
+      - run:
+          command: |
+            docker load -i workspace-full.tar
+            ./.circleci/build_image.sh flutter/Dockerfile gitpod/workspace-flutter
+
   workspace-gecko:
     docker:
       - image: docker:stable
@@ -164,6 +177,9 @@ workflows:
           requires:
             - workspace-full
       - workspace-mongodb:
+          requires:
+              - workspace-full
+      - workspace-flutter:
           requires:
               - workspace-full
       - workspace-gecko:
