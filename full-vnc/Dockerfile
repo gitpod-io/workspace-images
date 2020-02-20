@@ -5,10 +5,13 @@ RUN sudo apt-get update && \
     sudo apt-get install -yq xvfb x11vnc xterm openjfx libopenjfx-java openbox && \
     sudo rm -rf /var/lib/apt/lists/*
 
-# overwrite this env variable to use a different window manager
+# Overwrite this env variable to use a different window manager
 ENV WINDOW_MANAGER="openbox"
 
 USER root
+
+# Change the default number of virtual desktops from 4 to 1 (footgun)
+RUN sed -ri "s/<number>4<\/number>/<number>1<\/number>/" /etc/xdg/openbox/rc.xml
 
 # Install novnc
 RUN git clone https://github.com/novnc/noVNC.git /opt/novnc \
