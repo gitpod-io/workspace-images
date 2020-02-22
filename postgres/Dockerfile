@@ -22,4 +22,4 @@ ENV PGDATABASE="postgres"
 # tasks from a Dockerfile. This workaround checks, on each bashrc eval, if the
 # PostgreSQL server is running, and if not starts it.
 RUN printf "\n# Auto-start PostgreSQL server.\n[[ \$(pg_ctl status | grep PID) ]] || pg_start > /dev/null\n" >> ~/.bashrc
-CMD ["sh", "-c", "mkdir -p $PGDATA && initdb -D $PGDATA", "&&", "sh"]
+CMD ["sh", "-c", "'mkdir -p $PGDATA && initdb -D $PGDATA'", "&&", "sh"]
