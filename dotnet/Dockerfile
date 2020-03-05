@@ -6,7 +6,7 @@ RUN wget -q https://packages.microsoft.com/config/ubuntu/19.04/packages-microsof
     rm -rf packages-microsoft-prod.deb && \
     add-apt-repository universe && \
     apt-get update && \
-    DEBIAN_FRONTEND=noninteractive apt-get -y -o APT::Install-Suggests="true" install \
+    DEBIAN_FRONTEND=noninteractive ACCEPT_EULA=Y apt-get -y -o APT::Install-Suggests="true" install \
         dotnet-sdk-2.2 \
         dotnet-sdk-3.1 \
         fsharp \
