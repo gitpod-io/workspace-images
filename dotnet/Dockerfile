@@ -6,6 +6,7 @@ RUN wget -q https://packages.microsoft.com/config/ubuntu/19.04/packages-microsof
     rm -rf packages-microsoft-prod.deb && \
     add-apt-repository universe && \
     apt-get update && \
+    echo resolvconf resolvconf/linkify-resolvconf boolean false | debconf-set-selections && \
     DEBIAN_FRONTEND=noninteractive ACCEPT_EULA=Y apt-get -y -o APT::Install-Suggests="true" install \
         dotnet-sdk-2.2 \
         dotnet-sdk-3.1 \
