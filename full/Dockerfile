@@ -207,8 +207,8 @@ RUN curl -fsSL https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-ins
         echo 'eval "$(pyenv init -)"'; \
         echo 'eval "$(pyenv virtualenv-init -)"'; } >> /home/gitpod/.bashrc.d/60-python \
     && pyenv install 2.7.17 \
-    && pyenv install 3.7.6 \
-    && pyenv global 2.7.17 3.7.6 \
+    && pyenv install 3.8.2 \
+    && pyenv global 2.7.17 3.8.2 \
     && pip2 install --upgrade pip \
     && pip2 install virtualenv pipenv pylint rope flake8 autopep8 pep8 pylama pydocstyle bandit notebook python-language-server[all]==0.25.0 \
     && pip3 install --upgrade pip \
