@@ -23,6 +23,11 @@ RUN yes | unminimize \
 
 ENV LANG=en_US.UTF-8
 
+### Git ###
+RUN add-apt-repository -y ppa:git-core/ppa \
+    && apt-get install -yq git \
+    && rm -rf /var/lib/apt/lists/*
+
 ### Gitpod user ###
 # '-l': see https://docs.docker.com/develop/develop-images/dockerfile_best-practices/#user
 RUN useradd -l -u 33333 -G sudo -md /home/gitpod -s /bin/bash -p gitpod gitpod \
@@ -69,6 +74,7 @@ RUN  apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -yq \
         composer \
         php \
         php-all-dev \
+        php-bcmath \
         php-ctype \
         php-curl \
         php-date \
@@ -102,9 +108,9 @@ LABEL dazzle/layer=tool-brew
 LABEL dazzle/test=tests/tool-brew.yaml
 USER gitpod
 RUN mkdir ~/.cache && sh -c "$(curl -fsSL https://raw.githubusercontent.com/Linuxbrew/install/master/install.sh)"
-ENV PATH="$PATH:/home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin/"
-ENV MANPATH="$MANPATH:/home/linuxbrew/.linuxbrew/share/man"
-ENV INFOPATH="$INFOPATH:/home/linuxbrew/.linuxbrew/share/info"
+ENV PATH="$PATH:/home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin/" \
+    MANPATH="$MANPATH:/home/linuxbrew/.linuxbrew/share/man" \
+    INFOPATH="$INFOPATH:/home/linuxbrew/.linuxbrew/share/info"
 RUN sudo apt-get remove -y cmake \
     && brew install cmake
 ENV HOMEBREW_NO_AUTO_UPDATE=1
@@ -113,43 +119,44 @@ ENV HOMEBREW_NO_AUTO_UPDATE=1
 LABEL dazzle/layer=lang-go
 LABEL dazzle/test=tests/lang-go.yaml
 USER gitpod
-ENV GO_VERSION=1.13 \
+ENV GO_VERSION=1.14 \
     GOPATH=$HOME/go-packages \
     GOROOT=$HOME/go
 ENV PATH=$GOROOT/bin:$GOPATH/bin:$PATH
-RUN curl -fsSL https://storage.googleapis.com/golang/go$GO_VERSION.linux-amd64.tar.gz | tar -xzv \
+RUN curl -fsSL https://storage.googleapis.com/golang/go$GO_VERSION.linux-amd64.tar.gz | tar -xzv && \
 # install VS Code Go tools from https://github.com/Microsoft/vscode-go/blob/0faec7e5a8a69d71093f08e035d33beb3ded8626/src/goInstallTools.ts#L19-L45
-    && go get -u -v \
-    github.com/mdempsky/gocode \
-    github.com/uudashr/gopkgs/cmd/gopkgs \
-    github.com/ramya-rao-a/go-outline \
-    github.com/acroca/go-symbols \
-    golang.org/x/tools/cmd/guru \
-    golang.org/x/tools/cmd/gorename \
-    github.com/fatih/gomodifytags \
-    github.com/haya14busa/goplay/cmd/goplay \
-    github.com/josharian/impl \
-    github.com/tylerb/gotype-live \
-    github.com/rogpeppe/godef \
-    github.com/zmb3/gogetdoc \
-    golang.org/x/tools/cmd/goimports \
-    github.com/sqs/goreturns \
-    winterdrache.de/goformat/goformat \
-    golang.org/x/lint/golint \
-    github.com/cweill/gotests/... \
-    github.com/alecthomas/gometalinter \
-    honnef.co/go/tools/... \
-    github.com/golangci/golangci-lint/cmd/golangci-lint \
-    github.com/mgechev/revive \
-    github.com/sourcegraph/go-langserver \
-    golang.org/x/tools/cmd/gopls \
-    github.com/go-delve/delve/cmd/dlv \
-    github.com/davidrjenni/reftools/cmd/fillstruct \
-    github.com/godoctor/godoctor && \
+    go get -u -v \
+        github.com/mdempsky/gocode \
+        github.com/uudashr/gopkgs/cmd/gopkgs \
+        github.com/ramya-rao-a/go-outline \
+        github.com/acroca/go-symbols \
+        golang.org/x/tools/cmd/guru \
+        golang.org/x/tools/cmd/gorename \
+        github.com/fatih/gomodifytags \
+        github.com/haya14busa/goplay/cmd/goplay \
+        github.com/josharian/impl \
+        github.com/tylerb/gotype-live \
+        github.com/rogpeppe/godef \
+        github.com/zmb3/gogetdoc \
+        golang.org/x/tools/cmd/goimports \
+        github.com/sqs/goreturns \
+        winterdrache.de/goformat/goformat \
+        golang.org/x/lint/golint \
+        github.com/cweill/gotests/... \
+        github.com/alecthomas/gometalinter \
+        honnef.co/go/tools/... \
+        github.com/golangci/golangci-lint/cmd/golangci-lint \
+        github.com/mgechev/revive \
+        github.com/sourcegraph/go-langserver \
+        github.com/go-delve/delve/cmd/dlv \
+        github.com/davidrjenni/reftools/cmd/fillstruct \
+        github.com/godoctor/godoctor && \
+    GO111MODULE=on go get -u -v \
+        golang.org/x/tools/gopls@latest && \
     go get -u -v -d github.com/stamblerre/gocode && \
     go build -o $GOPATH/bin/gocode-gomod github.com/stamblerre/gocode && \
     rm -rf $GOPATH/src && \
-    rm -rf $GOPATH/pkg && \
+    sudo rm -rf $GOPATH/pkg && \
     rm -rf /home/gitpod/.cache/go
 # user Go packages
 ENV GOPATH=/workspace/go \
@@ -162,7 +169,7 @@ LABEL dazzle/test=tests/lang-java.yaml
 USER gitpod
 RUN curl -fsSL "https://get.sdkman.io" | bash \
  && bash -c ". /home/gitpod/.sdkman/bin/sdkman-init.sh \
-             && sdk install java 11.0.2-zulufx \
+             && sdk install java 11.0.5.fx-zulu \
              && sdk install gradle \
              && sdk install maven \
              && sdk flush archives \
@@ -178,17 +185,16 @@ ENV GRADLE_USER_HOME=/workspace/.gradle/
 LABEL dazzle/layer=lang-node
 LABEL dazzle/test=tests/lang-node.yaml
 USER gitpod
-ENV NODE_VERSION=10.18.1
-RUN curl -fsSL https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.1/install.sh | PROFILE=/dev/null bash \
+ENV NODE_VERSION=10.19.0
+RUN curl -fsSL https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.2/install.sh | PROFILE=/dev/null bash \
     && bash -c ". .nvm/nvm.sh \
         && nvm install $NODE_VERSION \
         && npm config set python /usr/bin/python --global \
         && npm config set python /usr/bin/python \
-        && npm install -g typescript yarn" \
+        && npm install -g npm typescript yarn" \
     && echo ". ~/.nvm/nvm-lazy.sh"  >> /home/gitpod/.bashrc.d/50-node
 # above, we are adding the lazy nvm init to .bashrc, because one is executed on interactive shells, the other for non-interactive shells (e.g. plugin-host)
 COPY --chown=gitpod:gitpod nvm-lazy.sh /home/gitpod/.nvm/nvm-lazy.sh
-ENV PATH=/home/gitpod/.nvm/versions/node/v${NODE_VERSION}/bin:$PATH
 
 ### Python ###
 LABEL dazzle/layer=lang-python
@@ -202,16 +208,16 @@ RUN curl -fsSL https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-ins
     && pyenv install 2.7.17 \
     && pyenv install 3.7.6 \
     && pyenv global 2.7.17 3.7.6 \
-    && pip2 install --upgrade pip \
-    && pip2 install \
+    && python2 -m pip install --upgrade pip \
+    && python3 -m pip install --upgrade \
         virtualenv pylint rope autopep8 pep8 pylama pydocstyle \
         bandit notebook python-language-server[all]==0.25.0 \
-    && pip3 install --upgrade pip \
-    && pip3 install \
+    && python3 -m pip install --upgrade pip \
+    && python3 -m pip install --upgrade \
         setuptools wheel virtualenv pipenv pylint rope flake8 \
         mypy autopep8 pep8 pylama pydocstyle bandit notebook \
         python-language-server[all]==0.25.0 twine \
-    && rm -rf /tmp/*
+    && sudo rm -rf /tmp/*
 # Gitpod will automatically add user site under `/workspace` to persist your packages.
 # ENV PYTHONUSERBASE=/workspace/.pip-modules \
 #    PIP_USER=yes
@@ -251,13 +257,19 @@ RUN sudo apt-get update \
 
 RUN cp /home/gitpod/.profile /home/gitpod/.profile_orig && \
     curl -fsSL https://sh.rustup.rs | sh -s -- -y \
-    && .cargo/bin/rustup install 1.39.0 \
-    && .cargo/bin/rustup component add rls-preview rust-analysis rust-src \
+    && .cargo/bin/rustup toolchain install 1.41.1 \
+    && .cargo/bin/rustup default 1.41.1 \
+    # Save image size by removing now-redudant stable toolchain
+    && .cargo/bin/rustup toolchain uninstall stable \
+    && .cargo/bin/rustup component add \
+        rls \
+        rust-analysis \
+        rust-src \
     && .cargo/bin/rustup completions bash | sudo tee /etc/bash_completion.d/rustup.bash-completion > /dev/null \
     && .cargo/bin/rustup target add x86_64-unknown-linux-musl \
     && grep -v -F -x -f /home/gitpod/.profile_orig /home/gitpod/.profile > /home/gitpod/.bashrc.d/80-rust
 
-RUN bash -lc "cargo install cargo-watch"
+RUN bash -lc "cargo install cargo-watch cargo-edit cargo-tree"
 
 ### Prologue (built across all layers) ###
 LABEL dazzle/layer=dazzle-prologue
