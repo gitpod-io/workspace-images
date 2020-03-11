@@ -70,6 +70,7 @@ jobs:
           command: |
             docker load -i workspace-full.tar
             ./.circleci/build_image.sh dotnet/Dockerfile gitpod/workspace-dotnet
+          no_output_timeout: 30m
 
   workspace-dotnet-vnc:
     docker:
