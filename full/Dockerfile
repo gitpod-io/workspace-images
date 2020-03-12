@@ -46,8 +46,8 @@ RUN sudo echo "Running 'sudo' for Gitpod: success" && \
     (echo; echo "for i in \$(ls \$HOME/.bashrc.d/*); do source \$i; done"; echo) >> /home/gitpod/.bashrc
 
 ### Install C/C++ compiler and associated tools ###
-LABEL dazzle/layer=lang-c \
-      dazzle/test=tests/lang-c.yaml
+LABEL dazzle/layer="lang-c" \
+      dazzle/test="tests/lang-c.yaml"
 USER root
 RUN curl -fsSL https://apt.llvm.org/llvm-snapshot.gpg.key | apt-key add - \
     && echo "deb https://apt.llvm.org/disco/ llvm-toolchain-disco main" >> /etc/apt/sources.list.d/llvm.list \
@@ -63,8 +63,8 @@ RUN curl -fsSL https://apt.llvm.org/llvm-snapshot.gpg.key | apt-key add - \
     && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/*
 
 ### Apache, PHP and Nginx ###
-LABEL dazzle/layer=tool-nginx \
-      dazzle/test=tests/lang-php.yaml
+LABEL dazzle/layer="tool-nginx" \
+      dazzle/test="tests/lang-php.yaml"
 USER root
 RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -yq \
         apache2 \
@@ -103,8 +103,8 @@ ENV APACHE_DOCROOT_IN_REPO="public" \
     NGINX_DOCROOT_IN_REPO="public"
 
 ### Homebrew ###
-LABEL dazzle/layer=tool-brew \
-      dazzle/test=tests/tool-brew.yaml
+LABEL dazzle/layer="tool-brew" \
+      dazzle/test="tests/tool-brew.yaml"
 USER gitpod
 RUN mkdir ~/.cache && sh -c "$(curl -fsSL https://raw.githubusercontent.com/Linuxbrew/install/master/install.sh)"
 ENV PATH="$PATH:/home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin/" \
@@ -115,8 +115,8 @@ RUN sudo apt-get remove -y cmake \
     && brew install cmake
 
 ### Go ###
-LABEL dazzle/layer=lang-go \
-      dazzle/test=tests/lang-go.yaml
+LABEL dazzle/layer="lang-go" \
+      dazzle/test="tests/lang-go.yaml"
 USER gitpod
 ENV GO_VERSION=1.14 \
     GOPATH=$HOME/go-packages \
@@ -163,8 +163,8 @@ ENV GOPATH=/workspace/go \
 
 ### Java ###
 ## Place '.gradle' and 'm2-repository' in /workspace because (1) that's a fast volume, (2) it survives workspace-restarts and (3) it can be warmed-up by pre-builds.
-LABEL dazzle/layer=lang-java \
-      dazzle/test=tests/lang-java.yaml
+LABEL dazzle/layer="lang-java" \
+      dazzle/test="tests/lang-java.yaml"
 USER gitpod
 RUN curl -fsSL "https://get.sdkman.io" | bash \
  && bash -c ". /home/gitpod/.sdkman/bin/sdkman-init.sh \
@@ -181,8 +181,8 @@ RUN curl -fsSL "https://get.sdkman.io" | bash \
 ENV GRADLE_USER_HOME=/workspace/.gradle/
 
 ### Node.js ###
-LABEL dazzle/layer=lang-node \
-      dazzle/test=tests/lang-node.yaml
+LABEL dazzle/layer="lang-node" \
+      dazzle/test="tests/lang-node.yaml"
 USER gitpod
 ENV NODE_VERSION=10.19.0
 RUN curl -fsSL https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | PROFILE=/dev/null bash \
@@ -196,8 +196,8 @@ RUN curl -fsSL https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh |
 COPY --chown=gitpod:gitpod nvm-lazy.sh /home/gitpod/.nvm/nvm-lazy.sh
 
 ### Python ###
-LABEL dazzle/layer=lang-python \
-      dazzle/test=tests/lang-python.yaml
+LABEL dazzle/layer="lang-python" \
+      dazzle/test="tests/lang-python.yaml"
 USER gitpod
 ENV PATH=$HOME/.pyenv/bin:$HOME/.pyenv/shims:$PATH
 RUN curl -fsSL https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-installer | bash \
@@ -219,8 +219,8 @@ RUN curl -fsSL https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-ins
 #    PIP_USER=yes
 
 ### Ruby ###
-LABEL dazzle/layer=lang-ruby \
-      dazzle/test=tests/lang-ruby.yaml
+LABEL dazzle/layer="lang-ruby" \
+      dazzle/test="tests/lang-ruby.yaml"
 USER gitpod
 RUN curl -sSL https://rvm.io/mpapis.asc | gpg --import - \
     && curl -sSL https://rvm.io/pkuczynski.asc | gpg --import - \
@@ -237,8 +237,8 @@ RUN curl -sSL https://rvm.io/mpapis.asc | gpg --import - \
 ENV GEM_HOME=/workspace/.rvm
 
 ### Rust ###
-LABEL dazzle/layer=lang-rust \
-      dazzle/test=tests/lang-rust.yaml
+LABEL dazzle/layer="lang-rust" \
+      dazzle/test="tests/lang-rust.yaml"
 USER gitpod
 RUN sudo apt-get update \
     && DEBIAN_FRONTEND=noninteractive sudo apt-get install -yq \
@@ -267,8 +267,8 @@ RUN cp /home/gitpod/.profile /home/gitpod/.profile_orig && \
 RUN bash -lc "cargo install cargo-watch cargo-edit cargo-tree"
 
 ### Prologue (built across all layers) ###
-LABEL dazzle/layer=dazzle-prologue \
-      dazzle/test=tests/prologue.yaml
+LABEL dazzle/layer="dazzle-prologue" \
+      dazzle/test="tests/prologue.yaml"
 
 USER root
 RUN curl -o /usr/bin/dazzle-util -L https://github.com/csweichel/dazzle/releases/download/v0.0.3/dazzle-util_0.0.3_Linux_x86_64 \
