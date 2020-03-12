@@ -3,7 +3,6 @@ FROM buildpack-deps:disco
 ### base ###
 RUN yes | unminimize \
     && apt-get install -yq \
-        asciidoctor \
         bash-completion \
         build-essential \
         htop \
@@ -41,17 +40,17 @@ RUN { echo && echo "PS1='\[\e]0;\u \w\a\]\[\033[01;32m\]\u\[\033[00m\] \[\033[01
 ### Gitpod user (2) ###
 USER gitpod
 # use sudo so that user does not get sudo usage info on (the first) login
-RUN sudo echo "Running 'sudo' for Gitpod: success"
-# create .bashrc.d folder and source it in the bashrc
-RUN mkdir /home/gitpod/.bashrc.d && \
+RUN sudo echo "Running 'sudo' for Gitpod: success" && \
+    # create .bashrc.d folder and source it in the bashrc
+    mkdir /home/gitpod/.bashrc.d && \
     (echo; echo "for i in \$(ls \$HOME/.bashrc.d/*); do source \$i; done"; echo) >> /home/gitpod/.bashrc
 
 ### Install C/C++ compiler and associated tools ###
-LABEL dazzle/layer=lang-c
-LABEL dazzle/test=tests/lang-c.yaml
+LABEL dazzle/layer=lang-c \
+      dazzle/test=tests/lang-c.yaml
 USER root
 RUN curl -fsSL https://apt.llvm.org/llvm-snapshot.gpg.key | apt-key add - \
-    && echo "deb http://apt.llvm.org/disco/ llvm-toolchain-disco main" >> /etc/apt/sources.list.d/llvm.list \
+    && echo "deb https://apt.llvm.org/disco/ llvm-toolchain-disco main" >> /etc/apt/sources.list.d/llvm.list \
     && apt-get update \
     && apt-get install -yq \
         clang-format \
@@ -64,10 +63,10 @@ RUN curl -fsSL https://apt.llvm.org/llvm-snapshot.gpg.key | apt-key add - \
     && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/*
 
 ### Apache, PHP and Nginx ###
-LABEL dazzle/layer=tool-nginx
-LABEL dazzle/test=tests/lang-php.yaml
+LABEL dazzle/layer=tool-nginx \
+      dazzle/test=tests/lang-php.yaml
 USER root
-RUN  apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -yq \
+RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -yq \
         apache2 \
         nginx \
         nginx-extras \
@@ -100,29 +99,29 @@ COPY --chown=gitpod:gitpod apache2/ /etc/apache2/
 COPY --chown=gitpod:gitpod nginx /etc/nginx/
 
 ## The directory relative to your git repository that will be served by Apache / Nginx
-ENV APACHE_DOCROOT_IN_REPO="public"
-ENV NGINX_DOCROOT_IN_REPO="public"
+ENV APACHE_DOCROOT_IN_REPO="public" \
+    NGINX_DOCROOT_IN_REPO="public"
 
 ### Homebrew ###
-LABEL dazzle/layer=tool-brew
-LABEL dazzle/test=tests/tool-brew.yaml
+LABEL dazzle/layer=tool-brew \
+      dazzle/test=tests/tool-brew.yaml
 USER gitpod
 RUN mkdir ~/.cache && sh -c "$(curl -fsSL https://raw.githubusercontent.com/Linuxbrew/install/master/install.sh)"
 ENV PATH="$PATH:/home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin/" \
     MANPATH="$MANPATH:/home/linuxbrew/.linuxbrew/share/man" \
-    INFOPATH="$INFOPATH:/home/linuxbrew/.linuxbrew/share/info"
+    INFOPATH="$INFOPATH:/home/linuxbrew/.linuxbrew/share/info" \
+    HOMEBREW_NO_AUTO_UPDATE=1
 RUN sudo apt-get remove -y cmake \
     && brew install cmake
-ENV HOMEBREW_NO_AUTO_UPDATE=1
 
 ### Go ###
-LABEL dazzle/layer=lang-go
-LABEL dazzle/test=tests/lang-go.yaml
+LABEL dazzle/layer=lang-go \
+      dazzle/test=tests/lang-go.yaml
 USER gitpod
 ENV GO_VERSION=1.14 \
     GOPATH=$HOME/go-packages \
-    GOROOT=$HOME/go
-ENV PATH=$GOROOT/bin:$GOPATH/bin:$PATH
+    GOROOT=$HOME/go \
+    PATH=$GOROOT/bin:$GOPATH/bin:$PATH
 RUN curl -fsSL https://storage.googleapis.com/golang/go$GO_VERSION.linux-amd64.tar.gz | tar -xzv && \
 # install VS Code Go tools from https://github.com/Microsoft/vscode-go/blob/0faec7e5a8a69d71093f08e035d33beb3ded8626/src/goInstallTools.ts#L19-L45
     go get -u -v \
@@ -164,8 +163,8 @@ ENV GOPATH=/workspace/go \
 
 ### Java ###
 ## Place '.gradle' and 'm2-repository' in /workspace because (1) that's a fast volume, (2) it survives workspace-restarts and (3) it can be warmed-up by pre-builds.
-LABEL dazzle/layer=lang-java
-LABEL dazzle/test=tests/lang-java.yaml
+LABEL dazzle/layer=lang-java \
+      dazzle/test=tests/lang-java.yaml
 USER gitpod
 RUN curl -fsSL "https://get.sdkman.io" | bash \
  && bash -c ". /home/gitpod/.sdkman/bin/sdkman-init.sh \
@@ -182,11 +181,11 @@ RUN curl -fsSL "https://get.sdkman.io" | bash \
 ENV GRADLE_USER_HOME=/workspace/.gradle/
 
 ### Node.js ###
-LABEL dazzle/layer=lang-node
-LABEL dazzle/test=tests/lang-node.yaml
+LABEL dazzle/layer=lang-node \
+      dazzle/test=tests/lang-node.yaml
 USER gitpod
 ENV NODE_VERSION=10.19.0
-RUN curl -fsSL https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.2/install.sh | PROFILE=/dev/null bash \
+RUN curl -fsSL https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | PROFILE=/dev/null bash \
     && bash -c ". .nvm/nvm.sh \
         && nvm install $NODE_VERSION \
         && npm config set python /usr/bin/python --global \
@@ -197,8 +196,8 @@ RUN curl -fsSL https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.2/install.sh |
 COPY --chown=gitpod:gitpod nvm-lazy.sh /home/gitpod/.nvm/nvm-lazy.sh
 
 ### Python ###
-LABEL dazzle/layer=lang-python
-LABEL dazzle/test=tests/lang-python.yaml
+LABEL dazzle/layer=lang-python \
+      dazzle/test=tests/lang-python.yaml
 USER gitpod
 ENV PATH=$HOME/.pyenv/bin:$HOME/.pyenv/shims:$PATH
 RUN curl -fsSL https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-installer | bash \
@@ -209,9 +208,6 @@ RUN curl -fsSL https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-ins
     && pyenv install 3.7.6 \
     && pyenv global 2.7.17 3.7.6 \
     && python2 -m pip install --upgrade pip \
-    && python3 -m pip install --upgrade \
-        virtualenv pylint rope autopep8 pep8 pylama pydocstyle \
-        bandit notebook python-language-server[all]==0.25.0 \
     && python3 -m pip install --upgrade pip \
     && python3 -m pip install --upgrade \
         setuptools wheel virtualenv pipenv pylint rope flake8 \
@@ -223,8 +219,8 @@ RUN curl -fsSL https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-ins
 #    PIP_USER=yes
 
 ### Ruby ###
-LABEL dazzle/layer=lang-ruby
-LABEL dazzle/test=tests/lang-ruby.yaml
+LABEL dazzle/layer=lang-ruby \
+      dazzle/test=tests/lang-ruby.yaml
 USER gitpod
 RUN curl -sSL https://rvm.io/mpapis.asc | gpg --import - \
     && curl -sSL https://rvm.io/pkuczynski.asc | gpg --import - \
@@ -233,7 +229,6 @@ RUN curl -sSL https://rvm.io/mpapis.asc | gpg --import - \
         rvm requirements \
         && rvm install 2.5 \
         && rvm install 2.6 \
-        && rvm install 2.7 \
         && rvm use 2.6 --default \
         && rvm rubygems current \
         && gem install bundler --no-document \
@@ -242,8 +237,8 @@ RUN curl -sSL https://rvm.io/mpapis.asc | gpg --import - \
 ENV GEM_HOME=/workspace/.rvm
 
 ### Rust ###
-LABEL dazzle/layer=lang-rust
-LABEL dazzle/test=tests/lang-rust.yaml
+LABEL dazzle/layer=lang-rust \
+      dazzle/test=tests/lang-rust.yaml
 USER gitpod
 RUN sudo apt-get update \
     && DEBIAN_FRONTEND=noninteractive sudo apt-get install -yq \
@@ -272,11 +267,11 @@ RUN cp /home/gitpod/.profile /home/gitpod/.profile_orig && \
 RUN bash -lc "cargo install cargo-watch cargo-edit cargo-tree"
 
 ### Prologue (built across all layers) ###
-LABEL dazzle/layer=dazzle-prologue
-LABEL dazzle/test=tests/prologue.yaml
+LABEL dazzle/layer=dazzle-prologue \
+      dazzle/test=tests/prologue.yaml
 
 USER root
-RUN curl -o /usr/bin/dazzle-util -L https://github.com/32leaves/dazzle/releases/download/v0.0.3/dazzle-util_0.0.3_Linux_x86_64 \
+RUN curl -o /usr/bin/dazzle-util -L https://github.com/csweichel/dazzle/releases/download/v0.0.3/dazzle-util_0.0.3_Linux_x86_64 \
     && chmod +x /usr/bin/dazzle-util
 # merge dpkg status files
 RUN cp /var/lib/dpkg/status /tmp/dpkg-status \
