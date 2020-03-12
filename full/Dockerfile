@@ -3,6 +3,8 @@ FROM buildpack-deps:disco
 ### base ###
 RUN yes | unminimize \
     && apt-get install -yq \
+        zip \
+        unzip \
         bash-completion \
         build-essential \
         htop \
