@@ -17,7 +17,7 @@ RUN bash -cl "git clone \"https://github.com/emscripten-core/emsdk.git\" \
 
 RUN bash -cl "echo -e \"\nsource /home/gitpod/emsdk/emsdk_env.sh\nclear\" >> ~/.bashrc"
 
-RUN git clone "https://github.com/WebAssembly/binaryen" \
+RUN git clone "https://github.com/WebAssembly/binaryen.git" \
     && cd binaryen \
     && cmake . && make \
     && cd .. \
