@@ -149,6 +149,7 @@ RUN curl -fsSL https://storage.googleapis.com/golang/go$GO_VERSION.linux-amd64.t
         github.com/josharian/impl \
         github.com/tylerb/gotype-live \
         github.com/rogpeppe/godef \
+        github.com/jesseduffield/lazygit \
         github.com/zmb3/gogetdoc \
         golang.org/x/tools/cmd/goimports \
         github.com/sqs/goreturns \
