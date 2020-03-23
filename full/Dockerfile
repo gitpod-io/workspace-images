@@ -8,6 +8,15 @@ RUN yes | unminimize \
         build-essential \
         htop \
         jq \
+        hub=2.7.0~ds1-1 \
+        zsh=5.5.1-1ubuntu3 \
+        tmux=2.8-3 \
+        fzf=0.17.5-2 \
+        mtr=0.92-2 \
+        ripgrep=0.10.0-2 \
+        neovim=0.3.4-1ubuntu0.19.04.1 \
+        fd-find=7.2.0-2 \
+        silversearcher-ag=2.2.0-1 \
         less \
         locales \
         man-db \
@@ -19,7 +28,10 @@ RUN yes | unminimize \
         lsof \
     && locale-gen en_US.UTF-8 \
     && mkdir /var/lib/apt/dazzle-marks \
-    && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/*
+    && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* \
+    && wget "https://raw.githubusercontent.com/rupa/z/master/z.sh" \
+    && mv z.sh /home/z.sh \
+    && echo -e "\n. /home/z.sh" >> $HOME/.bashrc
 
 ENV LANG=en_US.UTF-8
 
