@@ -39,6 +39,7 @@ jobs:
             docker load -i workspace-full.tar
             ./.circleci/build_image.sh full-vnc/Dockerfile gitpod/workspace-full-vnc
             docker save gitpod/workspace-full-vnc -o workspace-full-vnc.tar
+          no_output_timeout: 15m        
       - persist_to_workspace:
           root: .
           paths:
