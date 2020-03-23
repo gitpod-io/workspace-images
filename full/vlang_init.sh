@@ -37,9 +37,9 @@ edebug() {
 
 # checkroot
 if [ "$(id -u)" != "0" ]; then
-	die 3 "Insufficient permission UID '$(id -u)' used for vlang initialization"
+	die 3 "Insufficient permission UID '$(id -u)' user '$USER' for vlang initialization"
 elif [ "$(id -u)" = "0" ]; then
-	edebug "Script has been executed from expected used with UID '$(id -u)'"
+	edebug "Script has been executed from expected user '$USER' with UID '$(id -u)'"
 else
 	die 256 "Unexpected happend while checking root"
 fi
@@ -143,12 +143,7 @@ else
 fi
 
 # Selfcheck
-su gitpod -c "$VLANG_EXE" help 1>/dev/null
-
-case "$?" in
-	0) printf 'INFO: %s\n' "builtin vlang selfcheck passed" ;;
-	*) die "$?" "builtin vlang selfcheck failed"
-esac
+su gitpod -c "$VLANG_EXE" help 1>/dev/null || die 1 "Self-check for Vlang failed"
 
 # Master unset
 unset VLANG_SOURCE VLANG_VERSION DIE_PREFIX CACHEDIR VLANG_EXE
