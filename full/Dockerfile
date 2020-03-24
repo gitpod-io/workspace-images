@@ -196,6 +196,7 @@ RUN curl -fsSL https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh |
     && echo ". ~/.nvm/nvm-lazy.sh"  >> /home/gitpod/.bashrc.d/50-node
 # above, we are adding the lazy nvm init to .bashrc, because one is executed on interactive shells, the other for non-interactive shells (e.g. plugin-host)
 COPY --chown=gitpod:gitpod nvm-lazy.sh /home/gitpod/.nvm/nvm-lazy.sh
+ENV PATH=/home/gitpod/.nvm/versions/node/v${NODE_VERSION}/bin:$PATH
 
 ### Python ###
 LABEL dazzle/layer=lang-python
@@ -206,9 +207,10 @@ RUN curl -fsSL https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-ins
     && { echo; \
         echo 'eval "$(pyenv init -)"'; \
         echo 'eval "$(pyenv virtualenv-init -)"'; } >> /home/gitpod/.bashrc.d/60-python \
+    && pyenv update \
     && pyenv install 2.7.17 \
-    && pyenv install 3.7.6 \
-    && pyenv global 2.7.17 3.7.6 \
+    && pyenv install 3.7.7 \
+    && pyenv global 2.7.17 3.7.7 \
     && python2 -m pip install --upgrade pip \
     && python3 -m pip install --upgrade pip \
     && python3 -m pip install --upgrade \
