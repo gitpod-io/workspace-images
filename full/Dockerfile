@@ -15,6 +15,7 @@ RUN yes | unminimize \
         nano \
         software-properties-common \
         sudo \
+        time \
         vim \
         multitail \
         lsof \
