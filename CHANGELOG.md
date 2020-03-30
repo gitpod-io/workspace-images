@@ -1,7 +1,8 @@
 # Change Log
 
 Curated, chronologically ordered list of notable changes in [Gitpod's default workspace images](https://hub.docker.com/u/gitpod).
-Inspired by https://keepachangelog.com.
+
+Inspired by [keepachangelog.com](https://keepachangelog.com/).
 
 
 ## 2020-03-30
