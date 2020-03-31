@@ -110,9 +110,9 @@ LABEL dazzle/layer=tool-brew
 LABEL dazzle/test=tests/tool-brew.yaml
 USER gitpod
 RUN mkdir ~/.cache && sh -c "$(curl -fsSL https://raw.githubusercontent.com/Linuxbrew/install/master/install.sh)"
-ENV PATH="$PATH:/home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin/" \
-    MANPATH="$MANPATH:/home/linuxbrew/.linuxbrew/share/man" \
-    INFOPATH="$INFOPATH:/home/linuxbrew/.linuxbrew/share/info" \
+ENV PATH="/home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin:$PATH" \
+    MANPATH="/home/linuxbrew/.linuxbrew/share/man:$MANPATH" \
+    INFOPATH="/home/linuxbrew/.linuxbrew/share/info:$INFOPATH" \
     HOMEBREW_NO_AUTO_UPDATE=1
 RUN sudo apt-get remove -y cmake \
     && brew install cmake
