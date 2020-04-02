@@ -7,11 +7,6 @@
   command: [pip, --version]
   assert:
   - status == 0
-- desc: it should default to the correct pip version
-  command: [sh, -c, '[ "$(pip --version)" = "$(pip2 --version)" ] && echo pass']
-  assert:
-  - status == 0
-  - stdout.trim() == "pass"
 - desc: it should have pip3
   command: [pip3, --version]
   assert:
