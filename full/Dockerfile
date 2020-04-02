@@ -210,15 +210,14 @@ RUN curl -fsSL https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-ins
         echo 'eval "$(pyenv init -)"'; \
         echo 'eval "$(pyenv virtualenv-init -)"'; } >> /home/gitpod/.bashrc.d/60-python \
     && pyenv update \
-    && pyenv install 2.7.17 \
     && pyenv install 3.7.7 \
-    && pyenv global 2.7.17 3.7.7 \
+    && pyenv global 3.7.7 \
     && python2 -m pip install --upgrade pip \
     && python3 -m pip install --upgrade pip \
     && python3 -m pip install --upgrade \
         setuptools wheel virtualenv pipenv pylint rope flake8 \
         mypy autopep8 pep8 pylama pydocstyle bandit notebook \
-        python-language-server[all]==0.25.0 twine \
+        python-language-server[all]==0.31.9 twine poetry \
     && sudo rm -rf /tmp/*
 # Gitpod will automatically add user site under `/workspace` to persist your packages.
 # ENV PYTHONUSERBASE=/workspace/.pip-modules \
@@ -233,12 +232,10 @@ RUN curl -sSL https://rvm.io/mpapis.asc | gpg --import - \
     && curl -fsSL https://get.rvm.io | bash -s stable \
     && bash -lc " \
         rvm requirements \
-        && rvm install 2.5 \
         && rvm install 2.6 \
         && rvm use 2.6 --default \
         && rvm rubygems current \
-        && gem install bundler --no-document \
-        && gem install solargraph --no-document" \
+        && gem install bundler solargraph --no-document \
     && echo '[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*' >> /home/gitpod/.bashrc.d/70-ruby
 ENV GEM_HOME=/workspace/.rvm
 
@@ -258,8 +255,8 @@ RUN sudo apt-get update \
 
 RUN cp /home/gitpod/.profile /home/gitpod/.profile_orig && \
     curl -fsSL https://sh.rustup.rs | sh -s -- -y \
-    && .cargo/bin/rustup toolchain install 1.41.1 \
-    && .cargo/bin/rustup default 1.41.1 \
+    && .cargo/bin/rustup toolchain install 1.42.0 \
+    && .cargo/bin/rustup default 1.42.0 \
     # Save image size by removing now-redudant stable toolchain
     && .cargo/bin/rustup toolchain uninstall stable \
     && .cargo/bin/rustup component add \
