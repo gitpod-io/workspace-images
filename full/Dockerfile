@@ -212,16 +212,15 @@ RUN curl -fsSL https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-ins
     && pyenv update \
     && pyenv install 3.7.7 \
     && pyenv global 3.7.7 \
-    && python2 -m pip install --upgrade pip \
+    && curl -fsSL https://bootstrap.pypa.io/get-pip.py -o get-pip.py \
+    && python get-pip.py \
+    && rm -rf get-pip.py \
     && python3 -m pip install --upgrade pip \
     && python3 -m pip install --upgrade \
         setuptools wheel virtualenv pipenv pylint rope flake8 \
         mypy autopep8 pep8 pylama pydocstyle bandit notebook \
         python-language-server[all]==0.31.9 twine poetry \
     && sudo rm -rf /tmp/*
-# Gitpod will automatically add user site under `/workspace` to persist your packages.
-# ENV PYTHONUSERBASE=/workspace/.pip-modules \
-#    PIP_USER=yes
 
 ### Ruby ###
 LABEL dazzle/layer=lang-ruby
