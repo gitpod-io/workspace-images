@@ -204,8 +204,8 @@ ENV PATH=$PATH:/home/gitpod/.nvm/versions/node/v${NODE_VERSION}/bin
 LABEL dazzle/layer=lang-python
 LABEL dazzle/test=tests/lang-python.yaml
 USER gitpod
-RUN apt-get update \
-    && apt-get install python3.7 \
+RUN sudo apt-get update \
+    && sudo apt-get install python3.7 \
     && curl -fsSL https://bootstrap.pypa.io/get-pip.py -o get-pip.py \
     && python get-pip.py \
     && rm -rf get-pip.py \
@@ -214,7 +214,7 @@ RUN apt-get update \
         setuptools wheel virtualenv pipenv pylint rope flake8 \
         mypy autopep8 pep8 pylama pydocstyle bandit notebook \
         python-language-server[all]==0.31.9 twine poetry \
-    && apt-get clean \
+    && sudo apt-get clean \
     && sudo rm -rf /tmp/* /var/lib/apt/lists/*
 
 ### Ruby ###
