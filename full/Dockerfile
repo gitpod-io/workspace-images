@@ -206,8 +206,8 @@ LABEL dazzle/test=tests/lang-python.yaml
 USER gitpod
 ENV GP_PYTHON_VERSION=3.8.2
 RUN sudo apt-get update \
-    && sudo apt-get install -y libssl-dev zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev wget llvm libncurses5-dev libncursesw5-dev xz-utils \
-    && wget https://www.python.org/ftp/python/${GP_PYTHON_VERSION}/Python-${GP_PYTHON_VERSION}.tar.xz \
+    && sudo apt-get install -yq libssl-dev zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev wget llvm libncurses5-dev libncursesw5-dev xz-utils \
+    && wget --quiet https://www.python.org/ftp/python/${GP_PYTHON_VERSION}/Python-${GP_PYTHON_VERSION}.tar.xz \
     && tar xsf Python-${GP_PYTHON_VERSION}.tar.xz \
     && cd Python-${GP_PYTHON_VERSION} \
     && ./configure --enable-optimizations --enable-shared --with-lto --enable-ipv6 --enable-loadable-sqlite-extensions --without-ensurepip \
@@ -231,7 +231,7 @@ LABEL dazzle/layer=lang-ruby
 LABEL dazzle/test=tests/lang-ruby.yaml
 USER gitpod
 RUN curl -sSL https://rvm.io/mpapis.asc | gpg --import - \
-    && curl -sSL https://rvm.io/pkuczynski.asc | gpg --import - \
+    && curl -fsSL https://rvm.io/pkuczynski.asc | gpg --import - \
     && curl -fsSL https://get.rvm.io | bash -s stable \
     && bash -lc " \
         rvm requirements \
