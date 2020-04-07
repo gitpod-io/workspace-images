@@ -209,7 +209,7 @@ RUN sudo apt-get update \
     && sudo apt-get install -y libssl-dev zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev wget llvm libncurses5-dev libncursesw5-dev xz-utils \
     && wget https://www.python.org/ftp/python/${GP_PYTHON_VERSION}/Python-${GP_PYTHON_VERSION}.tar.xz \
     && tar xsf Python-${GP_PYTHON_VERSION}.tar.xz \
-    && cd Python-${GP_PYTHON_VERSION}.tar.xz \
+    && cd Python-${GP_PYTHON_VERSION} \
     && ./configure --enable-optimizations --enable-shared --with-lto --enable-ipv6 --enable-loadable-sqlite-extensions --with-ensurepip=install \
     && sudo make -j 8 \
     && sudo make install \
