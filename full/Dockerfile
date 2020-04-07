@@ -204,14 +204,8 @@ ENV PATH=$PATH:/home/gitpod/.nvm/versions/node/v${NODE_VERSION}/bin
 LABEL dazzle/layer=lang-python
 LABEL dazzle/test=tests/lang-python.yaml
 USER gitpod
-ENV PATH=$HOME/.pyenv/bin:$HOME/.pyenv/shims:$PATH
-RUN curl -fsSL https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-installer | bash \
-    && { echo; \
-        echo 'eval "$(pyenv init -)"'; \
-        echo 'eval "$(pyenv virtualenv-init -)"'; } >> /home/gitpod/.bashrc.d/60-python \
-    && pyenv update \
-    && pyenv install 3.7.7 \
-    && pyenv global 3.7.7 \
+RUN apt-get update \
+    && apt-get install python3.7 \
     && curl -fsSL https://bootstrap.pypa.io/get-pip.py -o get-pip.py \
     && python get-pip.py \
     && rm -rf get-pip.py \
@@ -220,7 +214,8 @@ RUN curl -fsSL https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-ins
         setuptools wheel virtualenv pipenv pylint rope flake8 \
         mypy autopep8 pep8 pylama pydocstyle bandit notebook \
         python-language-server[all]==0.31.9 twine poetry \
-    && sudo rm -rf /tmp/*
+    && apt-get clean \
+    && sudo rm -rf /tmp/* /var/lib/apt/lists/*
 
 ### Ruby ###
 LABEL dazzle/layer=lang-ruby
