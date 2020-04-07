@@ -217,7 +217,7 @@ RUN sudo apt-get update \
     && sudo rm -rf Python-${GP_PYTHON_VERSION} Python-${GP_PYTHON_VERSION}.tar.xz \
     && curl -fsSL https://bootstrap.pypa.io/get-pip.py -o get-pip.py \
     && python get-pip.py \
-    && rm -rf get-pip.py \
+    && rm get-pip.py \
     && python3 -m pip install --upgrade pip \
     && python3 -m pip install --upgrade \
         setuptools wheel virtualenv pipenv pylint rope flake8 \
