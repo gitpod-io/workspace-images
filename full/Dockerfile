@@ -210,11 +210,11 @@ RUN sudo apt-get update \
     && wget https://www.python.org/ftp/python/${GP_PYTHON_VERSION}/Python-${GP_PYTHON_VERSION}.tar.xz \
     && tar xsf Python-${GP_PYTHON_VERSION}.tar.xz \
     && cd Python-${GP_PYTHON_VERSION} \
-    && ./configure --enable-optimizations --enable-shared --with-lto --enable-ipv6 --enable-loadable-sqlite-extensions --with-ensurepip=install \
+    && ./configure --enable-optimizations --enable-shared --with-lto --enable-ipv6 --enable-loadable-sqlite-extensions --without-ensurepip \
     && sudo make -j 8 \
     && sudo make install \
     && cd .. \
-    && rm -rf Python-${GP_PYTHON_VERSION} Python-${GP_PYTHON_VERSION}.tar.xz \
+    && sudo rm -rf Python-${GP_PYTHON_VERSION} Python-${GP_PYTHON_VERSION}.tar.xz \
     && curl -fsSL https://bootstrap.pypa.io/get-pip.py -o get-pip.py \
     && python get-pip.py \
     && rm -rf get-pip.py \
