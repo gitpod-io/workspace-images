@@ -204,19 +204,20 @@ ENV PATH=$PATH:/home/gitpod/.nvm/versions/node/v${NODE_VERSION}/bin
 LABEL dazzle/layer=lang-python
 LABEL dazzle/test=tests/lang-python.yaml
 USER gitpod
-ENV GP_PYTHON_VERSION=3.8.2
+ENV GP_PYTHON_VERSION=3.7.7
 RUN sudo apt-get update \
     && sudo apt-get install -yq libssl-dev zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev wget llvm libncurses5-dev libncursesw5-dev xz-utils \
     && wget --quiet https://www.python.org/ftp/python/${GP_PYTHON_VERSION}/Python-${GP_PYTHON_VERSION}.tar.xz \
     && tar xsf Python-${GP_PYTHON_VERSION}.tar.xz \
     && cd Python-${GP_PYTHON_VERSION} \
-    && ./configure --enable-optimizations --enable-shared --with-lto --enable-ipv6 --enable-loadable-sqlite-extensions --without-ensurepip \
+    && ./configure --enable-optimizations --enable-shared --with-lto --enable-ipv6 --enable-loadable-sqlite-extensions --with-ensurepip=install \
     && sudo make -j 8 \
     && sudo make install \
     && cd .. \
     && sudo rm -rf Python-${GP_PYTHON_VERSION} Python-${GP_PYTHON_VERSION}.tar.xz \
+    && python --version \
     && curl -fsSL https://bootstrap.pypa.io/get-pip.py -o get-pip.py \
-    && python3 get-pip.py \
+    && python get-pip.py \
     && rm get-pip.py \
     && python3 -m pip install --upgrade \
         setuptools wheel virtualenv pipenv pylint rope flake8 \
