@@ -216,15 +216,20 @@ RUN sudo apt-get update \
     && cd .. \
     && sudo rm -rf Python-${GP_PYTHON_VERSION} Python-${GP_PYTHON_VERSION}.tar.xz \
     && curl -fsSL https://bootstrap.pypa.io/get-pip.py -o get-pip.py \
-    && python get-pip.py \
+    && python3 get-pip.py \
     && rm get-pip.py \
-    && python3 -m pip install --upgrade pip \
     && python3 -m pip install --upgrade \
         setuptools wheel virtualenv pipenv pylint rope flake8 \
         mypy autopep8 pep8 pylama pydocstyle bandit notebook \
         python-language-server[all]==0.31.9 twine poetry \
+    && curl -fsSL https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-installer | bash \
+    && { echo; \
+        echo 'eval "$(pyenv init -)"'; \
+        echo 'eval "$(pyenv virtualenv-init -)"'; } >> /home/gitpod/.bashrc.d/60-python \
     && sudo apt-get clean \
     && sudo rm -rf /tmp/* /var/lib/apt/lists/*
+
+ENV PATH=$HOME/.pyenv/bin:$HOME/.pyenv/shims:$PATH
 
 ### Ruby ###
 LABEL dazzle/layer=lang-ruby
