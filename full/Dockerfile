@@ -205,7 +205,9 @@ LABEL dazzle/layer=lang-python
 LABEL dazzle/test=tests/lang-python.yaml
 USER gitpod
 
-ENV GP_PYTHON_VERSION=3.7.7
+ENV GP_PYTHON_VERSION=3.7.7 \
+    GP_PYTHON_SHORT_VERSION=3.7 \
+    PATH=$HOME/.pyenv/bin:$HOME/.pyenv/shims:/home/gitpod/.local/bin:$PATH
 
 RUN sudo apt-get update \
     && sudo apt-get install -yq libssl-dev zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev llvm libncurses5-dev libncursesw5-dev xz-utils \
@@ -220,6 +222,8 @@ RUN sudo apt-get update \
         --enable-loadable-sqlite-extensions \
         --with-ensurepip=install \
     && sudo make -j 8 \
+    && sudo chown gitpod:gitpod /home/gitpod/.cache \
+    && sudo chown gitpod:gitpod /home/gitpod/.local/lib/python${GP_PYTHON_SHORT_VERSION}/site-packages \
     && sudo make install \
     && sudo ldconfig \
     && cd .. \
@@ -237,8 +241,6 @@ RUN sudo apt-get update \
         echo 'eval "$(pyenv virtualenv-init -)"'; } >> /home/gitpod/.bashrc.d/60-python \
     && sudo apt-get clean \
     && sudo rm -rf /tmp/* /var/lib/apt/lists/*
-
-ENV PATH=$HOME/.pyenv/bin:$HOME/.pyenv/shims:$PATH
 
 ### Ruby ###
 LABEL dazzle/layer=lang-ruby
