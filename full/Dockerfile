@@ -222,9 +222,9 @@ RUN sudo apt-get update \
         --enable-loadable-sqlite-extensions \
         --with-ensurepip=install \
     && sudo make -j 8 \
+    && sudo make install \
     && sudo chown gitpod:gitpod /home/gitpod/.cache \
     && sudo chown gitpod:gitpod /home/gitpod/.local/lib/python${GP_PYTHON_SHORT_VERSION}/site-packages \
-    && sudo make install \
     && sudo ldconfig \
     && cd .. \
     && sudo rm -rf Python-${GP_PYTHON_VERSION} Python-${GP_PYTHON_VERSION}.tar.xz \
