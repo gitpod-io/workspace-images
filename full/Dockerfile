@@ -204,59 +204,27 @@ ENV PATH=$PATH:/home/gitpod/.nvm/versions/node/v${NODE_VERSION}/bin
 LABEL dazzle/layer=lang-python
 LABEL dazzle/test=tests/lang-python.yaml
 USER gitpod
-ENV GP_PYTHON_VERSION=3.7.7
+
+ENV GP_PYTHON_VERSION=3.7.7 \
+    GP_PYTHON_OPTIMIZE="test_array test_base64 test_binascii test_binhex test_binop test_bytes test_c_locale_coercion test_class test_cmath test_codecs test_compile test_complex test_csv test_decimal test_dict test_float test_fstring test_hashlib test_io test_iter test_json test_long test_math test_memoryview test_pickle test_re test_set test_slice test_struct test_threading test_time test_traceback test_unicode"
+
 RUN sudo apt-get update \
-    && sudo apt-get install -yq libssl-dev zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev wget llvm libncurses5-dev libncursesw5-dev xz-utils \
-    && wget --quiet https://www.python.org/ftp/python/${GP_PYTHON_VERSION}/Python-${GP_PYTHON_VERSION}.tar.xz \
+    && sudo apt-get install -yq libssl-dev zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev llvm libncurses5-dev libncursesw5-dev xz-utils \
+    && curl -fsSL https://www.python.org/ftp/python/${GP_PYTHON_VERSION}/Python-${GP_PYTHON_VERSION}.tar.xz -o Python-${GP_PYTHON_VERSION}.tar.xz \
     && tar xsf Python-${GP_PYTHON_VERSION}.tar.xz \
     && cd Python-${GP_PYTHON_VERSION} \
     && ./configure --enable-optimizations --enable-shared --with-lto --enable-ipv6 --enable-loadable-sqlite-extensions --with-ensurepip=install \
-    && sudo make -j 8 PROFILE_TASK='-m test.regrtest --pgo \
-			test_array \
-			test_base64 \
-			test_binascii \
-			test_binhex \
-			test_binop \
-			test_bytes \
-			test_c_locale_coercion \
-			test_class \
-			test_cmath \
-			test_codecs \
-			test_compile \
-			test_complex \
-			test_csv \
-			test_decimal \
-			test_dict \
-			test_float \
-			test_fstring \
-			test_hashlib \
-			test_io \
-			test_iter \
-			test_json \
-			test_long \
-			test_math \
-			test_memoryview \
-			test_pickle \
-			test_re \
-			test_set \
-			test_slice \
-			test_struct \
-			test_threading \
-			test_time \
-			test_traceback \
-			test_unicode \
-		' \
+    && sudo make -j 8 PROFILE_TASK='-m test.regrtest --pgo ${GP_PYTHON_OPTIMIZE}' \
     && sudo make install \
     && cd .. \
     && sudo rm -rf Python-${GP_PYTHON_VERSION} Python-${GP_PYTHON_VERSION}.tar.xz \
-    && python --version \
     && curl -fsSL https://bootstrap.pypa.io/get-pip.py -o get-pip.py \
-    && python get-pip.py \
+    && python3 get-pip.py \
     && rm get-pip.py \
-    && python3 -m pip install --upgrade \
+    && sudo python3 -m pip install --upgrade \
         setuptools wheel virtualenv pipenv pylint rope flake8 \
         mypy autopep8 pep8 pylama pydocstyle bandit notebook \
-        python-language-server[all]==0.31.9 twine poetry \
+        python-language-server[all]==0.31.9 twine \
     && curl -fsSL https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-installer | bash \
     && { echo; \
         echo 'eval "$(pyenv init -)"'; \
