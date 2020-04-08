@@ -205,16 +205,21 @@ LABEL dazzle/layer=lang-python
 LABEL dazzle/test=tests/lang-python.yaml
 USER gitpod
 
-ENV GP_PYTHON_VERSION=3.7.7 \
-    GP_PYTHON_OPTIMIZE="test_array test_base64 test_binascii test_binhex test_binop test_bytes test_c_locale_coercion test_class test_cmath test_codecs test_compile test_complex test_csv test_decimal test_dict test_float test_fstring test_hashlib test_io test_iter test_json test_long test_math test_memoryview test_pickle test_re test_set test_slice test_struct test_threading test_time test_traceback test_unicode"
+ENV GP_PYTHON_VERSION=3.7.7
 
 RUN sudo apt-get update \
     && sudo apt-get install -yq libssl-dev zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev llvm libncurses5-dev libncursesw5-dev xz-utils \
     && curl -fsSL https://www.python.org/ftp/python/${GP_PYTHON_VERSION}/Python-${GP_PYTHON_VERSION}.tar.xz -o Python-${GP_PYTHON_VERSION}.tar.xz \
     && tar xsf Python-${GP_PYTHON_VERSION}.tar.xz \
     && cd Python-${GP_PYTHON_VERSION} \
-    && ./configure --enable-optimizations --enable-shared --with-lto --enable-ipv6 --enable-loadable-sqlite-extensions --with-ensurepip=install \
-    && sudo make -j 8 PROFILE_TASK='-m test.regrtest --pgo ${GP_PYTHON_OPTIMIZE}' \
+    && ./configure \
+        #--enable-optimizations \
+        --enable-shared \
+        --with-lto \
+        --enable-ipv6 \
+        --enable-loadable-sqlite-extensions \
+        --with-ensurepip=install \
+    && sudo make -j 8 \
     && sudo make install \
     && cd .. \
     && sudo rm -rf Python-${GP_PYTHON_VERSION} Python-${GP_PYTHON_VERSION}.tar.xz \
