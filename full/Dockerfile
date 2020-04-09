@@ -223,7 +223,6 @@ RUN sudo apt-get update \
         --with-ensurepip=install \
     && sudo make -j 8 \
     && sudo make install \
-    && sudo chown gitpod:gitpod /home/gitpod/.cache \
     && sudo chown gitpod:gitpod /home/gitpod/.local/lib/python${GP_PYTHON_SHORT_VERSION}/site-packages \
     && sudo ldconfig \
     && cd .. \
@@ -235,6 +234,7 @@ RUN sudo apt-get update \
         setuptools wheel virtualenv pipenv pylint rope flake8 \
         mypy autopep8 pep8 pylama pydocstyle bandit notebook \
         python-language-server[all]==0.31.9 twine \
+    && sudo chown gitpod:gitpod /home/gitpod/.cache \
     && curl -fsSL https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-installer | bash \
     && { echo; \
         echo 'eval "$(pyenv init -)"'; \
