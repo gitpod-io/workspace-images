@@ -1,7 +1,7 @@
 FROM gitpod/workspace-full-vnc:latest
 
 USER root
-RUN wget -q https://packages.microsoft.com/config/ubuntu/19.04/packages-microsoft-prod.deb && \
+RUN wget -q https://packages.microsoft.com/config/ubuntu/20.04/packages-microsoft-prod.deb && \
     dpkg -i packages-microsoft-prod.deb && \
     rm -rf packages-microsoft-prod.deb && \
     add-apt-repository universe && \
