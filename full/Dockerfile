@@ -69,29 +69,31 @@ RUN curl -fsSL https://apt.llvm.org/llvm-snapshot.gpg.key | apt-key add - \
 LABEL dazzle/layer=tool-nginx
 LABEL dazzle/test=tests/lang-php.yaml
 USER root
-RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -yq \
+RUN add-apt-repository -y ppa:ondrej/php && \
+    apt-get update && \
+    DEBIAN_FRONTEND=noninteractive apt-get install -yq \
         apache2 \
         nginx \
         nginx-extras \
         composer \
-        php \
-        php-all-dev \
-        php-bcmath \
-        php-ctype \
-        php-curl \
-        php-date \
-        php-gd \
-        php-gettext \
-        php-intl \
-        php-json \
-        php-mbstring \
-        php-mysql \
-        php-net-ftp \
-        php-pgsql \
-        php-sqlite3 \
-        php-tokenizer \
-        php-xml \
-        php-zip \
+        php7.4 \
+        php7.4-all-dev \
+        php7.4-bcmath \
+        php7.4-ctype \
+        php7.4-curl \
+        php7.4-date \
+        php7.4-gd \
+        php7.4-gettext \
+        php7.4-intl \
+        php7.4-json \
+        php7.4-mbstring \
+        php7.4-mysql \
+        php7.4-net-ftp \
+        php7.4-pgsql \
+        php7.4-sqlite3 \
+        php7.4-tokenizer \
+        php7.4-xml \
+        php7.4-zip \
     && cp /var/lib/dpkg/status /var/lib/apt/dazzle-marks/tool-nginx.status \
     && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* \
     && mkdir /var/run/nginx \
