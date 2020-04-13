@@ -84,7 +84,7 @@ jobs:
           command: |
             docker load -i workspace-full-vnc.tar
             ./.circleci/build_image.sh dotnet-vnc/Dockerfile gitpod/workspace-dotnet-vnc
-          no_output_timeout: 30m
+          no_output_timeout: 60m
 
   workspace-postgres:
     docker:
@@ -139,6 +139,7 @@ jobs:
           command: |
             docker load -i workspace-full.tar
             ./.circleci/build_image.sh flutter/Dockerfile gitpod/workspace-flutter
+          no_output_timeout: 30m
 
   workspace-gecko:
     docker:
