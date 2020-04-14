@@ -207,7 +207,7 @@ ENV GP_PYTHON_SHORT_VERSION=3.7 \
     PATH=$HOME/.pyenv/bin:$HOME/.pyenv/shims:/home/gitpod/.local/bin:$PATH
 
 RUN export GP_PYTHON_VERSION="3.7.7" \
-    && cat /etc/apt/sources.list.d \
+    && cat /etc/apt/sources.list \
     && sudo apt-get update \
     && sudo apt-get install -yq libssl-dev zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev llvm libncurses5-dev libncursesw5-dev xz-utils tk-dev \
     && curl -fsSL https://www.python.org/ftp/python/${GP_PYTHON_VERSION}/Python-${GP_PYTHON_VERSION}.tar.xz -o Python-${GP_PYTHON_VERSION}.tar.xz \
