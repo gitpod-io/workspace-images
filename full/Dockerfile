@@ -54,7 +54,7 @@ LABEL dazzle/test=tests/lang-c.yaml
 USER root
 RUN curl -fsSL https://apt.llvm.org/llvm-snapshot.gpg.key | apt-key add - \
     && echo "deb https://apt.llvm.org/disco/ llvm-toolchain-disco main" >> /etc/apt/sources.list.d/llvm.list \
-    && apt-get update \
+    && apt-get update -q \
     && apt-get install -yq \
         clang-format \
         clang-tidy \
@@ -69,7 +69,7 @@ RUN curl -fsSL https://apt.llvm.org/llvm-snapshot.gpg.key | apt-key add - \
 LABEL dazzle/layer=tool-nginx
 LABEL dazzle/test=tests/lang-php.yaml
 USER root
-RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -yq \
+RUN apt-get update -q && DEBIAN_FRONTEND=noninteractive apt-get install -yq \
         apache2 \
         nginx \
         nginx-extras \
@@ -207,7 +207,7 @@ ENV GP_PYTHON_SHORT_VERSION=3.7 \
 
 RUN sudo rm -rf /tmp/* /var/lib/apt/lists/* \
     && export GP_PYTHON_VERSION="3.7.7" \
-    && sudo apt-get update \
+    && sudo apt-get update -q \
     && sudo apt-get install -yq libssl-dev zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev llvm libncurses5-dev libncursesw5-dev xz-utils tk-dev \
     && curl -fsSL https://www.python.org/ftp/python/${GP_PYTHON_VERSION}/Python-${GP_PYTHON_VERSION}.tar.xz -o Python-${GP_PYTHON_VERSION}.tar.xz \
     && tar xsf Python-${GP_PYTHON_VERSION}.tar.xz \
@@ -260,7 +260,7 @@ ENV GEM_HOME=/workspace/.rvm
 LABEL dazzle/layer=lang-rust
 LABEL dazzle/test=tests/lang-rust.yaml
 USER gitpod
-RUN sudo apt-get update \
+RUN sudo apt-get update -q \
     && DEBIAN_FRONTEND=noninteractive sudo apt-get install -yq \
         # Enable Rust static binary builds
         musl \
