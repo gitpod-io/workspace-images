@@ -54,7 +54,7 @@ LABEL dazzle/test=tests/lang-c.yaml
 USER root
 RUN curl -fsSL https://apt.llvm.org/llvm-snapshot.gpg.key | apt-key add - \
     && echo "deb https://apt.llvm.org/disco/ llvm-toolchain-disco main" >> /etc/apt/sources.list.d/llvm.list \
-    && apt-get update \
+    && apt-get update -q \
     && apt-get install -yq \
         clang-format \
         clang-tidy \
@@ -63,13 +63,14 @@ RUN curl -fsSL https://apt.llvm.org/llvm-snapshot.gpg.key | apt-key add - \
         gdb \
         lld \
     && cp /var/lib/dpkg/status /var/lib/apt/dazzle-marks/lang-c.status \
-    && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/*
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/* /tmp/*
 
 ### Apache, PHP and Nginx ###
 LABEL dazzle/layer=tool-nginx
 LABEL dazzle/test=tests/lang-php.yaml
 USER root
-RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -yq \
+RUN apt-get update -q && DEBIAN_FRONTEND=noninteractive apt-get install -yq \
         apache2 \
         nginx \
         nginx-extras \
@@ -114,8 +115,7 @@ ENV PATH="$PATH:/home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin/"
     MANPATH="$MANPATH:/home/linuxbrew/.linuxbrew/share/man" \
     INFOPATH="$INFOPATH:/home/linuxbrew/.linuxbrew/share/info" \
     HOMEBREW_NO_AUTO_UPDATE=1
-RUN sudo apt-get remove -y cmake \
-    && brew install cmake
+RUN sudo apt-get remove -y cmake && brew install cmake
 
 ### Go ###
 LABEL dazzle/layer=lang-go
@@ -126,7 +126,7 @@ ENV GO_VERSION=1.14 \
     GOROOT=$HOME/go
 ENV PATH=$GOROOT/bin:$GOPATH/bin:$PATH
 RUN curl -fsSL https://storage.googleapis.com/golang/go$GO_VERSION.linux-amd64.tar.gz | tar xzs && \
-# install VS Code Go tools from https://github.com/Microsoft/vscode-go/blob/0faec7e5a8a69d71093f08e035d33beb3ded8626/src/goInstallTools.ts#L19-L45
+    # install VS Code Go tools from https://github.com/Microsoft/vscode-go/blob/0faec7e5a8a69d71093f08e035d33beb3ded8626/src/goInstallTools.ts#L19-L45
     go get -u -v \
         github.com/mdempsky/gocode \
         github.com/uudashr/gopkgs/cmd/gopkgs \
@@ -157,9 +157,7 @@ RUN curl -fsSL https://storage.googleapis.com/golang/go$GO_VERSION.linux-amd64.t
         golang.org/x/tools/gopls@latest && \
     go get -u -v -d github.com/stamblerre/gocode && \
     go build -o $GOPATH/bin/gocode-gomod github.com/stamblerre/gocode && \
-    rm -rf $GOPATH/src && \
-    sudo rm -rf $GOPATH/pkg && \
-    rm -rf /home/gitpod/.cache/go
+    sudo rm -rf $GOPATH/src $GOPATH/pkg /home/gitpod/.cache/go
 # user Go packages
 ENV GOPATH=/workspace/go \
     PATH=/workspace/go/bin:$PATH
@@ -204,41 +202,57 @@ ENV PATH=$PATH:/home/gitpod/.nvm/versions/node/v${NODE_VERSION}/bin
 LABEL dazzle/layer=lang-python
 LABEL dazzle/test=tests/lang-python.yaml
 USER gitpod
-ENV PATH=$HOME/.pyenv/bin:$HOME/.pyenv/shims:$PATH
-RUN curl -fsSL https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-installer | bash \
+
+ENV GP_PYTHON_SHORT_VERSION=3.7 \
+    PATH=$HOME/.pyenv/bin:$HOME/.pyenv/shims:/home/gitpod/.local/bin:$PATH
+
+RUN export GP_PYTHON_VERSION="3.7.7" \
+    && sudo apt-get update -q \
+    && sudo apt-get install -yq libssl-dev zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev llvm libncurses5-dev libncursesw5-dev xz-utils tk-dev \
+    && curl -fsSL https://www.python.org/ftp/python/${GP_PYTHON_VERSION}/Python-${GP_PYTHON_VERSION}.tar.xz -o Python-${GP_PYTHON_VERSION}.tar.xz \
+    && tar xsf Python-${GP_PYTHON_VERSION}.tar.xz \
+    && cd Python-${GP_PYTHON_VERSION} \
+    && ./configure \
+        --enable-optimizations \
+        --enable-shared \
+        --with-lto \
+        --enable-ipv6 \
+        --enable-loadable-sqlite-extensions \
+        --with-ensurepip=install \
+    && sudo make -j 8 \
+    && sudo make install \
+    && sudo ldconfig \
+    && cd .. \
+    && sudo rm -rf Python-${GP_PYTHON_VERSION} Python-${GP_PYTHON_VERSION}.tar.xz \
+    && curl -fsSL https://bootstrap.pypa.io/get-pip.py -o get-pip.py \
+    && sudo python3 get-pip.py \
+    && rm get-pip.py \
+    && sudo python3 -m pip install --upgrade \
+        setuptools wheel virtualenv pipenv pylint rope flake8 \
+        mypy autopep8 pep8 pylama pydocstyle bandit notebook \
+        python-language-server[all]==0.31.9 twine \
+    && sudo mkdir /home/gitpod/.cache \
+    && sudo chown gitpod:gitpod /home/gitpod/.cache \
+    && sudo chown gitpod:gitpod /home/gitpod/.local/lib/python${GP_PYTHON_SHORT_VERSION}/site-packages \
+    && curl -fsSL https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-installer | bash \
     && { echo; \
         echo 'eval "$(pyenv init -)"'; \
         echo 'eval "$(pyenv virtualenv-init -)"'; } >> /home/gitpod/.bashrc.d/60-python \
-    && pyenv update \
-    && pyenv install 2.7.17 \
-    && pyenv install 3.7.7 \
-    && pyenv global 2.7.17 3.7.7 \
-    && python2 -m pip install --upgrade pip \
-    && python3 -m pip install --upgrade pip \
-    && python3 -m pip install --upgrade \
-        setuptools wheel virtualenv pipenv pylint rope flake8 \
-        mypy autopep8 pep8 pylama pydocstyle bandit notebook \
-        python-language-server[all]==0.25.0 twine \
-    && sudo rm -rf /tmp/*
-# Gitpod will automatically add user site under `/workspace` to persist your packages.
-# ENV PYTHONUSERBASE=/workspace/.pip-modules \
-#    PIP_USER=yes
+    && sudo rm -rf /tmp/* /var/lib/apt/lists/*
 
 ### Ruby ###
 LABEL dazzle/layer=lang-ruby
 LABEL dazzle/test=tests/lang-ruby.yaml
 USER gitpod
 RUN curl -sSL https://rvm.io/mpapis.asc | gpg --import - \
-    && curl -sSL https://rvm.io/pkuczynski.asc | gpg --import - \
+    && curl -fsSL https://rvm.io/pkuczynski.asc | gpg --import - \
     && curl -fsSL https://get.rvm.io | bash -s stable \
     && bash -lc " \
         rvm requirements \
-        && rvm install 2.5 \
         && rvm install 2.6 \
         && rvm use 2.6 --default \
         && rvm rubygems current \
-        && gem install bundler --no-document \
-        && gem install solargraph --no-document" \
+        && gem install bundler solargraph --no-document" \
     && echo '[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*' >> /home/gitpod/.bashrc.d/70-ruby
 ENV GEM_HOME=/workspace/.rvm
 
@@ -246,7 +260,7 @@ ENV GEM_HOME=/workspace/.rvm
 LABEL dazzle/layer=lang-rust
 LABEL dazzle/test=tests/lang-rust.yaml
 USER gitpod
-RUN sudo apt-get update \
+RUN sudo apt-get update -q \
     && DEBIAN_FRONTEND=noninteractive sudo apt-get install -yq \
         # Enable Rust static binary builds
         musl \
@@ -258,8 +272,8 @@ RUN sudo apt-get update \
 
 RUN cp /home/gitpod/.profile /home/gitpod/.profile_orig && \
     curl -fsSL https://sh.rustup.rs | sh -s -- -y \
-    && .cargo/bin/rustup toolchain install 1.41.1 \
-    && .cargo/bin/rustup default 1.41.1 \
+    && .cargo/bin/rustup toolchain install 1.42.0 \
+    && .cargo/bin/rustup default 1.42.0 \
     # Save image size by removing now-redudant stable toolchain
     && .cargo/bin/rustup toolchain uninstall stable \
     && .cargo/bin/rustup component add \
