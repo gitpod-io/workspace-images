@@ -2,7 +2,9 @@ FROM buildpack-deps:disco
 
 ### base ###
 RUN yes | unminimize \
+    && add-apt-repository -y ppa:git-core/ppa \
     && apt-get install -yq \
+        git \
         zip \
         unzip \
         bash-completion \
@@ -24,11 +26,6 @@ RUN yes | unminimize \
     && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/*
 
 ENV LANG=en_US.UTF-8
-
-### Git ###
-RUN add-apt-repository -y ppa:git-core/ppa \
-    && apt-get install -yq git \
-    && rm -rf /var/lib/apt/lists/*
 
 ### Gitpod user ###
 # '-l': see https://docs.docker.com/develop/develop-images/dockerfile_best-practices/#user
@@ -157,9 +154,7 @@ RUN curl -fsSL https://storage.googleapis.com/golang/go$GO_VERSION.linux-amd64.t
         golang.org/x/tools/gopls@latest && \
     go get -u -v -d github.com/stamblerre/gocode && \
     go build -o $GOPATH/bin/gocode-gomod github.com/stamblerre/gocode && \
-    rm -rf $GOPATH/src && \
-    sudo rm -rf $GOPATH/pkg && \
-    rm -rf /home/gitpod/.cache/go
+    sudo rm -rf $GOPATH/src $GOPATH/pkg /home/gitpod/.cache/go
 # user Go packages
 ENV GOPATH=/workspace/go \
     PATH=/workspace/go/bin:$PATH
