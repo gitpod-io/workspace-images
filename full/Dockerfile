@@ -111,8 +111,7 @@ ENV PATH="$PATH:/home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin/"
     MANPATH="$MANPATH:/home/linuxbrew/.linuxbrew/share/man" \
     INFOPATH="$INFOPATH:/home/linuxbrew/.linuxbrew/share/info" \
     HOMEBREW_NO_AUTO_UPDATE=1
-RUN sudo apt-get remove -y cmake \
-    && brew install cmake
+RUN sudo apt-get remove -y cmake && brew install cmake
 
 ### Go ###
 LABEL dazzle/layer=lang-go
@@ -193,18 +192,17 @@ RUN curl -fsSL https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh |
     && echo ". ~/.nvm/nvm-lazy.sh"  >> /home/gitpod/.bashrc.d/50-node
 # above, we are adding the lazy nvm init to .bashrc, because one is executed on interactive shells, the other for non-interactive shells (e.g. plugin-host)
 COPY --chown=gitpod:gitpod nvm-lazy.sh /home/gitpod/.nvm/nvm-lazy.sh
-ENV PATH=$PATH:/home/gitpod/.nvm/versions/node/v${NODE_VERSION}/bin
+# set the path (this also includes some path items from the upcoming python layer to make the image size smaller)
+ENV PATH=$HOME/.pyenv/bin:$HOME/.pyenv/shims:/home/gitpod/.local/bin:$PATH:/home/gitpod/.nvm/versions/node/v${NODE_VERSION}/bin
 
 ### Python ###
 LABEL dazzle/layer=lang-python
 LABEL dazzle/test=tests/lang-python.yaml
 USER gitpod
 
-ENV GP_PYTHON_VERSION=3.7.7 \
-    GP_PYTHON_SHORT_VERSION=3.7 \
-    PATH=$HOME/.pyenv/bin:$HOME/.pyenv/shims:/home/gitpod/.local/bin:$PATH
-
-RUN sudo apt-get update \
+RUN export GP_PYTHON_VERSION=3.7.7 \
+    && export GP_PYTHON_SHORT_VERSION=3.7\
+    && sudo apt-get update \
     && sudo apt-get install -yq libssl-dev zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev llvm libncurses5-dev libncursesw5-dev xz-utils \
     && curl -fsSL https://www.python.org/ftp/python/${GP_PYTHON_VERSION}/Python-${GP_PYTHON_VERSION}.tar.xz -o Python-${GP_PYTHON_VERSION}.tar.xz \
     && tar xsf Python-${GP_PYTHON_VERSION}.tar.xz \
