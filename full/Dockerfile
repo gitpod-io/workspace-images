@@ -195,16 +195,17 @@ RUN curl -fsSL https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh |
     && echo ". ~/.nvm/nvm-lazy.sh"  >> /home/gitpod/.bashrc.d/50-node
 # above, we are adding the lazy nvm init to .bashrc, because one is executed on interactive shells, the other for non-interactive shells (e.g. plugin-host)
 COPY --chown=gitpod:gitpod nvm-lazy.sh /home/gitpod/.nvm/nvm-lazy.sh
-# set the path (this also includes some path items from the upcoming python layer to make the image size smaller)
-ENV PATH=$HOME/.pyenv/bin:$HOME/.pyenv/shims:/home/gitpod/.local/bin:$PATH:/home/gitpod/.nvm/versions/node/v${NODE_VERSION}/bin
+ENV PATH=$PATH:/home/gitpod/.nvm/versions/node/v${NODE_VERSION}/bin
 
 ### Python ###
 LABEL dazzle/layer=lang-python
 LABEL dazzle/test=tests/lang-python.yaml
 USER gitpod
 
-RUN export GP_PYTHON_VERSION=3.7.7 \
-    && export GP_PYTHON_SHORT_VERSION=3.7\
+ENV GP_PYTHON_SHORT_VERSION=3.7 \
+    PATH=$HOME/.pyenv/bin:$HOME/.pyenv/shims:/home/gitpod/.local/bin:$PATH
+
+RUN export GP_PYTHON_VERSION="3.7.7" \
     && sudo apt-get update \
     && sudo apt-get install -yq libssl-dev zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev llvm libncurses5-dev libncursesw5-dev xz-utils \
     && curl -fsSL https://www.python.org/ftp/python/${GP_PYTHON_VERSION}/Python-${GP_PYTHON_VERSION}.tar.xz -o Python-${GP_PYTHON_VERSION}.tar.xz \
@@ -236,7 +237,6 @@ RUN export GP_PYTHON_VERSION=3.7.7 \
     && { echo; \
         echo 'eval "$(pyenv init -)"'; \
         echo 'eval "$(pyenv virtualenv-init -)"'; } >> /home/gitpod/.bashrc.d/60-python \
-    && sudo apt-get clean \
     && sudo rm -rf /tmp/* /var/lib/apt/lists/*
 
 ### Ruby ###
