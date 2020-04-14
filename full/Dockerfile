@@ -2,9 +2,7 @@ FROM buildpack-deps:disco
 
 ### base ###
 RUN yes | unminimize \
-    && add-apt-repository -y ppa:git-core/ppa \
     && apt-get install -yq \
-        git \
         zip \
         unzip \
         bash-completion \
@@ -26,6 +24,11 @@ RUN yes | unminimize \
     && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/*
 
 ENV LANG=en_US.UTF-8
+
+### Git ###
+RUN add-apt-repository -y ppa:git-core/ppa \
+    && apt-get install -yq git \
+    && rm -rf /var/lib/apt/lists/*
 
 ### Gitpod user ###
 # '-l': see https://docs.docker.com/develop/develop-images/dockerfile_best-practices/#user
