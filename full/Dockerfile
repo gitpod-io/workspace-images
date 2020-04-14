@@ -69,7 +69,7 @@ RUN curl -fsSL https://apt.llvm.org/llvm-snapshot.gpg.key | apt-key add - \
 LABEL dazzle/layer=tool-nginx
 LABEL dazzle/test=tests/lang-php.yaml
 USER root
-RUN apt-get update -q && DEBIAN_FRONTEND=noninteractive apt-get install -yq \
+RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -yq \
         apache2 \
         nginx \
         nginx-extras \
@@ -114,7 +114,8 @@ ENV PATH="$PATH:/home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin/"
     MANPATH="$MANPATH:/home/linuxbrew/.linuxbrew/share/man" \
     INFOPATH="$INFOPATH:/home/linuxbrew/.linuxbrew/share/info" \
     HOMEBREW_NO_AUTO_UPDATE=1
-RUN sudo apt-get remove -y cmake && brew install cmake
+RUN sudo apt-get remove -y cmake \
+    && brew install cmake
 
 ### Go ###
 LABEL dazzle/layer=lang-go
