@@ -81,7 +81,6 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -yq \
         php-curl \
         php-date \
         php-gd \
-        php-gettext \
         php-intl \
         php-json \
         php-mbstring \
