@@ -107,10 +107,3 @@ USER gitpod
   #&& printf '%s\n' "eval \$($(brew --prefix)/bin/brew shellenv)" >>~/.profile \
   # Docker, see https://github.com/gitpod-io/gitpod/issues/52#issuecomment-546844862
   #&& curl -sSL https://get.docker.com/rootless | sh
-
-# Add custom functions
-RUN true \
-  if ! grep -qF 'ix()' /etc/bash.bashrc; then printf '%s\n' \
-	'# Custom' \
-	"ix() { curl -F 'f:1=<-' ix.io 2>/dev/null ;}" \
-	>> /etc/bash.bashrc; fi
