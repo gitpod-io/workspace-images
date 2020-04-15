@@ -1,0 +1,1 @@
+This directory is used when neither of the core is set

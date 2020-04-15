@@ -1,4 +1,7 @@
 #!/bin/sh
+
+# FIXME(Kreyren): Oh gawd who wrote this, Abstract required for proper implementation
+
 set -xe
 
 if [[ $# -ne 2 ]]; then
