@@ -1,0 +1,1 @@
+Directory dedicated to various scripts used on gidpot runtime

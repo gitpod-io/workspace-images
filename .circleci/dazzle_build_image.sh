@@ -1,6 +1,10 @@
 #!/bin/sh
 
+###! FIXME-DOCS: Intro
+
 # FIXME(Kreyren): Oh gawd who wrote this, Abstract required for proper implementation
+
+# --- Original code below
 
 set -xe
 

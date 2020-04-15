@@ -3,8 +3,10 @@ FROM archlinux:latest
 LABEL Gitpod Maintainers
 
 # FIXME: We should allow end-users to set this
-ENV LANG=en_US.UTF-8
+ENV LANG="en_US.UTF-8"
 ENV LC_ALL=C
+
+USER root
 
 # Add 'gitpod' user
 RUN useradd \

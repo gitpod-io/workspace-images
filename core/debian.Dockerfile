@@ -6,8 +6,10 @@ LABEL Gitpod Maintainers
 ENV DEBIAN_FRONTEND=noninteractive
 
 # FIXME: We should allow end-users to set this
-ENV LANG=en_US.UTF-8
+ENV LANG="en_US.UTF-8"
 ENV LC_ALL=C
+
+USER root
 
 # Add 'gitpod' user
 RUN useradd \
@@ -23,9 +25,8 @@ RUN apt update
 
 # Install core dependencies
 # FIXME: We should allow logic based on expected 'shell' i.e using `shell: bash` in gitpod.yml should expand in installing bash-completion
-RUN true \
-  apt-get install -y \
-    novnc
+RUN apt-get install -y \
+	novnc
 
 # Configure default NoVNC in theia
 COPY core/misc/novnc-index.html /opt/novnc/index.html
