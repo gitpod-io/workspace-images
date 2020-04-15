@@ -65,7 +65,7 @@ ENV DOCKER_HOST="unix:///tmp/docker-33333/docker.sock"
 # Install default dependencies
 RUN true \
   && apt-get install -y \
-    build-essentials \
+    build-essential \
     git \
     nano \
     vim \
