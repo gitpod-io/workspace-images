@@ -88,9 +88,6 @@ RUN true \
     apache2 \
     nginx \
     apt-transport-https \
-    dotnet-sdk-3.1 \
-    aspnetcore-runtime-3.1 \
-    dotnet-runtime-3.1 \
     nodejs \
     java-common \
     default-jre \
