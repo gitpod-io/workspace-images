@@ -35,7 +35,7 @@ COPY core/misc/novnc-index.html /opt/novnc/index.html
 ###! We need following:
 ###! - [X] Rust
 ###! - [X] Java
-###! - [X] Dotnet
+###! - [ ] Dotnet
 ###! - [X] Python
 ###! - [X] Openbox (Used in theia desktop)
 ###! - [X] nano
@@ -64,9 +64,6 @@ ENV DOCKER_HOST="unix:///tmp/docker-33333/docker.sock"
 
 # Install default dependencies
 RUN true \
-  # Dotnet, see https://docs.microsoft.com/en-us/dotnet/core/install/linux-package-manager-debian10
-  && wget -O- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > /etc/apt/trusted.gpg.d/ \
-  && wget https://packages.microsoft.com/config/debian/10/prod.list -O /etc/apt/sources.list.d/microsoft-prod.list \
   && apt-get install -y \
     build-essentials \
     git \
