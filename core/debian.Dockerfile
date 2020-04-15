@@ -1,5 +1,7 @@
 FROM debian:stable
 
+LABEL Gitpod Maintainers
+
 # To avoid bricked workspaces assuming interactive shell breaks the build (https://github.com/gitpod-io/gitpod/issues/1171)
 ENV DEBIAN_FRONTEND=noninteractive
 
