@@ -101,7 +101,9 @@ RUN true \
     default-jre \
     default-jdk \
     openjdk-11-jre \
-    openjdk-11-jdk
+    openjdk-11-jdk \
+    curl \
+    gnupg
 
 USER gitpod
 RUN true \
