@@ -64,10 +64,6 @@ ENV DOCKER_HOST="unix:///tmp/docker-33333/docker.sock"
 
 # Install default dependencies
 RUN true \
-  # We need curl and gpg prior to reaching docker step
-  && apt-get install -y curl gpg \
-  # Docker, see https://github.com/gitpod-io/gitpod/issues/52#issuecomment-546844862
-  && curl -sSL https://get.docker.com/rootless | sh \
   # Dotnet, see https://docs.microsoft.com/en-us/dotnet/core/install/linux-package-manager-debian10
   && wget -O- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > /etc/apt/trusted.gpg.d/ \
   && wget https://packages.microsoft.com/config/debian/10/prod.list -O /etc/apt/sources.list.d/microsoft-prod.list \
@@ -103,7 +99,10 @@ RUN true \
     default-jre \
     default-jdk \
     openjdk-11-jre \
-    openjdk-11-jdk
+    openjdk-11-jdk \
+    curl \
+    gpg \
+    apt-utils
 
 USER gitpod
 RUN true \
@@ -111,7 +110,9 @@ RUN true \
   && test -d ~/.linuxbrew && eval $(~/.linuxbrew/bin/brew shellenv) \
   && test -d /home/linuxbrew/.linuxbrew && eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv) \
   && test -r ~/.bash_profile && echo "eval \$($(brew --prefix)/bin/brew shellenv)" >>~/.bash_profile \
-  && printf '%s\n' "eval \$($(brew --prefix)/bin/brew shellenv)" >>~/.profile
+  && printf '%s\n' "eval \$($(brew --prefix)/bin/brew shellenv)" >>~/.profile \
+  # Docker, see https://github.com/gitpod-io/gitpod/issues/52#issuecomment-546844862
+  && curl -sSL https://get.docker.com/rootless | sh
 
 # Add custom functions
 RUN true \
