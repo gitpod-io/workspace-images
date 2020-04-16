@@ -46,6 +46,7 @@ RUN printf '%s\n' \
 RUN true \
   # FIXME: Pipe the key in apt-key somehow
   && dpkg --add-architecture i386 \
+  && apt-get install -y gpg \
   && apt-key adv --keyserver keys.openpgp.org --recv-keys 0x76F1A20FF987672F \
   && apt update
 
