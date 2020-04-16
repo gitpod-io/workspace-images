@@ -28,7 +28,7 @@ RUN true \
 	&& groupadd apt \
 	&& usermod -a -G apt gitpod \
 	&& chown root:apt /var/lib/dpkg/lock-frontend \
-	&& chmod g+w /var/lib/dpkg
+	&& chmod g+w /var/lib/dpkg/lock-frontend
 
 # Initial configuration of sources.list
 # NOTICE: Heredoc would be nicer here, but that seems to be pita in dockerfile
