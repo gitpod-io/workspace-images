@@ -27,7 +27,7 @@ RUN true \
   # FIXME: Pipe the key in apt-key somehow
   && dpkg --add-architecture i386 \
   && apt update \
-  && apt-get install -y gpg \
+  && apt-get install -y gnupg \
   && apt-key adv --keyserver keys.openpgp.org --recv-keys 0x76F1A20FF987672F
 
 # Configure sources.list
