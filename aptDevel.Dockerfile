@@ -30,7 +30,7 @@ ENV KAPT_DIR="/home/gitpod/makeshift"
 
 RUN true \
   && apt install -y debootstrap \
-  && debootstrap --arch=amd64 --cache-dir="$HOME/.cache/apt" "$KAPT_DIR" \
+  && debootstrap --arch=amd64 stable "$KAPT_DIR" http://deb.debian.org/debian
   && chown -R gitpod:gitpod "$KAPT_DIR"
 
 # RUN true \
