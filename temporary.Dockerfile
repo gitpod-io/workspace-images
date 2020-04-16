@@ -22,8 +22,23 @@ RUN useradd \
 	--password gitpod \
 	gitpod
 
+# Configure apt to be used on non-root
+## NOTICE: We need read+write in /var/lib/dpkg/lock-frontend
+RUN true \
+	&& groupadd apt \
+	&& usermod -a -G apt gitpod \
+	&& chown root:apt /var/lib/dpkg/lock-frontend
+
+# Initial configuration of sources.list
+# NOTICE: Heredoc would be nicer here, but that seems to be pita in dockerfile
+RUN printf '%s\n' \
+		"# Stable" \
+		"deb http://mirror.dkm.cz/debian stable main non-free contrib" \
+		"deb-src http://mirror.dkm.cz/debian stable main non-free contrib" \
+	> /etc/apt/sources.list \
+	&& apt-get update
+
 # Make sure that end-users have packages available for their dockerimages
-# FIXME: We are expecting `rm -rf /var/lib/apt/lists/*` in gitpod-layer to downsize 
 # NOTICE: You can use `gpg --search-keys` to get the recv-keys value, this requires upstream to upload in relevant keyserver and sync them
 # NOTICE: Do not use debian/ubuntu keyserver --https://unix.stackexchange.com/questions/530778/what-is-debians-default-gpg-keyserver-and-where-is-it-configured -> Use keys.opengpg.org which also sets standard for keyserver instead of fregmenting
 RUN true \
@@ -91,6 +106,8 @@ COPY core/misc/novnc-index.html /opt/novnc/index.html
 ###! - [X] Node.js
 ###! - [X] Ruby
 ###! - [ ] Docker (for development) -- See https://github.com/gitpod-io/gitpod/issues/52
+###! Additional info:
+###! - [ ] End-users are expected to use apt
 
 # Used for docker
 #ENV XDG_RUNTIME_DIR=/tmp/docker-33333
