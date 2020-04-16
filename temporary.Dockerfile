@@ -41,7 +41,11 @@ RUN printf '%s\n' \
 
 # Make sure that end-users have packages available for their dockerimages
 # FIXME: We are expecting `rm -rf /var/lib/apt/lists/*` in gitpod-layer to downsize the dockerimage
-RUN apt update
+RUN true \
+  && sudo dpkg --add-architecture i386 \
+  && wget -nc https://dl.winehq.org/wine-builds/winehq.key \
+  && apt-key add winehq.key \
+  && apt update
 
 # Install core dependencies
 # FIXME: We should allow logic based on expected 'shell' i.e using `shell: bash` in gitpod.yml should expand in installing bash-completion
