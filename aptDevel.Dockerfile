@@ -37,4 +37,5 @@ RUN true \
 	&& chown -R root:apt /var/cache/apt/ \
 	&& chmod -R g+w /var/cache/apt \
 	# To ensure that files created have the expected group
-	&& chmod -R g+s /var/cache/apt
+	&& chmod -R g+s /var/cache/apt \
+	&& chmod u+s /usr/bin/apt
