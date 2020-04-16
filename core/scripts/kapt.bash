@@ -7,7 +7,7 @@
 ###! - We are making a new FSH as a makeshift sandbox in a place accesible by the non-root to which we make custom file system hierarchy and force apt to use it as a new root using configuration from /etc/apt on host
 ###! Additional info
 ###! - See `man apt.conf` and `apt-config dump`
-###! - deboostrap it may help to create the initial filesystem
+###! - deboostrap may help to create the initial filesystem
 
 efixme() { printf 'FIXME: %s\n' "$1" ;}
 eerror() { printf 'ERROR: %s\n' "$1" ;}
@@ -27,7 +27,7 @@ die() {
 
 while [ "$#" -ge 1 ]; do case "$1" in
 	update)
-		apt --option="Dpkg::Options::=\"--root=/makeshift/\"" update
+		apt --option="Dpkg::Options::=\"--root=/makeshift/\"" "$1"
 		shift 1
 	;;
 	--help|help) efixme "help-message" ;;
