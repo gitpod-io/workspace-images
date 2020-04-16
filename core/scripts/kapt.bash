@@ -26,8 +26,9 @@ die() {
 [ "$(id -u)" = 0 ] && die 3 "This script is not expected to be executed on root"
 
 while [ "$#" -ge 1 ]; do case "$1" in
-	--update)
+	update)
 		apt --option="Dpkg::Options::=\"--root=/makeshift/\"" update
+		shift 1
 	;;
 	--help|help) efixme "help-message" ;;
 	*) die 2 "$1"

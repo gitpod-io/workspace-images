@@ -3,4 +3,4 @@ image:
 
 tasks:
   - init: echo meh
-    command: kapt install
+    command: kapt update
