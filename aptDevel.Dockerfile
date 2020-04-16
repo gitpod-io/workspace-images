@@ -35,6 +35,9 @@ ENV KAPT_DIR="/home/gitpod/makeshift"
 #   && chown -R gitpod:gitpod "$KAPT_DIR"
 
 RUN true \
+  && mkdir "$KAPT_DIR" || true \
+  && mkdir "$KAPT_DIR/lib" || true \
+  && cp -r /var/lib/dpkg "$KAPT_DIR/lib/dpkg" \
   && apt-get \
     -o Dir="$KAPT_DIR" \
     # Use /etc/apt from host
