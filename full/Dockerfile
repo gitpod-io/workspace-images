@@ -206,9 +206,6 @@ USER gitpod
 ENV GP_PYTHON_SHORT_VERSION=3.7 \
     PATH=$HOME/.pyenv/bin:$HOME/.pyenv/shims:/home/gitpod/.local/bin:$PATH
 
-RUN sudo rm -rf /etc/apt/sources.list
-COPY sources.list /etc/apt/sources.list
-
 RUN export GP_PYTHON_VERSION="3.7.7" \
     && sudo apt-get update \
     && sudo apt-get install -yq libssl-dev zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev llvm libncurses5-dev libncursesw5-dev xz-utils tk-dev \
