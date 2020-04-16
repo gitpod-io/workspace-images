@@ -1,5 +1,8 @@
 FROM debian:stable
 
+###! Additional info:
+###! - Do not use sudo -> Set proper group permission
+
 LABEL Gitpod Maintainers
 
 # To avoid bricked workspaces assuming interactive shell breaks the build (https://github.com/gitpod-io/gitpod/issues/1171)
@@ -28,7 +31,7 @@ RUN true \
   && dpkg --add-architecture i386 \
   && apt update \
   && apt-get install -y gnupg wget \
-  && wget -qnc https://dl.winehq.org/wine-builds/winehq.key -O - | sudo apt-key add - \
+  && wget -qnc https://dl.winehq.org/wine-builds/winehq.key -O - | apt-key add - \
   && apt-key adv --keyserver keys.openpgp.org --recv-keys 0x76F1A20FF987672F
 
 # Configure sources.list
