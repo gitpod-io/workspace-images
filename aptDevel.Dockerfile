@@ -29,4 +29,5 @@ RUN true \
 	&& usermod -a -G apt gitpod \
 	&& chown -R root:apt /var/lib/dpkg/ \
 	&& chmod -R g+w /var/lib/dpkg/ \
-	&& chown -R root:apt /var/lib/apt/
+	&& chown -R root:apt /var/lib/apt/ \
+	&& chmod -R g+w /var/lib/apt \
