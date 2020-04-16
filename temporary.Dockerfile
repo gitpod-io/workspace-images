@@ -35,8 +35,8 @@ RUN printf '%s\n' \
     "deb-src http://mirror.dkm.cz/debian stable main non-free contrib" \
     "" \
     "# WINE" \
-    "deb [arch=amd64,i386] https://dl.winehq.org/wine-builds/debian/ bullseye main" \
-    "deb-src [arch=amd64,i386] https://dl.winehq.org/wine-builds/debian/ bullseye  main" \
+    "#deb [arch=amd64,i386] https://dl.winehq.org/wine-builds/debian/ bullseye main" \
+    "#deb-src [arch=amd64,i386] https://dl.winehq.org/wine-builds/debian/ bullseye  main" \
   > /etc/apt/sources.list
 
 # Make sure that end-users have packages available for their dockerimages
@@ -44,8 +44,8 @@ RUN printf '%s\n' \
 RUN true \
   # FIXME: Pipe the key in apt-key somehow
   && dpkg --add-architecture i386 \
-  && wget -nc https://dl.winehq.org/wine-builds/winehq.key \
-  && apt-key add winehq.key \
+  #&& wget -nc https://dl.winehq.org/wine-builds/winehq.key \
+  #&& apt-key add winehq.key \
   && apt update
 
 # Install core dependencies
