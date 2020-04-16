@@ -32,7 +32,7 @@ RUN true \
   && apt-get \
     -o Dir="$KAPT_DIR" \
     -o Dir::Etc="/etc/apt" \
-    -o Dir::Cache "$HOME/apt" \
+    -o Dir::Cache="$HOME/apt" \
   install -y debootstrap \
   && chown -R gitpod:gitpod "$KAPT_DIR"
 
