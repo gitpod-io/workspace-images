@@ -40,13 +40,12 @@ RUN printf '%s\n' \
   > /etc/apt/sources.list
 
 # Make sure that end-users have packages available for their dockerimages
-# FIXME: We are expecting `rm -rf /var/lib/apt/lists/*` in gitpod-layer to downsize the dockerimage
-  #&& wget -nc https://dl.winehq.org/wine-builds/winehq.key \
-  #&& apt-key add winehq.key \
+# FIXME: We are expecting `rm -rf /var/lib/apt/lists/*` in gitpod-layer to downsize 
+# NOTICE: You can use `gpg --search-keys` to get the recv-keys value, this requires upstream to upload in keyservers and sync
 RUN true \
   # FIXME: Pipe the key in apt-key somehow
   && dpkg --add-architecture i386 \
-  #&& apt-key adv --keyserver keyring.debian.org --recv-keys 0x673A03E4C1DB921F \
+  && apt-key adv --keyserver keyring.debian.org --recv-keys 0x76F1A20FF987672F \
   && apt update
 
 # Install core dependencies
