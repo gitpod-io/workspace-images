@@ -1,4 +1,4 @@
-FROM buildpack-deps:bionic
+FROM buildpack-deps:focal
 
 ### base ###
 RUN yes | unminimize \
@@ -53,7 +53,7 @@ LABEL dazzle/layer=lang-c
 LABEL dazzle/test=tests/lang-c.yaml
 USER root
 RUN curl -fsSL https://apt.llvm.org/llvm-snapshot.gpg.key | apt-key add - \
-    && echo "deb https://apt.llvm.org/disco/ llvm-toolchain-disco main" >> /etc/apt/sources.list.d/llvm.list \
+    && echo "deb https://apt.llvm.org/focal/ llvm-toolchain-focal main" >> /etc/apt/sources.list.d/llvm.list \
     && apt-get update \
     && apt-get install -yq \
         clang-format \
@@ -81,7 +81,6 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -yq \
         php-curl \
         php-date \
         php-gd \
-        php-gettext \
         php-intl \
         php-json \
         php-mbstring \
@@ -169,7 +168,7 @@ LABEL dazzle/test=tests/lang-java.yaml
 USER gitpod
 RUN curl -fsSL "https://get.sdkman.io" | bash \
  && bash -c ". /home/gitpod/.sdkman/bin/sdkman-init.sh \
-             && sdk install java 11.0.5.fx-zulu \
+             && sdk install java 11.0.6.fx-zulu \
              && sdk install gradle \
              && sdk install maven \
              && sdk flush archives \
