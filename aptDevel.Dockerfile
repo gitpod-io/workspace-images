@@ -27,5 +27,5 @@ RUN useradd \
 RUN true \
 	&& groupadd apt \
 	&& usermod -a -G apt gitpod \
-	&& chown root:apt /var/lib/dpkg/lock-frontend \
-	&& chmod g+w /var/lib/dpkg/lock-frontend
+	&& chown -R root:apt /var/lib/dpkg/ \
+	&& chmod -R g+w /var/lib/dpkg/
