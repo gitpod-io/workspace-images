@@ -27,11 +27,12 @@ RUN useradd \
 RUN true \
 	&& groupadd apt \
 	&& usermod -a -G apt gitpod \
+	# DPKG
 	&& chown -R root:apt /var/lib/dpkg/ \
 	&& chmod -R g+w /var/lib/dpkg/ \
+	# APT
 	&& chown -R root:apt /var/lib/apt/ \
 	&& chmod -R g+w /var/lib/apt \
+	# APT CACHE
 	&& chown -R root:apt /var/cache/apt/ \
-	&& chmod -R g+w /var/cache/apt/ \
-	&& chown -R root:apt /var/cache/apt/archives/partial \
-	&& chmod -R g+w /var/cache/apt/archives/partial
+	&& chmod -R g+w /var/cache/apt
