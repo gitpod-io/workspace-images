@@ -11,5 +11,3 @@ deb http://archive.ubuntu.com/ubuntu/ disco-updates multiverse
 deb http://archive.ubuntu.com/ubuntu/ disco-backports main restricted universe multiverse
 
 deb http://security.ubuntu.com/ubuntu/ disco-security main restricted
-deb http://security.ubuntu.com/ubuntu/ disco-security universe
-deb http://security.ubuntu.com/ubuntu/ disco-security multiverse
