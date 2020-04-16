@@ -19,6 +19,26 @@ RUN useradd \
 	--password gitpod \
 	gitpod
 
+# Configure sources.list
+# NOTICE: Heredoc would be nicer here, but that seems to be pita in dockerfile
+RUN printf '%s\n' \
+    "# Testing" \
+    "deb http://mirror.dkm.cz/debian testing main non-free contrib" \
+    "deb-src http://mirror.dkm.cz/debian testing main non-free contrib" \
+    "" \
+    "# Sid" \
+    "deb http://mirror.dkm.cz/debian sid main non-free contrib" \
+    "deb-src http://mirror.dkm.cz/debian sid main non-free contrib" \
+    "" \
+    "# Stable" \
+    "deb http://mirror.dkm.cz/debian stable main non-free contrib" \
+    "deb-src http://mirror.dkm.cz/debian stable main non-free contrib" \
+    "" \
+    "# WINE" \
+    "deb [arch=amd64,i386] https://dl.winehq.org/wine-builds/debian/ bullseye main" \
+    "deb-src [arch=amd64,i386] https://dl.winehq.org/wine-builds/debian/ bullseye  main" \
+  > /etc/apt/sources.list
+
 # Make sure that end-users have packages available for their dockerimages
 # FIXME: We are expecting `rm -rf /var/lib/apt/lists/*` in gitpod-layer to downsize the dockerimage
 RUN apt update
@@ -63,26 +83,6 @@ COPY core/misc/novnc-index.html /opt/novnc/index.html
 # Used for docker
 ENV XDG_RUNTIME_DIR=/tmp/docker-33333
 ENV DOCKER_HOST="unix:///tmp/docker-33333/docker.sock"
-
-# Configure sources.list
-# NOTICE: Heredoc would be nicer here, but that seems to be pita in dockerfile
-RUN printf '%s\n' \
-    "# Testing" \
-    "deb http://mirror.dkm.cz/debian testing main non-free contrib" \
-    "deb-src http://mirror.dkm.cz/debian testing main non-free contrib" \
-    "" \
-    "# Sid" \
-    "deb http://mirror.dkm.cz/debian sid main non-free contrib" \
-    "deb-src http://mirror.dkm.cz/debian sid main non-free contrib" \
-    "" \
-    "# Stable" \
-    "deb http://mirror.dkm.cz/debian stable main non-free contrib" \
-    "deb-src http://mirror.dkm.cz/debian stable main non-free contrib" \
-    "" \
-    "# WINE" \
-    "deb [arch=amd64,i386] https://dl.winehq.org/wine-builds/debian/ bullseye main" \
-    "deb-src [arch=amd64,i386] https://dl.winehq.org/wine-builds/debian/ bullseye  main" \
-  > /etc/apt/sources.list
 
 # Install default dependencies
 RUN true \
