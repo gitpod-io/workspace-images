@@ -31,7 +31,7 @@ ENV KAPT_DIR="/makeshift"
 RUN true && true \
   && apt install -y debootstrap \
   # FIXME: Use keys.opengpg.org for keyring
-  && debootstrap --arch=amd64 --no-merged-usr --make-tarball="$KAPT_DIR" stable "$KAPT_DIR" http://deb.debian.org/debian \
+  && debootstrap --arch=amd64 --foreign --no-merged-usr --make-tarball="$KAPT_DIR" stable "$KAPT_DIR" http://deb.debian.org/debian \
   && chown -R gitpod:gitpod "$KAPT_DIR"
 
 # RUN true \
