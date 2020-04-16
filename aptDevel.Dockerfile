@@ -34,7 +34,7 @@ RUN true \
 	&& chown -R root:apt /var/lib/apt/ \
 	&& chmod -R g+w /var/lib/apt \
 	# APT CACHE
-	# We need this otherwise apt will try to create it as root:root
-	&& mkdir -p /var/cache/apt/archives/partial \
 	&& chown -R root:apt /var/cache/apt/ \
-	&& chmod -R g+w /var/cache/apt
+	&& chmod -R g+w /var/cache/apt \
+	# To ensure that files created have the expected group
+	&& chmod -R g+s /var/cache/apt
