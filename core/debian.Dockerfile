@@ -19,6 +19,10 @@ RUN useradd \
 	--password gitpod \
 	gitpod
 
+# Make sure the DNS resolution is set
+RUN printf 'nameserver %s\n' \
+	"1.1.1.1" "1.0.0.1" "2606:4700:4700::1111" "2606:4700:4700::1001" > /etc/resolv.conf
+
 # Make sure that end-users have packages available for their dockerimages
 # FIXME: We are expecting `rm -rf /var/lib/apt/lists/*` in gitpod-layer to downsize the dockerimage
 RUN apt update

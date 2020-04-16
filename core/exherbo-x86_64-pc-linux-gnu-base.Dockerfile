@@ -16,6 +16,13 @@ RUN useradd \
 	--password gitpod \
 	gitpod
 
+# Make sure the DNS resolution is set
+RUN printf 'nameserver %s\n' \
+	"1.1.1.1" "1.0.0.1" "2606:4700:4700::1111" "2606:4700:4700::1001" > /etc/resolv.conf
+
+
+### Code below should be in a sourcable file ###
+
 # Configure expected shell
 COPY core/scripts/shellConfig.bash /usr/bin/shellConfig
 # FIXME: This is expected to be set by gitpod based on end-user preference

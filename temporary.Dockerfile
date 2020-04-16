@@ -41,11 +41,12 @@ RUN printf '%s\n' \
 
 # Make sure that end-users have packages available for their dockerimages
 # FIXME: We are expecting `rm -rf /var/lib/apt/lists/*` in gitpod-layer to downsize 
-# NOTICE: You can use `gpg --search-keys` to get the recv-keys value, this requires upstream to upload in keyservers and sync
+# NOTICE: You can use `gpg --search-keys` to get the recv-keys value, this requires upstream to upload in relevant keyserver and sync them
+# NOTICE: Do not use debian/ubuntu keyserver --https://unix.stackexchange.com/questions/530778/what-is-debians-default-gpg-keyserver-and-where-is-it-configured -> Use keys.opengpg.org which also sets standard for keyserver instead of fregmenting
 RUN true \
   # FIXME: Pipe the key in apt-key somehow
   && dpkg --add-architecture i386 \
-  && apt-key adv --keyserver keyring.debian.org --recv-keys 0x76F1A20FF987672F \
+  && apt-key adv --keyserver keys.openpgp.org --recv-keys 0x76F1A20FF987672F \
   && apt update
 
 # Install core dependencies
@@ -81,13 +82,11 @@ COPY core/misc/novnc-index.html /opt/novnc/index.html
 ###! - [X] Go
 ###! - [X] Node.js
 ###! - [X] Ruby
-###! - [X] Docker (for development) -- See https://github.com/gitpod-io/gitpod/issues/52
-###! Additional info:
-###! - We need a shellcheck >=0.7.0, see https://github.com/gitpod-io/workspace-images/pull/204#issuecomment-614463958
+###! - [ ] Docker (for development) -- See https://github.com/gitpod-io/gitpod/issues/52
 
 # Used for docker
-ENV XDG_RUNTIME_DIR=/tmp/docker-33333
-ENV DOCKER_HOST="unix:///tmp/docker-33333/docker.sock"
+#ENV XDG_RUNTIME_DIR=/tmp/docker-33333
+#ENV DOCKER_HOST="unix:///tmp/docker-33333/docker.sock"
 
 # Install default dependencies
 RUN true \
@@ -123,15 +122,16 @@ RUN true \
     curl \
     gpg \
     apt-utils \
+  # We need a shellcheck >=0.7.0, see https://github.com/gitpod-io/workspace-images/pull/204#issuecomment-614463958
   && apt-get install -t testing -y \
     shellcheck
 
 USER gitpod
-#RUN true \
+RUN true \
   # Homebrew, see https://docs.brew.sh/Homebrew-on-Linux
-  #&& test -d ~/.linuxbrew && eval $(~/.linuxbrew/bin/brew shellenv) \
-  #&& test -d /home/linuxbrew/.linuxbrew && eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv) \
-  #&& test -r ~/.bash_profile && echo "eval \$($(brew --prefix)/bin/brew shellenv)" >>~/.bash_profile \
-  #&& printf '%s\n' "eval \$($(brew --prefix)/bin/brew shellenv)" >>~/.profile \
+  && test -d "$HOME/.linuxbrew" && eval "$(~/.linuxbrew/bin/brew shellenv)" \
+  && test -d "/home/linuxbrew/.linuxbrew" && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)" \
+  && test -r "$HOME/.bash_profile" && printf '%s\n' "eval \$($(brew --prefix)/bin/brew shellenv)" >> "$HOME/.bash_profile" \
+  && printf '%s\n' "eval \$($(brew --prefix)/bin/brew shellenv)" >> "$HOME/.profile" \
   # Docker, see https://github.com/gitpod-io/gitpod/issues/52#issuecomment-546844862
-  #&& curl -sSL https://get.docker.com/rootless | sh
+  && curl -sSL https://get.docker.com/rootless | sh
