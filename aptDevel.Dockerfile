@@ -28,13 +28,17 @@ RUN apt update
 # Experiment - Krey's rootless APT! ^-^
 ENV KAPT_DIR="/home/gitpod/makeshift"
 
-RUN true \
-  && apt-get \
-    -o Dir="$KAPT_DIR" \
-    -o Dir::Etc="/etc/apt" \
-    -o Dir::Cache="$HOME/apt" \
-  install -y debootstrap \
-  && chown -R gitpod:gitpod "$KAPT_DIR"
+RUN apt install -y debootstrap
+
+# RUN true \
+#   && apt-get \
+#     -o Dir="$KAPT_DIR" \
+#     # Use /etc/apt from host
+#     -o Dir::Etc="/etc/apt" \
+#     # Baka apt does not respect FSH3_0 standard
+#     -o Dir::Cache="$HOME/.cache/apt" \
+#   install -y debootstrap \
+#   && chown -R gitpod:gitpod "$KAPT_DIR"
 
 COPY core/scripts/kapt.bash /usr/bin/kapt
 RUN chmod +x /usr/bin/kapt
