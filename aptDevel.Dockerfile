@@ -26,11 +26,11 @@ RUN apt update
 
 
 # Experiment - Krey's rootless APT! ^-^
-ENV KAPT_DIR="/home/gitpod/makeshift"
+ENV KAPT_DIR="/makeshift"
 
 RUN true && true \
   && apt install -y debootstrap \
-  && debootstrap --arch=amd64 stable "$KAPT_DIR" http://deb.debian.org/debian \
+  && debootstrap --arch=amd64 --keyring=KEYRING stable "$KAPT_DIR" http://deb.debian.org/debian \
   && chown -R gitpod:gitpod "$KAPT_DIR"
 
 # RUN true \
