@@ -24,6 +24,10 @@ RUN useradd \
 
 RUN apt update
 
+RUN true \
+  && apt-get -o Dir="/home/gitpod/makeshift/" install -y debootstrap \
+  && chown -R gitpod:gitpod /home/gitpod/makeshift
+
 # Experiment
 COPY core/scripts/kapt.bash /usr/bin/kapt
 RUN chmod +x /usr/bin/kapt

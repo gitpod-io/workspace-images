@@ -25,9 +25,11 @@ die() {
 # Root trap
 [ "$(id -u)" = 0 ] && die 3 "This script is not expected to be executed on root"
 
+# Argument management
 while [ "$#" -ge 1 ]; do case "$1" in
-	update)
-		apt --option="Dpkg::Options::=\"--root=/makeshift/\"" "$1"
+	"update")
+		apt-get -o Dir="$HOME/makeshift/" install -y debootstrap
+		apt --root="$HOME/makeshift/" "$1"
 		shift 1
 	;;
 	--help|help) efixme "help-message" ;;
