@@ -1,2 +1,6 @@
 image:
   file: aptDevel.Dockerfile
+
+tasks:
+  - init: echo hue hue
+    command: apt update
