@@ -51,8 +51,8 @@ RUN printf '%s\n' \
     "deb-src http://mirror.dkm.cz/debian stable main non-free contrib" \
     "" \
     "# WINE" \
-    "#deb [arch=amd64,i386] https://dl.winehq.org/wine-builds/debian/ bullseye main" \
-    "#deb-src [arch=amd64,i386] https://dl.winehq.org/wine-builds/debian/ bullseye  main" \
+    "deb [arch=amd64,i386] https://dl.winehq.org/wine-builds/debian/ bullseye main" \
+    "deb-src [arch=amd64,i386] https://dl.winehq.org/wine-builds/debian/ bullseye  main" \
   > /etc/apt/sources.list \
   && apt-get update
 
