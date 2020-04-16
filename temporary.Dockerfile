@@ -19,8 +19,20 @@ RUN useradd \
 	--password gitpod \
 	gitpod
 
+# Make sure that end-users have packages available for their dockerimages
+# FIXME: We are expecting `rm -rf /var/lib/apt/lists/*` in gitpod-layer to downsize 
+# NOTICE: You can use `gpg --search-keys` to get the recv-keys value, this requires upstream to upload in relevant keyserver and sync them
+# NOTICE: Do not use debian/ubuntu keyserver --https://unix.stackexchange.com/questions/530778/what-is-debians-default-gpg-keyserver-and-where-is-it-configured -> Use keys.opengpg.org which also sets standard for keyserver instead of fregmenting
+RUN true \
+  # FIXME: Pipe the key in apt-key somehow
+  && dpkg --add-architecture i386 \
+  && apt update \
+  && apt-get install -y gpg \
+  && apt-key adv --keyserver keys.openpgp.org --recv-keys 0x76F1A20FF987672F
+
 # Configure sources.list
 # NOTICE: Heredoc would be nicer here, but that seems to be pita in dockerfile
+# NOTICE: We need to update again to get base dependencies
 RUN printf '%s\n' \
     "# Testing" \
     "deb http://mirror.dkm.cz/debian testing main non-free contrib" \
@@ -37,18 +49,8 @@ RUN printf '%s\n' \
     "# WINE" \
     "#deb [arch=amd64,i386] https://dl.winehq.org/wine-builds/debian/ bullseye main" \
     "#deb-src [arch=amd64,i386] https://dl.winehq.org/wine-builds/debian/ bullseye  main" \
-  > /etc/apt/sources.list
-
-# Make sure that end-users have packages available for their dockerimages
-# FIXME: We are expecting `rm -rf /var/lib/apt/lists/*` in gitpod-layer to downsize 
-# NOTICE: You can use `gpg --search-keys` to get the recv-keys value, this requires upstream to upload in relevant keyserver and sync them
-# NOTICE: Do not use debian/ubuntu keyserver --https://unix.stackexchange.com/questions/530778/what-is-debians-default-gpg-keyserver-and-where-is-it-configured -> Use keys.opengpg.org which also sets standard for keyserver instead of fregmenting
-RUN true \
-  # FIXME: Pipe the key in apt-key somehow
-  && dpkg --add-architecture i386 \
-  && apt-get install -y gpg \
-  && apt-key adv --keyserver keys.openpgp.org --recv-keys 0x76F1A20FF987672F \
-  && apt update
+  > /etc/apt/sources.list \
+  && apt-get update
 
 # Install core dependencies
 # FIXME: We should allow logic based on expected 'shell' i.e using `shell: bash` in gitpod.yml should expand in installing bash-completion
