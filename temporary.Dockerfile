@@ -152,12 +152,12 @@ RUN true \
     shellcheck
 
 USER gitpod
-RUN true \
-  # Homebrew, see https://docs.brew.sh/Homebrew-on-Linux
-  && /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)" \ 
-  && test -d "$HOME/.linuxbrew" && eval "$(~/.linuxbrew/bin/brew shellenv)" \
-  && test -d "/home/linuxbrew/.linuxbrew" && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)" \
-  && test -r "$HOME/.bash_profile" && printf '%s\n' "eval \$($(brew --prefix)/bin/brew shellenv)" >> "$HOME/.bash_profile" \
-  && printf '%s\n' "eval \$($(brew --prefix)/bin/brew shellenv)" >> "$HOME/.profile" \
-  # Docker, see https://github.com/gitpod-io/gitpod/issues/52#issuecomment-546844862
-  && curl -sSL https://get.docker.com/rootless | sh
+# RUN true \
+#   # Homebrew, see https://docs.brew.sh/Homebrew-on-Linux
+#   && /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)" \ 
+#   && test -d "$HOME/.linuxbrew" && eval "$(~/.linuxbrew/bin/brew shellenv)" \
+#   && test -d "/home/linuxbrew/.linuxbrew" && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)" \
+#   && test -r "$HOME/.bash_profile" && printf '%s\n' "eval \$($(brew --prefix)/bin/brew shellenv)" >> "$HOME/.bash_profile" \
+#   && printf '%s\n' "eval \$($(brew --prefix)/bin/brew shellenv)" >> "$HOME/.profile" \
+#   # Docker, see https://github.com/gitpod-io/gitpod/issues/52#issuecomment-546844862
+#   && curl -sSL https://get.docker.com/rootless | sh
