@@ -32,4 +32,4 @@ RUN true \
 	&& chown -R root:apt /var/lib/apt/ \
 	&& chmod -R g+w /var/lib/apt \
 	&& chown -R root:apt /var/cache/apt/ \
-	&& chmod -R g+w /var/cache/apt/ \
+	&& chmod -R g+w /var/cache/apt/
