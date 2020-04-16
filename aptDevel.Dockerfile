@@ -22,20 +22,8 @@ RUN useradd \
 	--password gitpod \
 	gitpod
 
-# Configure apt to be used on non-root
-## NOTICE: We need read+write in /var/lib/dpkg/lock-frontend
-RUN true \
-	&& groupadd apt \
-	&& usermod -a -G apt gitpod \
-	# DPKG
-	&& chown -R root:apt /var/lib/dpkg/ \
-	&& chmod -R g+w /var/lib/dpkg/ \
-	# APT
-	&& chown -R root:apt /var/lib/apt/ \
-	&& chmod -R g+w /var/lib/apt \
-	# APT CACHE
-	&& chown -R root:apt /var/cache/apt/ \
-	&& chmod -R g+w /var/cache/apt \
-	# To ensure that files created have the expected group
-	&& chmod -R g+s /var/cache/apt \
-	&& chmod u+s /usr/bin/apt
+RUN apt update
+
+# Experiment
+COPY core/scripts/kapt.bash /usr/bin/kapt
+RUN chmod +x /usr/bin/kapt
