@@ -28,7 +28,7 @@ RUN true \
   && dpkg --add-architecture i386 \
   && apt update \
   && apt-get install -y gnupg \
-  && apt-key adv --keyserver keys.openpgp.org --recv-keys 0x76F1A20FF987672F
+  && apt-key adv --keyserver keys.openpgp.org --recv-keys 76F1A20FF987672F
 
 # Configure sources.list
 # NOTICE: Heredoc would be nicer here, but that seems to be pita in dockerfile
