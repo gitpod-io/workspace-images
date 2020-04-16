@@ -29,10 +29,13 @@ RUN apt update
 ENV KAPT_DIR="/home/gitpod/makeshift"
 
 RUN true \
-  && mkdir -p "$KAPT_DIR/etc" \
   && cp -r /etc/apt "$KAPT_DIR/etc" \
   && mkdir "$KAPT_DIR" \
-  && apt-get -o Dir="$KAPT_DIR" install -y debootstrap \
+  && apt-get \
+    -o Dir="$KAPT_DIR" \
+    -o Dir::Etc="/etc/apt" \
+    -o Dir::Cache "$HOME/apt" \
+  install -y debootstrap \
   && chown -R gitpod:gitpod "$KAPT_DIR"
 
 COPY core/scripts/kapt.bash /usr/bin/kapt
