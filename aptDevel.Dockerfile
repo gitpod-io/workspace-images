@@ -36,7 +36,8 @@ ENV KAPT_DIR="/home/gitpod/makeshift"
 
 RUN true \
   && mkdir "$KAPT_DIR" || true \
-  && mkdir "$KAPT_DIR/lib" || true \
+  && mkdir "$KAPT_DIR/var/" || true \
+  && mkdir "$KAPT_DIR/var/lib" || true \
   && cp -r /var/lib/dpkg "$KAPT_DIR/lib/" \
   && apt-get \
     -o Dir="$KAPT_DIR" \
