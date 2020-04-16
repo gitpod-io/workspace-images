@@ -29,8 +29,6 @@ RUN apt update
 ENV KAPT_DIR="/home/gitpod/makeshift"
 
 RUN true \
-  && cp -r /etc/apt "$KAPT_DIR/etc" \
-  && mkdir "$KAPT_DIR" \
   && apt-get \
     -o Dir="$KAPT_DIR" \
     -o Dir::Etc="/etc/apt" \
