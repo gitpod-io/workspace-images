@@ -31,3 +31,5 @@ RUN true \
 	&& chmod -R g+w /var/lib/dpkg/ \
 	&& chown -R root:apt /var/lib/apt/ \
 	&& chmod -R g+w /var/lib/apt \
+	&& chown -R /var/cache/apt/ \
+	&& chmod -R g+w /var/cache/apt/ \
