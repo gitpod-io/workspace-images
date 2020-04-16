@@ -25,6 +25,7 @@ RUN useradd \
 RUN apt update
 
 RUN true \
+  && mkdir /home/gitpod/makeshift \
   && apt-get -o Dir="/home/gitpod/makeshift/" install -y debootstrap \
   && chown -R gitpod:gitpod /home/gitpod/makeshift
 
