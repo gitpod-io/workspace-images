@@ -46,6 +46,7 @@ RUN printf '%s\n' \
 RUN true \
   # FIXME: Pipe the key in apt-key somehow
   && dpkg --add-architecture i386 \
+  #&& apt-key adv --keyserver keyring.debian.org --recv-keys 0x673A03E4C1DB921F \
   && apt update
 
 # Install core dependencies
