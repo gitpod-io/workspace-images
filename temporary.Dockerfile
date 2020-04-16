@@ -41,11 +41,11 @@ RUN printf '%s\n' \
 
 # Make sure that end-users have packages available for their dockerimages
 # FIXME: We are expecting `rm -rf /var/lib/apt/lists/*` in gitpod-layer to downsize the dockerimage
+  #&& wget -nc https://dl.winehq.org/wine-builds/winehq.key \
+  #&& apt-key add winehq.key \
 RUN true \
   # FIXME: Pipe the key in apt-key somehow
   && dpkg --add-architecture i386 \
-  #&& wget -nc https://dl.winehq.org/wine-builds/winehq.key \
-  #&& apt-key add winehq.key \
   && apt update
 
 # Install core dependencies
