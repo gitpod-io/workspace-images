@@ -257,8 +257,8 @@ RUN sudo apt-get update \
 
 RUN cp /home/gitpod/.profile /home/gitpod/.profile_orig && \
     curl -fsSL https://sh.rustup.rs | sh -s -- -y \
-    && .cargo/bin/rustup toolchain install 1.41.1 \
-    && .cargo/bin/rustup default 1.41.1 \
+    && .cargo/bin/rustup toolchain install 1.42.0 \
+    && .cargo/bin/rustup default 1.42.0 \
     # Save image size by removing now-redudant stable toolchain
     && .cargo/bin/rustup toolchain uninstall stable \
     && .cargo/bin/rustup component add \
