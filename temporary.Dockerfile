@@ -57,10 +57,32 @@ COPY core/misc/novnc-index.html /opt/novnc/index.html
 ###! - [X] Node.js
 ###! - [X] Ruby
 ###! - [X] Docker (for development) -- See https://github.com/gitpod-io/gitpod/issues/52
+###! Additional info:
+###! - We need a shellcheck >=0.7.0, see https://github.com/gitpod-io/workspace-images/pull/204#issuecomment-614463958
 
 # Used for docker
 ENV XDG_RUNTIME_DIR=/tmp/docker-33333
 ENV DOCKER_HOST="unix:///tmp/docker-33333/docker.sock"
+
+# Configure sources.list
+# NOTICE: Heredoc would be nicer here, but that seems to be pita in dockerfile
+RUN printf '%s\n' \
+    "# Testing" \
+    "deb http://mirror.dkm.cz/debian testing main non-free contrib" \
+    "deb-src http://mirror.dkm.cz/debian testing main non-free contrib" \
+    "" \
+    "# Sid" \
+    "deb http://mirror.dkm.cz/debian sid main non-free contrib" \
+    "deb-src http://mirror.dkm.cz/debian sid main non-free contrib" \
+    "" \
+    "# Stable" \
+    "deb http://mirror.dkm.cz/debian stable main non-free contrib" \
+    "deb-src http://mirror.dkm.cz/debian stable main non-free contrib" \
+    "" \
+    "# WINE" \
+    "deb [arch=amd64,i386] https://dl.winehq.org/wine-builds/debian/ bullseye main" \
+    "deb-src [arch=amd64,i386] https://dl.winehq.org/wine-builds/debian/ bullseye  main" \
+  > /etc/apt/sources.list
 
 # Install default dependencies
 RUN true \
@@ -81,7 +103,6 @@ RUN true \
     python \
     python3 \
     pylint \
-    shellcheck \
     golang-go \
     php \
     ruby \
@@ -96,7 +117,9 @@ RUN true \
     openjdk-11-jdk \
     curl \
     gpg \
-    apt-utils
+    apt-utils \
+  && apt-get install -t testing -y \
+    shellcheck
 
 USER gitpod
 #RUN true \

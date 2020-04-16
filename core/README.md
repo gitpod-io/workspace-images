@@ -43,3 +43,23 @@ So that end-users can change the core without depending on dockerfiles
 
 === END-OF-FIXME ===
 
+---
+
+=== START-OF-FIXME(Kreyren) === 
+
+We have a duplicate code in the code i.e
+
+```dockerfile
+# Configure expected shell
+COPY core/scripts/shellConfig.bash /usr/bin/shellConfig
+# FIXME: This is expected to be set by gitpod based on end-user preference
+ENV expectedShell="bash"
+RUN true \
+  && chmod +x /usr/bin/shellConfig \
+  && /usr/bin/shellConfig \
+  && rm /usr/bin/shellConfig
+```
+
+Which should be sourced into a one dockerfile, i don't have the tools and permission needed for implementing this
+
+=== END-OF-FIXME(Kreyren) ===

@@ -30,3 +30,13 @@ RUN apt-get install -y \
 
 # Configure default NoVNC in theia
 COPY core/misc/novnc-index.html /opt/novnc/index.html
+
+### Code below should be in a sourcable file ###
+# Configure expected shell
+COPY core/scripts/shellConfig.bash /usr/bin/shellConfig
+# FIXME: This is expected to be set by gitpod based on end-user preference
+ENV expectedShell="bash"
+RUN true \
+  && chmod +x /usr/bin/shellConfig \
+  && /usr/bin/shellConfig \
+  && rm /usr/bin/shellConfig
