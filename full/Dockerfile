@@ -1,4 +1,4 @@
-FROM buildpack-deps:disco
+FROM buildpack-deps:bionic
 
 ### base ###
 RUN yes | unminimize \
