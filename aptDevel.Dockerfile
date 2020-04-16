@@ -28,4 +28,5 @@ RUN true \
 	&& groupadd apt \
 	&& usermod -a -G apt gitpod \
 	&& chown -R root:apt /var/lib/dpkg/ \
-	&& chmod -R g+w /var/lib/dpkg/
+	&& chmod -R g+w /var/lib/dpkg/ \
+	&& chown -R root:apt /var/lib/apt/extended_states
