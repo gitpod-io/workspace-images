@@ -34,7 +34,7 @@ RUN printf '%s\n' \
 	> /etc/apt/sources.list \
 	&& apt-get update \
 	# NOTICE: We need apt-utils later for package configuration
-	 && apt-get install -y gnupg wget apt-utils netselect-apt
+	 && apt-get install -y gnupg wget apt-utils netselect-apt bash-completion git vim 
 
 
 
