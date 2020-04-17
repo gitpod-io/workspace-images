@@ -43,7 +43,15 @@ RUN true \
 	&& export APT_MIRROR_STABLE="$(netselect-apt --nonfree --sources stable |& grep -A 1 "Of the hosts tested we choose the fastest valid for HTTP:" | grep -o "http://.*")" \
 	&& export APT_MIRROR_TESTING="$(netselect-apt --nonfree --sources testing |& grep -A 1 "Of the hosts tested we choose the fastest valid for HTTP:" | grep -o "http://.*")" \
 	&& export APT_MIRROR_SID="$(netselect-apt --nonfree --sources sid |& grep -A 1 "Of the hosts tested we choose the fastest valid for HTTP:" | grep -o "http://.*")" \
+	# Self-check
+	&& [ -z "$APT_MIRROR_STABLE" ] && exit 1 \
+	&& [ -z "$APT_MIRROR_TESTING" ] && exit 1 \
+	&& [ -z "$APT_MIRROR_SID" ] && exit 1 \
 	&& printf '%s\n' \
+		"# Stable" \
+		"deb $APT_MIRROR_STABLE stable main non-free contrib" \
+		"deb-src $APT_MIRROR_STABLE stable main non-free contrib" \
+		"" \
 		"# Testing" \
 		"deb $APT_MIRROR_TESTING testing main non-free contrib" \
 		"deb-src $APT_MIRROR_TESTING testing main non-free contrib" \
@@ -51,10 +59,6 @@ RUN true \
 		"# Sid" \
 		"deb $APT_MIRROR_SID sid main non-free contrib" \
 		"deb-src $APT_MIRROR_SID sid main non-free contrib" \
-		"" \
-		"# Stable" \
-		"deb $APT_MIRROR_STABLE stable main non-free contrib" \
-		"deb-src $APT_MIRROR_STABLE stable main non-free contrib" \
 		"" \
 		"# WINE" \
 		"deb [arch=amd64,i386] https://dl.winehq.org/wine-builds/debian/ bullseye main" \
