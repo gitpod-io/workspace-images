@@ -81,7 +81,7 @@ ENV aptList="$(apt list 2>/dev/null)"
 
 # Install core dependencies
 # FIXME: We should allow logic based on expected 'shell' i.e using `shell: bash` in gitpod.yml should expand in installing bash-completion
-RUN thealer novnc
+RUN thealer install novnc
 
 # Configure default NoVNC in theia
 COPY core/misc/novnc-index.html /opt/novnc/index.html
