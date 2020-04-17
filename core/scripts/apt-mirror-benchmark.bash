@@ -24,11 +24,10 @@ myName="apt-mirror-benchmark"
 
 [ ! -f /etc/os-release ] && die 1 "Script $myName expects file /etc/os-release"
 
-myDISTRO="$(grep -o "ID=.*" /etc/os-release)"
-	DISTRO="${myDISTRO##ID=}" # Strip `ID=`
+DISTRO="$(grep -o "ID=.*" /etc/os-release)"
 
 # Make sure that none is running this on unsupported distro
-case "$DISTRO" in
+case "${DISTRO##ID=}" in
 	debian)
 		if ! command -v apt; then die 1 "This debian does not have expected apt, runtime is not adapted to handle this situation"; fi
 	;;
