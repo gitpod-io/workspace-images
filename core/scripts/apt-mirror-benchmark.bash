@@ -53,7 +53,7 @@ if ! command -v netselect-apt; then
 	"$SUDO" apt install -y netselect-apt || die 1 "Unable to install package 'netselect-apt'"
 	# Self-check
 	if ! command -v netselect-apt; then die 1 "Self-check for availability of netselect-apt failed"; fi
-elif ! command -v netselect-apt; then
+elif command -v netselect-apt; then
 	true
 else
 	die 255 "Unexpected happend while processing netselect-apt command"
