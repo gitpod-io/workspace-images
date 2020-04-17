@@ -1,6 +1,2 @@
 image:
-  file: aptDevel.Dockerfile
-
-tasks:
-  - init: echo meh
-    command: kapt update
+  file: temporary.Dockerfile

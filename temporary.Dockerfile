@@ -6,11 +6,14 @@ FROM debian:stable
 LABEL Gitpod Maintainers
 
 # To avoid bricked workspaces assuming interactive shell breaks the build (https://github.com/gitpod-io/gitpod/issues/1171)
-ENV DEBIAN_FRONTEND=noninteractive
+# NOTICE(Kreyren): double quotes are not needed here, but i think it looks nicer
+ENV DEBIAN_FRONTEND="noninteractive"
 
 # FIXME: We should allow end-users to set this
 ENV LANG="en_US.UTF-8"
-ENV LC_ALL=C
+ENV LC_ALL="C"
+
+ENV APT_MIRROR=""
 
 USER root
 
@@ -18,59 +21,51 @@ USER root
 RUN useradd \
 	--uid 33333 \
 	--create-home --home-dir /home/gitpod \
+	# NOTICE: We allow end-users to set their own shell, but bash is used by default
 	--shell /bin/bash \
 	--password gitpod \
 	gitpod
 
-# Configure apt to be used on non-root
-## NOTICE: We need read+write in /var/lib/dpkg/lock-frontend
-RUN true \
-	&& groupadd apt \
-	&& usermod -a -G apt gitpod \
-	&& chown root:apt /var/lib/dpkg/lock-frontend \
-	&& chmod g+w /var/lib/dpkg/lock-frontend
-
-# Initial configuration of sources.list
-# NOTICE: Heredoc would be nicer here, but that seems to be pita in dockerfile
+# Grab bare minimum that we need for configuration
+# NOTICE: You can use `gpg --search-keys` to get the recv-keys value, this requires upstream to upload in relevant keyserver and sync them
+# NOTICE: Do not use debian/ubuntu keyserver (https://unix.stackexchange.com/questions/530778/what-is-debians-default-gpg-keyserver-and-where-is-it-configured) -> Use keys.opengpg.org which also sets standard for keyserver instead of fregmenting
 RUN printf '%s\n' \
 		"# Stable" \
-		"deb http://mirror.dkm.cz/debian stable main non-free contrib" \
-		"deb-src http://mirror.dkm.cz/debian stable main non-free contrib" \
+		"deb $APT_MIRROR stable main non-free contrib" \
+		"deb-src $APT_MIRROR stable main non-free contrib" \
 	> /etc/apt/sources.list \
-	&& apt-get update
+	&& apt-get update \
+	# NOTICE: We need apt-utils later for package configuration
+  && apt-get install -y gnupg wget apt-utils netselect-apt
 
-# Make sure that end-users have packages available for their dockerimages
-# NOTICE: You can use `gpg --search-keys` to get the recv-keys value, this requires upstream to upload in relevant keyserver and sync them
-# NOTICE: Do not use debian/ubuntu keyserver --https://unix.stackexchange.com/questions/530778/what-is-debians-default-gpg-keyserver-and-where-is-it-configured -> Use keys.opengpg.org which also sets standard for keyserver instead of fregmenting
+# Initial configuration
 RUN true \
-  # FIXME: Pipe the key in apt-key somehow
-  && dpkg --add-architecture i386 \
-  && apt update \
-  # NOTICE: We need apt-utils later for package configuration
-  && apt-get install -y gnupg wget apt-utils \
-  && wget -qnc https://dl.winehq.org/wine-builds/winehq.key -O - | apt-key add - \
-  && apt-key adv --keyserver keys.openpgp.org --recv-keys 0x76F1A20FF987672F
-
-# Configure sources.list
-# NOTICE: Heredoc would be nicer here, but that seems to be pita in dockerfile
-# NOTICE: We need to update again to get base dependencies
-RUN printf '%s\n' \
-    "# Testing" \
-    "deb http://mirror.dkm.cz/debian testing main non-free contrib" \
-    "deb-src http://mirror.dkm.cz/debian testing main non-free contrib" \
-    "" \
-    "# Sid" \
-    "deb http://mirror.dkm.cz/debian sid main non-free contrib" \
-    "deb-src http://mirror.dkm.cz/debian sid main non-free contrib" \
-    "" \
-    "# Stable" \
-    "deb http://mirror.dkm.cz/debian stable main non-free contrib" \
-    "deb-src http://mirror.dkm.cz/debian stable main non-free contrib" \
-    "" \
-    "# WINE" \
-    "deb [arch=amd64,i386] https://dl.winehq.org/wine-builds/debian/ bullseye main" \
-    "deb-src [arch=amd64,i386] https://dl.winehq.org/wine-builds/debian/ bullseye  main" \
-  > /etc/apt/sources.list \
+	# Benchmark available mirrors and define the fastest
+	&& export APT_MIRROR_STABLE="$(netselect-apt --nonfree --sources stable |& grep "Of the hosts tested we choose the fastest valid for HTTP:" -A 1 | grep -o "http://.*")" \
+	&& export APT_MIRROR_TESTING="$(netselect-apt --nonfree --sources testing |& grep "Of the hosts tested we choose the fastest valid for HTTP:" -A 1 | grep -o "http://.*")" \
+	&& export APT_MIRROR_SID="$(netselect-apt --nonfree --sources sid |& grep "Of the hosts tested we choose the fastest valid for HTTP:" -A 1 | grep -o "http://.*")" \
+	&& printf '%s\n' \
+		"# Testing" \
+		"deb $APT_MIRROR_TESTING testing main non-free contrib" \
+		"deb-src $APT_MIRROR_TESTING testing main non-free contrib" \
+		"" \
+		"# Sid" \
+		"deb $APT_MIRROR_SID sid main non-free contrib" \
+		"deb-src $APT_MIRROR_SID sid main non-free contrib" \
+		"" \
+		"# Stable" \
+		"deb $APT_MIRROR_STABLE stable main non-free contrib" \
+		"deb-src $APT_MIRROR_STABLE stable main non-free contrib" \
+		"" \
+		"# WINE" \
+		"deb [arch=amd64,i386] https://dl.winehq.org/wine-builds/debian/ bullseye main" \
+		"deb-src [arch=amd64,i386] https://dl.winehq.org/wine-builds/debian/ bullseye  main" \
+	> /etc/apt/sources.list \
+	# Ensure that we have 32-bit available
+	&& dpkg --add-architecture i386 \
+	# WINEHQ dependencies
+	&& wget -qnc https://dl.winehq.org/wine-builds/winehq.key -O - | apt-key add - \
+  && apt-key adv --keyserver keys.openpgp.org --recv-keys 0x76F1A20FF987672F \
   && apt-get update
 
 # Install core dependencies
