@@ -80,6 +80,8 @@ else
 	die 255 "Unexpected happend while processing netselect-apt command"
 fi
 
+einfo "wtf"
+
 # Declare fastest mirrors
 # NOTICE: Command 'netselect-apt' requires root otherwise it returns exit code 1
 einfo "Testing for fastest mirrors.."
