@@ -22,6 +22,8 @@ die() {
 # MAINTAINERS: Change this in case script name changes
 myName="apt-mirror-benchmark"
 
+[ ! -f /etc/os-release ] && die 1 "Script $myName expects file /etc/os-release"
+
 DISTRO="$(grep -o "ID:.*" /etc/os-release)"
 	DISTRO="${DISTRO##ID:}" # Strip `ID:`
 
