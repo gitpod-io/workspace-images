@@ -20,6 +20,8 @@ ENV LC_ALL="C"
 # Set on the number of expected speedtests performed
 # - Use 'disabled' to skip speedtests, not-recommended!
 ENV SPEEDTEST_TRIES="5"
+# This is a penalty issued to mirrors that are we are unable to fetch from as a part of speedtest (mostly problem on unreliable mirrors and code-quality issues), higger value makes the mirror less likely to be selected as the fastest
+ENV FAILED_MIRROR_PENALTY="5000"
 
 USER root
 
@@ -49,7 +51,7 @@ RUN printf '%s\n' \
 # Initial configuration
 # FIXME: Ideally this shoudn't be cached to avoid grabbing dead mirror
 COPY core/scripts/apt-mirror-benchmark.sh /usr/bin/apt-mirror-benchmark
-RUN true "sdga" \
+RUN true "sadgd" \
 	&& chmod +x /usr/bin/apt-mirror-benchmark \
 	&& /usr/bin/apt-mirror-benchmark \
 	&& rm /usr/bin/apt-mirror-benchmark \

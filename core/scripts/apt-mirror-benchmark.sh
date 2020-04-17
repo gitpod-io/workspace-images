@@ -2,6 +2,9 @@
 # Created by Jacob Hrbek <kreyren@rixotstudio.cz> under GPLv3 license <https://www.gnu.org/licenses/gpl-3.0.en.html> in 17/04/2020 05:57
 
 ###! Perform a speedtest on hard-coded and available mirror and use the fastest and most reliable (assuming enough tries performed)
+###! Configuration:
+###! - Set 'SPEEDTEST_TRIES' variable value on integer from 0 to 999 which dictates how many tests we will make per mirror
+###! - Set 'FAILED_MIRROR_PENALTY' variable value on integer from 0 to 9999 which dictates the penalty issues to mirrors that failed to fetch the expected file -> Higger penalty makes it less likely for said mirror to be selected
 ###! Additional info:
 ###! - ENVIRONMENT: This is expected to be invoked in docker build environment -> Reasoning to use capped vars this way
 ###! - Use `netselect-apt --nonfree --sources stable |& grep -A 1 "Of the hosts tested we choose the fastest valid for HTTP:" | grep -o "http://.*"` to get the fastest mirror -> Configure /etc/apt/sources.list with it
@@ -38,7 +41,13 @@ case "$SPEEDTEST_TRIES" in
 	[0-9]|[0-9][0-9]|[0-9][0-9][0-9]) true ;;
 	# This expects SPEEDTEST_TRIES to terminate the script with exit code 0 at the top of the script
 	disabled) die 1 "Angry Kreyren: WHO DARED TO REMOVE MY SPEEDTEST_TRIES TRAP?! Those are here for a reason u know.. -_-\"" ;;
-	*) die 2 "Unexpected value '$SPEEDTEST_TRIES' of variable SPEEDTEST_TRIES has been parsed, expected variables are only integers"
+	*) die 2 "Unexpected value '$SPEEDTEST_TRIES' of variable SPEEDTEST_TRIES has been parsed, expected variables are only integers from 0 to 999"
+esac
+
+# Sanity-check for 'FAILED_MIRROR_PENALTY' variable
+case "$FAILED_MIRROR_PENALTY" in
+	[0-9]|[0-9][0-9]|[0-9][0-9][0-9]|[0-9][0-9][0-9][0-9]|[0-9][0-9][0-9][0-9][0-9]) true ;;
+	*) die 2 "Unexpected value '$FAILED_MIRROR_PENALTY' of variable FAILED_MIRROR_PENALTY has been parsed, expected variables are only integers from 0 to 9999"
 esac
 
 [ -z "$APT_MIRROR" ] && die 1 "Script $myName expects variable APT_MIRROR set on preffered mirror"
@@ -73,7 +82,9 @@ else
 fi
 
 if ! command -v netselect-apt >/dev/null; then
-	"$SUDO" apt install -y netselect-apt || die 1 "Unable to install package 'netselect-apt'"
+	# NOTICE: Do not double-quote SUDO, it breaks it..
+	# NOTICE: We need bc below
+	$SUDO apt install -y netselect-apt bc || die 1 "Unable to install package 'netselect-apt' and 'bc'"
 	# Self-check
 	if ! command -v netselect-apt >/dev/null; then die 1 "Self-check for availability of netselect-apt failed"; fi
 elif command -v netselect-apt >/dev/null; then
@@ -106,16 +117,16 @@ apt_mirror_sid_speed=0
 while [ "$tries" != "$SPEEDTEST_TRIES" ]; do
 	# Speedtest hard-coded mirror
 	# shellcheck disable=SC1083 # Invalid - This } is literal. Check expression (missing ;/\n?) or quote it.
-	apt_mirror_speed="$( printf '%s\n' "$apt_mirror_speed + $(curl --write-out %{speed_download} "$APT_MIRROR/debian/README" --output /dev/null 2>/dev/null)" | bc -q )"
+	apt_mirror_speed="$( printf '%s\n' "$apt_mirror_speed + $(curl --write-out %{speed_download} "$APT_MIRROR/debian/README" --output /dev/null 2>/dev/null)" | bc -q || printf '%s\n' "$FAILED_MIRROR_PENALTY" )"
 	# Speedtest stable
 	# shellcheck disable=SC1083 # Invalid - This } is literal. Check expression (missing ;/\n?) or quote it.
-	apt_mirror_stable_speed="$( printf '%s\n' "$apt_mirror_speed + $(curl --write-out %{speed_download} "$APT_MIRROR_STABLE/debian/README" --output /dev/null 2>/dev/null)" | bc -q )"
+	apt_mirror_stable_speed="$( printf '%s\n' "$apt_mirror_speed + $(curl --write-out %{speed_download} "$APT_MIRROR_STABLE/debian/README" --output /dev/null 2>/dev/null)" | bc -q || printf '%s\n' "$FAILED_MIRROR_PENALTY" )"
 	# Speedtest testing
 	# shellcheck disable=SC1083 # Invalid - This } is literal. Check expression (missing ;/\n?) or quote it.
-	apt_mirror_testing_speed="$( printf '%s\n' "$apt_mirror_testing_speed + $(curl --write-out %{speed_download} "$APT_MIRROR_STABLE/debian/README" --output /dev/null 2>/dev/null)" | bc -q )"
+	apt_mirror_testing_speed="$( printf '%s\n' "$apt_mirror_testing_speed + $(curl --write-out %{speed_download} "$APT_MIRROR_TESTING/debian/README" --output /dev/null 2>/dev/null)" | bc -q || printf '%s\n' "$FAILED_MIRROR_PENALTY" )"
 	# Speedtest sid
 	# shellcheck disable=SC1083 # Invalid - This } is literal. Check expression (missing ;/\n?) or quote it.
-	apt_mirror_sid_speed="$( printf '%s\n' "$apt_mirror_sid_speed + $(curl --write-out %{speed_download} "$APT_MIRROR_STABLE/debian/README" --output /dev/null 2>/dev/null)" | bc -q )"
+	apt_mirror_sid_speed="$( printf '%s\n' "$apt_mirror_sid_speed + $(curl --write-out %{speed_download} "$APT_MIRROR_SID/debian/README" --output /dev/null 2>/dev/null)" | bc -q || printf '%s\n' "$FAILED_MIRROR_PENALTY" )"
 
 	tries="$(( "$tries" + 1 ))"
 done
