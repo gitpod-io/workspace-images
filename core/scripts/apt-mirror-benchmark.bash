@@ -59,6 +59,7 @@ else
 fi
 
 # Declare fastest mirrors
+# NOTICE: Command 'netselect-apt' requires root otherwise it returns exit code 1
 APT_STABLE_MIRROR="$("$SUDO" netselect-apt --nonfree --sources stable |& grep -A 1 "Of the hosts tested we choose the fastest valid for HTTP:" | grep -o "http://.*")"
 APT_TESTING_MIRROR="$("$SUDO" netselect-apt --nonfree --sources testing |& grep -A 1 "Of the hosts tested we choose the fastest valid for HTTP:" | grep -o "http://.*")"
 APT_SID_MIRROR="$("$SUDO" netselect-apt --nonfree --sources sid |& grep -A 1 "Of the hosts tested we choose the fastest valid for HTTP:" | grep -o "http://.*")"
@@ -69,7 +70,7 @@ APT_SID_MIRROR="$("$SUDO" netselect-apt --nonfree --sources sid |& grep -A 1 "Of
 [ -z "$APT_MIRROR_SID" ] && die 1 "Script '$myName' failed to acquire fastest mirror for sid release"
 
 # CORE
-printf '%s\n' \
+"$SUDO" su root -c printf '%s\n' \
 	"# Stable" \
 	"deb $APT_STABLE_MIRROR stable main non-free contrib" \
 	"deb-src $APT_STABLE_MIRROR stable main non-free contrib" \
@@ -80,6 +81,3 @@ printf '%s\n' \
 	"deb $APT_SID_MIRROR testing main non-free contrib" \
 	"deb-src $APT_SID_MIRROR testing main non-free contrib" \
 > /etc/apt/sources.list
-
-# Self-check
-apt update || die 1 "Self-check for script $myName failed"
