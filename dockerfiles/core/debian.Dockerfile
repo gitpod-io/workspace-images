@@ -25,6 +25,10 @@ ENV FAILED_MIRROR_PENALTY="5000"
 
 USER root
 
+# Get thealer
+COPY dockerfiles/core/scripts/thealer.bash /usr/bin/thealer
+RUN chmod +x /usr/bin/thealer
+
 # Add 'gitpod' user
 RUN useradd \
 	--uid 33333 \
@@ -71,8 +75,7 @@ RUN true "fdhsdfh" \
 
 # Install core dependencies
 # FIXME: We should allow logic based on expected 'shell' i.e using `shell: bash` in gitpod.yml should expand in installing bash-completion
-RUN apt-get install -y \
-	novnc
+RUN thealer novnc
 
 # Configure default NoVNC in theia
 COPY core/misc/novnc-index.html /opt/novnc/index.html

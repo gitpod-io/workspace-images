@@ -20,7 +20,6 @@ RUN useradd \
 RUN printf 'nameserver %s\n' \
 	"1.1.1.1" "1.0.0.1" "2606:4700:4700::1111" "2606:4700:4700::1001" > /etc/resolv.conf
 
-
 ### Code below should be in a sourcable file ###
 
 # Configure expected shell
@@ -31,3 +30,6 @@ RUN true \
   && chmod +x /usr/bin/shellConfig \
   && /usr/bin/shellConfig \
   && rm /usr/bin/shellConfig
+
+# Get list of available packages for thealer script
+ENV paludisList="$(cave print-packages)"
