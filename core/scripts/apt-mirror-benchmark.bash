@@ -61,14 +61,15 @@ fi
 
 # Declare fastest mirrors
 # NOTICE: Command 'netselect-apt' requires root otherwise it returns exit code 1
+einfo "Testing for fastest mirrors.."
 APT_STABLE_MIRROR="$(netselect-apt --nonfree --sources stable |& grep -A 1 "Of the hosts tested we choose the fastest valid for HTTP:" | grep -o "http://.*")"
 APT_TESTING_MIRROR="$(netselect-apt --nonfree --sources testing |& grep -A 1 "Of the hosts tested we choose the fastest valid for HTTP:" | grep -o "http://.*")"
 APT_SID_MIRROR="$(netselect-apt --nonfree --sources sid |& grep -A 1 "Of the hosts tested we choose the fastest valid for HTTP:" | grep -o "http://.*")"
 
 # Self-check for mirrors
-[ -z "$APT_MIRROR_STABLE" ] && die 1 "Script '$myName' failed to acquire fastest mirror for stable release"
-[ -z "$APT_TESTING_MIRROR" ] && die 1 "Script '$myName' failed to acquire fastest mirror for testing release"
-[ -z "$APT_MIRROR_SID" ] && die 1 "Script '$myName' failed to acquire fastest mirror for sid release"
+[ -z "$APT_MIRROR_STABLE" ] && eerror "Script '$myName' failed to acquire fastest mirror for stable release" && APT_MIRROR_STABLE="$APT_MIRROR"
+[ -z "$APT_TESTING_MIRROR" ] && eeror "Script '$myName' failed to acquire fastest mirror for testing release" && APT_TESTING_MIRROR="$APT_MIRROR"
+[ -z "$APT_MIRROR_SID" ] && eeror "Script '$myName' failed to acquire fastest mirror for sid release" && APT_MIRROR_SID="$APT_MIRROR"
 
 # CORE
 printf '%s\n' \
