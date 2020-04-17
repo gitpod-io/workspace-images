@@ -150,6 +150,9 @@ downMan() {
 			fi
 		;;
 	esac
+
+	# Self-check
+	# FIXME
 }
 
 ebench start # Start benchmark
