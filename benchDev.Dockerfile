@@ -27,6 +27,7 @@ RUN useradd \
 # Grab bare minimum that we need for configuration
 # NOTICE: You can use `gpg --search-keys` to get the recv-keys value, this requires upstream to upload in relevant keyserver and sync them
 # NOTICE: Do not use debian/ubuntu keyserver (https://unix.stackexchange.com/questions/530778/what-is-debians-default-gpg-keyserver-and-where-is-it-configured) -> Use keys.opengpg.org which also sets standard for keyserver instead of fregmenting
+ENV APT_MIRROR="http://mirror.dkm.cz/debian"
 RUN printf '%s\n' \
 		"# Stable" \
 		"deb $APT_MIRROR stable main non-free contrib" \
