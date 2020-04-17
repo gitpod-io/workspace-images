@@ -99,11 +99,8 @@ einfo "Testing for fastest mirrors.."
 # NOTICE: Do not quote SUDO, it breaks it..
 # FIXME: Someone tell netselect-apt upstream to make it possible to output the fastest mirror..
 APT_STABLE_MIRROR="$($SUDO netselect-apt --nonfree --sources stable 2>&1 | grep -A 1 "Of the hosts tested we choose the fastest valid for HTTP:" | grep -o "http://.*")"
-einfo "Fastest mirror for stable: $APT_STABLE_MIRROR"
 APT_TESTING_MIRROR="$($SUDO netselect-apt --nonfree --sources testing 2>&1 | grep -A 1 "Of the hosts tested we choose the fastest valid for HTTP:" | grep -o "http://.*")"
-einfo "Fastest mirror for testing: $APT_STABLE_MIRROR"
 APT_SID_MIRROR="$($SUDO netselect-apt --nonfree --sources sid 2>&1 | grep -A 1 "Of the hosts tested we choose the fastest valid for HTTP:" | grep -o "http://.*")"
-einfo "Fastest mirror for sid: $APT_STABLE_MIRROR"
 
 # Self-check for mirrors
 # NOTICE: netselect-apt may fail sometimes so we shoudn't be dieing here
@@ -111,7 +108,7 @@ if [ -z "$APT_MIRROR_STABLE" ]; then
 	eerror "Script '$myName' failed to acquire fastest mirror for stable release"
 	APT_MIRROR_STABLE="$APT_MIRROR"
 elif [ -n "$APT_MIRROR_STABLE" ]; then
-	true
+	einfo "Fastest mirror for stable: $APT_STABLE_MIRROR"
 else
 	die 255 "Unexpected happend while processing variable APT_MIRROR_STABLE with value '$APT_MIRROR_STABLE'"
 fi
@@ -120,7 +117,7 @@ if [ -z "$APT_TESTING_MIRROR" ]; then
 	eerror "Script '$myName' failed to acquire fastest mirror for testing release"
 	APT_TESTING_MIRROR="$APT_MIRROR"
 elif [ -n "$APT_TESTING_MIRROR" ]; then
-	true
+	einfo "Fastest mirror for testing: $APT_TESTING_MIRROR"
 else
 	die 255 "Unexpected happend while processing variable APT_MIRROR_STABLE with value '$APT_TESTING_MIRROR'"
 fi
@@ -129,7 +126,7 @@ if [ -z "$APT_MIRROR_SID" ]; then
 	eerror "Script '$myName' failed to acquire fastest mirror for sid release"
 	APT_TESTING_MIRROR="$APT_MIRROR"
 elif [ -n "$APT_MIRROR_SID" ]; then
-	true
+	einfo "Fastest mirror for sid: $APT_MIRROR_SID"
 else
 	die 255 "Unexpected happend while processing variable APT_MIRROR_STABLE with value '$APT_MIRROR_SID'"
 fi

@@ -51,7 +51,7 @@ RUN printf '%s\n' \
 # Initial configuration
 # FIXME: Ideally this shoudn't be cached to avoid grabbing dead mirror
 COPY core/scripts/apt-mirror-benchmark.sh /usr/bin/apt-mirror-benchmark
-RUN true "asdgasd" \
+RUN true "sdgasdg" \
 	&& chmod +x /usr/bin/apt-mirror-benchmark \
 	&& /usr/bin/apt-mirror-benchmark \
 	&& rm /usr/bin/apt-mirror-benchmark \
