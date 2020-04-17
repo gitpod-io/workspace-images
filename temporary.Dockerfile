@@ -13,13 +13,15 @@ LABEL Gitpod Maintainers
 # NOTICE(Kreyren): double quotes are not needed here, but i think it looks nicer
 ENV DEBIAN_FRONTEND="noninteractive"
 
-# FIXME: We should allow end-users to set this
+# FIXME: We should allow end-users to set this (logic in code sets translation based on LANG variable)
 ENV LANG="en_US.UTF-8"
 ENV LC_ALL="C"
 
 # Set on the number of expected speedtests performed
 # - Use 'disabled' to skip speedtests, not-recommended!
 ENV SPEEDTEST_TRIES="5"
+# This is a penalty issued to mirrors that are we are unable to fetch from as a part of speedtest (mostly problem on unreliable mirrors and code-quality issues), higger value makes the mirror less likely to be selected as the fastest
+ENV FAILED_MIRROR_PENALTY="5000"
 
 USER root
 
@@ -43,31 +45,18 @@ RUN printf '%s\n' \
 	> /etc/apt/sources.list \
 	&& apt-get update \
 	# NOTICE: We need apt-utils later for package configuration
-	 && apt-get install -y gnupg wget apt-utils netselect-apt
+	# NOTICE: We need bc in apt-mirror-benchmark script
+	 && apt-get install -y gnupg wget apt-utils netselect-apt bc
 
 # Initial configuration
 # FIXME: Ideally this shoudn't be cached to avoid grabbing dead mirror
-COPY core/scripts/apt-mirror-benchmark.bash /usr/bin/apt-mirror-benchmark
-RUN true "dsdhfd" \
+COPY core/scripts/apt-mirror-benchmark.sh /usr/bin/apt-mirror-benchmark
+RUN true "fdhsdfh" \
 	&& chmod +x /usr/bin/apt-mirror-benchmark \
 	&& /usr/bin/apt-mirror-benchmark \
 	&& rm /usr/bin/apt-mirror-benchmark \
 	&& printf '%s\n' \
-		"# WINE" \
-		"deb [arch=amd64,i386] https://dl.winehq.org/wine-builds/debian/ bullseye main" \
-		"deb-src [arch=amd64,i386] https://dl.winehq.org/wine-builds/debian/ bullseye  main" \
-	>> /etc/apt/sources.list \
-	&& apt-get update \
-	# NOTICE: We need apt-utils later for package configuration
-	&& apt-get install -y gnupg wget apt-utils netselect-apt
-
-# Initial configuration
-COPY core/scripts/apt-mirror-benchmark.bash /usr/bin/apt-mirror-benchmark
-RUN true \
-	&& chmod +x /usr/bin/apt-mirror-benchmark \
-	&& /usr/bin/apt-mirror-benchmark \
-	&& rm /usr/bin/apt-mirror-benchmark \
-	&& printf '%s\n' \
+		"" \
 		"# WINE" \
 		"deb [arch=amd64,i386] https://dl.winehq.org/wine-builds/debian/ bullseye main" \
 		"deb-src [arch=amd64,i386] https://dl.winehq.org/wine-builds/debian/ bullseye  main" \
@@ -76,8 +65,8 @@ RUN true \
 	&& dpkg --add-architecture i386 \
 	# WINEHQ dependencies
 	&& wget -qnc https://dl.winehq.org/wine-builds/winehq.key -O - | apt-key add - \
-  && apt-key adv --keyserver keys.openpgp.org --recv-keys 0x76F1A20FF987672F \
-  && apt-get update
+	&& apt-key adv --keyserver keys.openpgp.org --recv-keys 0x76F1A20FF987672F \
+	&& apt-get update
 
 # Install core dependencies
 # FIXME: We should allow logic based on expected 'shell' i.e using `shell: bash` in gitpod.yml should expand in installing bash-completion

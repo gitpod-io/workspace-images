@@ -10,6 +10,7 @@
 ###! - Use `netselect-apt --nonfree --sources stable |& grep -A 1 "Of the hosts tested we choose the fastest valid for HTTP:" | grep -o "http://.*"` to get the fastest mirror -> Configure /etc/apt/sources.list with it
 ###! Code-quality:
 ###! - We are expecting shellcheck[>=0.7.0] ideally latest
+###! - Cosmic rays and memory corruption is a concern -> Make sure to cover unexpected (else should be only used for this purpose)
 
 # FIXME: Add translations
 # FIXME: Support other distributions
