@@ -43,12 +43,13 @@ RUN printf '%s\n' \
 	> /etc/apt/sources.list \
 	&& apt-get update \
 	# NOTICE: We need apt-utils later for package configuration
-	 && apt-get install -y gnupg wget apt-utils netselect-apt
+	# NOTICE: We need bc in apt-mirror-benchmark script
+	 && apt-get install -y gnupg wget apt-utils netselect-apt bc
 
 # Initial configuration
 # FIXME: Ideally this shoudn't be cached to avoid grabbing dead mirror
 COPY core/scripts/apt-mirror-benchmark.sh /usr/bin/apt-mirror-benchmark
-RUN true "dsaghasdh" \
+RUN true "sdga" \
 	&& chmod +x /usr/bin/apt-mirror-benchmark \
 	&& /usr/bin/apt-mirror-benchmark \
 	&& rm /usr/bin/apt-mirror-benchmark \
