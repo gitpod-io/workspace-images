@@ -88,11 +88,12 @@ RUN thealer install novnc
 COPY dockerfiles/core/misc/novnc-index.html /opt/novnc/index.html
 
 ### Code below should be in a sourcable file ###
+# FIXME: Needs rework
 # Configure expected shell
-COPY dockerfiles/core/scripts/shellConfig.bash /usr/bin/shellConfig
 # FIXME: This is expected to be set by gitpod based on end-user preference
-ENV expectedShell="bash"
-RUN true "dsgasdghhg" \
-	&& chmod +x /usr/bin/shellConfig \
-	&& /usr/bin/shellConfig \
-	&& rm /usr/bin/shellConfig
+# ENV expectedShell="bash"
+# COPY dockerfiles/core/scripts/shellConfig.bash /usr/bin/shellConfig
+# RUN true "dsgasdghhg" \
+# 	&& chmod +x /usr/bin/shellConfig \
+# 	&& /usr/bin/shellConfig \
+# 	&& rm /usr/bin/shellConfig
