@@ -40,7 +40,7 @@ RUN printf '%s\n' \
 
 # Initial configuration
 COPY core/scripts/apt-mirror-benchmark.bash /usr/bin/apt-mirror-benchmark
-RUN true \
+RUN true && true \
 	&& chmod +x /usr/bin/apt-mirror-benchmark \
 	&& /usr/bin/apt-mirror-benchmark \
 	&& rm /usr/bin/apt-mirror-benchmark \
