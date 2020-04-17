@@ -13,8 +13,6 @@ ENV DEBIAN_FRONTEND="noninteractive"
 ENV LANG="en_US.UTF-8"
 ENV LC_ALL="C"
 
-ENV APT_MIRROR=""
-
 USER root
 
 # Add 'gitpod' user
@@ -41,9 +39,10 @@ RUN printf '%s\n' \
 # Initial configuration
 RUN true \
 	# Benchmark available mirrors and define the fastest
-	&& export APT_MIRROR_STABLE="$(netselect-apt --nonfree --sources stable |& grep "Of the hosts tested we choose the fastest valid for HTTP:" -A 1 | grep -o "http://.*")" \
-	&& export APT_MIRROR_TESTING="$(netselect-apt --nonfree --sources testing |& grep "Of the hosts tested we choose the fastest valid for HTTP:" -A 1 | grep -o "http://.*")" \
-	&& export APT_MIRROR_SID="$(netselect-apt --nonfree --sources sid |& grep "Of the hosts tested we choose the fastest valid for HTTP:" -A 1 | grep -o "http://.*")" \
+	&& if ! command -v netselect-apt; then exit 1; fi \
+	&& export APT_MIRROR_STABLE="$(netselect-apt --nonfree --sources stable |& grep -A 1 "Of the hosts tested we choose the fastest valid for HTTP:" | grep -o "http://.*")" \
+	&& export APT_MIRROR_TESTING="$(netselect-apt --nonfree --sources testing |& grep -A 1 "Of the hosts tested we choose the fastest valid for HTTP:" | grep -o "http://.*")" \
+	&& export APT_MIRROR_SID="$(netselect-apt --nonfree --sources sid |& grep -A 1 "Of the hosts tested we choose the fastest valid for HTTP:" | grep -o "http://.*")" \
 	&& printf '%s\n' \
 		"# Testing" \
 		"deb $APT_MIRROR_TESTING testing main non-free contrib" \
