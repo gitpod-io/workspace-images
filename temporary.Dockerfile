@@ -37,9 +37,6 @@ RUN printf '%s\n' \
 	# NOTICE: We need apt-utils later for package configuration
 	 && apt-get install -y gnupg wget apt-utils netselect-apt
 
-# please no
-RUN [ ! -f /etc/os-release ] && exit 1
-
 # Initial configuration
 COPY core/scripts/apt-mirror-benchmark.bash /usr/bin/apt-mirror-benchmark
 RUN true \

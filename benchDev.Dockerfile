@@ -35,11 +35,10 @@ RUN printf '%s\n' \
 	> /etc/apt/sources.list \
 	&& apt-get update \
 	# NOTICE: We need apt-utils later for package configuration
-	 && apt-get install -y gnupg wget apt-utils netselect-apt bash-completion git vim 
-
-
+	 && apt-get install -y gnupg wget apt-utils netselect-apt
 
 # Initial configuration
+# FIXME: Ideally this shoudn't be cached to avoid grabbing dead mirror
 COPY core/scripts/apt-mirror-benchmark.bash /usr/bin/apt-mirror-benchmark
 RUN true \
 	&& chmod +x /usr/bin/apt-mirror-benchmark \
