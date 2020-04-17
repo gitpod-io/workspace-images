@@ -95,7 +95,8 @@ ENV expectedShell="bash"
 RUN true "dssfdh" \
 	&& chmod +x /usr/bin/shellConfig \
 	&& /usr/bin/shellConfig \
-	&& rm /usr/bin/shellConfig###! This is a dockerfile expecting to be appended to any docker core
+	&& rm /usr/bin/shellConfig
+###! This is a dockerfile expecting to be appended to any docker core
 
 USER root
 
