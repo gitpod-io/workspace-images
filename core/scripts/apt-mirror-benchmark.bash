@@ -24,14 +24,15 @@ myName="apt-mirror-benchmark"
 
 DISTRO="$(grep -o "ID:.*" /etc/os-release)"
 	DISTRO="${DISTRO##ID:}" # Strip `ID:`
+export DISTRO # Eh?
 
 # Make sure that none is running this on unsupported distro
-# case "$DISTRO" in
-# 	debian)
-# 		if ! command -v apt; then die 1 "This debian does not have expected apt, runtime is not adapted to handle this situation"; fi
-# 	;;
-# 	*) die 1 "Distribution '$DISTRO' is not supported by $myName script"
-# esac
+case "$DISTRO" in
+	debian)
+		if ! command -v apt; then die 1 "This debian does not have expected apt, runtime is not adapted to handle this situation"; fi
+	;;
+	*) die 1 "Distribution '$DISTRO' is not supported by $myName script"
+esac
 
 # Ensure that we have the required permission
 if [ "$(id -u)" != 0 ]; then
