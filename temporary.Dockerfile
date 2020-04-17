@@ -27,7 +27,6 @@ USER root
 
 # Get thealer
 COPY dockerfiles/core/scripts/thealer.bash /usr/bin/thealer
-RUN chmod +x /usr/bin/thealer
 
 # Add 'gitpod' user
 RUN useradd \
