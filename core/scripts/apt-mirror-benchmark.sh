@@ -128,7 +128,7 @@ while [ "$tries" != "$SPEEDTEST_TRIES" ]; do
 	# shellcheck disable=SC1083 # Invalid - This } is literal. Check expression (missing ;/\n?) or quote it.
 	apt_mirror_sid_speed="$( printf '%s\n' "$apt_mirror_sid_speed + $(curl --write-out %{speed_download} "$APT_MIRROR_SID/debian/README" --output /dev/null 2>/dev/null)" | bc -q || printf '%s\n' "$FAILED_MIRROR_PENALTY" )"
 
-	tries="$(( "$tries" + 1 ))"
+	tries="$(( tries + 1 ))"
 done
 
 # Get average of network speed
