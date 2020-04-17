@@ -20,8 +20,8 @@ die() { printf 'FATAL: %s\n' "$2"; exit "$1";}
 # FIXME: Shoudn't be fatal
 [ ! -e "/etc/os-release" ] && die 1 "Expected file '/etc/os-release' is not available, unable to process shell"
 
-DISTRO="$(grep -o "ID:.*" /etc/os-release)"
-	DISTRO="${DISTRO##ID:}" # Strip `ID:`
+DISTRO="$(grep -o "ID=.*" /etc/os-release)"
+	DISTRO="${DISTRO##ID=}" # Strip `ID=`
 
 # shellcheck disable=SC2154 # Expected to be set in dockerfile
 case "$expectedShell" in
