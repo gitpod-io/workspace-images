@@ -107,9 +107,32 @@ einfo "Fastest mirror for sid: $APT_STABLE_MIRROR"
 
 # Self-check for mirrors
 # NOTICE: netselect-apt may fail sometimes so we shoudn't be dieing here
-[ -z "$APT_MIRROR_STABLE" ] && eerror "Script '$myName' failed to acquire fastest mirror for stable release" && APT_MIRROR_STABLE="$APT_MIRROR"
-[ -z "$APT_TESTING_MIRROR" ] && eerror "Script '$myName' failed to acquire fastest mirror for testing release" && APT_TESTING_MIRROR="$APT_MIRROR"
-[ -z "$APT_MIRROR_SID" ] && eerror "Script '$myName' failed to acquire fastest mirror for sid release" && APT_MIRROR_SID="$APT_MIRROR"
+if [ -z "$APT_MIRROR_STABLE" ]; then
+	eerror "Script '$myName' failed to acquire fastest mirror for stable release"
+	APT_MIRROR_STABLE="$APT_MIRROR"
+elif [ -n "$APT_MIRROR_STABLE" ]; then
+	true
+else
+	die 255 "Unexpected happend while processing variable APT_MIRROR_STABLE with value '$APT_MIRROR_STABLE'"
+fi
+
+if [ -z "$APT_TESTING_MIRROR" ]; then
+	eerror "Script '$myName' failed to acquire fastest mirror for testing release"
+	APT_TESTING_MIRROR="$APT_MIRROR"
+elif [ -n "$APT_TESTING_MIRROR" ]; then
+	true
+else
+	die 255 "Unexpected happend while processing variable APT_MIRROR_STABLE with value '$APT_TESTING_MIRROR'"
+fi
+
+if [ -z "$APT_MIRROR_SID" ]; then
+	eerror "Script '$myName' failed to acquire fastest mirror for sid release"
+	APT_TESTING_MIRROR="$APT_MIRROR"
+elif [ -n "$APT_MIRROR_SID" ]; then
+	true
+else
+	die 255 "Unexpected happend while processing variable APT_MIRROR_STABLE with value '$APT_MIRROR_SID'"
+fi
 
 # Speedtest the found mirrors agains the one hardcoded in APT_MIRROR
 tries=0
