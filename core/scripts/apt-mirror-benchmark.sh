@@ -98,9 +98,9 @@ fi
 einfo "Testing for fastest mirrors.."
 # NOTICE: Do not quote SUDO, it breaks it..
 # FIXME: Someone tell netselect-apt upstream to make it possible to output the fastest mirror..
-APT_STABLE_MIRROR="$( $SUDO netselect-apt --nonfree --sources stable 2>&1 | grep -A 1 "Of the hosts tested we choose the fastest valid for HTTP:" | grep -o "http://.*" || true )"
-APT_TESTING_MIRROR="$( $SUDO netselect-apt --nonfree --sources testing 2>&1 | grep -A 1 "Of the hosts tested we choose the fastest valid for HTTP:" | grep -o "http://.*" || true )"
-APT_SID_MIRROR="$( $SUDO netselect-apt --nonfree --sources sid 2>&1 | grep -A 1 "Of the hosts tested we choose the fastest valid for HTTP:" | grep -o "http://.*" || true )"
+APT_STABLE_MIRROR="$( { $SUDO netselect-apt --nonfree --sources stable 2>&1 | grep -A 1 "Of the hosts tested we choose the fastest valid for HTTP:" || true ;} | grep -o "http://.*" )"
+APT_TESTING_MIRROR="$( { $SUDO netselect-apt --nonfree --sources testing 2>&1 | grep -A 1 "Of the hosts tested we choose the fastest valid for HTTP:" || true ;} | grep -o "http://.*" )"
+APT_SID_MIRROR="$( { $SUDO netselect-apt --nonfree --sources sid 2>&1 | grep -A 1 "Of the hosts tested we choose the fastest valid for HTTP:" || true ;} | grep -o "http://.*" )"
 
 # Self-check for mirrors
 # NOTICE: netselect-apt may fail sometimes so we shoudn't be dieing here
