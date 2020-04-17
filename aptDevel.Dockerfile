@@ -24,9 +24,8 @@ RUN useradd \
 
 RUN apt update
 
-
 # Experiment - Krey's rootless APT! ^-^
-ENV KAPT_DIR="/home/gitpod/makeshift"
+ENV KAPT_DIR="/home/gitpod/makeshift/"
 
 # RUN true && true \
 #   && apt install -y debootstrap \
@@ -34,7 +33,7 @@ ENV KAPT_DIR="/home/gitpod/makeshift"
 #   && debootstrap --arch=amd64 --no-merged-usr --make-tarball="$KAPT_DIR" stable "$KAPT_DIR" http://deb.debian.org/debian \
 #   && chown -R gitpod:gitpod "$KAPT_DIR"
 
-RUN true && true \
+RUN true \
   && mkdir "$KAPT_DIR" || true \
   && mkdir "$KAPT_DIR/var/" || true \
   && mkdir "$KAPT_DIR/var/lib" || true \
