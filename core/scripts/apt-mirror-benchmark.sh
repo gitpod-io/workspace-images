@@ -17,10 +17,10 @@
 # Skip this whole script if disabled is used (including sourcing below which is the reason for this here)
 [ "$SPEEDTEST_TRIES" = disabled ] && exit 0
 
-efixme() { printf 'FIXME: %s\n' "$1" ;}
+efixme() { [ "$IGNORE_FIXME" != 1 ] && printf 'FIXME: %s\n' "$1" ;}
 eerror() { printf 'ERROR: %s\n' "$1" ;}
 einfo() { printf 'INFO: %s\n' "$1" ;}
-edebug() { [ "$IGNORE_FIXME" != 1 ] && printf 'DEBUG: %s\n' "$1" ;}
+edebug() { [ "$DEBUG" = 1 ] && printf 'DEBUG: %s\n' "$1" ;}
 die() {
 	case "$1" in
 		2) printf 'SYNERR: %s\n' "Argument '$2' was not recognized" ;;
@@ -132,6 +132,8 @@ else
 	die 255 "Unexpected happend while processing variable APT_MIRROR_STABLE with value '$APT_MIRROR_SID'"
 fi
 
+edebug "Passed self-test for APT_MIRROR variables"
+
 # Speedtest the found mirrors agains the one hardcoded in APT_MIRROR
 tries=0
 apt_mirror_speed=0
@@ -139,22 +141,23 @@ apt_mirror_stable_speed=0
 apt_mirror_testing_speed=0
 apt_mirror_sid_speed=0
 while [ "$tries" != "$SPEEDTEST_TRIES" ]; do
+	edebug "Starting speedtest"
 	# Speedtest hard-coded mirror
 	# shellcheck disable=SC1083 # Invalid - This } is literal. Check expression (missing ;/\n?) or quote it.
 	apt_mirror_speed="$( printf '%s\n' "$apt_mirror_speed + $(curl --write-out %{speed_download} "$APT_MIRROR/README" --output /dev/null 2>/dev/null)" | bc -q || printf '%s\n' "$FAILED_MIRROR_PENALTY" )"
-	einfo "APT_MIRROR"
+	edebug "APT_MIRROR"
 	# Speedtest stable
 	# shellcheck disable=SC1083 # Invalid - This } is literal. Check expression (missing ;/\n?) or quote it.
 	apt_mirror_stable_speed="$( printf '%s\n' "$apt_mirror_speed + $(curl --write-out %{speed_download} "$APT_MIRROR_STABLE/README" --output /dev/null 2>/dev/null)" | bc -q || printf '%s\n' "$FAILED_MIRROR_PENALTY" )"
-	einfo "APT_MIRROR_STABLE"
+	edebug "APT_MIRROR_STABLE"
 	# Speedtest testing
 	# shellcheck disable=SC1083 # Invalid - This } is literal. Check expression (missing ;/\n?) or quote it.
 	apt_mirror_testing_speed="$( printf '%s\n' "$apt_mirror_testing_speed + $(curl --write-out %{speed_download} "$APT_MIRROR_TESTING/README" --output /dev/null 2>/dev/null)" | bc -q || printf '%s\n' "$FAILED_MIRROR_PENALTY" )"
-	einfo "APT_MIRROR_TESTING"
+	edebug "APT_MIRROR_TESTING"
 	# Speedtest sid
 	# shellcheck disable=SC1083 # Invalid - This } is literal. Check expression (missing ;/\n?) or quote it.
 	apt_mirror_sid_speed="$( printf '%s\n' "$apt_mirror_sid_speed + $(curl --write-out %{speed_download} "$APT_MIRROR_SID/README" --output /dev/null 2>/dev/null)" | bc -q || printf '%s\n' "$FAILED_MIRROR_PENALTY" )"
-	einfo "APT_MIRROR_SID"
+	edebug "APT_MIRROR_SID"
 
 	tries="$(( tries + 1 ))"
 done
@@ -178,7 +181,7 @@ apt_mirror_sid_speed=$( printf '%s\n' "$apt_mirror_sid_speed / $SPEEDTEST_TRIES"
 
 # CORE
 # NOTICE: Do not double-quote SUDO, it breaks it..
-$SUDO cat <<EOF > "$targetList"
+$SUDO cat <<-EOF > "$targetList" || die 1 "Unable to parse core of script '$myName'"
 	# Stable
 	deb $APT_STABLE_MIRROR stable main non-free contrib
 	deb-src $APT_STABLE_MIRROR stable main non-free contrib
