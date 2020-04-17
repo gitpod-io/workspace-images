@@ -56,7 +56,9 @@ RUN printf '%s\n' \
 # Initial configuration
 # FIXME: Ideally this shoudn't be cached to avoid grabbing dead mirror
 COPY scripts/apt-mirror-benchmark.sh /usr/bin/apt-mirror-benchmark
-RUN true "fdhsdfh" \
+RUN true \
+	# Make sure that sources.list is wiped
+	&& printf '%s\n' "" > /etc/apt/sources.list \
 	&& chmod +x /usr/bin/apt-mirror-benchmark \
 	&& /usr/bin/apt-mirror-benchmark \
 	&& rm /usr/bin/apt-mirror-benchmark \

@@ -24,6 +24,7 @@ ebench() {
 	# Allow skipping benchmark
 	case "$SKIP_BENCHMARK" in 
 		1) return 0 ;;
+		"") true ;;
 		*) die 23 "Variable SKIP_BENCHMARK has unexpected value '$SKIP_BENCHMARK', expecting only '1' or blank"
 	esac
 
@@ -47,6 +48,9 @@ myName="installer"
 # for cmd in git; do
 # 	if command -v $cmd >/dev/null; then die 126 "$cmd"; fi
 # done
+
+# DO_NOT_MERGE
+efixme "Generating package lists, this takes too much time and has to be resolved"
 
 # Define list of available packages to be used in logic
 # NOTICE: If the command is not found it complains about it -> Sent sterr in devnull
@@ -141,12 +145,14 @@ downMan() {
 
 ebench start # Start benchmark
 
+# FIXME: Sanitize for package manager version used, i.e apt 2.0.0 changed how wildcards behave -> Simmilar change might break poor thealer
+
 # Process packages from arguments
 # NOTICE: -ge is used because '0' is shell
 while [ "$#" -ge 1 ]; do case "$1" in
 	install)
 		case "$2" in
-			nim|git|nano|vim|emacs|htop|less|zip|unzip|tar|rustc|cargo|openbox|python|python3|pylint|shellcheck|golang|php|ruby|apache2|nginx|novnc)
+			nim|git|nano|vim|emacs|htop|less|zip|unzip|tar|rustc|cargo|openbox|python|python3|pylint|golang|php|ruby|apache2|nginx|novnc)
 			downMan "$2"
 			shift 1
 		;;
@@ -157,6 +163,17 @@ while [ "$#" -ge 1 ]; do case "$1" in
 					apt install -y "$2" || die 1 "Unable to install package '$2'"
 				;;
 				*) edebug "Distribution '$DISTRO/$RELEASE' does not support apt specific package '$2'"
+			esac
+		shift 1
+		;;
+		# Shellcheck in debian stable is not usable, see https://github.com/gitpod-io/workspace-images/pull/204#issuecomment-614463958
+		shellcheck)
+			case "$DISTRO/$RELEASE" in
+				debian/stable)
+					apt install -t testing -y "$2" || die 1 "Unable to install package '$2'"
+				;;
+				*)
+					downMan "$2"
 			esac
 		shift 1
 		;;
