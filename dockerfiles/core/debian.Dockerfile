@@ -76,6 +76,9 @@ RUN true \
 	&& apt-key adv --keyserver keys.openpgp.org --recv-keys 0x76F1A20FF987672F \
 	&& apt-get update
 
+# DO_NOT_MERGE: Experiment
+ENV aptList="$(apt list 2>/dev/null)"
+
 # Install core dependencies
 # FIXME: We should allow logic based on expected 'shell' i.e using `shell: bash` in gitpod.yml should expand in installing bash-completion
 RUN thealer novnc
