@@ -2,6 +2,8 @@
 
 ###! This file is expected to process the required packages on the system and if either of them is not possible to be installed from disto -> Provide it manually
 
+# FIXME-POSIX: This has to be converted in posix to support posix-based dockerfiles
+
 efixme() { [ "$IGNORE_FIXME" != 1 ] && printf 'FIXME: %s\n' "$1" ;}
 eerror() { printf 'ERROR: %s\n' "$1" ;}
 einfo() { printf 'INFO: %s\n' "$1" ;}
@@ -10,7 +12,9 @@ die() {
 	case "$1" in
 		2) printf 'SYNERR: Argument %s was not recognized\n' "$2" ;;
 		23) printf 'SAFETY-TRAP: %s\n' "$2" ;;
-		bug) printf "BUG: %s, please file a new issue in $UPSTREAM" "$2" ;;
+		bug)
+			printf "BUG: %s, please file a new issue in $UPSTREAM" "$2"
+			exit 1 ;;
 		*) printf 'FATAL: %s\n' "$2" ;;
 	esac
 
@@ -45,11 +49,12 @@ myName="installer"
 # done
 
 # Define list of available packages to be used in logic
+# NOTICE: If the command is not found it complains about it -> Sent sterr in devnull
 # FIXME: This should be defined in dockerfile so that it's not generating everytime myName is called
-paludisList="$(cave print-packages)"
-aptList="$(apt list)"
+paludisList="$(cave print-packages 2>/dev/null)"
+aptList="$(apt list 2>/dev/null)"
 # NOTICE: We may need to use EIX_LIMIT=0 here to output all packages
-portageList="$(eix --only-names)"
+portageList="$(eix --only-names 2>/dev/null)"
 # FIXME: Implement prebuilt binaries for merge
 binaryList=""
 

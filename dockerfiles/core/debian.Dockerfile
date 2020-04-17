@@ -70,6 +70,7 @@ RUN true "fdhsdfh" \
 	&& dpkg --add-architecture i386 \
 	# WINEHQ dependencies
 	&& wget -qnc https://dl.winehq.org/wine-builds/winehq.key -O - | apt-key add - \
+	# FIXME: Outputs 'Warning: apt-key output should not be parsed (stdout is not a terminal)'
 	&& apt-key adv --keyserver keys.openpgp.org --recv-keys 0x76F1A20FF987672F \
 	&& apt-get update
 
