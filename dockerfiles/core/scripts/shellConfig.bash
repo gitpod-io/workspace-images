@@ -27,6 +27,7 @@ DISTRO="$(grep -o "ID=.*" /etc/os-release)"
 case "$expectedShell" in
 			bash|"")
 				[ -z "$expectedShell" ] && eerror "We are expecting variable expectedShell set on shell that we are expecting in production system, since it's blank we are using default bash"
+
 				case "$DISTRO" in
 					debian|ubuntu) apt install -y bash-completion || die 1 "Unable to install bash-completion" ;;
 					# FIXME: Obvious
