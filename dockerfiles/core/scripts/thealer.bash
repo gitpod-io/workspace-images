@@ -149,9 +149,6 @@ downMan() {
 }
 
 ebench start # Start benchmark
-downMan "$1"
-
-die pinger
 
 # FIXME: Sanitize for package manager version used, i.e apt 2.0.0 changed how wildcards behave -> Simmilar change might break poor thealer
 
