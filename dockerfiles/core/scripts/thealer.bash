@@ -162,7 +162,7 @@ while [ "$#" -ge 1 ]; do case "$1" in
 			shift 1
 		;;
 		# APT specific
-		apt-transport-https)
+		apt-transport-https|build-essentials)
 			case "$DISTRO/$RELEASE" in
 				debian/*|ubuntu/*)
 					apt install -y "$2" || die 1 "Unable to install package '$2'"
