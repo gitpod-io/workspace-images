@@ -193,4 +193,10 @@ $SUDO cat <<EOF > "$targetList"
 EOF
 
 # Core self-check
-[ ! -s /etc/apt/sources.list ] && die 1 "$myName's core self-check failed"
+if [ ! -s /etc/apt/sources.list ]; then
+	die 1 "$myName's core self-check failed"
+elif [ -s /etc/apt/sources.list ]; then
+	true
+else
+	die 255 "Unexpected happend while processing core self-check"
+fi
