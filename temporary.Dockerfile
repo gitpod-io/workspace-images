@@ -37,7 +37,7 @@ RUN printf '%s\n' \
   && apt-get install -y gnupg wget apt-utils netselect-apt
 
 # Initial configuration
-RUN true \
+RUN true && true \
 	# Benchmark available mirrors and define the fastest
 	&& if ! command -v netselect-apt; then exit 1; fi \
 	&& export APT_MIRROR_STABLE="$(netselect-apt --nonfree --sources stable |& grep -A 1 "Of the hosts tested we choose the fastest valid for HTTP:" | grep -o "http://.*")" \
