@@ -1,31 +1,6 @@
-FROM gitpod/debian
+FROM gitpod/debian:latest
 
 ###! The idea of this dockerimage is to provide everything that end-users might need for their workflow on gitpod
-###! We need following:
-###! - [X] Rust
-###! - [X] Java
-###! - [X] Dotnet
-###! - [X] Python
-###! - [X] Openbox (Used in theia desktop)
-###! - [X] nano
-###! - [X] vim
-###! - [X] Shellcheck
-###! - [X] emacs
-###! - [X] htop
-###! - [X] zip
-###! - [X] unzip
-###! - [X] tar
-###! - [X] Packages for building (build-essentials)
-###! - [X] less
-###! - [X] git
-###! - [X] Apache2
-###! - [X] PHP
-###! - [X] Nginx
-###! - [X] Homebrew
-###! - [X] Go
-###! - [X] Node.js
-###! - [X] Ruby
-###! - [X] Docker (for development) -- See https://github.com/gitpod-io/gitpod/issues/52
 
 # Used for docker
 ENV XDG_RUNTIME_DIR=/tmp/docker-33333

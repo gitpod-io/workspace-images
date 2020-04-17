@@ -1,13 +1,13 @@
 FROM debian:stable
 
+LABEL Gitpod Maintainers
+
 ###! Additional info:
 ###! - Do not use sudo -> Set proper group permission
 ###! - Set variable SPEEDTEST_TRIES on the integer of expected speedtests
-###!	 - More tries -> More accurate result
-###!	 - Recommended value: 5
+###!   - More tries -> More accurate result
+###!   - Recommended value: 5
 ###! - Set variable APT_MIRROR on hard-codded mirror (stub in case gitpod will provide it's own mirror), speedtest will be performed anyway to verify that hardcoded mirror is faster then alternatives
-
-LABEL Gitpod Maintainers
 
 # To avoid bricked workspaces assuming interactive shell breaks the build (https://github.com/gitpod-io/gitpod/issues/1171)
 # NOTICE(Kreyren): double quotes are not needed here, but i think it looks nicer
@@ -47,7 +47,7 @@ RUN printf '%s\n' \
 	&& apt-get update \
 	# NOTICE: We need apt-utils later for package configuration
 	# NOTICE: We need bc in apt-mirror-benchmark script
-	 && apt-get install -y gnupg wget apt-utils netselect-apt bc
+	&& apt-get install -y gnupg wget apt-utils netselect-apt bc
 
 # Initial configuration
 # FIXME: Ideally this shoudn't be cached to avoid grabbing dead mirror
@@ -60,7 +60,7 @@ RUN true "fdhsdfh" \
 		"" \
 		"# WINE" \
 		"deb [arch=amd64,i386] https://dl.winehq.org/wine-builds/debian/ bullseye main" \
-		"deb-src [arch=amd64,i386] https://dl.winehq.org/wine-builds/debian/ bullseye	main" \
+		"deb-src [arch=amd64,i386] https://dl.winehq.org/wine-builds/debian/ bullseye  main" \
 	>> /etc/apt/sources.list \
 	# Ensure that we have 32-bit available
 	&& dpkg --add-architecture i386 \
@@ -77,59 +77,12 @@ RUN apt-get install -y \
 # Configure default NoVNC in theia
 COPY core/misc/novnc-index.html /opt/novnc/index.html
 
-
-### START OF DEFAULT CONFIG ###
-
-# Used for docker
-ENV XDG_RUNTIME_DIR=/tmp/docker-33333
-ENV DOCKER_HOST="unix:///tmp/docker-33333/docker.sock"
-
-# Install default dependencies
+### Code below should be in a sourcable file ###
+# Configure expected shell
+COPY core/scripts/shellConfig.bash /usr/bin/shellConfig
+# FIXME: This is expected to be set by gitpod based on end-user preference
+ENV expectedShell="bash"
 RUN true \
-	&& apt-get install -y \
-		build-essential \
-		git \
-		nano \
-		vim \
-		emacs \
-		htop \
-		less \
-		zip \
-		unzip \
-		tar \
-		rustc \
-		cargo \
-		openbox \
-		python \
-		python3 \
-		pylint \
-		golang-go \
-		php \
-		ruby \
-		apache2 \
-		nginx \
-		apt-transport-https \
-		nodejs \
-		java-common \
-		default-jre \
-		default-jdk \
-		openjdk-11-jre \
-		openjdk-11-jdk \
-		curl \
-		gpg \
-		nim \
-		apt-utils \
-	# We need a shellcheck >=0.7.0, see https://github.com/gitpod-io/workspace-images/pull/204#issuecomment-614463958
-	&& apt-get install -t testing -y \
-		shellcheck
-
-USER gitpod
-# RUN true \
-#	# Homebrew, see https://docs.brew.sh/Homebrew-on-Linux
-#	&& /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)" \ 
-#	&& test -d "$HOME/.linuxbrew" && eval "$(~/.linuxbrew/bin/brew shellenv)" \
-#	&& test -d "/home/linuxbrew/.linuxbrew" && eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)" \
-#	&& test -r "$HOME/.bash_profile" && printf '%s\n' "eval \$($(brew --prefix)/bin/brew shellenv)" >> "$HOME/.bash_profile" \
-#	&& printf '%s\n' "eval \$($(brew --prefix)/bin/brew shellenv)" >> "$HOME/.profile" \
-#	# Docker, see https://github.com/gitpod-io/gitpod/issues/52#issuecomment-546844862
-#	&& curl -sSL https://get.docker.com/rootless | sh
+	&& chmod +x /usr/bin/shellConfig \
+	&& /usr/bin/shellConfig \
+	&& rm /usr/bin/shellConfig

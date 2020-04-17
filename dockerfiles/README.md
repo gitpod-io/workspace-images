@@ -1,0 +1,1 @@
+This directory is dedicated to dockerfiles supported on gitpod
