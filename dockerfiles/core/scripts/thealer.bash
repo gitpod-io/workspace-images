@@ -195,6 +195,11 @@ while [ "$#" -ge 1 ]; do case "$1" in
 		*) die fixme "Package '$2' is not yet supported on $DISTRO/$RELEASE"
 		esac
 	;;
+	# DO_NOT_MERGE: Experiment
+	novnc)
+		downMan "$1"
+		shift 1
+	;;
 	"") exit 0 ;;
 	*)
 		die 2 "$1"
