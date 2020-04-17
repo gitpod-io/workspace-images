@@ -62,6 +62,8 @@ portageList="$(eix --only-names 2>/dev/null)"
 # FIXME: Implement prebuilt binaries for merge
 binaryList=""
 
+echo ping
+
 manuallInstall() {
 	# In case we are able to merge in system using pre-compiled binary package
 	if [ "$binaryList" = "$1" ]; then
