@@ -68,8 +68,8 @@ APT_SID_MIRROR="$(netselect-apt --nonfree --sources sid |& grep -A 1 "Of the hos
 
 # Self-check for mirrors
 [ -z "$APT_MIRROR_STABLE" ] && eerror "Script '$myName' failed to acquire fastest mirror for stable release" && APT_MIRROR_STABLE="$APT_MIRROR"
-[ -z "$APT_TESTING_MIRROR" ] && eeror "Script '$myName' failed to acquire fastest mirror for testing release" && APT_TESTING_MIRROR="$APT_MIRROR"
-[ -z "$APT_MIRROR_SID" ] && eeror "Script '$myName' failed to acquire fastest mirror for sid release" && APT_MIRROR_SID="$APT_MIRROR"
+[ -z "$APT_TESTING_MIRROR" ] && eerror "Script '$myName' failed to acquire fastest mirror for testing release" && APT_TESTING_MIRROR="$APT_MIRROR"
+[ -z "$APT_MIRROR_SID" ] && eerror "Script '$myName' failed to acquire fastest mirror for sid release" && APT_MIRROR_SID="$APT_MIRROR"
 
 # CORE
 printf '%s\n' \
