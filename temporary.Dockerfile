@@ -85,7 +85,7 @@ ENV aptList="$(apt list 2>/dev/null)"
 RUN thealer install novnc
 
 # Configure default NoVNC in theia
-COPY core/misc/novnc-index.html /opt/novnc/index.html
+COPY dockerfile/core/misc/novnc-index.html /opt/novnc/index.html
 
 ### Code below should be in a sourcable file ###
 # Configure expected shell
