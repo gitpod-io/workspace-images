@@ -5,6 +5,9 @@
 ###! Abstract:
 ###! - Use `netselect-apt --nonfree --sources stable |& grep -A 1 "Of the hosts tested we choose the fastest valid for HTTP:" | grep -o "http://.*"` to get the fastest mirror -> Configure /etc/apt/sources.list with it
 
+# Do not perform tests if explicitedly disabled
+[ "$SPEEDTEST_TRIES" = disabled ] && exit 0
+
 # FIXME: Add translations
 
 efixme() { printf 'FIXME: %s\n' "$1" ;}
