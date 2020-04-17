@@ -37,33 +37,12 @@ RUN printf '%s\n' \
   && apt-get install -y gnupg wget apt-utils netselect-apt
 
 # Initial configuration
-RUN true && true \
+RUN true \
 	# Benchmark available mirrors and define the fastest
 	&& if ! command -v netselect-apt; then exit 1; fi \
-	&& export APT_MIRROR_STABLE="$(netselect-apt --nonfree --sources stable |& grep -A 1 "Of the hosts tested we choose the fastest valid for HTTP:" | grep -o "http://.*")" \
-	&& export APT_MIRROR_TESTING="$(netselect-apt --nonfree --sources testing |& grep -A 1 "Of the hosts tested we choose the fastest valid for HTTP:" | grep -o "http://.*")" \
-	&& export APT_MIRROR_SID="$(netselect-apt --nonfree --sources sid |& grep -A 1 "Of the hosts tested we choose the fastest valid for HTTP:" | grep -o "http://.*")" \
-	# Self-check
-	&& [ -z "$APT_MIRROR_STABLE" ] && exit 1 || echo $APT_MIRROR_STABLE \
-	&& [ -z "$APT_MIRROR_TESTING" ] && exit 1 || echo $APT_MIRROR_TESTING \
-	&& [ -z "$APT_MIRROR_SID" ] && exit 1 || echo $APT_MIRROR_SID \
-	&& printf '%s\n' \
-		"# Stable" \
-		"deb $APT_MIRROR_STABLE stable main non-free contrib" \
-		"deb-src $APT_MIRROR_STABLE stable main non-free contrib" \
-		"" \
-		"# Testing" \
-		"deb $APT_MIRROR_TESTING testing main non-free contrib" \
-		"deb-src $APT_MIRROR_TESTING testing main non-free contrib" \
-		"" \
-		"# Sid" \
-		"deb $APT_MIRROR_SID sid main non-free contrib" \
-		"deb-src $APT_MIRROR_SID sid main non-free contrib" \
-		"" \
-		"# WINE" \
-		"deb [arch=amd64,i386] https://dl.winehq.org/wine-builds/debian/ bullseye main" \
-		"deb-src [arch=amd64,i386] https://dl.winehq.org/wine-builds/debian/ bullseye  main" \
-	> /etc/apt/sources.list \
+	&& printf '# Stable\ndeb %s stable main non-free contrib\ndeb-src %s stable main non-free contrib\n' "$(netselect-apt --nonfree --sources stable |& grep -A 1 "Of the hosts tested we choose the fastest valid for HTTP:" | grep -o "http://.*")" > /etc/apt/sources.list \
+	&& printf '# Testing\ndeb %s testing main non-free contrib\ndeb-src %s testing main non-free contrib\n' "$(netselect-apt --nonfree --sources testing |& grep -A 1 "Of the hosts tested we choose the fastest valid for HTTP:" | grep -o "http://.*")" >> /etc/apt/sources.list \
+	&& printf '# Sid\ndeb %s sid main non-free contrib\ndeb-src %s sid main non-free contrib\n' "$(netselect-apt --nonfree --sources sid |& grep -A 1 "Of the hosts tested we choose the fastest valid for HTTP:" | grep -o "http://.*")" >> /etc/apt/sources.list \
 	# Ensure that we have 32-bit available
 	&& dpkg --add-architecture i386 \
 	# WINEHQ dependencies
