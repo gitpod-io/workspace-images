@@ -1,4 +1,5 @@
 #!/bin/bash
+# Created by Jacob Hrbek <kreyren@rixotstudio.cz> under GPLv3 license <https://www.gnu.org/licenses/gpl-3.0.en.html> in 17/04/2020 05:57
 
 ###! This script is designed to benchmark all available mirrors and then pick the fastest to configure /etc/apt/sources.list
 ###! Abstract:
@@ -23,6 +24,8 @@ die() {
 myName="apt-mirror-benchmark"
 
 [ ! -f /etc/os-release ] && die 1 "Script $myName expects file /etc/os-release"
+# FIXME: Check if SPEEDTEST_TRIES is numerical
+[ -z "$SPEEDTEST_TRIES" ] && die 1 "Script $myName requires variable SPEEDTEST_TRIES set on number of expected speedtests"
 
 DISTRO="$(grep -o "^ID=.*" /etc/os-release)"
 
@@ -67,9 +70,41 @@ APT_TESTING_MIRROR="$(netselect-apt --nonfree --sources testing |& grep -A 1 "Of
 APT_SID_MIRROR="$(netselect-apt --nonfree --sources sid |& grep -A 1 "Of the hosts tested we choose the fastest valid for HTTP:" | grep -o "http://.*")"
 
 # Self-check for mirrors
+# NOTICE: netselect-apt may fail sometimes so we shoudn't be dieing here
 [ -z "$APT_MIRROR_STABLE" ] && eerror "Script '$myName' failed to acquire fastest mirror for stable release" && APT_MIRROR_STABLE="$APT_MIRROR"
 [ -z "$APT_TESTING_MIRROR" ] && eerror "Script '$myName' failed to acquire fastest mirror for testing release" && APT_TESTING_MIRROR="$APT_MIRROR"
 [ -z "$APT_MIRROR_SID" ] && eerror "Script '$myName' failed to acquire fastest mirror for sid release" && APT_MIRROR_SID="$APT_MIRROR"
+
+# Speedtest the found mirrors agains the one hardcoded in APT_MIRROR
+tries=0
+apt_mirror_speed=0
+apt_mirror_stable_speed=0
+apt_mirror_testing_speed=0
+apt_mirror_sid_speed=0
+while [ "$tries" != "$SPEEDTEST_TRIES" ]; do
+	# shellcheck disable=SC1083 # Invalid, part of syntax -- (This } is literal. Check expression (missing ;/\n?) or quote)
+	apt_mirror_speed+="$(curl --write-out %{speed_download} "$APT_MIRROR/debian/README" --output /dev/null 2>/dev/null)"
+	# shellcheck disable=SC1083 # Invalid, part of syntax -- (This } is literal. Check expression (missing ;/\n?) or quote)
+	apt_mirror_stable_speed+="$(curl --write-out %{speed_download} "$APT_MIRROR_STABLE/debian/README" --output /dev/null 2>/dev/null)"
+	# shellcheck disable=SC1083 # Invalid, part of syntax -- (This } is literal. Check expression (missing ;/\n?) or quote)
+	apt_mirror_testing_speed+="$(curl --write-out %{speed_download} "$APT_MIRROR_TESTING/debian/README" --output /dev/null 2>/dev/null)"
+	# shellcheck disable=SC1083 # Invalid, part of syntax -- (This } is literal. Check expression (missing ;/\n?) or quote)
+	apt_mirror_sid_speed+="$(curl --write-out %{speed_download} "$APT_MIRROR_SID/debian/README" --output /dev/null 2>/dev/null)"
+
+	tries="$(( "$tries" + 1 ))"
+done
+
+# Get average of network speed
+# NOTICE: Do not use '$(( ))', because that does not know how to process decimals
+apt_mirror_speed=$(bc -q <<< "$apt_mirror_speed / $SPEEDTEST_TRIES")
+apt_mirror_stable_speed=$(bc -q <<< "$apt_mirror_stable_speed / $SPEEDTEST_TRIES")
+apt_mirror_testing_speed=$(bc -q <<< "$apt_mirror_testing_speed / $SPEEDTEST_TRIES")
+apt_mirror_sid_speed=$(bc -q <<< "$apt_mirror_sid_speed / $SPEEDTEST_TRIES")
+
+# Prefer hardcodded if faster
+[ "$apt_mirror_speed" -le "$apt_mirror_stable_speed" ] && APT_MIRROR_STABLE="$APT_MIRROR"
+[ "$apt_mirror_speed" -le "$apt_mirror_testing_speed" ] && APT_MIRROR_TESTING="$APT_MIRROR"
+[ "$apt_mirror_speed" -le "$apt_mirror_sid_speed" ] && APT_MIRROR_SID="$APT_MIRROR"
 
 # CORE
 printf '%s\n' \
