@@ -117,16 +117,16 @@ apt_mirror_sid_speed=0
 while [ "$tries" != "$SPEEDTEST_TRIES" ]; do
 	# Speedtest hard-coded mirror
 	# shellcheck disable=SC1083 # Invalid - This } is literal. Check expression (missing ;/\n?) or quote it.
-	apt_mirror_speed="$( printf '%s\n' "$apt_mirror_speed + $(curl --write-out %{speed_download} "$APT_MIRROR/debian/README" --output /dev/null 2>/dev/null)" | bc -q || printf '%s\n' "$FAILED_MIRROR_PENALTY" )"
+	apt_mirror_speed="$( printf '%s\n' "$apt_mirror_speed + $(curl --write-out %{speed_download} "$APT_MIRROR/README" --output /dev/null 2>/dev/null)" | bc -q || printf '%s\n' "$FAILED_MIRROR_PENALTY" )"
 	# Speedtest stable
 	# shellcheck disable=SC1083 # Invalid - This } is literal. Check expression (missing ;/\n?) or quote it.
-	apt_mirror_stable_speed="$( printf '%s\n' "$apt_mirror_speed + $(curl --write-out %{speed_download} "$APT_MIRROR_STABLE/debian/README" --output /dev/null 2>/dev/null)" | bc -q || printf '%s\n' "$FAILED_MIRROR_PENALTY" )"
+	apt_mirror_stable_speed="$( printf '%s\n' "$apt_mirror_speed + $(curl --write-out %{speed_download} "$APT_MIRROR_STABLE/README" --output /dev/null 2>/dev/null)" | bc -q || printf '%s\n' "$FAILED_MIRROR_PENALTY" )"
 	# Speedtest testing
 	# shellcheck disable=SC1083 # Invalid - This } is literal. Check expression (missing ;/\n?) or quote it.
-	apt_mirror_testing_speed="$( printf '%s\n' "$apt_mirror_testing_speed + $(curl --write-out %{speed_download} "$APT_MIRROR_TESTING/debian/README" --output /dev/null 2>/dev/null)" | bc -q || printf '%s\n' "$FAILED_MIRROR_PENALTY" )"
+	apt_mirror_testing_speed="$( printf '%s\n' "$apt_mirror_testing_speed + $(curl --write-out %{speed_download} "$APT_MIRROR_TESTING/README" --output /dev/null 2>/dev/null)" | bc -q || printf '%s\n' "$FAILED_MIRROR_PENALTY" )"
 	# Speedtest sid
 	# shellcheck disable=SC1083 # Invalid - This } is literal. Check expression (missing ;/\n?) or quote it.
-	apt_mirror_sid_speed="$( printf '%s\n' "$apt_mirror_sid_speed + $(curl --write-out %{speed_download} "$APT_MIRROR_SID/debian/README" --output /dev/null 2>/dev/null)" | bc -q || printf '%s\n' "$FAILED_MIRROR_PENALTY" )"
+	apt_mirror_sid_speed="$( printf '%s\n' "$apt_mirror_sid_speed + $(curl --write-out %{speed_download} "$APT_MIRROR_SID/README" --output /dev/null 2>/dev/null)" | bc -q || printf '%s\n' "$FAILED_MIRROR_PENALTY" )"
 
 	tries="$(( tries + 1 ))"
 done
