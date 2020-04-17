@@ -36,20 +36,17 @@ RUN printf '%s\n' \
 	# NOTICE: We need apt-utils later for package configuration
   && apt-get install -y gnupg wget apt-utils netselect-apt
 
-ENV APT_MIRROR_STABLE="$(netselect-apt --nonfree --sources stable |& grep -A 1 "Of the hosts tested we choose the fastest valid for HTTP:" | grep -o "http://.*")"
-
-ENV APT_MIRROR_TESTING="$(netselect-apt --nonfree --sources testing |& grep -A 1 "Of the hosts tested we choose the fastest valid for HTTP:" | grep -o "http://.*")"
-
-ENV APT_MIRROR_SID="$(netselect-apt --nonfree --sources sid |& grep -A 1 "Of the hosts tested we choose the fastest valid for HTTP:" | grep -o "http://.*")"
-
 # Initial configuration
 RUN true \
 	# Benchmark available mirrors and define the fastest
 	&& if ! command -v netselect-apt; then exit 1; fi \
+	&& export APT_MIRROR_STABLE="$(netselect-apt --nonfree --sources stable |& grep -A 1 "Of the hosts tested we choose the fastest valid for HTTP:" | grep -o "http://.*")" \
+	&& export APT_MIRROR_TESTING="$(netselect-apt --nonfree --sources testing |& grep -A 1 "Of the hosts tested we choose the fastest valid for HTTP:" | grep -o "http://.*")" \
+	&& export APT_MIRROR_SID="$(netselect-apt --nonfree --sources sid |& grep -A 1 "Of the hosts tested we choose the fastest valid for HTTP:" | grep -o "http://.*")" \
 	# Self-check
-	&& [ -z "$APT_MIRROR_STABLE" ] && exit 1 \
-	&& [ -z "$APT_MIRROR_TESTING" ] && exit 1 \
-	&& [ -z "$APT_MIRROR_SID" ] && exit 1 \
+	&& [ -z "$APT_MIRROR_STABLE" ] && exit 1 || echo $APT_MIRROR_STABLE \
+	&& [ -z "$APT_MIRROR_TESTING" ] && exit 1 || echo $APT_MIRROR_TESTING \
+	&& [ -z "$APT_MIRROR_SID" ] && exit 1 || echo $APT_MIRROR_SID \
 	&& printf '%s\n' \
 		"# Stable" \
 		"deb $APT_MIRROR_STABLE stable main non-free contrib" \
