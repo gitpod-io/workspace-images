@@ -84,7 +84,7 @@ fi
 if ! command -v netselect-apt >/dev/null; then
 	# NOTICE: Do not double-quote SUDO, it breaks it..
 	# NOTICE: We need bc below
-	$SUDO apt install -y netselect-apt bc || die 1 "Unable to install package 'netselect-apt' and 'bc'"
+	$SUDO apt install -y netselect-apt bc curl || die 1 "Unable to install package 'netselect-apt', 'bc' or 'curl'"
 	# Self-check
 	if ! command -v netselect-apt >/dev/null; then die 1 "Self-check for availability of netselect-apt failed"; fi
 elif command -v netselect-apt >/dev/null; then
@@ -139,6 +139,7 @@ apt_mirror_stable_speed=0
 apt_mirror_testing_speed=0
 apt_mirror_sid_speed=0
 while [ "$tries" != "$SPEEDTEST_TRIES" ]; do
+	einfo ping
 	# Speedtest hard-coded mirror
 	# shellcheck disable=SC1083 # Invalid - This } is literal. Check expression (missing ;/\n?) or quote it.
 	apt_mirror_speed="$( printf '%s\n' "$apt_mirror_speed + $(curl --write-out %{speed_download} "$APT_MIRROR/README" --output /dev/null 2>/dev/null)" | bc -q || printf '%s\n' "$FAILED_MIRROR_PENALTY" )"
@@ -158,10 +159,10 @@ done
 # Get average of network speed
 # NOTICE: Do not use '$(( ))', because that does not know how to process decimals
 # NOTICE(Kreyren): We can implement the same logic for our own speedtest, but better outsource that on upstream of netselect-apt package
-apt_mirror_speed=$(printf '%s\n' "$apt_mirror_speed / $SPEEDTEST_TRIES" | bc -q || printf '%s\n' "$FAILED_MIRROR_PENALTY")
-apt_mirror_stable_speed=$(printf '%s\n' "$apt_mirror_stable_speed / $SPEEDTEST_TRIES" | bc -q || printf '%s\n' "$FAILED_MIRROR_PENALTY")
-apt_mirror_testing_speed=$(printf '%s\n' "$apt_mirror_testing_speed / $SPEEDTEST_TRIES" | bc -q || printf '%s\n' "$FAILED_MIRROR_PENALTY")
-apt_mirror_sid_speed=$(printf '%s\n' "$apt_mirror_sid_speed / $SPEEDTEST_TRIES" | bc -q || printf '%s\n' "$FAILED_MIRROR_PENALTY")
+apt_mirror_speed=$( printf '%s\n' "$apt_mirror_speed / $SPEEDTEST_TRIES" | bc -q || printf '%s\n' "$FAILED_MIRROR_PENALTY" )
+apt_mirror_stable_speed=$( printf '%s\n' "$apt_mirror_stable_speed / $SPEEDTEST_TRIES" | bc -q || printf '%s\n' "$FAILED_MIRROR_PENALTY" )
+apt_mirror_testing_speed=$( printf '%s\n' "$apt_mirror_testing_speed / $SPEEDTEST_TRIES" | bc -q || printf '%s\n' "$FAILED_MIRROR_PENALTY" )
+apt_mirror_sid_speed=$( printf '%s\n' "$apt_mirror_sid_speed / $SPEEDTEST_TRIES" | bc -q || printf '%s\n' "$FAILED_MIRROR_PENALTY" )
 
 # Prefer hardcodded if faster
 # NOTICE: In case gitpod implements their own mirror this should be adapted to report opt-in telemetry about used mirror (in case gitpod's mirror is slower which should never be the case)
