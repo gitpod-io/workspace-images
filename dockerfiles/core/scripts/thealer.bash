@@ -15,7 +15,11 @@ die() {
 		bug)
 			printf "BUG: %s, please file a new issue in $UPSTREAM" "$2"
 			exit 1 ;;
-		*) printf 'FATAL: %s\n' "$2" ;;
+		[0-9]|[0-9][0-9]|[0-9][0-9][0-9]) printf 'FATAL: %s\n' "$2" ;;
+		*)
+			printf 'FATAL: %s\n' "$2"
+			exit 1
+		;;
 	esac
 
 	exit "$1"
@@ -35,7 +39,7 @@ ebench() {
 		result)
 			printf "BENCHMARK: Action %s took $SECONDS seconds\n" "$1"
 			return 0 ;;
-		*) die 2 "$1"
+		*) die 2 "$1 TEST"
 	esac
 
 	die 23 "Logic in function 'ebench' escaped sanitization"
