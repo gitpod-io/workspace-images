@@ -23,8 +23,10 @@ die() { printf 'FATAL: %s\n' "$2"; exit "$1";}
 DISTRO="$(grep -o "ID:.*" /etc/os-release)"
 	DISTRO="${DISTRO##ID:}" # Strip `ID:`
 
+# shellcheck disable=SC2154 # Expected to be set in dockerfile
 case "$expectedShell" in
-			bash)
+			bash|"")
+				[ -z "$expectedShell" ] && eerror "We are expecting variable expectedShell set on shell that we are expecting in production system, since it's blank we are using default bash"
 				case "$DISTRO" in
 					debian|ubuntu) apt install -y bash-completion || die 1 "Unable to install bash-completion" ;;
 					# FIXME: Obvious
@@ -44,6 +46,7 @@ case "$expectedShell" in
 					gentoo) emerge -vuDNj dev-lang/powershell-bin || die 1 "Unable to install powershell-bin package on gentoo" ;;
 					exherbo) die 1 "Exherbo does not have package for powershell, if anyone really wants it make an issue and mension @kreyren and i implement it for you" ;;
 				esac
+			;;
 			*) die 255 "Unexpected shell in variable expectedShell with value '$expectedShell' has been provided to shellConfig script"
 esac
 
