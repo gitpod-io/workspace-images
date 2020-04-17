@@ -34,36 +34,21 @@ RUN printf '%s\n' \
 	> /etc/apt/sources.list \
 	&& apt-get update \
 	# NOTICE: We need apt-utils later for package configuration
-  && apt-get install -y gnupg wget apt-utils netselect-apt
+	 && apt-get install -y gnupg wget apt-utils netselect-apt
+
+
 
 # Initial configuration
+COPY core/scripts/apt-mirror-benchmark.bash /usr/bin/apt-mirror-benchmark
 RUN true \
-	# Benchmark available mirrors and define the fastest
-	&& if ! command -v netselect-apt; then exit 1; fi \
-	&& APT_MIRROR_STABLE="$(netselect-apt --nonfree --sources stable |& grep -A 1 "Of the hosts tested we choose the fastest valid for HTTP:" | grep -o "http://.*")" \
-	&& APT_MIRROR_TESTING="$(netselect-apt --nonfree --sources testing |& grep -A 1 "Of the hosts tested we choose the fastest valid for HTTP:" | grep -o "http://.*")" \
-	&& APT_MIRROR_SID="$(netselect-apt --nonfree --sources sid |& grep -A 1 "Of the hosts tested we choose the fastest valid for HTTP:" | grep -o "http://.*")" \
-	# Self-check
-	&& [ -z "$APT_MIRROR_STABLE" ] && exit 1 || echo $APT_MIRROR_STABLE \
-	&& [ -z "$APT_MIRROR_TESTING" ] && exit 1 || echo $APT_MIRROR_TESTING \
-	&& [ -z "$APT_MIRROR_SID" ] && exit 1 || echo $APT_MIRROR_SID \
+	&& chmod +x /usr/bin/apt-mirror-benchmark \
+	&& /usr/bin/apt-mirror-benchmark \
+	&& rm /usr/bin/apt-mirror-benchmark \
 	&& printf '%s\n' \
-		"# Stable" \
-		"deb $APT_MIRROR_STABLE stable main non-free contrib" \
-		"deb-src $APT_MIRROR_STABLE stable main non-free contrib" \
-		"" \
-		"# Testing" \
-		"deb $APT_MIRROR_TESTING testing main non-free contrib" \
-		"deb-src $APT_MIRROR_TESTING testing main non-free contrib" \
-		"" \
-		"# Sid" \
-		"deb $APT_MIRROR_SID sid main non-free contrib" \
-		"deb-src $APT_MIRROR_SID sid main non-free contrib" \
-		"" \
 		"# WINE" \
 		"deb [arch=amd64,i386] https://dl.winehq.org/wine-builds/debian/ bullseye main" \
 		"deb-src [arch=amd64,i386] https://dl.winehq.org/wine-builds/debian/ bullseye  main" \
-	> /etc/apt/sources.list \
+	>> /etc/apt/sources.list \
 	# Ensure that we have 32-bit available
 	&& dpkg --add-architecture i386 \
 	# WINEHQ dependencies

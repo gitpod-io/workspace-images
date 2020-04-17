@@ -4,6 +4,8 @@
 ###! Abstract:
 ###! - Use `netselect-apt --nonfree --sources stable |& grep -A 1 "Of the hosts tested we choose the fastest valid for HTTP:" | grep -o "http://.*"` to get the fastest mirror -> Configure /etc/apt/sources.list with it
 
+# FIXME: Add translations
+
 efixme() { printf 'FIXME: %s\n' "$1" ;}
 eerror() { printf 'ERROR: %s\n' "$1" ;}
 einfo() { printf 'INFO: %s\n' "$1" ;}
@@ -16,6 +18,20 @@ die() {
 
 	exit "$1"
 }
+
+# MAINTAINERS: Change this in case script name changes
+myName="apt-mirror-benchmark"
+
+DISTRO="$(grep -o "ID:.*" /etc/os-release)"
+	DISTRO="${DISTRO##ID:}" # Strip `ID:`
+
+# Make sure that none is running this on unsupported distro
+case "$DISTRO" in
+	debian)
+		if ! command -v apt; then die 1 "This debian does not have expected apt, runtime is not adapted to handle this situation"; fi
+	;;
+	*) die 1 "Distribution '$DISTRO' is not supported by $myName script"
+esac
 
 # Ensure that we have the required permission
 if [ "$(id -u)" != 0 ]; then
@@ -42,11 +58,18 @@ else
 	die 255 "Unexpected happend while processing netselect-apt command"
 fi
 
-export APT_STABLE_MIRROR="$(netselect-apt --nonfree --sources stable |& grep -A 1 "Of the hosts tested we choose the fastest valid for HTTP:" | grep -o "http://.*")"
-export APT_TESTING_MIRROR="$(netselect-apt --nonfree --sources testing |& grep -A 1 "Of the hosts tested we choose the fastest valid for HTTP:" | grep -o "http://.*")"
-export APT_SID_MIRROR="$(netselect-apt --nonfree --sources sid |& grep -A 1 "Of the hosts tested we choose the fastest valid for HTTP:" | grep -o "http://.*")"
+# Declare fastest mirrors
+APT_STABLE_MIRROR="$("$SUDO" netselect-apt --nonfree --sources stable |& grep -A 1 "Of the hosts tested we choose the fastest valid for HTTP:" | grep -o "http://.*")"
+APT_TESTING_MIRROR="$("$SUDO" netselect-apt --nonfree --sources testing |& grep -A 1 "Of the hosts tested we choose the fastest valid for HTTP:" | grep -o "http://.*")"
+APT_SID_MIRROR="$("$SUDO" netselect-apt --nonfree --sources sid |& grep -A 1 "Of the hosts tested we choose the fastest valid for HTTP:" | grep -o "http://.*")"
 
-printf '%s\n' \
+# Self-check for mirrors
+[ -z "$APT_MIRROR_STABLE" ] && die 1 "Script '$myName' failed to acquire fastest mirror for stable release"
+[ -z "$APT_TESTING_MIRROR" ] && die 1 "Script '$myName' failed to acquire fastest mirror for testing release"
+[ -z "$APT_MIRROR_SID" ] && die 1 "Script '$myName' failed to acquire fastest mirror for sid release"
+
+# CORE
+"$SUDO" su root -c printf '%s\n' \
 	"# Stable" \
 	"deb $APT_STABLE_MIRROR stable main non-free contrib" \
 	"deb-src $APT_STABLE_MIRROR stable main non-free contrib" \
@@ -56,3 +79,7 @@ printf '%s\n' \
 	"# SID" \
 	"deb $APT_SID_MIRROR testing main non-free contrib" \
 	"deb-src $APT_SID_MIRROR testing main non-free contrib" \
+> /etc/apt/sources.list
+
+# Self-check
+apt update || die 1 "Self-check for script $myName failed"
