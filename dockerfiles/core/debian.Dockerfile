@@ -55,7 +55,7 @@ RUN printf '%s\n' \
 
 # Initial configuration
 # FIXME: Ideally this shoudn't be cached to avoid grabbing dead mirror
-COPY core/scripts/apt-mirror-benchmark.sh /usr/bin/apt-mirror-benchmark
+COPY scripts/apt-mirror-benchmark.sh /usr/bin/apt-mirror-benchmark
 RUN true "fdhsdfh" \
 	&& chmod +x /usr/bin/apt-mirror-benchmark \
 	&& /usr/bin/apt-mirror-benchmark \
