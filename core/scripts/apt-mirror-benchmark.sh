@@ -140,6 +140,7 @@ apt_mirror_speed=0
 apt_mirror_stable_speed=0
 apt_mirror_testing_speed=0
 apt_mirror_sid_speed=0
+# FIXME: Do not perform speedtest if the mirror has been replaced with hardcoded
 while [ "$tries" != "$SPEEDTEST_TRIES" ]; do
 	edebug "Starting speedtest"
 	# Speedtest hard-coded mirror
@@ -148,15 +149,15 @@ while [ "$tries" != "$SPEEDTEST_TRIES" ]; do
 	edebug "APT_MIRROR"
 	# Speedtest stable
 	# shellcheck disable=SC1083 # Invalid - This } is literal. Check expression (missing ;/\n?) or quote it.
-	apt_mirror_stable_speed="$( printf '%s\n' "$apt_mirror_speed + $(curl --write-out %{speed_download} "$APT_MIRROR_STABLE/README" --output /dev/null 2>/dev/null)" | bc -q || printf '%s\n' "$FAILED_MIRROR_PENALTY" )"
+	[ "$APT_MIRROR" != "$APT_MIRROR_STABLE" ] && apt_mirror_stable_speed="$( printf '%s\n' "$apt_mirror_speed + $(curl --write-out %{speed_download} "$APT_MIRROR_STABLE/README" --output /dev/null 2>/dev/null)" | bc -q || printf '%s\n' "$FAILED_MIRROR_PENALTY" )"
 	edebug "APT_MIRROR_STABLE"
 	# Speedtest testing
 	# shellcheck disable=SC1083 # Invalid - This } is literal. Check expression (missing ;/\n?) or quote it.
-	apt_mirror_testing_speed="$( printf '%s\n' "$apt_mirror_testing_speed + $(curl --write-out %{speed_download} "$APT_MIRROR_TESTING/README" --output /dev/null 2>/dev/null)" | bc -q || printf '%s\n' "$FAILED_MIRROR_PENALTY" )"
+	[ "$APT_MIRROR" != "$APT_MIRROR_TESTING" ] && apt_mirror_testing_speed="$( printf '%s\n' "$apt_mirror_testing_speed + $(curl --write-out %{speed_download} "$APT_MIRROR_TESTING/README" --output /dev/null 2>/dev/null)" | bc -q || printf '%s\n' "$FAILED_MIRROR_PENALTY" )"
 	edebug "APT_MIRROR_TESTING"
 	# Speedtest sid
 	# shellcheck disable=SC1083 # Invalid - This } is literal. Check expression (missing ;/\n?) or quote it.
-	apt_mirror_sid_speed="$( printf '%s\n' "$apt_mirror_sid_speed + $(curl --write-out %{speed_download} "$APT_MIRROR_SID/README" --output /dev/null 2>/dev/null)" | bc -q || printf '%s\n' "$FAILED_MIRROR_PENALTY" )"
+	[ "$APT_MIRROR" != "$APT_MIRROR_SID" ] && apt_mirror_sid_speed="$( printf '%s\n' "$apt_mirror_sid_speed + $(curl --write-out %{speed_download} "$APT_MIRROR_SID/README" --output /dev/null 2>/dev/null)" | bc -q || printf '%s\n' "$FAILED_MIRROR_PENALTY" )"
 	edebug "APT_MIRROR_SID"
 
 	tries="$(( tries + 1 ))"
@@ -196,9 +197,9 @@ $SUDO cat <<-EOF > "$targetList" || die 1 "Unable to parse core of script '$myNa
 EOF
 
 # Core self-check
-if [ ! -s /etc/apt/sources.list ]; then
+if [ ! -s "$targetList" ]; then
 	die 1 "$myName's core self-check failed"
-elif [ -s /etc/apt/sources.list ]; then
+elif [ -s "$targetList" ]; then
 	true
 else
 	die 255 "Unexpected happend while processing core self-check"
