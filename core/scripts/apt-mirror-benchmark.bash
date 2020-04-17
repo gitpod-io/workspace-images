@@ -24,7 +24,8 @@ myName="apt-mirror-benchmark"
 
 DISTRO="$(grep -o "ID:.*" /etc/os-release)"
 	DISTRO="${DISTRO##ID:}" # Strip `ID:`
-export DISTRO # Eh?
+
+cat /etc/os-releease
 
 # Make sure that none is running this on unsupported distro
 case "$DISTRO" in
