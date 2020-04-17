@@ -60,7 +60,7 @@ esac
 DISTRO="$(grep -o "^ID=.*" /etc/os-release)"
 
 # Make sure that none is running this on unsupported distro
-case "${DISTRO##ID=}" in
+case "${DISTRO##ID\=}" in
 	debian)
 		if ! command -v apt >/dev/null; then die 1 "This debian does not have expected apt, runtime is not adapted to handle this situation"; fi
 	;;
