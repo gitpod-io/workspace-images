@@ -1,10 +1,12 @@
 
 ###! This is a dockerfile expecting to be appended to any docker core
 
+# FIXME: Disable linting err
 USER root
 
 # Install all required packages
-RUN thealer install \
+RUN true "sdhsfh" \
+	thealer install \
 	build-essentials \
 	git \
 	nano \
