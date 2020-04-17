@@ -193,5 +193,7 @@ while [ "$#" -ge 1 ]; do case "$1" in
 		esac
 	;;
 	"") exit 0 ;;
-	*) die 2 "$1"
+	*)
+		die 2 "$1"
+		shift 1 # in case this does not exit
 esac; done
