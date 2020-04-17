@@ -1,14 +1,16 @@
-#!/bin/bash
+#!/bin/sh
 # Created by Jacob Hrbek <kreyren@rixotstudio.cz> under GPLv3 license <https://www.gnu.org/licenses/gpl-3.0.en.html> in 17/04/2020 05:57
 
-###! This script is designed to benchmark all available mirrors and then pick the fastest to configure /etc/apt/sources.list
-###! Abstract:
+###! Perform a speedtest on hard-coded and available mirror and use the fastest and most reliable (assuming enough tries performed)
+###! Additional info:
+###! - ENVIRONMENT: This is expected to be invoked in docker build environment -> Reasoning to use capped vars this way
 ###! - Use `netselect-apt --nonfree --sources stable |& grep -A 1 "Of the hosts tested we choose the fastest valid for HTTP:" | grep -o "http://.*"` to get the fastest mirror -> Configure /etc/apt/sources.list with it
 
-# Do not perform tests if explicitedly disabled
-[ "$SPEEDTEST_TRIES" = disabled ] && exit 0
-
 # FIXME: Add translations
+# FIXME: Support other distributions
+
+# Skip this whole script if disabled is used (including sourcing below which is the reason for this here)
+[ "$SPEEDTEST_TRIES" = disabled ] && exit 0
 
 efixme() { printf 'FIXME: %s\n' "$1" ;}
 eerror() { printf 'ERROR: %s\n' "$1" ;}
@@ -25,6 +27,19 @@ die() {
 
 # MAINTAINERS: Change this in case script name changes
 myName="apt-mirror-benchmark"
+
+# In case we want to change the location (supported by apt)
+targetList="/etc/apt/sources.list"
+
+# Do not perform tests if explicitedly disabled
+case "$SPEEDTEST_TRIES" in
+	[0-9]|[0-9][0-9]|[0-9][0-9][0-9]) true ;;
+	# This expects SPEEDTEST_TRIES to terminate the script with exit code 0 at the top of the script
+	disabled) die 1 "Angry Kreyren: WHO DARED TO REMOVE MY SPEEDTEST_TRIES TRAP?! Those are here for a reason u know.. -_-\"" ;;
+	*) die 2 "Unexpected value '$SPEEDTEST_TRIES' of variable SPEEDTEST_TRIES has been parsed, expected variables are only integers"
+esac
+
+[ -z "$APT_MIRROR" ] && die 1 "Script $myName expects variable APT_MIRROR set on preffered mirror"
 
 [ ! -f /etc/os-release ] && die 1 "Script $myName expects file /etc/os-release"
 # FIXME: Check if SPEEDTEST_TRIES is numerical
@@ -45,18 +60,18 @@ if [ "$(id -u)" != 0 ]; then
 	if command -v sudo; then
 		export SUDO="sudo"
 	elif ! command -v sudo; then
-		die 1 "Unable to acquire root permission"
+		die 1 "Unable to acquire root permission (sudo not available)"
 	else
 		die 255 "Unexpected happend while trying to acquire root using sudo"
 	fi
 elif [ "$(id -u)" = 0 ]; then
-	unset SUDO
+	unset SUDO # We don't need sudo on root
 else
 	die 255 "Unexpected happend while checking user with id '$(id -u)'"
 fi
 
 if ! command -v netselect-apt >/dev/null; then
-	apt install -y netselect-apt || die 1 "Unable to install package 'netselect-apt'"
+	"$SUDO" apt install -y netselect-apt || die 1 "Unable to install package 'netselect-apt'"
 	# Self-check
 	if ! command -v netselect-apt >/dev/null; then die 1 "Self-check for availability of netselect-apt failed"; fi
 elif command -v netselect-apt >/dev/null; then
@@ -68,9 +83,9 @@ fi
 # Declare fastest mirrors
 # NOTICE: Command 'netselect-apt' requires root otherwise it returns exit code 1
 einfo "Testing for fastest mirrors.."
-APT_STABLE_MIRROR="$(netselect-apt --nonfree --sources stable |& grep -A 1 "Of the hosts tested we choose the fastest valid for HTTP:" | grep -o "http://.*")"
-APT_TESTING_MIRROR="$(netselect-apt --nonfree --sources testing |& grep -A 1 "Of the hosts tested we choose the fastest valid for HTTP:" | grep -o "http://.*")"
-APT_SID_MIRROR="$(netselect-apt --nonfree --sources sid |& grep -A 1 "Of the hosts tested we choose the fastest valid for HTTP:" | grep -o "http://.*")"
+APT_STABLE_MIRROR="$("$SUDO" netselect-apt --nonfree --sources stable |& grep -A 1 "Of the hosts tested we choose the fastest valid for HTTP:" | grep -o "http://.*")"
+APT_TESTING_MIRROR="$("$SUDO" netselect-apt --nonfree --sources testing |& grep -A 1 "Of the hosts tested we choose the fastest valid for HTTP:" | grep -o "http://.*")"
+APT_SID_MIRROR="$("$SUDO" netselect-apt --nonfree --sources sid |& grep -A 1 "Of the hosts tested we choose the fastest valid for HTTP:" | grep -o "http://.*")"
 
 # Self-check for mirrors
 # NOTICE: netselect-apt may fail sometimes so we shoudn't be dieing here
@@ -99,25 +114,30 @@ done
 
 # Get average of network speed
 # NOTICE: Do not use '$(( ))', because that does not know how to process decimals
+# NOTICE(Kreyren): We can implement the same logic for our own speedtest, but better outsource that on upstream of netselect-apt package
 apt_mirror_speed=$(bc -q <<< "$apt_mirror_speed / $SPEEDTEST_TRIES")
 apt_mirror_stable_speed=$(bc -q <<< "$apt_mirror_stable_speed / $SPEEDTEST_TRIES")
 apt_mirror_testing_speed=$(bc -q <<< "$apt_mirror_testing_speed / $SPEEDTEST_TRIES")
 apt_mirror_sid_speed=$(bc -q <<< "$apt_mirror_sid_speed / $SPEEDTEST_TRIES")
 
 # Prefer hardcodded if faster
+# NOTICE: In case gitpod implements their own mirror this should be adapted to report opt-in telemetry about used mirror (in case gitpod's mirror is slower which should never be the case)
 [ "$apt_mirror_speed" -le "$apt_mirror_stable_speed" ] && APT_MIRROR_STABLE="$APT_MIRROR"
 [ "$apt_mirror_speed" -le "$apt_mirror_testing_speed" ] && APT_MIRROR_TESTING="$APT_MIRROR"
 [ "$apt_mirror_speed" -le "$apt_mirror_sid_speed" ] && APT_MIRROR_SID="$APT_MIRROR"
 
 # CORE
-printf '%s\n' \
-	"# Stable" \
-	"deb $APT_STABLE_MIRROR stable main non-free contrib" \
-	"deb-src $APT_STABLE_MIRROR stable main non-free contrib" \
-	"# Testing" \
-	"deb $APT_TESTING_MIRROR testing main non-free contrib" \
-	"deb-src $APT_TESTING_MIRROR testing main non-free contrib" \
-	"# SID" \
-	"deb $APT_SID_MIRROR testing main non-free contrib" \
-	"deb-src $APT_SID_MIRROR testing main non-free contrib" \
-> /etc/apt/sources.list
+"$SUDO" cat <<EOF > "$targetList"
+	# Stable
+	deb $APT_STABLE_MIRROR stable main non-free contrib
+	deb-src $APT_STABLE_MIRROR stable main non-free contrib
+	# Testing
+	deb $APT_TESTING_MIRROR testing main non-free contrib
+	deb-src $APT_TESTING_MIRROR testing main non-free contrib
+	# SID
+	deb $APT_SID_MIRROR testing main non-free contrib
+	deb-src $APT_SID_MIRROR testing main non-free contrib
+EOF
+
+# Core self-check
+[ ! -s /etc/apt/sources.list ] && die 1 "$myName's core self-check failed"
