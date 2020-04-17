@@ -27,6 +27,7 @@ RUN true "sdhsfh" \
 	golang \
 	php \
 	ruby \
+	nim \
 	apache2 \
 	nginx \
 	apt-transport-https \

@@ -96,6 +96,10 @@ downMan() {
 		nim)
 			exherboPackage="sys-lang/nim"
 			gentooPackage="dev-lang/nim" ;;
+		golang)
+			aptPackage="golang-go"
+			exherboPackage="$1" 
+			gentooPackage="$1" ;;
 		*)
 			exherboPackage="$1" 
 			gentooPackage="$1" ;;
@@ -105,11 +109,11 @@ downMan() {
 	case "$DISTRO/$RELEASE" in
 		"debian/stable"|"debian/testing"|"ubuntu/eoan")
 			# Check if package is available
-			if "$aptList" | grep -m 1 -q "^$1/$RELEASE.*"; then
-				apt-get intall -y "$1" || manuallInstall "$1"
+			if "$aptList" | grep -m 1 -q "^aptPackage/$RELEASE.*"; then
+				apt-get intall -y "$aptPackage" || manuallInstall "$aptPackage"
 				ebench result "installing package '$1' on $DISTRO with release $RELEASE using distro's downstream"
 			elif ! "$aptList" | grep -m 1 -q "^$1/$RELEASE.*"; then
-				manuallInstall "$1"
+				manuallInstall "$aptPackage"
 			else
 				die 255 "Processing $1 in $DISTRO/$RELEASE"
 			fi
@@ -157,7 +161,7 @@ ebench start # Start benchmark
 while [ "$#" -ge 1 ]; do case "$1" in
 	install)
 		case "$2" in
-			nim|git|nano|vim|emacs|htop|less|zip|unzip|tar|rustc|cargo|openbox|python|python3|pylint|golang|php|ruby|apache2|nginx|novnc)
+			nim|git|nano|vim|emacs|htop|less|zip|unzip|tar|rustc|cargo|openbox|python|python3|pylint|golang|php|ruby|apache2|nginx|novnc|cppcheck|valgrind)
 			downMan "$2"
 			shift 1
 		;;
