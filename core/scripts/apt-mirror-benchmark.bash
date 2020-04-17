@@ -19,6 +19,8 @@ die() {
 	exit "$1"
 }
 
+exit 28
+
 # MAINTAINERS: Change this in case script name changes
 myName="apt-mirror-benchmark"
 
