@@ -69,7 +69,7 @@ APT_SID_MIRROR="$("$SUDO" netselect-apt --nonfree --sources sid |& grep -A 1 "Of
 [ -z "$APT_MIRROR_SID" ] && die 1 "Script '$myName' failed to acquire fastest mirror for sid release"
 
 # CORE
-"$SUDO" su root -c printf '%s\n' \
+printf '%s\n' \
 	"# Stable" \
 	"deb $APT_STABLE_MIRROR stable main non-free contrib" \
 	"deb-src $APT_STABLE_MIRROR stable main non-free contrib" \
