@@ -13,7 +13,7 @@ LABEL Gitpod Maintainers
 # NOTICE(Kreyren): double quotes are not needed here, but i think it looks nicer
 ENV DEBIAN_FRONTEND="noninteractive"
 
-# FIXME: We should allow end-users to set this
+# FIXME: We should allow end-users to set this (logic in code sets translation based on LANG variable)
 ENV LANG="en_US.UTF-8"
 ENV LC_ALL="C"
 
@@ -48,7 +48,7 @@ RUN printf '%s\n' \
 # Initial configuration
 # FIXME: Ideally this shoudn't be cached to avoid grabbing dead mirror
 COPY core/scripts/apt-mirror-benchmark.bash /usr/bin/apt-mirror-benchmark
-RUN true "fddfgj" \
+RUN true "fdddsgasdhfgj" \
 	&& chmod +x /usr/bin/apt-mirror-benchmark \
 	&& /usr/bin/apt-mirror-benchmark \
 	&& rm /usr/bin/apt-mirror-benchmark \

@@ -84,6 +84,7 @@ fi
 # NOTICE: Command 'netselect-apt' requires root otherwise it returns exit code 1
 einfo "Testing for fastest mirrors.."
 # NOTICE: Do not quote SUDO, it breaks it..
+# FIXME: Someone tell netselect-apt upstream to make it possible to output the fastest mirror..
 APT_STABLE_MIRROR="$($SUDO netselect-apt --nonfree --sources stable |& grep -A 1 "Of the hosts tested we choose the fastest valid for HTTP:" | grep -o "http://.*")"
 APT_TESTING_MIRROR="$($SUDO netselect-apt --nonfree --sources testing |& grep -A 1 "Of the hosts tested we choose the fastest valid for HTTP:" | grep -o "http://.*")"
 APT_SID_MIRROR="$($SUDO netselect-apt --nonfree --sources sid |& grep -A 1 "Of the hosts tested we choose the fastest valid for HTTP:" | grep -o "http://.*")"
