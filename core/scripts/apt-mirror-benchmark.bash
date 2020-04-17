@@ -24,8 +24,8 @@ myName="apt-mirror-benchmark"
 
 [ ! -f /etc/os-release ] && die 1 "Script $myName expects file /etc/os-release"
 
-DISTRO="$(grep -o "ID=.*" /etc/os-release)"
-	DISTRO="${DISTRO##ID=}" # Strip `ID=`
+myDISTRO="$(grep -o "ID=.*" /etc/os-release)"
+	DISTRO="${myDISTRO##ID=}" # Strip `ID=`
 
 # Make sure that none is running this on unsupported distro
 case "$DISTRO" in
