@@ -1,0 +1,23 @@
+name: ConaIsa
+
+# Relevant to events - https://help.github.com/en/actions/automating-your-workflow-with-github-actions/events-that-trigger-workflows
+on: 
+  pull_request:
+    types: [synchronize, opened, reopened, ready_for_review]
+    paths:
+    - "^/.github/labels\.yml\$"
+
+jobs:
+  labeler:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - name: Assigning labels
+        if: success()
+        uses: crazy-max/ghaction-github-labeler@v1
+        with:
+          yaml_file: .github/labels.yml
+          skip_delete: false
+          dry_run: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

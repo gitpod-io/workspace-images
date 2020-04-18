@@ -1,0 +1,17 @@
+name: Staler
+
+on:
+  schedule:
+  - cron: "@weekly"
+
+jobs:
+  stale:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/stale@v1
+      with:
+        repo-token: ${{ secrets.GITHUB_TOKEN }}
+        stale-issue-message: 'This issue is inactive for 7 days, set it as stale'
+        stale-pr-message: 'This merge request is inactive for 7 days, set it as stale'
+        stale-issue-label: 'no-issue-activity'
+        stale-pr-label: 'no-pr-activity'

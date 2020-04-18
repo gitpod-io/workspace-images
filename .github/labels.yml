@@ -1,0 +1,112 @@
+# This file handles labels on GitHub
+
+# Priority handling
+- name: P - SHTF
+  color: ae00ff
+  description: "Stop whatever you are doing and focus on this"
+
+- name: P - Very High
+  color: ff2f00
+  description: "FIXME"
+
+- name: P - High
+  color: 910f00
+  description: "FIXME"
+
+- name: P - Med
+  color: ffd000
+  description: "FIXME"
+
+- name: P - Low
+  color: b3ff00
+  description: "FIXME"
+
+- name: P - Very Low
+  color: 73ff00
+  description: "FIXME"
+
+# MISC
+- name: bug
+  color: d73a4a
+  description: "Something isn't working"
+
+ - name: question
+  color: 7300ff
+  description: "For questions"
+
+- name: feature-request
+  color: 03fc5a
+  description: "Feature requests"
+
+- name: docs
+  color: 0075ca
+  description: "Improvements or additions to documentation"
+
+- name: duplicate
+  color: cfd8d7
+  description: "This issue or pull request already exists"
+
+- name: enhancement
+  color: a22eef
+  description: "Proposal for code improvement"
+
+- name: license
+  color: 1a7546
+  description: "Relevant to licensing"
+
+- name: dependencies
+  color: ca0ef0
+  description: "Relevant to dependencies"
+
+- name: tests
+  color: 8d0fd6
+  description: "Relevant to tests"
+
+- name: benches
+  color: cc1250
+  description: "Relevant to benchmarks"
+
+# Programming language specific
+- name: python
+  color: 00aeff
+  description: "Relevant to python"
+
+- name: rustlang
+  color: f58142
+  description: "Relevant to rustlang"
+
+- name: c-lang
+  color: 427bf5
+  description: "Relevant to c-lang"
+
+- name: brainfuck
+  color: f542c5
+  description: "Relevant to brainfuck"
+
+- name: shell
+  color: 74e63c
+  description: "Relevant to shell"
+
+- name: bash
+  color: 9dff00
+  description: "Relevant to bash"
+
+- name: CCP
+  color: 009dff
+  description: "Relevant to CCP"
+
+- name: vlang
+  color: 03cafc
+  description: "Relevant to vlang"
+
+- name: csharp
+  color: 08400a
+  description: "Relevant to csharp"
+
+- name: java
+  color: ad690a
+  description: "Relevant to java"
+
+- name: markdown
+  color: 454545
+  description: "Relevant to markdown"

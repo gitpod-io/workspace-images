@@ -1,0 +1,23 @@
+# Programming specific
+- regExp: ".*\\.sh+$"
+  labels: ["shell"]
+
+- regExp: ".*\\.bash+$"
+  labels: ["bash"]
+
+- regExp: ".*\\.Dockerfile+$"
+  labels: ["Dockerfile"]
+
+- regExp: ".*\\.Vagrantfile+$"
+  labels: ["Vagrantfile"]
+
+# Maintainance specific
+- regExp: "^/dockerfiles/.*"
+  labels: ["Docker"]
+
+- regExp: "^/vagrantfiles/.*"
+  labels: ["Vagrant"]
+
+# Repository specific
+- regExp: ".*\\.md+$"
+  labels: ["markdown"]

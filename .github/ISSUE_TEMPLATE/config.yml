@@ -1,0 +1,27 @@
+# Disable blank issues
+# Notice(Kreyren): This allows up to automate the issue resolution assuming end-users using "Other" template
+blank_issues_enabled: false
+
+contact_links:
+  # FIXME: Make a relevant template in gitpod-io/gitpod
+  - name: Help me with gitpod!
+    about: Use this if you need help with gitpod, i.e something not working the way you want it to
+    url: https://github.com/gitpod-io/gitpod/issues/new/choose
+  # FIXME: Make a relevant template in gitpod-io/gitpod
+  - name: Feature requests not relevant to dockerfiles nor vagrantfiles
+    about: This this if you want to suggest a new feature to be implemented in gitpod
+    url: https://github.com/gitpod-io/gitpod/issues/new/choose
+  # FIXME: Make a relevant template in eclipse-theia/theia
+  - name: Extension is not working
+    about: Use this if vscode extension is not working in gitpod
+    url: https://github.com/eclipse-theia/theia/issues/new
+  # FIXME: Make a new channel dedicated to gitpod-workspace project
+  - name: IRC
+    url: https://webchat.freenode.net/#gitpod-workplace
+    about: For simple questions and brainstorming
+  - name: I just want to complain about something irationally
+    about: Twitter is great for those! :p
+    url: https://twitter.com/gitpod
+  - name: Forum
+    url: https://community.gitpod.io/
+    about: For complicated questions and general forum stuff
