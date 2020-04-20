@@ -8,7 +8,6 @@ RUN wget -q https://packages.microsoft.com/config/ubuntu/19.10/packages-microsof
     apt-get update && \
     echo resolvconf resolvconf/linkify-resolvconf boolean false | debconf-set-selections && \
     DEBIAN_FRONTEND=noninteractive ACCEPT_EULA=Y apt-get -y -o APT::Install-Suggests="true" install \
-        dotnet-sdk-2.2 \
         dotnet-sdk-3.1 \
         fsharp \
         mono-complete && \
