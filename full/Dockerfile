@@ -191,8 +191,6 @@ RUN curl -fsSL https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh |
     && bash -c ". .nvm/nvm.sh \
         && nvm install $NODE_VERSION \
         && nvm alias default $NODE_VERSION \
-        && npm config set python /usr/bin/python --global \
-        && npm config set python /usr/bin/python \
         && npm install -g npm typescript yarn" \
     && echo ". ~/.nvm/nvm-lazy.sh"  >> /home/gitpod/.bashrc.d/50-node
 # above, we are adding the lazy nvm init to .bashrc, because one is executed on interactive shells, the other for non-interactive shells (e.g. plugin-host)
