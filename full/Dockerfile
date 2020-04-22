@@ -208,7 +208,7 @@ RUN curl -fsSL https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-ins
     && pyenv update \
     && pyenv install 2.7.17 \
     && pyenv install 3.8.2 \
-    && pyenv global 2.7.17 3.8.2 \
+    && pyenv global 3.8.2 2.7.17 \
     && python2 -m pip install --upgrade pip \
     && python3 -m pip install --upgrade pip \
     && python3 -m pip install --upgrade \
