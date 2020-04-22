@@ -1,14 +1,14 @@
 FROM gitpod/workspace-full:latest
 
-USER root
-
 # Install Xvfb, JavaFX-helpers and Openbox window manager
-RUN apt-get update \
-    && apt-get install -yq xvfb x11vnc xterm openjfx libopenjfx-java openbox \
-    && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/*
+RUN sudo apt-get update && \
+    sudo apt-get install -yq xvfb x11vnc xterm openjfx libopenjfx-java openbox && \
+    sudo rm -rf /var/lib/apt/lists/*
 
 # overwrite this env variable to use a different window manager
 ENV WINDOW_MANAGER="openbox"
+
+USER root
 
 # Install novnc
 RUN git clone https://github.com/novnc/noVNC.git /opt/novnc \
@@ -30,3 +30,5 @@ RUN echo "[ ! -e /tmp/.X0-lock ] && (/usr/bin/start-vnc-session.sh &> /tmp/displ
 RUN notOwnedFile=$(find . -not "(" -user gitpod -and -group gitpod ")" -print -quit) \
     && { [ -z "$notOwnedFile" ] \
         || { echo "Error: not all files/dirs in $HOME are owned by 'gitpod' user & group"; exit 1; } }
+
+USER gitpod
