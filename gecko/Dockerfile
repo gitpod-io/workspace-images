@@ -12,6 +12,7 @@ RUN __RR_VERSION__="5.3.0" \
 # https://developer.mozilla.org/en-US/docs/Mozilla/Developer_guide/Build_Instructions/Linux_Prerequisites#Most_Distros_-_One_Line_Bootstrap_Command
 ENV SHELL=/bin/bash
 RUN sudo apt-get update \
+ && pyenv global 3.8.2 2.7.17 \
  && git clone https://github.com/mozilla/gecko-dev/ /tmp/gecko \
  && cd /tmp/gecko \
  && python2.7 python/mozboot/bin/bootstrap.py --no-interactive --application-choice=browser \
