@@ -15,7 +15,7 @@ RUN sudo apt-get update \
  && pyenv global 3.8.2 2.7.17 \
  && git clone https://github.com/mozilla/gecko-dev/ /tmp/gecko \
  && cd /tmp/gecko \
- && python2.7 python/mozboot/bin/bootstrap.py --no-interactive --application-choice=browser \
+ && ./mach bootstrap --no-interactive --application-choice=browser \
  && sudo rm -rf /tmp/gecko /var/lib/apt/lists/*
 
 # Install git-cinnabar.
