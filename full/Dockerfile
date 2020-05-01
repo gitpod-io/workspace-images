@@ -102,7 +102,11 @@ COPY --chown=gitpod:gitpod nginx /etc/nginx/
 # Kreyren: This applies a hotfix from gitpod-io/gitpod(#943) if issue gitpod-io/gitpod(#39) is not closed, The implementation is not ideall, but i don't have the option to parse scripts securely (being worked on in jankeromnes/gitpod-layers)
 # Relevant: https://github.com/gitpod-io/gitpod/issues/943 (access to /etc/php/../php.ini)
 # Relevant: https://github.com/gitpod-io/gitpod/issues/39 (root/sudo implementation)
-RUN command -v curl >/dev/null && if [ "$(curl https://api.github.com/repos/gitpod-io/gitpod/issues/39 2>/dev/null | grep -o \"state.* | sed -E 's#(\"state\":\s{1}\")(.*)(\",)#\2#gm')" = open ]; then chown -R root:gitpod /etc/php && chmod -R g+rw /etc/php; fi
+COPY full/scripts/php-root-hotfix.sh /usr/bin/php-root-hotfix
+RUN true \
+  && { chmod +x /usr/bin/php-root-hotfix || true ;} \
+  && /usr/bin/php-root-hotfix \
+  && rm /usr/bin/php-root-hotfix
 
 ## The directory relative to your git repository that will be served by Apache / Nginx
 ENV APACHE_DOCROOT_IN_REPO="public" \
