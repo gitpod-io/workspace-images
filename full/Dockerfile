@@ -237,7 +237,7 @@ RUN curl -sSL https://rvm.io/mpapis.asc | gpg --import - \
         && gem install bundler --no-document \
         && gem install solargraph --no-document" \
     && echo '[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*' >> /home/gitpod/.bashrc.d/70-ruby
-ENV GEM_HOME=/workspace/.rvm
+RUN echo "rvm_gems_path=/workspace/.rvm" > ~/.rvmrc
 
 ### Rust ###
 LABEL dazzle/layer=lang-rust
