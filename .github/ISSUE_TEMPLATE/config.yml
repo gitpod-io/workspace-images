@@ -1,0 +1,4 @@
+contact_links:
+  - name: Security
+    url: https://www.gitpod.io/contact/
+    about: For **ANYTHING** relevant to security, Do **NOT** make issues here!
