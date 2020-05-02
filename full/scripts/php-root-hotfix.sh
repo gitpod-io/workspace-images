@@ -6,10 +6,17 @@
 
 set -e # Docker won't exit if this is not specified
 
-die() { printf 'FATAL: %s\n' "$2"; exit "$1" ;}
 ewarn() { printf 'WARN: %s\n' "$1" ;}
 einfo() { printf 'INFO: %s\n' "$1" ;}
 eerror() { printf 'ERROR: %s\n' "$1" ;}
+die() {
+	case "$1" in
+		0) printf 'SUCCESS: %s\n' "$2" ;;
+		*) printf 'FATAL: %s\n' "$2"
+	esac
+
+	exit "$1"
+}
 
 myName="php-root-hotfix"
 targetDir="/etc/php"
