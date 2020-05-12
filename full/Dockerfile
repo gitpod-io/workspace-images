@@ -231,8 +231,8 @@ RUN curl -sSL https://rvm.io/mpapis.asc | gpg --import - \
     && bash -lc " \
         rvm requirements \
         && rvm install 2.5.8 \
-        && rvm install 2.7.1 \
-        && rvm use 2.7.1 --default \
+        && rvm install 2.6.6 \
+        && rvm use 2.6.6 --default \
         && rvm rubygems current \
         && gem install bundler --no-document \
         && gem install solargraph --no-document" \
