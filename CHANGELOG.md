@@ -2,6 +2,10 @@
 
 A curated, chronologically ordered list of notable changes in [Gitpod's default workspace images](https://hub.docker.com/u/gitpod).
 
+## 2020-05-12
+
+- Downgrade Ruby `2.7.1` → `2.6.6` (Ruby language server doesn't support latest Bundler `2.1.4` yet) [e9281a20](https://github.com/gitpod-io/workspace-images/commit/e9281a207c4c6b4c7df2e91e9ec81f36ed0652ae)
+
 ## 2020-05-08
 
 - Upgrade to Rust `1.43.1` [gitpod-io/workspace-images#230](https://github.com/gitpod-io/workspace-images/pull/230)
@@ -10,7 +14,7 @@ A curated, chronologically ordered list of notable changes in [Gitpod's default 
 
 ## 2020-05-02
 
-- Fix `gitpod/workspace-dotnet` and `gitpod/workspace-dotnet-vnc` images by installing .NET Core SDK 3.1 binaries (Ubuntu 20.04) [gitpod-io/workspace-images#218](https://github.com/gitpod-io/workspace-images/pull/218)
+- Fix Ubuntu 20.04 based `gitpod/workspace-dotnet` and `gitpod/workspace-dotnet-vnc` images by installing .NET Core SDK 3.1 binaries [gitpod-io/workspace-images#218](https://github.com/gitpod-io/workspace-images/pull/218)
 
 ## 2020-04-29
 
