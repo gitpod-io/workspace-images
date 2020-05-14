@@ -4,7 +4,7 @@ A curated, chronologically ordered list of notable changes in [Gitpod's default 
 
 ## 2020-05-12
 
-- Downgrade Ruby `2.7.1` → `2.6.6` (Ruby language server doesn't support latest Bundler `2.1.4` yet) [e9281a20](https://github.com/gitpod-io/workspace-images/commit/e9281a207c4c6b4c7df2e91e9ec81f36ed0652ae)
+- Downgrade Ruby `2.7.1` → `2.6.6` (because Solargraph doesn't support latest Bundler `2.1.4` yet) [e9281a20](https://github.com/gitpod-io/workspace-images/commit/e9281a207c4c6b4c7df2e91e9ec81f36ed0652ae)
 
 ## 2020-05-08
 
