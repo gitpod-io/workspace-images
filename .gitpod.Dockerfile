@@ -3,6 +3,7 @@ FROM gitpod/workspace-full-vnc
 USER gitpod
 
 RUN sudo apt-get -q update && sudo apt-get install -yq cmake && sudo rm -rf /var/lib/apt/lists/*
+RUN sudo apt-get install -yq libqt4 libruby2.5 libpython3.6 
 RUN sudo wget https://www.klayout.org/downloads/Ubuntu-18/klayout_0.26.5-1_amd64.deb && sudo dpkg -i klayout_0.26.5-1_amd64.deb
 
 
