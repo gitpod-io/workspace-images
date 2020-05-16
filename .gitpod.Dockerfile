@@ -3,12 +3,9 @@ FROM gitpod/workspace-full-vnc
 USER gitpod
 
 RUN cat /etc/os-release
-RUN sudo apt-get -yq update && sudo apt-get install -yq cmake clang
+RUN sudo apt-get -yq update && sudo apt-get install -yq cmake klayout
 # RUN sudo pip install conan
-RUN sudo apt-get install -yq gcc g++ make
-RUN sudo apt-get install -yq libqt4-dev-bin libqt4-dev ruby ruby-dev python3 python3-dev libz-dev
-# RUN sudo rm -rf /var/lib/apt/lists/*
-RUN sudo wget https://www.klayout.org/downloads/Ubuntu-18/klayout_0.26.5-1_amd64.deb && sudo dpkg -i klayout_0.26.5-1_amd64.deb
+RUN sudo rm -rf /var/lib/apt/lists/*
 
 
 # Install custom tools, runtime, etc. using apt-get
