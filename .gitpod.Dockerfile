@@ -3,7 +3,7 @@ FROM gitpod/workspace-full-vnc
 USER gitpod
 
 RUN sudo apt-get -q update && sudo apt-get install -yq cmake && sudo rm -rf /var/lib/apt/lists/*
-RUN wget https://www.klayout.org/downloads/Ubuntu-18/klayout_0.26.5-1_amd64.deb && dpkg -i klayout_0.26.5-1_amd64.deb
+RUN sudo wget https://www.klayout.org/downloads/Ubuntu-18/klayout_0.26.5-1_amd64.deb && dpkg -i klayout_0.26.5-1_amd64.deb
 
 
 # Install custom tools, runtime, etc. using apt-get
