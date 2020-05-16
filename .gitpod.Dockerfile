@@ -6,7 +6,7 @@ RUN cat /etc/os-release
 RUN sudo apt-get -q update && sudo apt-get install -yq cmake
 # RUN sudo pip install conan
 RUN sudo apt-get install -yq gcc g++ make
-RUN sudo apt-get install -yq isntall libqt4-dev-bin libqt4-dev ruby ruby-dev python3 python3-dev libz-dev
+RUN sudo apt-get install -yq libqt4-dev-bin libqt4-dev ruby ruby-dev python3 python3-dev libz-dev
 # RUN sudo rm -rf /var/lib/apt/lists/*
 RUN sudo wget https://www.klayout.org/downloads/Ubuntu-18/klayout_0.26.5-1_amd64.deb && sudo dpkg -i klayout_0.26.5-1_amd64.deb
 
