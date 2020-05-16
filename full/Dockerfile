@@ -187,12 +187,26 @@ LABEL dazzle/layer=lang-node
 LABEL dazzle/test=tests/lang-node.yaml
 USER gitpod
 ENV NODE_VERSION=12.16.3
+# Relevant issue https://github.com/gitpod-io/gitpod/issues/1520
+## node-nan - required for 'canvas' (npm) to avoid '../../nan/nan.h:176:10: fatal error: nan_callbacks.h: No such file or directory'
+## apt-utils - apt complains about delaying configuration without this
+## node-gyp - required for 'canvas' (npm)
+## libjpeg-dev libgif-dev librsvg2-dev - Required for 'canvas' (npm) to avoid '../src/backend/ImageBackend.cc:74:1: fatal error: opening dependency file ./Release/.deps/Release/obj.target/canvas/src/backend/ImageBackend.o.d.raw: No such file or directory'
 RUN curl -fsSL https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | PROFILE=/dev/null bash \
     && bash -c ". .nvm/nvm.sh \
         && nvm install $NODE_VERSION \
         && nvm alias default $NODE_VERSION \
         && npm install -g npm typescript yarn" \
-    && echo ". ~/.nvm/nvm-lazy.sh"  >> /home/gitpod/.bashrc.d/50-node
+    && echo ". ~/.nvm/nvm-lazy.sh"  >> /home/gitpod/.bashrc.d/50-node \
+    && apt-get install -y \
+        libcairo2-dev \
+        libpango1.0-dev \
+        node-nan \
+        apt-utils \
+        node-gyp \
+        libjpeg-dev \
+        libgif-dev \
+        librsvg2-dev
 # above, we are adding the lazy nvm init to .bashrc, because one is executed on interactive shells, the other for non-interactive shells (e.g. plugin-host)
 COPY --chown=gitpod:gitpod nvm-lazy.sh /home/gitpod/.nvm/nvm-lazy.sh
 ENV PATH=$PATH:/home/gitpod/.nvm/versions/node/v${NODE_VERSION}/bin
