@@ -1,0 +1,6 @@
+# This file is used to grant contributors the ability to make pushes to default branch if the merge request changes the defined paths only
+# Reference to configuration - https://github.blog/2017-07-06-introducing-code-owners/
+# Relevant https://help.github.com/en/github/creating-cloning-and-archiving-repositories/about-code-owners
+
+# Allow access to original creator of gitpod-1582.sh script
+full/scripts/gitpod-1520.sh   @kreyren
