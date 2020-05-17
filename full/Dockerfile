@@ -192,7 +192,16 @@ RUN curl -fsSL https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh |
         && nvm install $NODE_VERSION \
         && nvm alias default $NODE_VERSION \
         && npm install -g npm typescript yarn" \
-    && echo ". ~/.nvm/nvm-lazy.sh"  >> /home/gitpod/.bashrc.d/50-node
+    && echo ". ~/.nvm/nvm-lazy.sh"  >> /home/gitpod/.bashrc.d/50-node \
+    # Relevant issue https://github.com/gitpod-io/gitpod/issues/1520
+    # Upstream configuration https://github.com/Automattic/node-canvas/blob/master/.github/workflows/ci.yaml#L19
+	  && apt-get install -y \
+          build-essential \
+          libcairo2-dev \
+          libpango1.0-dev \
+          libjpeg8-dev \
+          libgif-dev \
+          librsvg2-dev
 # above, we are adding the lazy nvm init to .bashrc, because one is executed on interactive shells, the other for non-interactive shells (e.g. plugin-host)
 # Relevant issue https://github.com/gitpod-io/gitpod/issues/1520
 COPY full/scripts/gitpod-1520.sh /usr/bin/gitpod-1520
