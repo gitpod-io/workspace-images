@@ -35,10 +35,12 @@ edebug() {
 }
 
 # Root escalation - Not expected to run as non-root
+edebug "Processing root escalation in $myName"
 if [ "$(id -u)" != 0 ]; then
 	ewarn "$myName is expected to be invoked as root, but it has been executed from non-root! Trying to use sudo"
 	SUDO="sudo"
 elif [ "$(id -u)" = 0 ]; then
+	edebug "$myName has required root permission already, unsetting SUDO variable"
 	unset SUDO
 else
 	die 255 "root escalation in $myName"
@@ -50,12 +52,14 @@ einfo "Invoking $myName to workaround https://github.com/gitpod-io/gitpod/issues
 DISTRO="ubuntu"
 
 # Sanitization for distro used
+edebug "Processing distribution sanitity check"
 case "$DISTRO" in
 	ubuntu) edebug "Expected distribution '$myName' has been parsed in $myName" ;;
 	*) die 1 "Distribution '$DISTRO' is not supported by $myName"
 esac
 
 # Check if curl is available
+edebug "Checking if curl is available"
 if ! command -v curl 1>/dev/null; then
 	case "$DISTRO" in
 		ubuntu)
@@ -79,8 +83,10 @@ case "$bugStatus" in
 
 		case "$DISTRO" in
 			ubuntu)
+				einfo "Attempting to install package 'node-pre-gyp' for $DISTRO in $myName"
 				if [ "$(apt list --installed node-pre-gyp | grep -o node-pre-gyp)" != "node-pre-gyp" ]; then
 					$SUDO apt install -y node-pre-gyp || { eerror "$myName was unable to install package 'node-pre-gyp' which is required to install package 'canvas' using npm to workaround bug https://github.com/gitpod-io/gitpod/issues/1520 which is affected by https://github.com/tomas/needle/issues/312 as suggested in https://github.com/Automattic/node-canvas/pull/1582#issuecomment-629837503" ; exit 0 ;}
+					die 0 "Package 'node-pre-gyp' has been installed on $DISTRO using $myName"
 				elif [ "$(apt list --installed node-pre-gyp | grep -o node-pre-gyp)" = "node-pre-gyp" ]; then
 					die 0 "Package 'node-pre-gyp' is already installed, no need to do anything.."
 				else

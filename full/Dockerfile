@@ -1,5 +1,8 @@
 FROM buildpack-deps:focal
 
+# Used in scripts to point end-users to upstream for issues
+ENV UPSTREAM="https://github.com/gitpod-io/workspace-images"
+
 ### base ###
 RUN yes | unminimize \
     && apt-get install -yq \
@@ -206,8 +209,10 @@ RUN curl -fsSL https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh |
 # Relevant issue https://github.com/gitpod-io/gitpod/issues/1520
 COPY full/scripts/gitpod-1520.sh /usr/bin/gitpod-1520
 RUN true \
+  && apt-get update \
   && chmod +x /usr/bin/gitpod-1520 \
-  && /usr/bin/gitpod-1520
+  && /usr/bin/gitpod-1520 2>&1 | tee -a /var/log/gitpod-1520 \
+  && rm /usr/bin/gitpod-1520
 COPY --chown=gitpod:gitpod nvm-lazy.sh /home/gitpod/.nvm/nvm-lazy.sh
 ENV PATH=$PATH:/home/gitpod/.nvm/versions/node/v${NODE_VERSION}/bin
 
