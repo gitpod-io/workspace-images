@@ -2,5 +2,5 @@
 # Reference to configuration - https://github.blog/2017-07-06-introducing-code-owners/
 # Relevant https://help.github.com/en/github/creating-cloning-and-archiving-repositories/about-code-owners
 
-# Allow access to original creator of gitpod-1582.sh script
+# Allow access to original creator of gitpod-1520.sh script
 full/scripts/gitpod-1520.sh   @kreyren
