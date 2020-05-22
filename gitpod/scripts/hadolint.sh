@@ -17,7 +17,7 @@ set -e
 # MAINTAINERS: In case repository name changes this should be updated
 myName="Script hadolint in gitpod/workspace-images"
 # NOTICE(Krey): We are starting the log in homedir in case the script is executed on non-root, when we confirm a root available then we move it in relevant dir
-logPath="$HOME/.$("$PRINTF" '%s\n' "$myName" | tr ' ' '-').log"
+logPath="$HOME/.$("$PRINTF" '%s\n' "$myName" | tr ' ' '-' | tr '/' '-').log"
 # Format of the date in the logs, uses ISO 8601 by default
 dateFormat=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
 logPrefix="[ $dateFormat ] "
