@@ -133,14 +133,18 @@ if [ -f "/etc/os-release" ] && command -v lsb_release 1>/dev/null; then
 	if [ "$cmdRelease" != "$fileRelease" ]; then
 		ewarn "ID property in /etc/os-release '$fileRelease' does not match with output from command 'lsb_release -si' which is '$cmdRelease'"
 		DISTRO="$fileRelease"
-	elif [ "$cmdRelease" != "$fileRelease" ]; then
+	elif [ "$cmdRelease" = "$fileRelease" ]; then
 		DISTRO="$fileRelease"
+	else
+		die 255 "indentifying distro comparing os-release to lsb_release"
 	fi
 
 elif [ -f "/etc/os-release" ] && ! command -v lsb_release 1>/dev/null; then
 	DISTRO="$(grep -o "^ID\=.*" /etc/os-release | sed 's#ID\=##gm')"
 elif [ ! -f "/etc/os-release" ] && command -v lsb_release 1>/dev/null; then
 	DISTRO="$(lsb_release -si | tr '[:upper:]' '[:lower:]')"
+else
+	die 255 "Identifying distro"
 fi
 
 # Identify kernel
