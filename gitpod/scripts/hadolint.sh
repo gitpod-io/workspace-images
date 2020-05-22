@@ -17,7 +17,7 @@ set -e
 # MAINTAINERS: In case repository name changes this should be updated
 myName="Script hadolint in gitpod/workspace-images"
 # NOTICE(Krey): We are starting the log in homedir in case the script is executed on non-root, when we confirm a root available then we move it in relevant dir
-logPath="$HOME/.$("$PRINTF" '%s\n' $myName | tr ' ' '-').log"
+logPath="$HOME/.$("$PRINTF" '%s\n' "$myName" | tr ' ' '-').log"
 # Format of the date in the logs, uses ISO 8601 by default
 dateFormat=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
 logPrefix="[ $dateFormat ] "
@@ -108,10 +108,10 @@ dwnl() {
 }
 
 # Check root
-if [ $(id -u) = 0 ]; then
+if [ "$(id -u)" = 0 ]; then
 	edebug "Confirmed user with id '$(id -u)' (root)"
 	unset SUDO
-elif [ $(id -u) = 1000 ]; then
+elif [ "$(id -u)" = 1000 ]; then
 	edebug "Confirmed user with id '$(id -u)' (non-root)"
 	ewarn "We are not expecting non-root to be using this script, trying to elevate.."
 	if command -v sudo 1>/dev/null; then
@@ -168,7 +168,7 @@ case "$KERNEL" in
 							elif [ -x /usr/bin/hadolint ]; then
 								ewarn "Binary of hadolint has been downloaded with executable permission, which is a unexpected"
 							else
-								die 255 "Setting executable permission for hadolint in $myNames"
+								die 255 "Setting executable permission for hadolint in $myName"
 							fi
 						elif apt list hadolint | grep -q "^hadolint -"; then
 							edebug "Package hadolint has been confirmed to be available on $DISTRO in this environment"
@@ -185,8 +185,10 @@ case "$KERNEL" in
 						else
 							die 255 "self-checking hadolint in $myName on kernel '$KERNEL' using distro '$DISTRO'"
 						fi
+					fi
 				fi
 			;;
+			*) die 1 "Unsupported distribution '$DISTRO' has been parsed in $myName, fixme?"
 		esac
 	;;
 	"") die 1 "Command 'uname -s' failed to identify kernel on this environment" ;;

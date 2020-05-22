@@ -10,7 +10,10 @@
 		"noob",
 		"lenght",
 		"shellcheck",
-		"hadolin",
+		"hadolint",
+		"chmod",
+		"elif",
+		"printf",
 		"hotfix"
 	],
 }

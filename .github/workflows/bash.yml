@@ -60,7 +60,7 @@ jobs:
 
           # Process files
           ## NOTICE: Do not use for loop to avoid pitfall https://mywiki.wooledge.org/BashPitfalls#pf1
-          git --git-dir="$GITHUB_WORKSPACE/.git" ls-files -z -- '*.bash' tools/dockerfreeze | while IFS= read -rd '' file; do
+          git --git-dir="$GITHUB_WORKSPACE/.git" ls-files -z -- '*.bash' | while IFS= read -rd '' file; do
               printf 'linting bash file %s\n' "$file"
               shellcheck --external-sources --shell=bash "$file"
           done
