@@ -1,9 +1,11 @@
 FROM gitpod/workspace-full:latest
 
+USER root
+
 # Get linting dependencies
 ## Hadolint - For dockerfile linting
 COPY gitpod/scripts/hadolint.sh /usr/bin/hadolint-script
 RUN true "" \
-	&& sudo chmod +x /usr/bin/hadolint-script \
+	&& chmod +x /usr/bin/hadolint-script \
 	&& /usr/bin/hadolint-script \
-	&& sudo rm /usr/bin/hadolint-script
+	&& rm /usr/bin/hadolint-script
