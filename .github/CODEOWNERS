@@ -1,0 +1,2 @@
+# Allow krey to make changes to hadolint script
+gitpod/scripts/hadolint.sh @kreyren

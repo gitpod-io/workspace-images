@@ -1,0 +1,10 @@
+image:
+  file: gitpod/gitpod.Dockerfile
+
+tasks:
+  - init: brew install shellcheck
+
+vscode:
+  extensions:
+    - exiasr.hadolint@0.3.0:/FkAW3eTb+z9O7VZAyAa0w==
+    - streetsidesoftware.code-spell-checker@1.9.0:B0Usq/ATl+ohrSS731xRiA==

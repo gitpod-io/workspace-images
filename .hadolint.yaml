@@ -1,0 +1,11 @@
+# FIXME: does not accept .hadolint.yml
+
+ignored:
+  # Set to allow 'FROM somewhere/nowhere:latest'
+  - DL3007
+  # Last user should be `USER non-root` is invalid since this is handled by gitpod layers
+  - DL3002
+
+trustedRegistries:
+  - docker.io
+  - gitpod
