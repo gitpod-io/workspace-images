@@ -120,9 +120,9 @@ RUN sudo apt-get remove -y cmake \
 LABEL dazzle/layer=lang-go
 LABEL dazzle/test=tests/lang-go.yaml
 USER gitpod
-ENV GO_VERSION=1.14 \
-    GOPATH=$HOME/go-packages \
-    GOROOT=$HOME/go
+ENV GO_VERSION=1.14
+ENV GOPATH=$HOME/go-packages
+ENV GOROOT=$HOME/go
 ENV PATH=$GOROOT/bin:$GOPATH/bin:$PATH
 RUN curl -fsSL https://storage.googleapis.com/golang/go$GO_VERSION.linux-amd64.tar.gz | tar xzs && \
 # install VS Code Go tools from https://github.com/Microsoft/vscode-go/blob/0faec7e5a8a69d71093f08e035d33beb3ded8626/src/goInstallTools.ts#L19-L45
@@ -146,7 +146,6 @@ RUN curl -fsSL https://storage.googleapis.com/golang/go$GO_VERSION.linux-amd64.t
         github.com/cweill/gotests/... \
         github.com/alecthomas/gometalinter \
         honnef.co/go/tools/... \
-        github.com/golangci/golangci-lint/cmd/golangci-lint \
         github.com/mgechev/revive \
         github.com/sourcegraph/go-langserver \
         github.com/go-delve/delve/cmd/dlv \
@@ -186,7 +185,7 @@ ENV GRADLE_USER_HOME=/workspace/.gradle/
 LABEL dazzle/layer=lang-node
 LABEL dazzle/test=tests/lang-node.yaml
 USER gitpod
-ENV NODE_VERSION=12.16.3
+ENV NODE_VERSION=12.18.2
 RUN curl -fsSL https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | PROFILE=/dev/null bash \
     && bash -c ". .nvm/nvm.sh \
         && nvm install $NODE_VERSION \
@@ -201,15 +200,18 @@ ENV PATH=$PATH:/home/gitpod/.nvm/versions/node/v${NODE_VERSION}/bin
 LABEL dazzle/layer=lang-python
 LABEL dazzle/test=tests/lang-python.yaml
 USER gitpod
+RUN sudo apt-get update && \
+    sudo apt-get install -y python3-pip && \
+    sudo rm -rf /var/lib/apt/lists/*
 ENV PATH=$HOME/.pyenv/bin:$HOME/.pyenv/shims:$PATH
 RUN curl -fsSL https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-installer | bash \
     && { echo; \
         echo 'eval "$(pyenv init -)"'; \
         echo 'eval "$(pyenv virtualenv-init -)"'; } >> /home/gitpod/.bashrc.d/60-python \
     && pyenv update \
-    && pyenv install 2.7.17 \
-    && pyenv install 3.8.2 \
-    && pyenv global 2.7.17 3.8.2 \
+    && pyenv install 2.7.18 \
+    && pyenv install 3.8.3 \
+    && pyenv global 3.8.3 2.7.18 \
     && python2 -m pip install --upgrade pip \
     && python3 -m pip install --upgrade pip \
     && python3 -m pip install --upgrade \
@@ -255,8 +257,8 @@ RUN sudo apt-get update \
 
 RUN cp /home/gitpod/.profile /home/gitpod/.profile_orig && \
     curl -fsSL https://sh.rustup.rs | sh -s -- -y \
-    && .cargo/bin/rustup toolchain install 1.43.1 \
-    && .cargo/bin/rustup default 1.43.1 \
+    && .cargo/bin/rustup toolchain install 1.44.1 \
+    && .cargo/bin/rustup default 1.44.1 \
     # Save image size by removing now-redudant stable toolchain
     && .cargo/bin/rustup toolchain uninstall stable \
     && .cargo/bin/rustup component add \

@@ -1,0 +1,15 @@
+  workspace-quemu:
+    docker:
+      - image: docker:stable
+    steps:
+      - checkout
+      - setup_remote_docker
+      - attach_workspace:
+          at: .
+      - run:
+          command: |
+            docker load -i workspace-full.tar
+            ./.circleci/build_image.sh quemu/Dockerfile gitpod/workspace-quemu
+
+
+
