@@ -14,8 +14,8 @@ USER root
 RUN sed -ri "s/<number>4<\/number>/<number>1<\/number>/" /etc/xdg/openbox/rc.xml
 
 # Install novnc
-RUN git clone https://github.com/novnc/noVNC.git /opt/novnc \
-    && git clone https://github.com/novnc/websockify /opt/novnc/utils/websockify
+RUN git clone --depth 1 https://github.com/novnc/noVNC.git /opt/novnc \
+    && git clone --depth 1 https://github.com/novnc/websockify /opt/novnc/utils/websockify
 COPY novnc-index.html /opt/novnc/index.html
 
 # Add VNC startup script

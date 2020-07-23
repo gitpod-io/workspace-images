@@ -10,7 +10,7 @@ RUN mkdir /tmp/wasm-sdk \
     && sudo dpkg -i wasi-sdk_12.0_amd64.deb \
     && rm -rf /tmp/wasi-sdk
 
-RUN git clone "https://github.com/emscripten-core/emsdk.git" $HOME/.emsdk \
+RUN git clone --depth 1 "https://github.com/emscripten-core/emsdk.git" $HOME/.emsdk \
     && cd $HOME/.emsdk \
     && ./emsdk install latest \
     && ./emsdk activate latest \
