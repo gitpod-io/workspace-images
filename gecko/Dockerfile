@@ -26,7 +26,7 @@ RUN sudo apt-get update \
  && sudo rm -rf /var/lib/apt/lists/*
 
 # Install git-cinnabar.
-RUN git clone https://github.com/glandium/git-cinnabar $HOME/.git-cinnabar \
+RUN git clone --depth 1 https://github.com/glandium/git-cinnabar $HOME/.git-cinnabar \
  && $HOME/.git-cinnabar/git-cinnabar download \
  && echo "\n# Add git-cinnabar to the PATH." >> $HOME/.bashrc \
  && echo "PATH=\"\$PATH:$HOME/.git-cinnabar\"" >> $HOME/.bashrc
