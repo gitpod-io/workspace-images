@@ -1,7 +1,7 @@
 version: 2.0
 
 jobs:
-  workspace-full:
+  workspace-base:
     docker:
       - image: csweichel/dazzle:latest
     steps:
@@ -9,6 +9,24 @@ jobs:
       - setup_remote_docker
       - run:
           command: |
+            ./.circleci/dazzle_build_image.sh base/Dockerfile gitpod/workspace-base workspace-base.tar
+          no_output_timeout: 20m
+      - persist_to_workspace:
+          root: .
+          paths:
+            - workspace-base.tar
+
+  workspace-full:
+    docker:
+      - image: csweichel/dazzle:latest
+    steps:
+      - checkout
+      - setup_remote_docker
+      - attach_workspace:
+          at: .
+      - run:
+          command: |
+            docker load -i workspace-base.tar
             ./.circleci/dazzle_build_image.sh full/Dockerfile gitpod/workspace-full workspace-full.tar
           no_output_timeout: 30m
       - run:
@@ -171,7 +189,10 @@ workflows:
   version: 2
   build-and-deploy:
     jobs:
-      - workspace-full
+      - workspace-base
+      - workspace-full:
+          requires:
+            - workspace-base
       - workspace-full-vnc:
           requires:
             - workspace-full
