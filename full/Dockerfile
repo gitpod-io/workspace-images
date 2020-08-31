@@ -293,10 +293,13 @@ RUN export DEBIAN_FRONTEND=noninteractive DEBCONF_NONINTERACTIVE_SEEN=true && ap
     pkg-config \
     && rm -r /var/lib/apt/lists/*
 
+# pub   4096R/ED3D1561 2019-03-22 [expires: 2021-03-21]
+#       Key fingerprint = A62A E125 BBBF BB96 A6E0  42EC 925C C1CC ED3D 1561
+# uid                  Swift 5.x Release Signing Key <swift-infrastructure@swift.org
 ARG SWIFT_SIGNING_KEY=A62AE125BBBFBB96A6E042EC925CC1CCED3D1561
-ARG SWIFT_PLATFORM=ubuntu18.04
-ARG SWIFT_BRANCH=swift-5.2-release
-ARG SWIFT_VERSION=swift-5.2-RELEASE
+ARG SWIFT_PLATFORM=ubuntu20.04
+ARG SWIFT_BRANCH=swift-5.2.5-release
+ARG SWIFT_VERSION=swift-5.2.5-RELEASE
 ARG SWIFT_WEBROOT=https://swift.org/builds/
 
 ENV SWIFT_SIGNING_KEY=$SWIFT_SIGNING_KEY \
