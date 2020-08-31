@@ -4,10 +4,8 @@ FROM gitpod/workspace-full-vnc
 RUN __RR_VERSION__="5.3.0" \
  && cd /tmp \
  && wget -qO rr.deb https://github.com/mozilla/rr/releases/download/${__RR_VERSION__}/rr-${__RR_VERSION__}-Linux-$(uname -m).deb \
- && dpkg -i rr.deb \
+ && sudo dpkg -i rr.deb \
  && rm -f rr.deb
-
-USER gitpod
 
 # Install Firefox build dependencies.
 # One-line setup command from:
@@ -16,7 +14,8 @@ ENV SHELL=/bin/bash
 RUN sudo apt-get update \
  && git clone https://github.com/mozilla/gecko-dev/ /tmp/gecko \
  && cd /tmp/gecko \
- && python2.7 python/mozboot/bin/bootstrap.py --no-interactive --application-choice=browser \
+ && ./mach bootstrap --no-interactive --application-choice=browser \
+ && sudo apt-get remove -y nodejs nodejs-doc \
  && sudo rm -rf /tmp/gecko /var/lib/apt/lists/*
 
 # Install git-cinnabar.

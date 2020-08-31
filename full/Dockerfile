@@ -1,4 +1,4 @@
-FROM buildpack-deps:disco
+FROM buildpack-deps:focal
 
 ### base ###
 RUN yes | unminimize \
@@ -53,13 +53,13 @@ LABEL dazzle/layer=lang-c
 LABEL dazzle/test=tests/lang-c.yaml
 USER root
 RUN curl -fsSL https://apt.llvm.org/llvm-snapshot.gpg.key | apt-key add - \
-    && echo "deb https://apt.llvm.org/disco/ llvm-toolchain-disco main" >> /etc/apt/sources.list.d/llvm.list \
+    && echo "deb https://apt.llvm.org/focal/ llvm-toolchain-focal main" >> /etc/apt/sources.list.d/llvm.list \
     && apt-get update \
     && apt-get install -yq \
+        clang \
+        clangd \
         clang-format \
         clang-tidy \
-        # clang-tools \ # breaks the build atm
-        clangd \
         gdb \
         lld \
     && cp /var/lib/dpkg/status /var/lib/apt/dazzle-marks/lang-c.status \
@@ -81,7 +81,6 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -yq \
         php-curl \
         php-date \
         php-gd \
-        php-gettext \
         php-intl \
         php-json \
         php-mbstring \
@@ -109,7 +108,7 @@ ENV APACHE_DOCROOT_IN_REPO="public" \
 LABEL dazzle/layer=tool-brew
 LABEL dazzle/test=tests/tool-brew.yaml
 USER gitpod
-RUN mkdir ~/.cache && sh -c "$(curl -fsSL https://raw.githubusercontent.com/Linuxbrew/install/master/install.sh)"
+RUN mkdir ~/.cache && /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
 ENV PATH="$PATH:/home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin/" \
     MANPATH="$MANPATH:/home/linuxbrew/.linuxbrew/share/man" \
     INFOPATH="$INFOPATH:/home/linuxbrew/.linuxbrew/share/info" \
@@ -121,9 +120,9 @@ RUN sudo apt-get remove -y cmake \
 LABEL dazzle/layer=lang-go
 LABEL dazzle/test=tests/lang-go.yaml
 USER gitpod
-ENV GO_VERSION=1.14 \
-    GOPATH=$HOME/go-packages \
-    GOROOT=$HOME/go
+ENV GO_VERSION=1.15
+ENV GOPATH=$HOME/go-packages
+ENV GOROOT=$HOME/go
 ENV PATH=$GOROOT/bin:$GOPATH/bin:$PATH
 RUN curl -fsSL https://storage.googleapis.com/golang/go$GO_VERSION.linux-amd64.tar.gz | tar xzs && \
 # install VS Code Go tools from https://github.com/Microsoft/vscode-go/blob/0faec7e5a8a69d71093f08e035d33beb3ded8626/src/goInstallTools.ts#L19-L45
@@ -147,14 +146,13 @@ RUN curl -fsSL https://storage.googleapis.com/golang/go$GO_VERSION.linux-amd64.t
         github.com/cweill/gotests/... \
         github.com/alecthomas/gometalinter \
         honnef.co/go/tools/... \
-        github.com/golangci/golangci-lint/cmd/golangci-lint \
         github.com/mgechev/revive \
         github.com/sourcegraph/go-langserver \
         github.com/go-delve/delve/cmd/dlv \
         github.com/davidrjenni/reftools/cmd/fillstruct \
         github.com/godoctor/godoctor && \
     GO111MODULE=on go get -u -v \
-        golang.org/x/tools/gopls@latest && \
+        golang.org/x/tools/gopls@v0.4.4 && \
     go get -u -v -d github.com/stamblerre/gocode && \
     go build -o $GOPATH/bin/gocode-gomod github.com/stamblerre/gocode && \
     rm -rf $GOPATH/src && \
@@ -171,7 +169,7 @@ LABEL dazzle/test=tests/lang-java.yaml
 USER gitpod
 RUN curl -fsSL "https://get.sdkman.io" | bash \
  && bash -c ". /home/gitpod/.sdkman/bin/sdkman-init.sh \
-             && sdk install java 11.0.5.fx-zulu \
+             && sdk install java 11.0.6.fx-zulu \
              && sdk install gradle \
              && sdk install maven \
              && sdk flush archives \
@@ -187,13 +185,11 @@ ENV GRADLE_USER_HOME=/workspace/.gradle/
 LABEL dazzle/layer=lang-node
 LABEL dazzle/test=tests/lang-node.yaml
 USER gitpod
-ENV NODE_VERSION=12.16.1
+ENV NODE_VERSION=12.18.3
 RUN curl -fsSL https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | PROFILE=/dev/null bash \
     && bash -c ". .nvm/nvm.sh \
         && nvm install $NODE_VERSION \
         && nvm alias default $NODE_VERSION \
-        && npm config set python /usr/bin/python --global \
-        && npm config set python /usr/bin/python \
         && npm install -g npm typescript yarn" \
     && echo ". ~/.nvm/nvm-lazy.sh"  >> /home/gitpod/.bashrc.d/50-node
 # above, we are adding the lazy nvm init to .bashrc, because one is executed on interactive shells, the other for non-interactive shells (e.g. plugin-host)
@@ -204,21 +200,24 @@ ENV PATH=$PATH:/home/gitpod/.nvm/versions/node/v${NODE_VERSION}/bin
 LABEL dazzle/layer=lang-python
 LABEL dazzle/test=tests/lang-python.yaml
 USER gitpod
+RUN sudo apt-get update && \
+    sudo apt-get install -y python3-pip && \
+    sudo rm -rf /var/lib/apt/lists/*
 ENV PATH=$HOME/.pyenv/bin:$HOME/.pyenv/shims:$PATH
 RUN curl -fsSL https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-installer | bash \
     && { echo; \
         echo 'eval "$(pyenv init -)"'; \
         echo 'eval "$(pyenv virtualenv-init -)"'; } >> /home/gitpod/.bashrc.d/60-python \
     && pyenv update \
-    && pyenv install 2.7.17 \
-    && pyenv install 3.7.7 \
-    && pyenv global 2.7.17 3.7.7 \
+    && pyenv install 2.7.18 \
+    && pyenv install 3.8.3 \
+    && pyenv global 3.8.3 2.7.18 \
     && python2 -m pip install --upgrade pip \
     && python3 -m pip install --upgrade pip \
     && python3 -m pip install --upgrade \
         setuptools wheel virtualenv pipenv pylint rope flake8 \
         mypy autopep8 pep8 pylama pydocstyle bandit notebook \
-        python-language-server[all]==0.25.0 twine \
+        twine \
     && sudo rm -rf /tmp/*
 # Gitpod will automatically add user site under `/workspace` to persist your packages.
 # ENV PYTHONUSERBASE=/workspace/.pip-modules \
@@ -233,14 +232,14 @@ RUN curl -sSL https://rvm.io/mpapis.asc | gpg --import - \
     && curl -fsSL https://get.rvm.io | bash -s stable \
     && bash -lc " \
         rvm requirements \
-        && rvm install 2.5 \
-        && rvm install 2.6 \
-        && rvm use 2.6 --default \
+        && rvm install 2.5.8 \
+        && rvm install 2.6.6 \
+        && rvm use 2.6.6 --default \
         && rvm rubygems current \
         && gem install bundler --no-document \
         && gem install solargraph --no-document" \
     && echo '[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*' >> /home/gitpod/.bashrc.d/70-ruby
-ENV GEM_HOME=/workspace/.rvm
+RUN echo "rvm_gems_path=/workspace/.rvm" > ~/.rvmrc
 
 ### Rust ###
 LABEL dazzle/layer=lang-rust
@@ -258,8 +257,8 @@ RUN sudo apt-get update \
 
 RUN cp /home/gitpod/.profile /home/gitpod/.profile_orig && \
     curl -fsSL https://sh.rustup.rs | sh -s -- -y \
-    && .cargo/bin/rustup toolchain install 1.41.1 \
-    && .cargo/bin/rustup default 1.41.1 \
+    && .cargo/bin/rustup toolchain install 1.46.0 \
+    && .cargo/bin/rustup default 1.46.0 \
     # Save image size by removing now-redudant stable toolchain
     && .cargo/bin/rustup toolchain uninstall stable \
     && .cargo/bin/rustup component add \
@@ -267,6 +266,7 @@ RUN cp /home/gitpod/.profile /home/gitpod/.profile_orig && \
         rust-analysis \
         rust-src \
     && .cargo/bin/rustup completions bash | sudo tee /etc/bash_completion.d/rustup.bash-completion > /dev/null \
+    && .cargo/bin/rustup completions bash cargo | sudo tee /etc/bash_completion.d/rustup.cargo-bash-completion > /dev/null \
     && .cargo/bin/rustup target add x86_64-unknown-linux-musl \
     && grep -v -F -x -f /home/gitpod/.profile_orig /home/gitpod/.profile > /home/gitpod/.bashrc.d/80-rust
 
