@@ -25,14 +25,6 @@ RUN git clone https://github.com/glandium/git-cinnabar $HOME/.git-cinnabar \
  && echo "PATH=\"\$PATH:$HOME/.git-cinnabar\"" >> $HOME/.bashrc
 ENV PATH $PATH:$HOME/.git-cinnabar
 
-# Install the latest Phabricator helper.
-RUN mkdir $HOME/.phacility \
- && cd $HOME/.phacility \
- && git clone https://github.com/phacility/libphutil \
- && git clone https://github.com/phacility/arcanist \
- && echo "\n# Phabricator helper." >> $HOME/.bashrc \
- && echo "PATH=\"\$PATH:$HOME/.phacility/arcanist/bin\"" >> $HOME/.bashrc
-
 # Install Phlay to support uploading multiple commits to Phabricator.
 RUN git clone https://github.com/mystor/phlay/ $HOME/.phlay \
  && echo "\n# Add Phlay to the PATH." >> $HOME/.bashrc \
