@@ -9,7 +9,7 @@ RUN __RR_VERSION__="5.3.0" \
 
 # Install Firefox build dependencies.
 # One-line setup command from:
-# https://developer.mozilla.org/en-US/docs/Mozilla/Developer_guide/Build_Instructions/Linux_Prerequisites#Most_Distros_-_One_Line_Bootstrap_Command
+# https://firefox-source-docs.mozilla.org/setup/linux_build.html#one-line-bootstrapping
 ENV SHELL=/bin/bash
 RUN sudo apt-get update \
  && git clone https://github.com/mozilla/gecko-dev/ /tmp/gecko \
