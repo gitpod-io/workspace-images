@@ -28,3 +28,8 @@ ENV PATH $PATH:$HOME/.git-cinnabar
 
 # Inject the path update to the top as bash completion needs to call rustc
 RUN sed -i '1s|^|PATH=\"\$PATH:$HOME/.cargo/bin/\"\n|' $HOME/.bashrc
+
+# Point to the doc on how to contribute
+RUN echo "echo 'How to contribute:'"  >> $HOME/.bashrc \
+ && echo "echo 'https://firefox-source-docs.mozilla.org/contributing/contribution_quickref.html'" >> $HOME/.bashrc
+ 
