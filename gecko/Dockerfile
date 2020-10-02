@@ -25,11 +25,6 @@ RUN git clone https://github.com/glandium/git-cinnabar $HOME/.git-cinnabar \
  && echo "PATH=\"\$PATH:$HOME/.git-cinnabar\"" >> $HOME/.bashrc
 ENV PATH $PATH:$HOME/.git-cinnabar
 
-# Install Phlay to support uploading multiple commits to Phabricator.
-RUN git clone https://github.com/mystor/phlay/ $HOME/.phlay \
- && echo "\n# Add Phlay to the PATH." >> $HOME/.bashrc \
- && echo "PATH=\"\$PATH:$HOME/.phlay\"" >> $HOME/.bashrc
-
 # Also install moz-phab to support uploading multiple commits to Phabricator.
 RUN git clone https://github.com/mozilla-conduit/review/ $HOME/.moz-phab \
  && echo "\n# Add moz-phab to the PATH." >> $HOME/.bashrc \
