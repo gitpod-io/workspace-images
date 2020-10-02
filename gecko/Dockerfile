@@ -12,7 +12,7 @@ RUN __RR_VERSION__="5.3.0" \
 # https://firefox-source-docs.mozilla.org/setup/linux_build.html#one-line-bootstrapping
 ENV SHELL=/bin/bash
 RUN sudo apt-get update \
- && git clone https://github.com/mozilla/gecko-dev/ /tmp/gecko \
+ && git clone --progress https://github.com/mozilla/gecko-dev/ /tmp/gecko \
  && cd /tmp/gecko \
  && ./mach bootstrap --no-interactive --application-choice=browser \
  && ./mach install-moz-phab \
