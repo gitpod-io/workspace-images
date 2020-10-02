@@ -7,7 +7,7 @@ RUN __RR_VERSION__="5.3.0" \
  && sudo dpkg -i rr.deb \
  && rm -f rr.deb
 
-# Install Firefox build dependencies.
+# Install Firefox build dependencies, including moz-phab
 # One-line setup command from:
 # https://firefox-source-docs.mozilla.org/setup/linux_build.html#one-line-bootstrapping
 ENV SHELL=/bin/bash
@@ -15,6 +15,7 @@ RUN sudo apt-get update \
  && git clone https://github.com/mozilla/gecko-dev/ /tmp/gecko \
  && cd /tmp/gecko \
  && ./mach bootstrap --no-interactive --application-choice=browser \
+ && ./mach install-moz-phab \
  && sudo apt-get remove -y nodejs nodejs-doc \
  && sudo rm -rf /tmp/gecko /var/lib/apt/lists/*
 
@@ -24,8 +25,3 @@ RUN git clone https://github.com/glandium/git-cinnabar $HOME/.git-cinnabar \
  && echo "\n# Add git-cinnabar to the PATH." >> $HOME/.bashrc \
  && echo "PATH=\"\$PATH:$HOME/.git-cinnabar\"" >> $HOME/.bashrc
 ENV PATH $PATH:$HOME/.git-cinnabar
-
-# Also install moz-phab to support uploading multiple commits to Phabricator.
-RUN git clone https://github.com/mozilla-conduit/review/ $HOME/.moz-phab \
- && echo "\n# Add moz-phab to the PATH." >> $HOME/.bashrc \
- && echo "PATH=\"\$PATH:$HOME/.moz-phab\"" >> $HOME/.bashrc
