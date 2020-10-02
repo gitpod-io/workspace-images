@@ -25,3 +25,6 @@ RUN git clone https://github.com/glandium/git-cinnabar $HOME/.git-cinnabar \
  && echo "\n# Add git-cinnabar to the PATH." >> $HOME/.bashrc \
  && echo "PATH=\"\$PATH:$HOME/.git-cinnabar\"" >> $HOME/.bashrc
 ENV PATH $PATH:$HOME/.git-cinnabar
+
+# Inject the path update to the top as bash completion needs to call rustc
+RUN sed -i '1s|^|PATH=\"\$PATH:$HOME/.cargo/bin/\"\n|' $HOME/.bashrc
