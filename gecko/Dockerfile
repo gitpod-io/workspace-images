@@ -17,7 +17,15 @@ RUN sudo apt-get update \
  && ./mach bootstrap --no-interactive --application-choice=browser \
  && ./mach install-moz-phab \
  && sudo apt-get remove -y nodejs nodejs-doc \
- && sudo rm -rf /tmp/gecko /var/lib/apt/lists/*
+ && sudo rm -rf /tmp/gecko /var/lib/apt/lists/* \
+
+# Install moz-phab
+ENV SHELL=/bin/bash
+RUN sudo apt-get update \
+ && sudo apt install -y python3-pip \
+ && pip3 install MozPhab \
+ && echo "PATH=\"\$PATH:$HOME/.local/bin/moz-phab \"" >> $HOME/.bashrc \
+ && sudo rm -rf /var/lib/apt/lists/*
 
 # Install git-cinnabar.
 RUN git clone https://github.com/glandium/git-cinnabar $HOME/.git-cinnabar \
