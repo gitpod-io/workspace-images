@@ -52,6 +52,8 @@ RUN sudo echo "Running 'sudo' for Gitpod: success" && \
 LABEL dazzle/layer=lang-c
 LABEL dazzle/test=tests/lang-c.yaml
 USER root
+# Dazzle does not rebuild a layer until one of its lines are changed. Increase this counter to rebuild this layer.
+ENV TRIGGER_REBUILD=1
 RUN curl -fsSL https://apt.llvm.org/llvm-snapshot.gpg.key | apt-key add - \
     && echo "deb https://apt.llvm.org/focal/ llvm-toolchain-focal main" >> /etc/apt/sources.list.d/llvm.list \
     && apt-get update \
