@@ -15,7 +15,6 @@ RUN sudo apt-get update \
  && git clone --progress https://github.com/mozilla/gecko-dev/ /tmp/gecko \
  && cd /tmp/gecko \
  && ./mach bootstrap --no-interactive --application-choice=browser \
- && ./mach install-moz-phab \
  && sudo apt-get remove -y nodejs nodejs-doc \
  && sudo rm -rf /tmp/gecko /var/lib/apt/lists/*
 
