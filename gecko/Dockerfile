@@ -17,7 +17,7 @@ RUN sudo apt-get update \
  && ./mach bootstrap --no-interactive --application-choice=browser \
  && ./mach install-moz-phab \
  && sudo apt-get remove -y nodejs nodejs-doc \
- && sudo rm -rf /tmp/gecko /var/lib/apt/lists/* \
+ && sudo rm -rf /tmp/gecko /var/lib/apt/lists/*
 
 # Install moz-phab
 ENV SHELL=/bin/bash
