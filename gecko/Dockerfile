@@ -7,16 +7,23 @@ RUN __RR_VERSION__="5.4.0" \
  && sudo dpkg -i rr.deb \
  && rm -f rr.deb
 
-# Install Firefox build dependencies.
+# Install Firefox build dependencies
 # One-line setup command from:
-# https://developer.mozilla.org/en-US/docs/Mozilla/Developer_guide/Build_Instructions/Linux_Prerequisites#Most_Distros_-_One_Line_Bootstrap_Command
+# https://firefox-source-docs.mozilla.org/setup/linux_build.html#one-line-bootstrapping
 ENV SHELL=/bin/bash
 RUN sudo apt-get update \
- && git clone https://github.com/mozilla/gecko-dev/ /tmp/gecko \
+ && git clone --progress https://github.com/mozilla/gecko-dev/ /tmp/gecko \
  && cd /tmp/gecko \
  && ./mach bootstrap --no-interactive --application-choice=browser \
  && sudo apt-get remove -y nodejs nodejs-doc \
  && sudo rm -rf /tmp/gecko /var/lib/apt/lists/*
+
+# Install moz-phab
+ENV SHELL=/bin/bash
+RUN sudo apt-get update \
+ && pip3 install MozPhab \
+ && echo "PATH=\"\$PATH:$HOME/.local/bin/moz-phab\"" >> $HOME/.bashrc \
+ && sudo rm -rf /var/lib/apt/lists/*
 
 # Install git-cinnabar.
 RUN git clone https://github.com/glandium/git-cinnabar $HOME/.git-cinnabar \
@@ -25,20 +32,12 @@ RUN git clone https://github.com/glandium/git-cinnabar $HOME/.git-cinnabar \
  && echo "PATH=\"\$PATH:$HOME/.git-cinnabar\"" >> $HOME/.bashrc
 ENV PATH $PATH:$HOME/.git-cinnabar
 
-# Install the latest Phabricator helper.
-RUN mkdir $HOME/.phacility \
- && cd $HOME/.phacility \
- && git clone https://github.com/phacility/libphutil \
- && git clone https://github.com/phacility/arcanist \
- && echo "\n# Phabricator helper." >> $HOME/.bashrc \
- && echo "PATH=\"\$PATH:$HOME/.phacility/arcanist/bin\"" >> $HOME/.bashrc
+# Inject the path update to the top as bash completion needs to call rustc
+RUN sed -i '1s|^|PATH=\"\$PATH:$HOME/.cargo/bin/\"\n|' $HOME/.bashrc
 
-# Install Phlay to support uploading multiple commits to Phabricator.
-RUN git clone https://github.com/mystor/phlay/ $HOME/.phlay \
- && echo "\n# Add Phlay to the PATH." >> $HOME/.bashrc \
- && echo "PATH=\"\$PATH:$HOME/.phlay\"" >> $HOME/.bashrc
+# Delete go directories
+RUN rm -rf go-packages go
 
-# Also install moz-phab to support uploading multiple commits to Phabricator.
-RUN git clone https://github.com/mozilla-conduit/review/ $HOME/.moz-phab \
- && echo "\n# Add moz-phab to the PATH." >> $HOME/.bashrc \
- && echo "PATH=\"\$PATH:$HOME/.moz-phab\"" >> $HOME/.bashrc
+# Point to the doc on how to contribute
+RUN echo "echo 'How to contribute:'"  >> $HOME/.bashrc \
+ && echo "echo 'https://firefox-source-docs.mozilla.org/contributing/contribution_quickref.html'" >> $HOME/.bashrc
