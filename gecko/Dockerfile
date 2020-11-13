@@ -22,7 +22,7 @@ RUN sudo apt-get update \
 ENV SHELL=/bin/bash
 RUN sudo apt-get update \
  && pip3 install MozPhab \
- && echo "PATH=\"\$PATH:$HOME/.local/bin/moz-phab \"" >> $HOME/.bashrc \
+ && echo "PATH=\"\$PATH:$HOME/.local/bin/moz-phab\"" >> $HOME/.bashrc \
  && sudo rm -rf /var/lib/apt/lists/*
 
 # Install git-cinnabar.
@@ -41,4 +41,3 @@ RUN rm -rf go-packages go
 # Point to the doc on how to contribute
 RUN echo "echo 'How to contribute:'"  >> $HOME/.bashrc \
  && echo "echo 'https://firefox-source-docs.mozilla.org/contributing/contribution_quickref.html'" >> $HOME/.bashrc
-
