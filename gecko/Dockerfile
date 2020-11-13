@@ -7,7 +7,7 @@ RUN __RR_VERSION__="5.3.0" \
  && sudo dpkg -i rr.deb \
  && rm -f rr.deb
 
-# Install Firefox build dependencies, including moz-phab
+# Install Firefox build dependencies
 # One-line setup command from:
 # https://firefox-source-docs.mozilla.org/setup/linux_build.html#one-line-bootstrapping
 ENV SHELL=/bin/bash
