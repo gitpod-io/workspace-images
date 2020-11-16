@@ -1,16 +1,21 @@
 #!/bin/sh
 set -xe
 
-if [[ $# -ne 2 ]]; then
-  echo "Usage: $0 DOCKERFILE IMAGE_NAME"
+if [[ $# -lt 2 ]]; then
+  echo "Usage: $0 DOCKERFILE IMAGE_NAME [DOCKER_BUILD_ARG]"
   exit 2
 fi
 
 DIR=`dirname $1`
 DOCKERFILE=$1
 IMAGE_NAME=$2
+DOCKER_BUILD_ARG=$3
 
-docker build -t $IMAGE_NAME -f $DOCKERFILE $DIR
+if [[ -z $DOCKER_BUILD_ARG ]]; then
+  docker build -t $IMAGE_NAME -f $DOCKERFILE $DIR
+else
+  docker build -t $IMAGE_NAME -f $DOCKERFILE $DIR --build-arg $DOCKER_BUILD_ARG
+fi
 
 if [[ ! -z $DOCKER_USER ]]; then
   # Log in to Docker Hub.
