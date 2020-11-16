@@ -201,8 +201,10 @@ ENV PATH=$PATH:/home/gitpod/.nvm/versions/node/v${NODE_VERSION}/bin
 ### Python ###
 LABEL dazzle/layer=lang-python
 LABEL dazzle/test=tests/lang-python.yaml
+ARG WITH_PYTHON_TK=false
 USER gitpod
 RUN sudo apt-get update && \
+    if [ "$WITH_PYTHON_TK" = "true" ]; then sudo apt-get install -yq tk-dev; else echo "Not installing tk-dev (use '--build-arg WITH_PYTHON_TK=true' to get it)"; fi && \
     sudo apt-get install -y python3-pip && \
     sudo rm -rf /var/lib/apt/lists/*
 ENV PATH=$HOME/.pyenv/bin:$HOME/.pyenv/shims:$PATH
