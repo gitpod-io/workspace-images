@@ -271,6 +271,7 @@ RUN cp /home/gitpod/.profile /home/gitpod/.profile_orig && \
     && .cargo/bin/rustup completions bash cargo | sudo tee /etc/bash_completion.d/rustup.cargo-bash-completion > /dev/null \
     && .cargo/bin/rustup target add x86_64-unknown-linux-musl \
     && grep -v -F -x -f /home/gitpod/.profile_orig /home/gitpod/.profile > /home/gitpod/.bashrc.d/80-rust
+ENV PATH=$PATH:$HOME/.cargo/bin
 
 RUN bash -lc "cargo install cargo-watch cargo-edit cargo-tree"
 
