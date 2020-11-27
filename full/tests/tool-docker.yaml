@@ -1,0 +1,13 @@
+- desc: docker should be installed
+  command: [which, docker]
+  assert:
+  - status == 0
+  - stdout.indexOf("/usr/bin/docker") != -1
+- desc: containerd should be installed
+  command: [containerd, config, dump]
+  assert:
+  - status == 0
+- desc: dive should be installed
+  command: [dive, version]
+  assert:
+  - status == 0
