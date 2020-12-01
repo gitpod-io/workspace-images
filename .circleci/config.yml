@@ -166,6 +166,7 @@ jobs:
           command: |
             docker load -i workspace-full.tar
             ./.circleci/build_image.sh wasm/Dockerfile gitpod/workspace-wasm
+          no_output_timeout: 30m
 
 workflows:
   version: 2
