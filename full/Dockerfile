@@ -293,8 +293,6 @@ RUN curl -o /var/lib/apt/dazzle-marks/docker.gpg -fsSL https://download.docker.c
 RUN curl -o /tmp/dive.deb -L https://github.com/wagoodman/dive/releases/download/v0.9.2/dive_0.9.2_linux_amd64.deb \
     && apt install /tmp/dive.deb \
     && rm /tmp/dive.deb
-# workaround for https://github.com/gitpod-io/gitpod/issues/2331
-RUN ln -s /usr/bin/runc /usr/sbin/runc
 
 ### Prologue (built across all layers) ###
 LABEL dazzle/layer=dazzle-prologue
