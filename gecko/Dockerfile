@@ -35,8 +35,8 @@ ENV PATH $PATH:$HOME/.git-cinnabar
 # Inject the path update to the top as bash completion needs to call rustc
 RUN sed -i '1s|^|PATH=\"\$PATH:$HOME/.cargo/bin/\"\n|' $HOME/.bashrc
 
-# Delete go directories
-RUN rm -rf go-packages go
+# Delete useless directories for Firefox
+RUN rm -rf go-packages go .gem .subversion .rvm
 
 # Point to the doc on how to contribute
 RUN echo "echo 'How to contribute:'"  >> $HOME/.bashrc \
