@@ -249,16 +249,6 @@ RUN echo "rvm_gems_path=/workspace/.rvm" > ~/.rvmrc
 LABEL dazzle/layer=lang-rust
 LABEL dazzle/test=tests/lang-rust.yaml
 USER gitpod
-RUN sudo apt-get update \
-    && DEBIAN_FRONTEND=noninteractive sudo apt-get install -yq \
-        # Enable Rust static binary builds
-        musl \
-        musl-dev \
-        musl-tools \
-    && sudo cp /var/lib/dpkg/status /var/lib/apt/dazzle-marks/lang-rust.status \
-    && sudo apt-get clean \
-    && sudo rm -rf /var/lib/apt/lists/* /tmp/*
-
 RUN cp /home/gitpod/.profile /home/gitpod/.profile_orig && \
     curl -fsSL https://sh.rustup.rs | sh -s -- -y \
     && .cargo/bin/rustup toolchain install 1.48.0 \
@@ -271,7 +261,6 @@ RUN cp /home/gitpod/.profile /home/gitpod/.profile_orig && \
         rust-src \
     && .cargo/bin/rustup completions bash | sudo tee /etc/bash_completion.d/rustup.bash-completion > /dev/null \
     && .cargo/bin/rustup completions bash cargo | sudo tee /etc/bash_completion.d/rustup.cargo-bash-completion > /dev/null \
-    && .cargo/bin/rustup target add x86_64-unknown-linux-musl \
     && grep -v -F -x -f /home/gitpod/.profile_orig /home/gitpod/.profile > /home/gitpod/.bashrc.d/80-rust
 ENV PATH=$PATH:$HOME/.cargo/bin
 
