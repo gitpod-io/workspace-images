@@ -236,7 +236,6 @@ RUN curl -sSL https://rvm.io/mpapis.asc | gpg --import - \
     && curl -fsSL https://get.rvm.io | bash -s stable \
     && bash -lc " \
         rvm requirements \
-        && rvm install 2.5.8 \
         && rvm install 2.6.6 \
         && rvm use 2.6.6 --default \
         && rvm rubygems current \
