@@ -123,6 +123,9 @@ RUN sudo apt-get remove -y cmake \
 ### Go ###
 LABEL dazzle/layer=lang-go
 LABEL dazzle/test=tests/lang-go.yaml
+USER root
+RUN curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b /usr/bin v1.33.0
+
 USER gitpod
 ENV GO_VERSION=1.15
 ENV GOPATH=$HOME/go-packages
