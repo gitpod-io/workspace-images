@@ -112,7 +112,7 @@ ENV APACHE_DOCROOT_IN_REPO="public" \
 LABEL dazzle/layer=tool-brew
 LABEL dazzle/test=tests/tool-brew.yaml
 USER gitpod
-RUN mkdir ~/.cache && /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
+RUN mkdir ~/.cache && /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 ENV PATH="$PATH:/home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin/" \
     MANPATH="$MANPATH:/home/linuxbrew/.linuxbrew/share/man" \
     INFOPATH="$INFOPATH:/home/linuxbrew/.linuxbrew/share/info" \
