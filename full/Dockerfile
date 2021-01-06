@@ -112,7 +112,9 @@ ENV APACHE_DOCROOT_IN_REPO="public" \
 LABEL dazzle/layer=tool-brew
 LABEL dazzle/test=tests/tool-brew.yaml
 USER gitpod
-RUN mkdir ~/.cache && /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install.sh)"
+# Dazzle does not rebuild a layer until one of its lines are changed. Increase this counter to rebuild this layer.
+ENV TRIGGER_BREW_REBUILD=1
+RUN mkdir ~/.cache && /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 ENV PATH="$PATH:/home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin/" \
     MANPATH="$MANPATH:/home/linuxbrew/.linuxbrew/share/man" \
     INFOPATH="$INFOPATH:/home/linuxbrew/.linuxbrew/share/info" \
@@ -156,12 +158,10 @@ RUN curl -fsSL https://storage.googleapis.com/golang/go$GO_VERSION.linux-amd64.t
         github.com/davidrjenni/reftools/cmd/fillstruct \
         github.com/godoctor/godoctor && \
     GO111MODULE=on go get -u -v \
-        golang.org/x/tools/gopls@v0.5.4 && \
+        golang.org/x/tools/gopls@v0.6.1 && \
     go get -u -v -d github.com/stamblerre/gocode && \
     go build -o $GOPATH/bin/gocode-gomod github.com/stamblerre/gocode && \
-    rm -rf $GOPATH/src && \
-    sudo rm -rf $GOPATH/pkg && \
-    rm -rf /home/gitpod/.cache/go
+    sudo rm -rf $GOPATH/src $GOPATH/pkg /home/gitpod/.cache/go /home/gitpod/.cache/go-build
 # user Go packages
 ENV GOPATH=/workspace/go \
     PATH=/workspace/go/bin:$PATH
@@ -189,7 +189,7 @@ ENV GRADLE_USER_HOME=/workspace/.gradle/
 LABEL dazzle/layer=lang-node
 LABEL dazzle/test=tests/lang-node.yaml
 USER gitpod
-ENV NODE_VERSION=14.15.3
+ENV NODE_VERSION=14.15.4
 RUN curl -fsSL https://raw.githubusercontent.com/nvm-sh/nvm/v0.37.0/install.sh | PROFILE=/dev/null bash \
     && bash -c ". .nvm/nvm.sh \
         && nvm install $NODE_VERSION \
@@ -213,10 +213,8 @@ RUN curl -fsSL https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-ins
         echo 'eval "$(pyenv init -)"'; \
         echo 'eval "$(pyenv virtualenv-init -)"'; } >> /home/gitpod/.bashrc.d/60-python \
     && pyenv update \
-    && pyenv install 2.7.18 \
     && pyenv install 3.8.6 \
-    && pyenv global 3.8.6 2.7.18 \
-    && python2 -m pip install --upgrade pip \
+    && pyenv global 3.8.6 \
     && python3 -m pip install --upgrade pip \
     && python3 -m pip install --upgrade \
         setuptools wheel virtualenv pipenv pylint rope flake8 \
@@ -236,7 +234,6 @@ RUN curl -sSL https://rvm.io/mpapis.asc | gpg --import - \
     && curl -fsSL https://get.rvm.io | bash -s stable \
     && bash -lc " \
         rvm requirements \
-        && rvm install 2.5.8 \
         && rvm install 2.6.6 \
         && rvm use 2.6.6 --default \
         && rvm rubygems current \
@@ -249,29 +246,14 @@ RUN echo "rvm_gems_path=/workspace/.rvm" > ~/.rvmrc
 LABEL dazzle/layer=lang-rust
 LABEL dazzle/test=tests/lang-rust.yaml
 USER gitpod
-RUN sudo apt-get update \
-    && DEBIAN_FRONTEND=noninteractive sudo apt-get install -yq \
-        # Enable Rust static binary builds
-        musl \
-        musl-dev \
-        musl-tools \
-    && sudo cp /var/lib/dpkg/status /var/lib/apt/dazzle-marks/lang-rust.status \
-    && sudo apt-get clean \
-    && sudo rm -rf /var/lib/apt/lists/* /tmp/*
-
 RUN cp /home/gitpod/.profile /home/gitpod/.profile_orig && \
-    curl -fsSL https://sh.rustup.rs | sh -s -- -y \
-    && .cargo/bin/rustup toolchain install 1.48.0 \
-    && .cargo/bin/rustup default 1.48.0 \
-    # Save image size by removing now-redudant stable toolchain
-    && .cargo/bin/rustup toolchain uninstall stable \
+    curl -fsSL https://sh.rustup.rs | sh -s -- -y --profile minimal --default-toolchain 1.49.0 \
     && .cargo/bin/rustup component add \
         rls \
         rust-analysis \
         rust-src \
     && .cargo/bin/rustup completions bash | sudo tee /etc/bash_completion.d/rustup.bash-completion > /dev/null \
     && .cargo/bin/rustup completions bash cargo | sudo tee /etc/bash_completion.d/rustup.cargo-bash-completion > /dev/null \
-    && .cargo/bin/rustup target add x86_64-unknown-linux-musl \
     && grep -v -F -x -f /home/gitpod/.profile_orig /home/gitpod/.profile > /home/gitpod/.bashrc.d/80-rust
 ENV PATH=$PATH:$HOME/.cargo/bin
 
