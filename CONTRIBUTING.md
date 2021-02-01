@@ -2,7 +2,7 @@
 
 Here is a short video to explain this repository:
 
-[![How Gitpod's Default Workspace Images are Built](https://img.youtube.com/vi/0lnZak5cCT0/0.jpg)](https://youtu.be/0lnZak5cCT0)
+[<img alt="How Gitpod's Default Workspace Images are Built" src="https://user-images.githubusercontent.com/599268/106449039-d7dcd780-6483-11eb-91c4-e4e012b9d78b.png" width="600">](https://youtu.be/0lnZak5cCT0)
 
 It briefly explains:
 - What are the different Dockerfiles in here?
