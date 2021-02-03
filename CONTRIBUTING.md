@@ -1,4 +1,6 @@
-# How are these images built?
+# Contributor / Maintainer FAQ
+
+## How are these images built?
 
 Here is a short video that shows how this repository works:
 
@@ -11,7 +13,7 @@ It briefly explains:
 - Which images are built with Dazzle or not (and what's the difference)?
 - How to upgrade tools in workspace-full?
 
-# How to contribute?
+## How to contribute?
 
 - Simply open this repository in Gitpod, e.g. by clicking this button:
 
@@ -35,7 +37,7 @@ It briefly explains:
 > 
 > Finally, once this change is committed and pushed to your repository, you can open the repository or branch in Gitpod to test the project with your new image.
 
-# How to make CircleCI build a PR?
+## How to make CircleCI build a PR?
 
 CircleCI only builds branches of [gitpod-io/workspace-images](https://github.com/gitpod-io/workspace-images), not forks, so Pull Requests sent from forks will not have CircleCI builds by default.
 
