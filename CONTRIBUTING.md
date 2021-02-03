@@ -48,9 +48,9 @@ If you have push access to [gitpod-io/workspace-images](https://github.com/gitpo
 
 ```bash
 git checkout -b pr-123 # Tip: Use the actual PR number
-git push origin pr-123
+git push upstream pr-123
 ```
 
-That's it. Simply pushing the Pull Request's commits to a new branch under `origin` is enough to trigger CircleCI for that PR. Pretty soon the build status will appear in the Pull Request, automatically.
+That's it. Simply pushing the Pull Request's commits to a new branch under `upstream` is enough to trigger CircleCI for that PR. Pretty soon the build status will appear in the Pull Request, automatically.
 
 > 💡 Tip: If CircleCI fails to build a particular image, but you believe it's a temporary problem (for example a network timeout) you can restart builds directly from CircleCI's UI.
