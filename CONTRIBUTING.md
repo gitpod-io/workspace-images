@@ -23,7 +23,9 @@ It briefly explains:
 
 - Finally, once the build passes, test your Pull Request's Docker images on a relevant repository
 
-> 💡 CircleCI will upload temporary images to Docker Hub with a special tag, probably something like this: `gitpod/workspace-full:branch-pr-123` (if your Pull Request is number 123).
+<br>
+
+> 💡 Tip: CircleCI will upload temporary images to Docker Hub with a special tag, probably something like this: `gitpod/workspace-full:branch-pr-123` (if your Pull Request is number 123).
 > 
 > You can test this image by editing one of your project's [.gitpod.yml](https://www.gitpod.io/docs/config-gitpod-file/) file like so (maybe on a separate branch):
 > 
@@ -48,4 +50,4 @@ git push origin pr-123
 
 That's it. Simply pushing the Pull Request's commits to a new branch in `origin` is enough to trigger CircleCI for that PR. Pretty soon the build status will appear in the Pull Request automatically.
 
-> 💡 If CircleCI fails to build a particular image, but you believe it's a temporary problem (e.g. network timeout), you can restart builds directly from CircleCI's UI
+> 💡 Tip: If CircleCI fails to build a particular image, but you believe it's a temporary problem (e.g. network timeout), you can restart builds directly from CircleCI's UI
