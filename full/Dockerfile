@@ -247,7 +247,7 @@ LABEL dazzle/layer=lang-rust
 LABEL dazzle/test=tests/lang-rust.yaml
 USER gitpod
 RUN cp /home/gitpod/.profile /home/gitpod/.profile_orig && \
-    curl -fsSL https://sh.rustup.rs | sh -s -- -y --profile minimal --default-toolchain 1.49.0 \
+    curl -fsSL https://sh.rustup.rs | sh -s -- -y --profile minimal --default-toolchain 1.50.0 \
     && .cargo/bin/rustup component add \
         rls \
         rust-analysis \
