@@ -134,7 +134,7 @@ RUN curl -fsSL https://storage.googleapis.com/golang/go$GO_VERSION.linux-amd64.t
 # install VS Code Go tools from https://github.com/Microsoft/vscode-go/blob/0faec7e5a8a69d71093f08e035d33beb3ded8626/src/goInstallTools.ts#L19-L45
     go get -u -v \
         github.com/mdempsky/gocode \
-        github.com/uudashr/gopkgs/cmd/gopkgs \
+        github.com/uudashr/gopkgs/cmd/gopkgs@v2 \
         github.com/ramya-rao-a/go-outline \
         github.com/acroca/go-symbols \
         golang.org/x/tools/cmd/guru \
@@ -150,7 +150,6 @@ RUN curl -fsSL https://storage.googleapis.com/golang/go$GO_VERSION.linux-amd64.t
         winterdrache.de/goformat/goformat \
         golang.org/x/lint/golint \
         github.com/cweill/gotests/... \
-        github.com/alecthomas/gometalinter \
         honnef.co/go/tools/... \
         github.com/mgechev/revive \
         github.com/sourcegraph/go-langserver \
@@ -159,8 +158,6 @@ RUN curl -fsSL https://storage.googleapis.com/golang/go$GO_VERSION.linux-amd64.t
         github.com/godoctor/godoctor && \
     GO111MODULE=on go get -u -v \
         golang.org/x/tools/gopls@v0.6.5 && \
-    go get -u -v -d github.com/stamblerre/gocode && \
-    go build -o $GOPATH/bin/gocode-gomod github.com/stamblerre/gocode && \
     sudo rm -rf $GOPATH/src $GOPATH/pkg /home/gitpod/.cache/go /home/gitpod/.cache/go-build
 # user Go packages
 ENV GOPATH=/workspace/go \
