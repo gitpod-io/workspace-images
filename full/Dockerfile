@@ -125,7 +125,7 @@ RUN sudo apt-get remove -y cmake \
 ### Go ###
 LABEL dazzle/layer=lang-go
 LABEL dazzle/test=tests/lang-go.yaml
-USER root
+USER gitpod
 ENV GO_VERSION=1.16
 ENV GOPATH=$HOME/go-packages
 ENV GOROOT=$HOME/go
