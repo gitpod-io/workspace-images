@@ -21,7 +21,7 @@ RUN sudo apt-get update \
 # Install moz-phab
 ENV SHELL=/bin/bash
 RUN sudo apt-get update \
- && pip3 install MozPhab \
+ && pip3 install --no-cache-dir MozPhab \
  && echo "PATH=\"\$PATH:$HOME/.local/bin/moz-phab\"" >> $HOME/.bashrc \
  && sudo rm -rf /var/lib/apt/lists/*
 
