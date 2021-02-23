@@ -2,7 +2,7 @@ FROM buildpack-deps:focal
 
 ### base ###
 RUN yes | unminimize \
-    && apt-get install -yq \
+    && apt-get --no-install-recommends install -yq \
         zip \
         unzip \
         bash-completion \
@@ -28,7 +28,7 @@ ENV LANG=en_US.UTF-8
 
 ### Git ###
 RUN add-apt-repository -y ppa:git-core/ppa \
-    && apt-get install -yq git \
+    && apt-get --no-install-recommends install -yq git \
     && rm -rf /var/lib/apt/lists/*
 
 ### Gitpod user ###
@@ -59,7 +59,7 @@ RUN curl -o /var/lib/apt/dazzle-marks/llvm.gpg -fsSL https://apt.llvm.org/llvm-s
     && apt-key add /var/lib/apt/dazzle-marks/llvm.gpg \
     && echo "deb https://apt.llvm.org/focal/ llvm-toolchain-focal main" >> /etc/apt/sources.list.d/llvm.list \
     && apt-get update \
-    && apt-get install -yq \
+    && apt-get --no-install-recommends install -yq \
         clang \
         clangd \
         clang-format \
@@ -73,7 +73,7 @@ RUN curl -o /var/lib/apt/dazzle-marks/llvm.gpg -fsSL https://apt.llvm.org/llvm-s
 LABEL dazzle/layer=tool-nginx
 LABEL dazzle/test=tests/lang-php.yaml
 USER root
-RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -yq \
+RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get --no-install-recommends install -yq \
         apache2 \
         nginx \
         nginx-extras \
@@ -205,7 +205,7 @@ LABEL dazzle/layer=lang-python
 LABEL dazzle/test=tests/lang-python.yaml
 USER gitpod
 RUN sudo apt-get update && \
-    sudo apt-get install -y python3-pip && \
+    sudo apt-get --no-install-recommends install -y python3-pip && \
     sudo rm -rf /var/lib/apt/lists/*
 ENV PATH=$HOME/.pyenv/bin:$HOME/.pyenv/shims:$PATH
 RUN curl -fsSL https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-installer | bash \

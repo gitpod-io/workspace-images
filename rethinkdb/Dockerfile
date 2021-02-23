@@ -5,7 +5,7 @@ FROM gitpod/workspace-full
 # Install RethinkDB build dependencies.
 # Source: https://rethinkdb.com/docs/install/ubuntu/#compile-from-source
 RUN sudo apt-get update \
- && sudo apt-get install -y \
+ && sudo apt-get --no-install-recommends install -y \
   protobuf-compiler \
   libprotobuf-dev \
   libboost-all-dev \

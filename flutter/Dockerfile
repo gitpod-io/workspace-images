@@ -6,7 +6,7 @@ USER gitpod
 # dependencies
 RUN set -ex; \
     sudo apt-get update; \
-    sudo apt-get install -y libglu1-mesa; \
+    sudo apt-get --no-install-recommends install -y libglu1-mesa; \
     sudo rm -rf /var/lib/apt/lists/*
 
 RUN set -ex; \

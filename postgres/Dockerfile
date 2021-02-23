@@ -2,7 +2,7 @@ FROM gitpod/workspace-full:latest
 
 # Install PostgreSQL
 RUN sudo apt-get update \
- && sudo apt-get install -y postgresql-12 postgresql-contrib-12 \
+ && sudo apt-get --no-install-recommends install -y postgresql-12 postgresql-contrib-12 \
  && sudo apt-get clean \
  && sudo rm -rf /var/cache/apt/* /var/lib/apt/lists/* /tmp/*
 
