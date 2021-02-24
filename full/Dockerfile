@@ -7,6 +7,7 @@ RUN yes | unminimize \
         unzip \
         bash-completion \
         build-essential \
+        ninja-build \
         htop \
         jq \
         less \
