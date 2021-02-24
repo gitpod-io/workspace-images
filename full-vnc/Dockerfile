@@ -1,4 +1,5 @@
-FROM gitpod/workspace-full:latest
+ARG FROM=gitpod/workspace-full:latest
+FROM ${FROM}
 
 # Install Xvfb, JavaFX-helpers and Openbox window manager
 RUN sudo apt-get update && \
