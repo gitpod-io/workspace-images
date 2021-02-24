@@ -1,5 +1,7 @@
 FROM buildpack-deps:focal
 
+SHELL [ "/bin/bash", "-c" ]
+
 ### base ###
 RUN yes | unminimize \
     && apt-get install -yq \
