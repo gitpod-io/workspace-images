@@ -1,7 +1,7 @@
 FROM gitpod/workspace-full
 
 RUN bash -cl "cargo install wasm-pack cargo-wasm cargo-generate \
-    && curl \"https://wasmtime.dev/install.sh\" -sSf | bash; \
+    && curl -fsSL https://wasmtime.dev/install.sh  | bash; \
        rustup target add wasm32-wasi"
 
 RUN mkdir /tmp/wasm-sdk \

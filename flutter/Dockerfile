@@ -12,7 +12,7 @@ RUN set -ex; \
 RUN set -ex; \
     mkdir ~/development; \
     cd ~/development; \
-    git clone --depth 1 https://github.com/flutter/flutter.git -b stable
+    git clone --depth 1 https://github.com/flutter/flutter.git -b stable --no-single-branch
 
 ENV PATH="$PATH:/home/gitpod/development/flutter/bin"
 
