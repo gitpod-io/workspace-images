@@ -1,10 +1,7 @@
 FROM gitpod/workspace-full:latest
 
 # Install PostgreSQL
-RUN sudo apt-get update \
- && sudo apt-get install -y postgresql-12 postgresql-contrib-12 \
- && sudo apt-get clean \
- && sudo rm -rf /var/cache/apt/* /var/lib/apt/lists/* /tmp/*
+RUN sudo install-packages postgresql-12 postgresql-contrib-12
 
 # Setup PostgreSQL server for user gitpod
 ENV PATH="$PATH:/usr/lib/postgresql/12/bin"

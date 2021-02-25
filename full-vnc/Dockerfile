@@ -1,9 +1,7 @@
 FROM gitpod/workspace-full:latest
 
 # Install Xvfb, JavaFX-helpers and Openbox window manager
-RUN sudo apt-get update && \
-    sudo apt-get install -yq xvfb x11vnc xterm openjfx libopenjfx-java openbox && \
-    sudo rm -rf /var/lib/apt/lists/*
+RUN sudo install-packages xvfb x11vnc xterm openjfx libopenjfx-java openbox
 
 # Overwrite this env variable to use a different window manager
 ENV WINDOW_MANAGER="openbox"
