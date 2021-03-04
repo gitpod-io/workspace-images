@@ -23,6 +23,8 @@ RUN yes | unminimize \
         multitail \
         lsof \
         ssl-cert \
+        fish \
+        zsh \
     && locale-gen en_US.UTF-8
 
 ENV LANG=en_US.UTF-8
