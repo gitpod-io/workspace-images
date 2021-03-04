@@ -159,8 +159,8 @@ RUN curl -fsSL https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-ins
     && pyenv update \
     && pyenv install 3.8.8 \
     && pyenv global 3.8.8 \
-    && python3 -m pip install --upgrade pip \
-    && python3 -m pip install --upgrade \
+    && python3 -m pip install --no-cache-dir --upgrade pip \
+    && python3 -m pip install --no-cache-dir --upgrade \
         setuptools wheel virtualenv pipenv pylint rope flake8 \
         mypy autopep8 pep8 pylama pydocstyle bandit notebook \
         twine \
