@@ -7,6 +7,10 @@ if [ $# = 0 ]; then
   exit 1
 fi
 
+# Set a runlevel to avoid invoke-rc.d warnings
+# http://manpages.ubuntu.com/manpages/focal/man8/runlevel.8.html#environment
+RUNLEVEL=1
+
 DEBIAN_FRONTEND=noninteractive
 
 DAZZLE_MARKS="/var/lib/apt/dazzle-marks/"
