@@ -23,6 +23,7 @@ RUN curl -o /var/lib/apt/dazzle-marks/llvm.gpg -fsSL https://apt.llvm.org/llvm-s
 LABEL dazzle/layer=tool-nginx
 LABEL dazzle/test=tests/lang-php.yaml
 USER root
+ENV TRIGGER_REBUILD=1
 RUN install-packages \
         apache2 \
         nginx \
