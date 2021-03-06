@@ -1,3 +1,4 @@
+# Dazzle do not supports ARG TRIGGER_REBUILD=1
 FROM gitpod/workspace-base:latest
 
 RUN echo "ws full starts"
@@ -23,7 +24,7 @@ RUN curl -o /var/lib/apt/dazzle-marks/llvm.gpg -fsSL https://apt.llvm.org/llvm-s
 LABEL dazzle/layer=tool-nginx
 LABEL dazzle/test=tests/lang-php.yaml
 USER root
-ENV TRIGGER_REBUILD=1
+ENV TRIGGER_REBUILD=2
 RUN install-packages \
         apache2 \
         nginx \
@@ -208,6 +209,7 @@ RUN bash -lc "cargo install cargo-watch cargo-edit cargo-tree"
 LABEL dazzle/layer=tool-docker
 LABEL dazzle/test=tests/tool-docker.yaml
 USER root
+ENV TRIGGER_REBUILD=1
 # https://docs.docker.com/engine/install/ubuntu/
 RUN curl -o /var/lib/apt/dazzle-marks/docker.gpg -fsSL https://download.docker.com/linux/ubuntu/gpg \
     && apt-key add /var/lib/apt/dazzle-marks/docker.gpg \
