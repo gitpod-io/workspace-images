@@ -1,0 +1,4 @@
+contact_links:
+  - name: Security
+    url: https://www.gitpod.io/security
+    about: Please report security vulnerabilities here.
