@@ -14,7 +14,7 @@ ENV SHELL=/bin/bash
 RUN sudo apt-get update \
  && git clone --progress --single-branch --depth=1 https://github.com/mozilla/gecko-dev/ /tmp/gecko \
  && cd /tmp/gecko \
- && ./mach bootstrap --no-interactive --application-choice=browser \
+ && ./mach bootstrap --application-choice=browser \
  && sudo apt-get remove -y nodejs nodejs-doc \
  && sudo rm -rf /tmp/gecko /var/lib/apt/lists/*
 
