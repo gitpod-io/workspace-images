@@ -1,5 +1,6 @@
 # Dazzle do not supports ARG TRIGGER_REBUILD=2
 FROM gitpod/workspace-base:latest
+FROM composer:2 AS composer
 
 RUN echo "ws full starts"
 
@@ -29,7 +30,6 @@ RUN install-packages \
         apache2 \
         nginx \
         nginx-extras \
-        composer \
         php \
         php-all-dev \
         php-bcmath \
@@ -53,6 +53,7 @@ RUN install-packages \
     && chown -R gitpod:gitpod /etc/nginx /var/run/nginx /var/lib/nginx/ /var/log/nginx/
 COPY --chown=gitpod:gitpod apache2/ /etc/apache2/
 COPY --chown=gitpod:gitpod nginx /etc/nginx/
+COPY --from=composer /usr/bin/composer /usr/bin/composer
 
 ## The directory relative to your git repository that will be served by Apache / Nginx
 ENV APACHE_DOCROOT_IN_REPO="public"
