@@ -3,6 +3,20 @@ FROM gitpod/workspace-base:latest
 
 RUN echo "ws full starts"
 
+### Homebrew ###
+LABEL dazzle/layer=tool-brew
+LABEL dazzle/test=tests/tool-brew.yaml
+USER gitpod
+# Dazzle does not rebuild a layer until one of its lines are changed. Increase this counter to rebuild this layer.
+ENV TRIGGER_BREW_REBUILD=1
+RUN mkdir ~/.cache && /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+ENV PATH="/home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin/:$PATH" \
+    MANPATH="$MANPATH:/home/linuxbrew/.linuxbrew/share/man" \
+    INFOPATH="$INFOPATH:/home/linuxbrew/.linuxbrew/share/info" \
+    HOMEBREW_NO_AUTO_UPDATE=1
+RUN sudo apt remove -y cmake \
+    && brew install cmake
+
 ### Install C/C++ compiler and associated tools ###
 LABEL dazzle/layer=lang-c
 LABEL dazzle/test=tests/lang-c.yaml
@@ -57,20 +71,6 @@ COPY --chown=gitpod:gitpod nginx /etc/nginx/
 ## The directory relative to your git repository that will be served by Apache / Nginx
 ENV APACHE_DOCROOT_IN_REPO="public"
 ENV NGINX_DOCROOT_IN_REPO="public"
-
-### Homebrew ###
-LABEL dazzle/layer=tool-brew
-LABEL dazzle/test=tests/tool-brew.yaml
-USER gitpod
-# Dazzle does not rebuild a layer until one of its lines are changed. Increase this counter to rebuild this layer.
-ENV TRIGGER_BREW_REBUILD=1
-RUN mkdir ~/.cache && /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-ENV PATH="$PATH:/home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin/" \
-    MANPATH="$MANPATH:/home/linuxbrew/.linuxbrew/share/man" \
-    INFOPATH="$INFOPATH:/home/linuxbrew/.linuxbrew/share/info" \
-    HOMEBREW_NO_AUTO_UPDATE=1
-RUN sudo apt remove -y cmake \
-    && brew install cmake
 
 ### Go ###
 LABEL dazzle/layer=lang-go
