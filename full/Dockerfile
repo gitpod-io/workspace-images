@@ -107,7 +107,7 @@ RUN curl -fsSL https://storage.googleapis.com/golang/go$GO_VERSION.linux-amd64.t
         github.com/davidrjenni/reftools/cmd/fillstruct \
         github.com/godoctor/godoctor && \
     GO111MODULE=on go get -u -v \
-        golang.org/x/tools/gopls@v0.6.9 && \
+        golang.org/x/tools/gopls@v0.6.10 && \
     sudo rm -rf $GOPATH/src $GOPATH/pkg /home/gitpod/.cache/go /home/gitpod/.cache/go-build
 # user Go packages
 ENV GOPATH=/workspace/go \
