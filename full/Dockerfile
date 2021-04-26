@@ -198,6 +198,7 @@ RUN cp /home/gitpod/.profile /home/gitpod/.profile_orig && \
         rls \
         rust-analysis \
         rust-src \
+        rustfmt \
     && .cargo/bin/rustup completions bash | sudo tee /etc/bash_completion.d/rustup.bash-completion > /dev/null \
     && .cargo/bin/rustup completions bash cargo | sudo tee /etc/bash_completion.d/rustup.cargo-bash-completion > /dev/null \
     && grep -v -F -x -f /home/gitpod/.profile_orig /home/gitpod/.profile > /home/gitpod/.bashrc.d/80-rust
