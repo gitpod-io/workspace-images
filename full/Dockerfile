@@ -223,7 +223,7 @@ RUN curl -o /usr/local/bin/docker-compose -fsSL https://github.com/docker/compos
     && chmod +x /usr/local/bin/docker-compose
 
 # https://github.com/wagoodman/dive
-RUN curl -o /tmp/dive.deb -fsSL https://github.com/wagoodman/dive/releases/download/v0.9.2/dive_0.9.2_linux_amd64.deb \
+RUN curl -o /tmp/dive.deb -fsSL https://github.com/wagoodman/dive/releases/download/v0.10.0/dive_0.10.0_linux_amd64.deb \
     && apt install /tmp/dive.deb \
     && rm /tmp/dive.deb
 
