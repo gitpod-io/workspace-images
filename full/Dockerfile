@@ -180,8 +180,9 @@ RUN curl -fsSL https://rvm.io/mpapis.asc | gpg --import - \
     && curl -fsSL https://get.rvm.io | bash -s stable \
     && bash -lc " \
         rvm requirements \
-        && rvm install 2.6.6 \
-        && rvm use 2.6.6 --default \
+        && rvm install 3.0.1 \
+        && rvm install 2.6.7 \
+        && rvm use 2.6.7 --default \
         && rvm rubygems current \
         && gem install bundler --no-document \
         && gem install solargraph --no-document" \
