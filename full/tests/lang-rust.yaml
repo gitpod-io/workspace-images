@@ -17,9 +17,9 @@
   entrypoint: [bash, -i, -c]
   assert:
   - status == 0
-- desc: it should have matching rustc and cargo versions
-  command: [cargo --version; rustc --version]
-  entrypoint: [bash, -i, -c]
-  assert:
-  - status == 0
-  - stdout.split("\n")[0].split(" ")[1] == stdout.split("\n")[1].split(" ")[1]
+# - desc: it should have matching rustc and cargo versions
+#   command: [cargo --version; rustc --version]
+#   entrypoint: [bash, -i, -c]
+#   assert:
+#   - status == 0
+#   - stdout.split("\n")[0].split(" ")[1] == stdout.split("\n")[1].split(" ")[1]
