@@ -107,6 +107,34 @@ jobs:
             ./.circleci/build_image.sh dotnet-vnc/Dockerfile gitpod/workspace-dotnet-vnc
           no_output_timeout: 30m
 
+  workspace-dotnet-lts:
+    docker:
+      - image: docker:stable
+    steps:
+      - checkout
+      - setup_remote_docker
+      - attach_workspace:
+          at: .
+      - run:
+          command: |
+            docker load -i workspace-full.tar
+            ./.circleci/build_image.sh dotnet-lts/Dockerfile gitpod/workspace-dotnet-lts
+          no_output_timeout: 60m
+
+  workspace-dotnet-lts-vnc:
+    docker:
+      - image: docker:stable
+    steps:
+      - checkout
+      - setup_remote_docker
+      - attach_workspace:
+          at: .
+      - run:
+          command: |
+            docker load -i workspace-full-vnc.tar
+            ./.circleci/build_image.sh dotnet-lts-vnc/Dockerfile gitpod/workspace-dotnet-lts-vnc
+          no_output_timeout: 30m
+
   workspace-postgres:
     docker:
       - image: docker:stable
@@ -207,6 +235,12 @@ workflows:
           requires:
             - workspace-full
       - workspace-dotnet-vnc:
+          requires:
+            - workspace-full-vnc
+      - workspace-dotnet-lts:
+          requires:
+            - workspace-full
+      - workspace-dotnet-lts-vnc:
           requires:
             - workspace-full-vnc
       - workspace-postgres:
