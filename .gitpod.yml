@@ -1,13 +1,11 @@
 image: gitpod/workspace-full
 
 tasks:
-  - command: sudo docker-up
-    name: Docker daemon
   - command: docker
 
 vscode:
   extensions:
-    - ms-azuretools.vscode-docker@1.8.1:xuHtLS23Q5czFwYH7grcCQ==
+    - ms-azuretools.vscode-docker
 
 github:
   prebuilds:
