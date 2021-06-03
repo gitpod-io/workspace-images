@@ -1,5 +1,4 @@
-image: gitpod/workspace-full
-
+image: public.ecr.aws/g7f0f4s4/workspace-full:latest
 tasks:
   - command: sudo docker-up
     name: Docker daemon
