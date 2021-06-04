@@ -1,6 +1,17 @@
-version: 2.0
+version: 2.1
 
 jobs:
+  pre-commit:
+    docker:
+      - image: docker:stable
+    steps:
+      - checkout
+      - attach_workspace:
+          at: .
+      - run:
+          command: pre-commit run --all-files
+          name: Run pre-commit tests
+
   workspace-base:
     docker:
       - image: docker:stable
@@ -221,7 +232,10 @@ workflows:
   version: 2
   build-and-deploy:
     jobs:
-      - workspace-base
+      - pre-commit
+      - workspace-base:
+          requires:
+            - pre-commit
       - workspace-full:
           requires:
             - workspace-base

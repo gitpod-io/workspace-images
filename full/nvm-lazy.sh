@@ -1,18 +1,25 @@
 #!/bin/bash
 
-# Lazy-load NVM
-# Based on https://www.reddit.com/r/node/comments/4tg5jg/lazy_load_nvm_for_faster_shell_start/d5ib9fs
+export NVM_DIR="$HOME/.nvm"
 
-declare -a NODE_GLOBALS=(`find ~/.nvm/versions/node -maxdepth 3 -type l -wholename '*/bin/*' | xargs -n1 basename | sort | uniq`)
-NODE_GLOBALS+=("node")
-NODE_GLOBALS+=("nvm")
+# Lazy load
+if [[ -s "$NVM_DIR/nvm.sh" ]]; then
+    # shellcheck disable=SC2207,SC2038
+    NODE_GLOBALS=($(find "$NVM_DIR/versions/node" -maxdepth 3 -type l -wholename '*/bin/*' | xargs -n1 basename | sort | uniq))
+    NODE_GLOBALS+=("node")
+    NODE_GLOBALS+=("nvm")
 
-load_nvm () {
-    export NVM_DIR=~/.nvm
-    [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
-    [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-}
+    # Lazy-loading nvm + npm on node globals
+    load_nvm () {
+        # shellcheck disable=SC1091,SC1090
+        [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+    }
 
-for cmd in "${NODE_GLOBALS[@]}"; do
-    eval "${cmd}(){ unset -f ${NODE_GLOBALS[@]}; load_nvm; ${cmd} \$@; }"
-done
+    # Making node global trigger the lazy loading
+    for cmd in "${NODE_GLOBALS[@]}"; do
+        # shellcheck disable=SC2128
+        eval "${cmd}(){ unset -f ${NODE_GLOBALS}; load_nvm; ${cmd} \$@ }"
+    done
+
+    export PATH="$PATH:$HOME/.yarn/bin"
+fi
