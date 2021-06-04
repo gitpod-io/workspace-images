@@ -1,12 +1,13 @@
-#!/bin/bash
-set -xe
+#!/bin/sh
 
-if [[ $# -le 2 ]]; then
+set -e
+
+if [ $# -le 2 ]; then
   echo "Usage: $0 DOCKERFILE IMAGE_NAME [TAR_FILENAME]"
   exit 2
 fi
 
-if [[ -z $DOCKER_USER ]]; then
+if [ -z "$DOCKER_USER" ]; then
   echo "DOCKER_USER is mandatory"
   exit 2
 fi
@@ -29,7 +30,7 @@ EOF
 cd "$DIR"
 dazzle build --repository gitpod/dazzle-wsfull-build --output-test-xml results.xml -t "$IMAGE_NAME:$BUILD_TAG" -f "$DOCKERFILE" .
 
-if [[ $CIRCLE_BRANCH != "master" ]]; then
+if [ "$CIRCLE_BRANCH" != "master" ]; then
   # Work in progress: Tag the image ":branch-X" and push it to Docker Hub.
   # shellcheck disable=SC2001
   DOCKERHUB_TAG="branch-$(echo "$CIRCLE_BRANCH" | sed 's_/_-_g')"
@@ -45,7 +46,7 @@ else
   docker push "$IMAGE_NAME:$DOCKERHUB_TAG"
 fi
 
-if [[ -n $TAR_FILENAME ]]; then
+if [ -n "$TAR_FILENAME" ]; then
   echo "exporting $IMAGE_NAME:latest to $TAR_FILENAME"
   docker tag "$IMAGE_NAME:$BUILD_TAG" "$IMAGE_NAME:latest"
   docker save "$IMAGE_NAME:latest" -o "$TAR_FILENAME"

@@ -1,7 +1,8 @@
-#!/bin/bash
-set -xe
+#!/bin/sh
 
-if [[ $# -ne 2 ]]; then
+set -e
+
+if [ $# -ne 2 ]; then
   echo "Usage: $0 DOCKERFILE IMAGE_NAME"
   exit 2
 fi
@@ -12,14 +13,14 @@ IMAGE_NAME=$2
 
 docker build -t "$IMAGE_NAME" -f "$DOCKERFILE" "$DIR"
 
-if [[ -n $DOCKER_USER ]]; then
+if [ -n "$DOCKER_USER" ]; then
   # Log in to Docker Hub.
   # Use heredoc to avoid variable getting exposed in trace output.
   # Use << (<<< herestring is not available in busybox ash).
   docker login -u "$DOCKER_USER" --password-stdin << EOF
 $DOCKER_PASS
 EOF
-  if [[ "$CIRCLE_BRANCH" != "master" ]]; then
+  if [ "$CIRCLE_BRANCH" != "master" ]; then
     # Work in progress: Tag the image ":branch-X" and push it to Docker Hub.
     # shellcheck disable=SC2001
     DOCKERHUB_TAG="branch-$(echo "$CIRCLE_BRANCH" | sed 's_/_-_g')"
