@@ -2,6 +2,13 @@
 
 A curated, chronologically ordered list of notable changes in [Gitpod's default workspace images](https://hub.docker.com/u/gitpod).
 
+## 2021-06-04
+
+- Bump Go version to 1.16.5
+- Bump nvm.sh to v0.38.0
+- Introduce pre-commit checks
+- Run shellcheck in shell scripts
+
 ## 2020-06-03
 
 - Bump Node.js version following a [security alert](https://twitter.com/liran_tal/status/1267519052731289600): [gitpod-io/workspace-images#243](https://github.com/gitpod-io/workspace-images/pull/243)

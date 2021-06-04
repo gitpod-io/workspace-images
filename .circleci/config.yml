@@ -1,16 +1,19 @@
 version: 2.1
 
 jobs:
-  pre-commit:
+  validate-changes:
     docker:
-      - image: docker:stable
+      # pre-commit package is included since 20.10
+      - image: ubuntu:20.10
     steps:
       - checkout
       - attach_workspace:
           at: .
       - run:
-          command: pre-commit run --all-files
-          name: Run pre-commit tests
+          name: Run pre-commit checks
+          command: |
+            apt update && apt install -y shellcheck pre-commit git
+            pre-commit run --all-files
 
   workspace-base:
     docker:
@@ -232,10 +235,10 @@ workflows:
   version: 2
   build-and-deploy:
     jobs:
-      - pre-commit
+      - validate-changes
       - workspace-base:
           requires:
-            - pre-commit
+            - validate-changes
       - workspace-full:
           requires:
             - workspace-base
