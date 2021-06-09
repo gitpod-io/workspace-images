@@ -236,9 +236,7 @@ workflows:
   build-and-deploy:
     jobs:
       - validate-changes
-      - workspace-base:
-          requires:
-            - validate-changes
+      - workspace-base
       - workspace-full:
           requires:
             - workspace-base
