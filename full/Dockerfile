@@ -108,8 +108,8 @@ RUN curl -fsSL https://storage.googleapis.com/golang/go$GO_VERSION.linux-amd64.t
         github.com/godoctor/godoctor && \
     GO111MODULE=on go get -v \
         golang.org/x/tools/gopls@v0.6.11 && \
-    sudo rm -rf $GOPATH/src $GOPATH/pkg /home/gitpod/.cache/go /home/gitpod/.cache/go-build && \
-    	curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.40.1
+    curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.40.1 && \
+    sudo rm -rf $GOPATH/src $GOPATH/pkg /home/gitpod/.cache/go /home/gitpod/.cache/go-build
 # user Go packages
 ENV GOPATH=/workspace/go \
     PATH=/workspace/go/bin:$PATH
