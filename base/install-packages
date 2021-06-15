@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 set -o errexit
 
@@ -9,8 +9,10 @@ fi
 
 # Set a runlevel to avoid invoke-rc.d warnings
 # http://manpages.ubuntu.com/manpages/focal/man8/runlevel.8.html#environment
+# shellcheck disable=SC2034
 RUNLEVEL=1
 
+# shellcheck disable=SC2034
 DEBIAN_FRONTEND=noninteractive
 
 DAZZLE_MARKS="/var/lib/apt/dazzle-marks/"
@@ -21,7 +23,7 @@ if [ ! -d "${DAZZLE_MARKS}" ]; then
 fi
 
 apt-get update
-apt-get install -yq --no-install-recommends $@
+apt-get install -yq --no-install-recommends "$@"
 
 cp /var/lib/dpkg/status "${DAZZLE_MARKS}/${TIMESTAMP}.status"
 

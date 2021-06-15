@@ -7,6 +7,7 @@ Here is a short video that shows how this repository works:
 [<img alt="How Gitpod's Default Workspace Images are Built" src="https://user-images.githubusercontent.com/599268/106449039-d7dcd780-6483-11eb-91c4-e4e012b9d78b.png" width="600">](https://youtu.be/0lnZak5cCT0)
 
 It briefly explains:
+
 - What are the different Dockerfiles in here?
 - How do they relate to each other?
 - How does CircleCI build them?
@@ -36,7 +37,8 @@ It briefly explains:
 > image: gitpod/workspace-full:branch-pr-123
 > ```
 >
-> Finally, once this change is committed and pushed to your repository, you can open your test repository or branch in Gitpod to test the project with your new image. Please ask for help if you're not sure what to do.
+> Finally, once this change is committed and pushed to your repository, you can open your test repository or branch in Gitpod to test the project with your new image.
+> Please ask for help if you're not sure what to do.
 
 ## How to make CircleCI build a PR?
 
