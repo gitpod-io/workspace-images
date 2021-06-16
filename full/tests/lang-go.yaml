@@ -9,7 +9,7 @@
     - status == 0
     - stderr.indexOf("gotests") != -1
 - desc: it should have gopkgs
-  command: [gopkgs]
+  command: [gopkgs, "-h"]
   assert:
     - status == 0
     - stderr.indexOf("gopkgs") != -1
@@ -24,7 +24,7 @@
     - status == 0
     - stdout.indexOf("Delve") != -1
 - desc: it should have golangci-lint
-  command: ["golangci-lint", "version"]
+  command: ["golangci-lint", version]
   assert:
     - status == 0
     - stdout.indexOf("golangci-lint") != -1
