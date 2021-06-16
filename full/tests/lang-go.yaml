@@ -7,12 +7,12 @@
   command: [gotests, "-h"]
   assert:
     - status == 0
-    - stdout.indexOf("gotests") != -1
+    - stderr.indexOf("gotests") != -1
 - desc: it should have gopkgs
   command: [gopkgs]
   assert:
     - status == 0
-    - stdout.indexOf("gopkgs") != -1
+    - stderr.indexOf("gopkgs") != -1
 - desc: it should have gopls
   command: [gopls, version]
   assert:
