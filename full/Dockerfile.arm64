@@ -211,18 +211,33 @@ RUN bash -lc "cargo install cargo-watch cargo-edit cargo-tree"
 
 ### Install additional components ###
 USER gitpod
+# AWS CLI
 RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-aarch64.zip" -o "awscliv2.zip" && \
     unzip awscliv2.zip && \
     sudo ./aws/install
+# eksctl
 RUN curl --silent --location "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_Linux_arm64.tar.gz" | tar xz -C /tmp && \
     sudo mv /tmp/eksctl /usr/local/bin
+# kubectl
 RUN sudo apt-get update && \
     sudo apt-get install -y apt-transport-https ca-certificates curl && \
     sudo curl -fsSLo /usr/share/keyrings/kubernetes-archive-keyring.gpg https://packages.cloud.google.com/apt/doc/apt-key.gpg && \
     echo "deb [signed-by=/usr/share/keyrings/kubernetes-archive-keyring.gpg] https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee /etc/apt/sources.list.d/kubernetes.list && \
     sudo apt-get update && \
     sudo apt-get install -y kubectl
+# AWS CDK
 RUN npm install -g aws-cdk
+# mysql-client
+RUN sudo apt-get update && sudo apt-get install -y mysql-client
+# helm
+RUN curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 && chmod 700 get_helm.sh && ./get_helm.sh && rm get_helm.sh
+# tfenv + terraform
+RUN git clone https://github.com/trilogy-group/tfenv.git ~/.tfenv && \
+    mkdir -p ~/.local/bin/ && \
+    sudo ln -s ~/.tfenv/bin/* /usr/local/bin && \
+    tfenv install 0.14.11 && \
+    tfenv install latest && \
+    tfenv use latest
 
 ### Docker ###
 LABEL dazzle/layer=tool-docker
