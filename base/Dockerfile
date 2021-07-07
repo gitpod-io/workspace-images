@@ -18,6 +18,7 @@ RUN yes | unminimize \
         locales \
         man-db \
         nano \
+        ripgrep \
         software-properties-common \
         sudo \
         time \
