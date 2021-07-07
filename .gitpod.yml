@@ -1,4 +1,4 @@
-image: public.ecr.aws/g7f0f4s4/workspace-full:latest
+image: devfactory/workspace-full:latest
 tasks:
   - command: docker
 
