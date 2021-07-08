@@ -1,4 +1,5 @@
-FROM devfactory/workspace-full
+ARG BASE_IMAGE=devfactory/workspace-full
+FROM $BASE_IMAGE
 
 # Install MongoDB
 # Source: https://docs.mongodb.com/manual/tutorial/install-mongodb-on-ubuntu-tarball/#install-mongodb-community-edition
