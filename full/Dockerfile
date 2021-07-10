@@ -212,7 +212,7 @@ RUN bash -lc "cargo install cargo-watch cargo-edit cargo-tree"
 USER gitpod
 # AWS CLI
 RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" && \
-    unzip awscliv2.zip && sudo ./aws/install
+    unzip awscliv2.zip && sudo ./aws/install && rm awscliv2.zip
 # eksctl
 RUN curl --silent --location "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_Linux_amd64.tar.gz" | tar xz -C /tmp && \
     sudo mv /tmp/eksctl /usr/local/bin
@@ -236,6 +236,8 @@ RUN git clone https://github.com/trilogy-group/tfenv.git ~/.tfenv && \
     tfenv install 0.14.11 && \
     tfenv install latest && \
     tfenv use latest
+# EYK CLI tool
+RUN curl -ssl https://eyk-assets.ey.io/eyk/eyk-installer.sh | bash && sudo mv ./eyk /usr/local/bin
 
 ### Docker ###
 LABEL dazzle/layer=tool-docker
