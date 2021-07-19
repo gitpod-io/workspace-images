@@ -33,7 +33,7 @@ ENV LANG=en_US.UTF-8
 
 ### Git ###
 RUN add-apt-repository -y ppa:git-core/ppa \
-    && install-packages git
+    && install-packages git git-lfs
 
 ### Gitpod user ###
 # '-l': see https://docs.docker.com/develop/develop-images/dockerfile_best-practices/#user
@@ -52,3 +52,6 @@ RUN sudo echo "Running 'sudo' for Gitpod: success" && \
     # create .bashrc.d folder and source it in the bashrc
     mkdir /home/gitpod/.bashrc.d && \
     (echo; echo "for i in \$(ls \$HOME/.bashrc.d/*); do source \$i; done"; echo) >> /home/gitpod/.bashrc
+
+# configure git-lfs
+RUN sudo git lfs install --system
