@@ -217,6 +217,19 @@ jobs:
             ./.circleci/build_image.sh gecko/Dockerfile gitpod/workspace-gecko
           no_output_timeout: 60m
 
+  workspace-nix:
+    docker:
+      - image: docker:stable
+    steps:
+      - checkout
+      - setup_remote_docker
+      - attach_workspace:
+          at: .
+      - run:
+          command: |
+            docker load -i workspace-base.tar
+            ./.circleci/build_image.sh nix/Dockerfile gitpod/workspace-nix
+
   workspace-wasm:
     docker:
       - image: docker:stable
