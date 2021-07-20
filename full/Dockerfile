@@ -155,7 +155,9 @@ USER gitpod
 RUN sudo install-packages python3-pip
 
 ENV PATH=$HOME/.pyenv/bin:$HOME/.pyenv/shims:$PATH
-RUN curl -fsSL https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-installer | bash \
+RUN sudo apt-get update -q \
+    && sudo apt-get install -yq tk-dev \
+    && curl -fsSL https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-installer | bash \
     && { echo; \
         echo 'eval "$(pyenv init -)"'; \
         echo 'eval "$(pyenv virtualenv-init -)"'; } >> /home/gitpod/.bashrc.d/60-python \
