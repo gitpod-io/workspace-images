@@ -205,7 +205,7 @@ RUN cp /home/gitpod/.profile /home/gitpod/.profile_orig && \
     && grep -v -F -x -f /home/gitpod/.profile_orig /home/gitpod/.profile > /home/gitpod/.bashrc.d/80-rust
 ENV PATH=$PATH:$HOME/.cargo/bin
 
-RUN bash -lc "cargo install cargo-watch cargo-edit cargo-tree"
+RUN bash -lc "cargo install cargo-watch cargo-edit cargo-tree cargo-workspaces"
 
 ### Docker ###
 LABEL dazzle/layer=tool-docker
