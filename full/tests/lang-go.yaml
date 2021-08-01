@@ -1,18 +1,30 @@
 - desc: it should run
   command: [go, version]
   assert:
-  - stdout.indexOf("go version") != -1
-  - status == 0
-- desc: it should have gocode
-  command: [gocode]
+    - status == 0
+    - stdout.indexOf("go version") != -1
+- desc: it should have gotests
+  command: [gotests, "-h"]
   assert:
-  - status == 0
+    - status == 0
+    - stderr.indexOf("gotests") != -1
 - desc: it should have gopkgs
-  command: [gopkgs]
+  command: [gopkgs, "-h"]
   assert:
-  - status == 0
+    - status == 0
+    - stderr.indexOf("gopkgs") != -1
 - desc: it should have gopls
   command: [gopls, version]
   assert:
-  - status == 0
-  - stdout.indexOf("gopls") != -1
+    - status == 0
+    - stdout.indexOf("gopls") != -1
+- desc: it should have Delve
+  command: [dlv, version]
+  assert:
+    - status == 0
+    - stdout.indexOf("Delve") != -1
+- desc: it should have golangci-lint
+  command: ["golangci-lint", version]
+  assert:
+    - status == 0
+    - stdout.indexOf("golangci-lint") != -1
