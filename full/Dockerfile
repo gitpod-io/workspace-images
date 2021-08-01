@@ -154,6 +154,7 @@ RUN curl -fsSL https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-ins
         mypy autopep8 pep8 pylama pydocstyle bandit notebook \
         twine \
     && sudo rm -rf /tmp/*
+ENV PIP_USER=no
 # Gitpod will automatically add user site under `/workspace` to persist your packages.
 # ENV PYTHONUSERBASE=/workspace/.pip-modules \
 #    PIP_USER=yes
