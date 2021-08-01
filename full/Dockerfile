@@ -24,7 +24,7 @@ RUN curl -o /var/lib/apt/dazzle-marks/llvm.gpg -fsSL https://apt.llvm.org/llvm-s
 LABEL dazzle/layer=tool-nginx
 LABEL dazzle/test=tests/lang-php.yaml
 USER root
-ENV TRIGGER_REBUILD=2
+ENV TRIGGER_REBUILD=3
 RUN install-packages \
         apache2 \
         nginx \
@@ -122,7 +122,7 @@ ENV GRADLE_USER_HOME=/workspace/.gradle/
 LABEL dazzle/layer=lang-node
 LABEL dazzle/test=tests/lang-node.yaml
 USER gitpod
-ENV NODE_VERSION=14.17.3
+ENV NODE_VERSION=14.17.4
 ENV TRIGGER_REBUILD=1
 RUN curl -fsSL https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | PROFILE=/dev/null bash \
     && bash -c ". .nvm/nvm.sh \
@@ -180,7 +180,7 @@ LABEL dazzle/layer=lang-rust
 LABEL dazzle/test=tests/lang-rust.yaml
 USER gitpod
 RUN cp /home/gitpod/.profile /home/gitpod/.profile_orig && \
-    curl -fsSL https://sh.rustup.rs | sh -s -- -y --profile minimal --default-toolchain 1.53.0 \
+    curl -fsSL https://sh.rustup.rs | sh -s -- -y --profile minimal --default-toolchain 1.54.0 \
     && .cargo/bin/rustup component add \
         rls \
         rust-analysis \
@@ -204,10 +204,10 @@ RUN curl -o /var/lib/apt/dazzle-marks/docker.gpg -fsSL https://download.docker.c
     && add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" \
     && install-packages docker-ce=5:19.03.15~3-0~ubuntu-focal docker-ce-cli=5:19.03.15~3-0~ubuntu-focal containerd.io
 
-RUN curl -o /usr/bin/slirp4netns -fsSL https://github.com/rootless-containers/slirp4netns/releases/download/v1.1.9/slirp4netns-$(uname -m) \
+RUN curl -o /usr/bin/slirp4netns -fsSL https://github.com/rootless-containers/slirp4netns/releases/download/v1.1.11/slirp4netns-$(uname -m) \
     && chmod +x /usr/bin/slirp4netns
 
-RUN curl -o /usr/local/bin/docker-compose -fsSL https://github.com/docker/compose/releases/download/1.28.5/docker-compose-Linux-x86_64 \
+RUN curl -o /usr/local/bin/docker-compose -fsSL https://github.com/docker/compose/releases/download/1.29.2/docker-compose-Linux-x86_64 \
     && chmod +x /usr/local/bin/docker-compose
 
 # https://github.com/wagoodman/dive
