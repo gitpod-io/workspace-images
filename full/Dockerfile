@@ -155,9 +155,9 @@ RUN curl -fsSL https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-ins
         twine \
     && sudo rm -rf /tmp/*
 ENV PIP_USER=no
-# Gitpod will automatically add user site under `/workspace` to persist your packages.
-# ENV PYTHONUSERBASE=/workspace/.pip-modules \
-#    PIP_USER=yes
+ENV PIPENV_VENV_IN_PROJECT=true
+ENV PYTHONUSERBASE=/workspace/.pip-modules
+ENV PATH=$PYTHONUSERBASE/bin:$PATH
 
 ### Ruby ###
 LABEL dazzle/layer=lang-ruby
@@ -176,6 +176,10 @@ RUN curl -fsSL https://rvm.io/mpapis.asc | gpg --import - \
     && echo '[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*' >> /home/gitpod/.bashrc.d/70-ruby
 RUN echo "rvm_gems_path=/workspace/.rvm" > ~/.rvmrc
 
+ENV GEM_HOME=/workspace/.rvm
+ENV GEM_PATH=$GEM_HOME:$GEM_PATH
+ENV PATH=/workspace/.rvm/bin:$PATH
+
 ### Rust ###
 LABEL dazzle/layer=lang-rust
 LABEL dazzle/test=tests/lang-rust.yaml
@@ -191,6 +195,12 @@ RUN cp /home/gitpod/.profile /home/gitpod/.profile_orig && \
     && .cargo/bin/rustup completions bash cargo | sudo tee /etc/bash_completion.d/rustup.cargo-bash-completion > /dev/null \
     && grep -v -F -x -f /home/gitpod/.profile_orig /home/gitpod/.profile > /home/gitpod/.bashrc.d/80-rust
 ENV PATH=$PATH:$HOME/.cargo/bin
+# TODO: setting CARGO_HOME to /workspace/.cargo avoids manual updates. Remove after full workspace backups are GA.
+ENV CARGO_HOME=/workspace/.cargo
+ENV PATH=$CARGO_HOME/bin:$PATH
+
+RUN sudo mkdir -p $CARGO_HOME \
+    && sudo chown -R gitpod:gitpod $CARGO_HOME
 
 RUN bash -lc "cargo install cargo-watch cargo-edit cargo-tree cargo-workspaces"
 
