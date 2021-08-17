@@ -1,7 +1,8 @@
 FROM gitpod/workspace-full:latest
 
-# Install Xvfb, JavaFX-helpers and Openbox window manager
-RUN sudo install-packages xvfb x11vnc xterm openjfx libopenjfx-java openbox
+# Install Xvfb, JavaFX-helpers, Openbox window manager and emacs GTK
+RUN sudo install-packages xvfb x11vnc xterm openjfx libopenjfx-java openbox \
+            emacs-gtk
 
 # Overwrite this env variable to use a different window manager
 ENV WINDOW_MANAGER="openbox"
