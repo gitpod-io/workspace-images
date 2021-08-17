@@ -22,6 +22,7 @@ RUN yes | unminimize \
         software-properties-common \
         sudo \
         time \
+        emacs-nox \
         vim \
         multitail \
         lsof \
