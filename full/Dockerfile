@@ -83,15 +83,15 @@ ENV PATH=$GOROOT/bin:$GOPATH/bin:$PATH
 RUN curl -fsSL https://storage.googleapis.com/golang/go$GO_VERSION.linux-amd64.tar.gz | tar xzs && \
 # install VS Code Go tools for use with gopls as per https://github.com/golang/vscode-go/blob/master/docs/tools.md
 # also https://github.com/golang/vscode-go/blob/27bbf42a1523cadb19fad21e0f9d7c316b625684/src/goTools.ts#L139
-    go install \
-        github.com/uudashr/gopkgs/cmd/gopkgs@v2 \
-        github.com/ramya-rao-a/go-outline@latest \
-        github.com/cweill/gotests/gotests@latest \
-        github.com/fatih/gomodifytags@latest \
-        github.com/josharian/impl@latest \
-        github.com/haya14busa/goplay/cmd/goplay@latest \
-        github.com/go-delve/delve/cmd/dlv@latest \
-        golang.org/x/tools/gopls@v0.7.1 && \
+    go install github.com/uudashr/gopkgs/cmd/gopkgs@v2 && \
+    go install github.com/ramya-rao-a/go-outline@latest && \
+    go install github.com/cweill/gotests/gotests@latest && \
+    go install github.com/fatih/gomodifytags@latest && \
+    go install github.com/josharian/impl@latest && \
+    go install github.com/haya14busa/goplay/cmd/goplay@latest && \
+    go install github.com/go-delve/delve/cmd/dlv@latest && \
+    go install golang.org/x/tools/gopls@v0.7.1 && \
+
     curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.42.0 && \
     # curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin  & \ # it should work I'm not tested
     sudo rm -rf $GOPATH/src $GOPATH/pkg /home/gitpod/.cache/go /home/gitpod/.cache/go-build
