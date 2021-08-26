@@ -237,6 +237,32 @@ RUN curl -fsSL https://pkgs.tailscale.com/stable/ubuntu/focal.gpg | sudo apt-key
     && apt-get update \
     && apt-get install -y tailscale
 
+### Cloud Infrastructure CLIs ###
+
+LABEL dazzle/layer=tool-cloud-infra-cli
+LABEL dazzle/test=tests/tool-cloud-infra-cli.yaml
+USER root
+
+# Amazon Web Services
+RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" \
+    && unzip awscliv2.zip \
+    && ./aws/install \
+    && npm install -g aws-cdk
+
+# Digital Ocean
+RUN curl -L -s `curl -L -s https://api.github.com/repos/digitalocean/doctl/releases/latest | grep -o -E "https://(.*)doctl-(.*)-linux-amd64.tar.gz"` | tar xvz -C /usr/bin
+
+# Google Cloud Platform
+RUN apt-get update && \
+    apt-get install -y curl gnupg \
+    && echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] http://packages.cloud.google.com/apt cloud-sdk main" | tee -a /etc/apt/sources.list.d/google-cloud-sdk.list \
+    && curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key --keyring /usr/share/keyrings/cloud.google.gpg  add - \
+    && apt-get update -y \
+    && apt-get install google-cloud-sdk -y
+
+# Microsoft Azure
+RUN curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
+
 ### Prologue (built across all layers) ###
 LABEL dazzle/layer=dazzle-prologue
 LABEL dazzle/test=tests/prologue.yaml
