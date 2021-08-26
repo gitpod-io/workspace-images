@@ -282,6 +282,9 @@ workflows:
       - workspace-mongodb:
           requires:
             - workspace-full
+      - workspace-nix:
+          requires:
+            - workspace-base
       - workspace-flutter:
           requires:
             - workspace-full
