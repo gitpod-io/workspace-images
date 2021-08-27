@@ -1,6 +1,13 @@
 image: gitpod/workspace-full
 
 tasks:
+  - env:
+      # https://github.com/gitpod-io/gitpod/issues/479
+      PIP_USER: no
+  - init:
+      brew install pre-commit
+      pre-commit install
+      pre-commit run
   - command: docker
 
 vscode:
