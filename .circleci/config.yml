@@ -4,7 +4,7 @@ jobs:
   validate-changes:
     docker:
       # pre-commit package is included since 20.10
-      - image: ubuntu:20.10
+      - image: ubuntu:21.10
     steps:
       - checkout
       - attach_workspace:
