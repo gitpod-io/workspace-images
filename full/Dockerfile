@@ -246,7 +246,8 @@ USER root
 # Amazon Web Services
 RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" \
     && unzip awscliv2.zip \
-    && ./aws/install
+    && ./aws/install \
+    && rm -rf awscliv2.zip aws
 
 # Digital Ocean
 RUN curl -L -s `curl -L -s https://api.github.com/repos/digitalocean/doctl/releases/latest | grep -o -E "https://(.*)doctl-(.*)-linux-amd64.tar.gz"` | tar xvz -C /usr/bin
