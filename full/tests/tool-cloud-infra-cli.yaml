@@ -1,0 +1,16 @@
+- desc: amazon web services cli should be installed
+  command: [aws, --version]
+  assert:
+  - status == 0
+- desc: azure cli should be installed
+  command: [az, version]
+  assert:
+  - status == 0
+- desc: digital ocean cli should be installed
+  command: [doctl, version]
+  assert:
+  - status == 0
+- desc: google cloud platform cli should be installed
+  command: [gcloud, version]
+  assert:
+  - status == 0
