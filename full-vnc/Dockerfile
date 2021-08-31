@@ -9,7 +9,9 @@ ENV WINDOW_MANAGER="openbox"
 
 USER root
 
-# Make JavaFX display windows with visible content 
+# Make JavaFX display windows with visible content
+RUN echo >> /home/gitpod/.bashrc
+RUN echo '# Make JavaFX display windows with visible content' >> /home/gitpod/.bashrc
 RUN echo export JAVA_TOOL_OPTIONS=\"\$JAVA_TOOL_OPTIONS -Dsun.java2d.xrender=false\" >> /home/gitpod/.bashrc
 
 
