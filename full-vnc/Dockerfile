@@ -9,6 +9,10 @@ ENV WINDOW_MANAGER="openbox"
 
 USER root
 
+# Make JavaFX display windows with visible content 
+RUN echo export JAVA_TOOL_OPTIONS=\"\$JAVA_TOOL_OPTIONS -Dsun.java2d.xrender=false\" >> /home/gitpod/.bashrc
+
+
 # Change the default number of virtual desktops from 4 to 1 (footgun)
 RUN sed -ri "s/<number>4<\/number>/<number>1<\/number>/" /etc/xdg/openbox/rc.xml
 
