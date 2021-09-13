@@ -1,6 +1,8 @@
 # Dazzle do not supports ARG TRIGGER_REBUILD=2
 FROM gitpod/workspace-base:latest
 
+RUN ECHO test
+
 RUN echo "ws full starts"
 
 ### Install C/C++ compiler and associated tools ###
