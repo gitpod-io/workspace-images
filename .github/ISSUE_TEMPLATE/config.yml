@@ -1,4 +1,7 @@
 contact_links:
+  - name: Forum
+    url: https://community.gitpod.io/
+    about: For complicated questions and forum relevant topics
   - name: Security
     url: https://www.gitpod.io/security
     about: Please report security vulnerabilities here.
