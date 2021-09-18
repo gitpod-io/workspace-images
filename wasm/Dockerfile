@@ -16,4 +16,4 @@ RUN git clone --depth 1 "https://github.com/emscripten-core/emsdk.git" $HOME/.em
     && ./emsdk activate latest \
     && printf "\nsource $HOME/.emsdk/emsdk_env.sh\nclear\n" >> ~/.bashrc
 
-RUN brew install binaryen wabt
+RUN brew install binaryen wabt && brew install --build-from-source wasm-pack && rustup target add wasm32-unknown-unknown
