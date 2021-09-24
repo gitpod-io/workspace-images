@@ -1,7 +1,7 @@
 FROM gitpod/workspace-full-vnc
 
 # Install the latest rr.
-RUN __RR_VERSION__="5.4.0" \
+RUN __RR_VERSION__="5.5.0" \
  && cd /tmp \
  && wget -qO rr.deb https://github.com/mozilla/rr/releases/download/${__RR_VERSION__}/rr-${__RR_VERSION__}-Linux-$(uname -m).deb \
  && sudo dpkg -i rr.deb \
