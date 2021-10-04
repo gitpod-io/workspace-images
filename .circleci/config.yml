@@ -231,6 +231,20 @@ jobs:
             ./.circleci/build_image.sh wasm/Dockerfile gitpod/workspace-wasm
           no_output_timeout: 30m
 
+  workspace-android:
+    docker:
+      - image: docker:stable
+    steps:
+      - checkout
+      - setup_remote_docker
+      - attach_workspace:
+          at: .
+      - run:
+          command: |
+            docker load -i workspace-full.tar
+            ./.circleci/build_image.sh android/Dockerfile gitpod/workspace-android
+          no_output_timeout: 30m
+
 workflows:
   version: 2
   build-and-deploy:
@@ -276,5 +290,8 @@ workflows:
           requires:
             - workspace-full-vnc
       - workspace-wasm:
+          requires:
+            - workspace-full
+      - workspace-android:
           requires:
             - workspace-full
