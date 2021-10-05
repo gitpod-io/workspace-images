@@ -125,10 +125,13 @@ LABEL dazzle/test=tests/lang-node.yaml
 USER gitpod
 ENV NODE_VERSION=14.17.6
 ENV TRIGGER_REBUILD=1
+ENV PATH=/workspace/.npm-global/bin:$PATH
 RUN curl -fsSL https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | PROFILE=/dev/null bash \
     && bash -c ". .nvm/nvm.sh \
         && nvm install $NODE_VERSION \
         && nvm alias default $NODE_VERSION \
+        && mkdir /workspace/.npm-global \
+        && npm config set prefix '/workspace/.npm-global' \
         && npm install -g typescript yarn node-gyp" \
     && echo ". ~/.nvm/nvm-lazy.sh"  >> /home/gitpod/.bashrc.d/50-node
 # above, we are adding the lazy nvm init to .bashrc, because one is executed on interactive shells, the other for non-interactive shells (e.g. plugin-host)
