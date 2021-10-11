@@ -2,6 +2,11 @@
 
 A curated, chronologically ordered list of notable changes in [Gitpod's default workspace images](https://hub.docker.com/u/gitpod).
 
+## 2021-09-11
+
+- Bump Go version to v1.17.2
+- Bump node.js to v16.11.0 (use nvm to downgrade to v14.x if required)
+
 ## 2021-08-01
 
 - Bump Go version to 1.16.6
