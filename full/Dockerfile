@@ -125,7 +125,7 @@ LABEL dazzle/test=tests/lang-node.yaml
 USER gitpod
 ENV NODE_VERSION=14.18.0
 ENV TRIGGER_REBUILD=1
-RUN curl -fsSL https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | PROFILE=/dev/null bash \
+RUN curl -fsSL https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | PROFILE=/dev/null bash \
     && bash -c ". .nvm/nvm.sh \
         && nvm install $NODE_VERSION \
         && nvm alias default $NODE_VERSION \
