@@ -238,6 +238,18 @@ RUN cp /var/lib/dpkg/status /tmp/dpkg-status \
     && for i in $(ls /var/lib/apt/dazzle-marks/*.status); do /usr/bin/dazzle-util debian dpkg-status-merge /tmp/dpkg-status $i > /tmp/dpkg-status; done \
     && cp -f /var/lib/dpkg/status /var/lib/dpkg/status-old \
     && cp -f /tmp/dpkg-status /var/lib/dpkg/status
+
+# install terraform
+RUN sudo apt-get update && sudo apt-get install -y gnupg software-properties-common curl \
+    && curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo apt-key add - \
+    && sudo apt-add-repository "deb [arch=amd64] https://apt.releases.hashicorp.com $(lsb_release -cs) main" \
+    && sudo apt-get update && sudo apt-get install terraform
+
+#install kubectl
+RUN curl -LO https://storage.googleapis.com/kubernetes-release/release/v1.18.0/bin/linux/amd64/kubectl \
+    && chmod +x ./kubectl \
+    && sudo mv ./kubectl /usr/local/bin/kubectl
+
 # correct the path as per https://github.com/gitpod-io/gitpod/issues/4508
 ENV PATH=$PATH:/usr/games
 # merge GPG keys for trusted APT repositories
