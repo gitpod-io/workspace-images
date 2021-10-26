@@ -33,6 +33,10 @@ RUN yes | unminimize \
 
 ENV LANG=en_US.UTF-8
 
+### Update and upgrade the base image ###
+RUN apt-get update \
+    && apt-get -y upgrade
+
 ### Git ###
 RUN add-apt-repository -y ppa:git-core/ppa \
     && install-packages git git-lfs
