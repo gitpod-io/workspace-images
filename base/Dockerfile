@@ -1,6 +1,6 @@
 FROM buildpack-deps:focal
 
-COPY install-packages /usr/bin
+COPY install-packages upgrade-packages /usr/bin/
 
 ### base ###
 ARG DEBIAN_FRONTEND=noninteractive
@@ -34,8 +34,7 @@ RUN yes | unminimize \
 ENV LANG=en_US.UTF-8
 
 ### Update and upgrade the base image ###
-RUN apt-get update \
-    && apt-get -y upgrade
+RUN upgrade-packages
 
 ### Git ###
 RUN add-apt-repository -y ppa:git-core/ppa \
