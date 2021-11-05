@@ -37,8 +37,11 @@ ENV LANG=en_US.UTF-8
 RUN upgrade-packages
 
 ### Git ###
+LABEL dazzle/test=tests/tool-git.yaml
 RUN add-apt-repository -y ppa:git-core/ppa \
     && install-packages git git-lfs
+
+RUN git lfs install --system
 
 ### Gitpod user ###
 # '-l': see https://docs.docker.com/develop/develop-images/dockerfile_best-practices/#user
@@ -57,6 +60,3 @@ RUN sudo echo "Running 'sudo' for Gitpod: success" && \
     # create .bashrc.d folder and source it in the bashrc
     mkdir -p /home/gitpod/.bashrc.d && \
     (echo; echo "for i in \$(ls -A \$HOME/.bashrc.d/); do source \$HOME/.bashrc.d/\$i; done"; echo) >> /home/gitpod/.bashrc
-
-# configure git-lfs
-RUN sudo git lfs install --system

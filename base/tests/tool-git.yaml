@@ -1,0 +1,16 @@
+- desc: git should be installed
+  command: [which, git]
+  assert:
+  - status == 0
+  - stdout.indexOf("/usr/bin/git") != -1
+
+- desc: git-lfs should be installed
+  command: [git, lfs]
+  assert:
+  - status == 0
+
+- desc: git-lfs should be configured
+  command: [cat, /etc/gitconfig]
+  assert:
+  - status == 0
+  - stdout.indexOf("git-lfs") != -1
