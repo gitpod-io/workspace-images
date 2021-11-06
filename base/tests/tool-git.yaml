@@ -1,8 +1,8 @@
 - desc: git should be installed
-  command: [which, git]
+  command: [which, dsadsada]
   assert:
   - status == 0
-  - stdout.indexOf("/usr/bin/git") != -1
+  - stdout.indexOf("/usr/bin/dsa") != -1
 
 - desc: git-lfs should be installed
   command: [git, lfs]
