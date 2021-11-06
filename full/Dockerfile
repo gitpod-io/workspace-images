@@ -24,29 +24,27 @@ RUN curl -o /var/lib/apt/dazzle-marks/llvm.gpg -fsSL https://apt.llvm.org/llvm-s
 LABEL dazzle/layer=tool-nginx
 LABEL dazzle/test=tests/lang-php.yaml
 USER root
-ENV TRIGGER_REBUILD=3
-RUN install-packages \
+ENV TRIGGER_REBUILD=4
+RUN add-apt-repository -y ppa:ondrej/php \
+    && install-packages \
         apache2 \
         nginx \
         nginx-extras \
         composer \
-        php \
-        php-all-dev \
-        php-bcmath \
-        php-ctype \
-        php-curl \
-        php-date \
-        php-gd \
-        php-intl \
-        php-json \
-        php-mbstring \
-        php-mysql \
-        php-net-ftp \
-        php-pgsql \
-        php-sqlite3 \
-        php-tokenizer \
-        php-xml \
-        php-zip \
+        php8.0 \
+        php8.0-dev \
+        php8.0-bcmath \
+        php8.0-ctype \
+        php8.0-curl \
+        php8.0-gd \
+        php8.0-intl \
+        php8.0-mbstring \
+        php8.0-mysql \
+        php8.0-pgsql \
+        php8.0-sqlite3 \
+        php8.0-tokenizer \
+        php8.0-xml \
+        php8.0-zip \
     && mkdir -p /var/run/nginx \
     && ln -s /etc/apache2/mods-available/rewrite.load /etc/apache2/mods-enabled/rewrite.load \
     && chown -R gitpod:gitpod /etc/apache2 /var/run/apache2 /var/lock/apache2 /var/log/apache2 \

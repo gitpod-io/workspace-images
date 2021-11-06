@@ -2,7 +2,7 @@
   command: [php, --version]
   assert:
   - status == 0
-  - stdout.indexOf("PHP 7") != -1
+  - stdout.indexOf("PHP 8") != -1
 - desc: it should say hi
   command: [sh, -c, 'echo ''<?php'' echo \''hi\'' ''?>'' | php']
   assert:
