@@ -18,6 +18,7 @@ RUN yes | unminimize \
         locales \
         man-db \
         nano \
+        ack-grep \
         ripgrep \
         software-properties-common \
         sudo \
