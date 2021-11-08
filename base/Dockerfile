@@ -39,9 +39,16 @@ RUN upgrade-packages
 ### Git ###
 LABEL dazzle/layer=tool-git
 LABEL dazzle/test=tests/tool-git.yaml
+
+# '/tmp/git-lfs-install-: see https://github.com/git-lfs/git-lfs/issues/3964#issuecomment-570003049
 RUN add-apt-repository -y ppa:git-core/ppa \
     && install-packages git git-lfs \
-    && git lfs install --system
+    && mkdir -p /tmp/git-lfs-install \
+    && cd /tmp/git-lfs-install \
+    && git init \
+    && git lfs install --system \
+    && cd \
+    && rm -rf /tmp/git-lfs-install
 
 ### Gitpod user ###
 # '-l': see https://docs.docker.com/develop/develop-images/dockerfile_best-practices/#user
