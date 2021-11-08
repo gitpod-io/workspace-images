@@ -37,11 +37,11 @@ ENV LANG=en_US.UTF-8
 RUN upgrade-packages
 
 ### Git ###
+LABEL dazzle/layer=tool-git
 LABEL dazzle/test=tests/tool-git.yaml
 RUN add-apt-repository -y ppa:git-core/ppa \
-    && install-packages git git-lfs
-
-RUN git lfs install --system
+    && install-packages git git-lfs \
+    && git lfs install --system
 
 ### Gitpod user ###
 # '-l': see https://docs.docker.com/develop/develop-images/dockerfile_best-practices/#user
