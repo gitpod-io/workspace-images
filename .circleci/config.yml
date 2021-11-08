@@ -32,6 +32,16 @@ jobs:
           root: .
           paths:
             - workspace-base.tar
+      - run:
+          name: Save test results
+          command: |
+            mkdir -p ~/test-results/dazzle/
+            cp base/*.xml ~/test-results/dazzle
+          when: always
+      - store_test_results:
+          path: ~/test-results
+      - store_artifacts:
+          path: ~/test-results/dazzle
 
   workspace-full:
     docker:
