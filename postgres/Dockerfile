@@ -1,22 +1,23 @@
 FROM gitpod/workspace-full:latest
 # Docker build does not rebuild an image when a base image is changed, increase this counter to trigger it.
 ENV TRIGGER_REBUILD=1
-# Install PostgreSQL
-RUN sudo install-packages postgresql-12 postgresql-contrib-12
 
-# Setup PostgreSQL server for user gitpod
-ENV PATH="$PATH:/usr/lib/postgresql/12/bin"
-ENV PGDATA="/workspace/.pgsql/data"
-RUN mkdir -p ~/.pg_ctl/bin ~/.pg_ctl/sockets \
- && printf '#!/bin/bash\n[ ! -d $PGDATA ] && mkdir -p $PGDATA && initdb -D $PGDATA\npg_ctl -D $PGDATA -l ~/.pg_ctl/log -o "-k ~/.pg_ctl/sockets" start\n' > ~/.pg_ctl/bin/pg_start \
- && printf '#!/bin/bash\npg_ctl -D $PGDATA -l ~/.pg_ctl/log -o "-k ~/.pg_ctl/sockets" stop\n' > ~/.pg_ctl/bin/pg_stop \
- && chmod +x ~/.pg_ctl/bin/*
-ENV PATH="$PATH:$HOME/.pg_ctl/bin"
-ENV DATABASE_URL="postgresql://gitpod@localhost"
-ENV PGHOSTADDR="127.0.0.1"
-ENV PGDATABASE="postgres"
+# Install PostgreSQL
+RUN sudo sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
+RUN wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
+RUN sudo apt-get update
+RUN sudo apt-get -y install postgresql postgresql-contrib
+
+# Check PostgreSQL service is running
+RUN sudo service postgresql start \
+    && until pg_isready; do sleep 1; done \
+    # Create the PostgreSQL user. 
+    # Hack with double sudo is because gitpod user cannot run command on behalf of postgres user.
+    && sudo sudo -u postgres psql \
+        -c "CREATE USER gitpod PASSWORD 'gitpod' SUPERUSER" \
+        -c "CREATE DATABASE gitpod OWNER gitpod"
 
 # This is a bit of a hack. At the moment we have no means of starting background
 # tasks from a Dockerfile. This workaround checks, on each bashrc eval, if the
 # PostgreSQL server is running, and if not starts it.
-RUN printf "\n# Auto-start PostgreSQL server.\n[[ \$(pg_ctl status | grep PID) ]] || pg_start > /dev/null\n" >> ~/.bashrc
+RUN printf "\n# Auto-start PostgreSQL server.\nsudo service postgresql start\n" >> ~/.bashrc
