@@ -258,4 +258,13 @@ COPY tests /var/lib/dazzle/tests
 # share env see https://github.com/gitpod-io/workspace-images/issues/472
 RUN echo "PATH="${PATH}"" | sudo tee /etc/environment
 
+
+## clojure
+RUN apt-get install -y rlwrap
+RUN curl https://download.clojure.org/install/linux-install-1.10.3.1029.sh -o /tmp/linux-install-1.10.3.1029.sh \
+    && chmod +x /tmp/linux-install-1.10.3.1029.sh \
+    && /tmp/linux-install-1.10.3.1029.sh \
+    && rm /tmp/linux-install-1.10.3.1029.sh
+
+
 USER gitpod
