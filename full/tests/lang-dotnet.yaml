@@ -1,4 +1,6 @@
-- desc: it should run
-  command: [dotnet, version]
-  assert:
-    - status == 0
+- desc: it should run dotnet
+   command: [dotnet --version]
+   entrypoint: [bash, -i, -c]
+   assert:
+   - status == 0
+   - stdout.indexOf("dotnet") != -1
