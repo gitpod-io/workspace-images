@@ -203,6 +203,17 @@ RUN sudo mkdir -p $CARGO_HOME \
 
 RUN bash -lc "cargo install cargo-watch cargo-edit cargo-tree cargo-workspaces"
 
+### .NET SDK (Current channel) ###
+LABEL dazzle/layer=lang-dotnet
+LABEL dazzle/test=tests/lang-dotnet.yaml
+ENV TRIGGER_REBUILD=1
+
+# Source: https://docs.microsoft.com/dotnet/core/install/linux-scripted-manual#scripted-install
+USER gitpod
+RUN mkdir -p /home/gitpod/dotnet && curl -fsSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --channel Current --install-dir /home/gitpod/dotnet
+ENV DOTNET_ROOT=/home/gitpod/dotnet
+ENV PATH=$PATH:/home/gitpod/dotnet
+
 ### Docker ###
 LABEL dazzle/layer=tool-docker
 LABEL dazzle/test=tests/tool-docker.yaml

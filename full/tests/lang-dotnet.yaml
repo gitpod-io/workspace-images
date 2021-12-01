@@ -1,0 +1,5 @@
+- desc: it should run
+  command: [dotnet, version]
+  assert:
+    - status == 0
+    - stdout.indexOf("dotnet --version") != -1
