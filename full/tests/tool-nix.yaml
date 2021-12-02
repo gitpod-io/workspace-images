@@ -1,0 +1,10 @@
+- desc: nix-env should be installed
+  command: [which, /home/gitpod/.nix-profile/bin/nix-env]
+  assert:
+  - status == 0
+  - stdout.indexOf("/home/gitpod/.nix-profile/bin/nix-env") != -1
+- desc: it should run nix-shell
+  command: [nix-shell --version]
+  entrypoint: [bash, -i, -c]
+  assert:
+  - status == 0
