@@ -1,0 +1,6 @@
+- desc: it should run clj
+  command: [clj -h]
+  entrypoint: [bash, -i, -c]
+  assert:
+  - status == 0
+  - stdout.indexOf("clj") != -1

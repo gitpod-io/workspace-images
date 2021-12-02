@@ -1,8 +1,10 @@
 FROM buildpack-deps:focal
 
-COPY install-packages /usr/bin
+COPY install-packages upgrade-packages /usr/bin/
 
 ### base ###
+ARG DEBIAN_FRONTEND=noninteractive
+
 RUN yes | unminimize \
     && install-packages \
         zip \
@@ -30,6 +32,9 @@ RUN yes | unminimize \
     && locale-gen en_US.UTF-8
 
 ENV LANG=en_US.UTF-8
+
+### Update and upgrade the base image ###
+RUN upgrade-packages
 
 ### Git ###
 RUN add-apt-repository -y ppa:git-core/ppa \

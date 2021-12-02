@@ -4,4 +4,28 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event. There is nothing to be done yet. Consider adding build steps."
+      - name: Checkout dazzle
+        uses: actions/checkout@v2
+        with:
+          repository: gitpod-io/dazzle
+      - name: Setup go
+        uses: actions/setup-go@v2
+        with:
+          go-version: 1.16.1
+      - run: go get -v ./...
+      - run: go generate -v ./…
+      - run: go install
+      - run: dazzle # only to ensure dazzle is in the path
+      - name: Checkout workspace-images
+        uses: actions/checkout@v2
+        with:
+          repository: gitpod-io/workspace-images
+      - run: sudo su -c "cd /usr; curl -L https://github.com/moby/buildkit/releases/download/v0.8.3/buildkit-v0.8.3.linux-amd64.tar.gz | tar xvz"
+      - run: sudo buildkitd &
+      - run: docker pull registry:2
+      - run: docker run -p 5000:5000 --name registry --rm registry:2 &
+      - run: cd dazzle-rewrite
+      - run: sudo $(which dazzle) build localhost:5000/workspace-images
+
+# sudo su -c "cd /usr; curl -L https://github.com/moby/buildkit/releases/download/v0.8.3/buildkit-v0.8.3.linux-amd64.tar.gz | tar xvz"
+# docker run -p 5000:5000 --name registry --rm registry:2

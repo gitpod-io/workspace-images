@@ -4,7 +4,7 @@ FROM ${base}
 USER gitpod
 RUN curl -fsSL "https://get.sdkman.io" | bash \
  && bash -c ". /home/gitpod/.sdkman/bin/sdkman-init.sh \
-             && sdk install java 11.0.12.fx-zulu \
+             && sdk install java 11.0.13.fx-zulu \
              && sdk install gradle \
              && sdk install maven \
              && sdk flush archives \
