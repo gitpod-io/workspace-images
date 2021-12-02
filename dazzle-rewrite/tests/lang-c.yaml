@@ -1,0 +1,10 @@
+- desc: it should run clangd
+  command: [clangd]
+  assert:
+  - status == 1
+  - stderr.indexOf("Starting LSP over stdin/stdout") != -1
+- desc: it should run clangd version
+  command: [clangd, --version]
+  assert:
+  - status == 0
+  - stdout.indexOf("clangd version") != -1

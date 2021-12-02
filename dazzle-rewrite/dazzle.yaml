@@ -1,0 +1,48 @@
+combiner:
+  combinations:
+    - name: base
+    - name: full
+      chunks:
+      - lang-c
+      - lang-go
+      - lang-java
+      - lang-node
+      - lang-python
+      - lang-ruby
+      - lang-rust
+      # - tool-brew
+      - tool-docker
+      - tool-nginx
+    - name: full-vnc
+      chunks:
+      - lang-c
+      - lang-go
+      - lang-java
+      - lang-node
+      - lang-python
+      - lang-ruby
+      - lang-rust
+      # - tool-brew
+      - tool-docker
+      - tool-nginx
+      - tool-vnc
+    - name: postgresql
+      chunks:
+      - lang-c
+      - lang-go
+      - lang-java
+      - lang-node
+      - lang-python
+      - lang-ruby
+      - lang-rust
+      # - tool-brew
+      - tool-docker
+      - tool-nginx
+      - tool-postgresql
+  envvars:
+    - name: PATH
+      action: merge-unique
+    - name: HOME
+      action: use-last
+ignore:
+- tool-brew

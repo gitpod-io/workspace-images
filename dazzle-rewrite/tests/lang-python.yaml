@@ -1,0 +1,23 @@
+- desc: it should run python
+  command: [python, --version]
+  assert:
+  - status == 0
+  - stdout.indexOf("Python") != -1
+- desc: it should have pip
+  command: [pip, --version]
+  assert:
+  - status == 0
+- desc: it should have pip3
+  command: [pip3, --version]
+  assert:
+  - status == 0
+- desc: it should have Python 3
+  command: [python3, --version]
+  assert:
+  - status == 0
+  - stdout.indexOf("Python 3") != -1
+- desc: it should default to the correct pip version
+  command: [sh, -c, '[ "$(pip --version)" = "$(pip3 --version)" ] && echo pass']
+  assert:
+  - status == 0
+  - stdout.trim() == "pass"

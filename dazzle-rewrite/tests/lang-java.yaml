@@ -1,0 +1,18 @@
+- desc: it should run java
+  command: [java -version]
+  entrypoint: [bash, -i, -c]
+  assert:
+  - status == 0
+  - stderr.indexOf("OpenJDK") != -1
+- desc: it should run maven
+  command: [mvn -v]
+  entrypoint: [bash, -i, -c]
+  assert:
+  - status == 0
+  - stdout.indexOf("Apache Maven") != -1
+- desc: it should run sdk
+  command: [sdk v]
+  entrypoint: [bash, -i, -c]
+  assert:
+  - status == 0
+  - stdout.indexOf("SDKMAN") != -1

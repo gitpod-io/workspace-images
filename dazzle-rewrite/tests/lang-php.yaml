@@ -1,0 +1,33 @@
+- desc: it should run php
+  command: [php, --version]
+  assert:
+  - status == 0
+  - stdout.indexOf("PHP 7") != -1
+- desc: it should say hi
+  command: [sh, -c, 'echo ''<?php'' echo \''hi\'' ''?>'' | php']
+  assert:
+  - status == 0
+  - stdout == "hi"
+- desc: it should have all modules
+  command: [sh, -c, 'echo ''<?php phpinfo(INFO_MODULES) ?>'' | php']
+  assert:
+  - stdout.indexOf("ctype\n") != -1
+  - stdout.indexOf("curl\n") != -1
+  - stdout.indexOf("date\n") != -1
+  - stdout.indexOf("gd\n") != -1
+  - stdout.indexOf("gettext\n") != -1
+  - stdout.indexOf("intl\n") != -1
+  - stdout.indexOf("json\n") != -1
+  - stdout.indexOf("mbstring\n") != -1
+  - stdout.indexOf("mysql\n") != -1
+  - stdout.indexOf("ftp\n") != -1
+  - stdout.indexOf("pgsql\n") != -1
+  - stdout.indexOf("sqlite3\n") != -1
+  - stdout.indexOf("tokenizer\n") != -1
+  - stdout.indexOf("xml\n") != -1
+  - stdout.indexOf("zip\n") != -1
+- desc: it should have valid configuration
+  command: [nginx, -T]
+  assert:
+  - status == 0
+  - stderr.indexOf("test is successful") != -1

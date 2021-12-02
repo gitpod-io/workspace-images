@@ -1,0 +1,4 @@
+variants:
+  - name: "1.17.2"
+    args:
+      GO_VERSION: 1.17.2

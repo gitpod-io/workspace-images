@@ -1,0 +1,4 @@
+variants:
+  - name: "16.12.0"
+    args:
+      GO_VERSION: 16.12.0
