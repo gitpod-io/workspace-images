@@ -1,0 +1,7 @@
+name: Workspace Images Build
+on: [push]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event. There is nothing to be done yet. Consider adding build steps."
