@@ -206,13 +206,14 @@ RUN bash -lc "cargo install cargo-watch cargo-edit cargo-tree cargo-workspaces"
 ### Clojure ###
 LABEL dazzle/layer=lang-clojure
 LABEL dazzle/test=tests/lang-clojure.yaml
-USER root
 ENV TRIGGER_REBUILD=1
+ENV CLOJURE_VERSION=1.10.3.1029
+USER root
 RUN install-packages rlwrap
-RUN curl https://download.clojure.org/install/linux-install-1.10.3.1029.sh -o /tmp/linux-install-1.10.3.1029.sh \
-    && chmod +x /tmp/linux-install-1.10.3.1029.sh \
-    && /tmp/linux-install-1.10.3.1029.sh \
-    && rm /tmp/linux-install-1.10.3.1029.sh
+RUN curl https://download.clojure.org/install/linux-install-$CLOJURE_VERSION.sh -o /tmp/linux-install-$CLOJURE_VERSION.sh \
+    && chmod +x /tmp/linux-install-$CLOJURE_VERSION.sh \
+    && /tmp/linux-install-$CLOJURE_VERSION.sh \
+    && rm /tmp/linux-install-$CLOJURE_VERSION.sh
 
 ### Docker ###
 LABEL dazzle/layer=tool-docker
