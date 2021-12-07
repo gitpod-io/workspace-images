@@ -9,5 +9,4 @@ combiner:
       action: merge-unique
     - name: HOME
       action: use-last
-ignore:
-- tool-brew
+
