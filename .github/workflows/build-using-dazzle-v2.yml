@@ -8,18 +8,6 @@ jobs:
       id-token: 'write'
 
     steps:
-      - name: Set up Cloud SDK
-        uses: google-github-actions/setup-gcloud@v0.3.0
-      - id: 'auth'
-        name: 'Authenticate to Google Cloud'
-        uses: 'google-github-actions/auth@v0.4.2'
-        with:
-          token_format: 'access_token'
-          workload_identity_provider: 'projects/613222737209/locations/global/workloadIdentityPools/my-pool/providers/my-provider'
-          # audience: 'projects/613222737209/locations/global/workloadIdentityPools/my-pool'
-          # audience: 'https://iam.googleapis.com/projects/613222737209/locations/global/workloadIdentityPools/my-pool/providers/my-provider'
-          service_account: 'workspace-images@prince-tf-experiments.iam.gserviceaccount.com'
-          
       - name: Checkout dazzle
         uses: actions/checkout@v2
         with:
@@ -28,7 +16,6 @@ jobs:
         uses: actions/setup-go@v2
         with:
           go-version: 1.16.1
-      - run: gcloud --help
       - run: go get -v ./...
       - run: go generate -v ./...
       - run: go install
@@ -40,7 +27,16 @@ jobs:
       - run: sudo su -c "cd /usr; curl -L https://github.com/moby/buildkit/releases/download/v0.8.3/buildkit-v0.8.3.linux-amd64.tar.gz | tar xvz"
       - run: sudo buildkitd --group docker &
       - run: sudo chmod +777 /run/buildkit/buildkitd.sock
-      - run: docker pull registry:2
-      - run: docker run -p 5000:5000 --name registry --rm registry:2 &
-      - run: cd dazzle-rewrite && dazzle build localhost:5000/workspace-images
-
+      - id: 'auth'
+        name: 'Authenticate to Google Cloud'
+        uses: 'google-github-actions/auth@v0.4.2'
+        with:
+          token_format: 'access_token'
+          workload_identity_provider: 'projects/613222737209/locations/global/workloadIdentityPools/my-pool/providers/my-provider'
+          service_account: 'workspace-images@prince-tf-experiments.iam.gserviceaccount.com'
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@master
+        with:
+          version: 366.0.0
+      - run: gcloud auth configure-docker europe-docker.pkg.dev
+      - run: cd dazzle-rewrite && gcloud artifacts repositories list && dazzle build europe-docker.pkg.dev/prince-tf-experiments/dazzle/workspace-images
