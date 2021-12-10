@@ -1,7 +1,28 @@
-image: gitpod/workspace-full
+image:
+  file: .gitpod.Dockerfile
+
+ports:
+  - port: 5000
+    onOpen: ignore
 
 tasks:
-  - command: docker
+  - name: start up buildkitd
+    command: sudo /usr/bin/buildkitd
+  - name: server a local docker registry
+    command: |
+      docker run -p 5000:5000 --name registry --rm registry:2
+  - name: get latest version of dazzle, build and test images
+    before: |            
+      git clone --depth=1 https://github.com/gitpod-io/dazzle/
+      cd ./dazzle
+      go get -v ./...
+      go generate -v ./...
+      go install
+      go build
+      cd ..
+    command: |      
+      gp await-port 5000
+      cd ./dazzle-rewrite && sudo $(which dazzle) build localhost:5000/dazzle
 
 vscode:
   extensions:
