@@ -278,6 +278,16 @@ RUN . /home/gitpod/.nix-profile/etc/profile.d/nix.sh \
   && nix-env -iA cachix -f https://cachix.org/api/v1/install \
   && cachix use cachix
 
+### Install .NET SDK (Current channel)
+# Source: https://docs.microsoft.com/dotnet/core/install/linux-scripted-manual#scripted-install
+LABEL dazzle/layer=lang-dotnet
+LABEL dazzle/test=tests/lang-dotnet.yaml
+RUN mkdir -p /home/gitpod/dotnet && \
+	curl -fsSL https://dot.net/v1/dotnet-install.sh \
+	| bash /dev/stdin --channel Current --install-dir /home/gitpod/dotnet
+ENV DOTNET_ROOT=/home/gitpod/dotnet
+ENV PATH=$PATH:/home/gitpod/dotnet
+
 ### Prologue (built across all layers) ###
 LABEL dazzle/layer=dazzle-prologue
 LABEL dazzle/test=tests/prologue.yaml

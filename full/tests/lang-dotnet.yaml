@@ -1,0 +1,9 @@
+- desc: it should run dotnet with a fully configured environment
+  command: [dotnet, --info]
+  entrypoint: [bash, -i, -c]
+  assert:
+  - status == 0
+  - stdout.indexOf(".NET SDK") != -1
+  - stdout.indexOf("/home/gitpod/dotnet/sdk") != -1
+  - stdout.indexOf("/home/gitpod/dotnet/shared/Microsoft.AspNetCore.App") != -1
+  - stdout.indexOf("/home/gitpod/dotnet/shared/Microsoft.NETCore.App") != -1
