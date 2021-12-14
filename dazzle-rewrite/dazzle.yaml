@@ -1,12 +1,25 @@
 combiner:
   combinations:
     - name: base
-    - name: full
+    - name: debug20
       chunks:
       - lang-c
+      - lang-clojure
+      - lang-go:1.17.2
+      - lang-java
+      - lang-node:16.13.0
+      - lang-python
+      - lang-ruby
+      - lang-rust
+      - tool-brew
+      - tool-docker
+      - tool-nginx
+      - tool-nix:2.3.14
+      - tool-postgresql
+      - tool-tailscale
+      - tool-vnc
   envvars:
     - name: PATH
       action: merge-unique
     - name: HOME
       action: use-last
-

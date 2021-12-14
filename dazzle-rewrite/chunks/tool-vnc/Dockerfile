@@ -9,6 +9,7 @@ ENV WINDOW_MANAGER="openbox"
 
 USER root
 
+ENV TRIGGER_REBUILD=1
 # Change the default number of virtual desktops from 4 to 1 (footgun)
 RUN sed -ri "s/<number>4<\/number>/<number>1<\/number>/" /etc/xdg/openbox/rc.xml
 
@@ -21,12 +22,14 @@ COPY novnc-index.html /opt/novnc/index.html
 COPY start-vnc-session.sh /usr/bin/
 RUN chmod +x /usr/bin/start-vnc-session.sh
 
+USER gitpod
 # This is a bit of a hack. At the moment we have no means of starting background
 # tasks from a Dockerfile. This workaround checks, on each bashrc eval, if the X
 # server is running on screen 0, and if not starts Xvfb, x11vnc and novnc.
-RUN echo "export DISPLAY=:0" >> ~/.bashrc
-RUN echo "[ ! -e /tmp/.X0-lock ] && (/usr/bin/start-vnc-session.sh &> /tmp/display-\${DISPLAY}.log)" >> ~/.bashrc
+RUN echo "export DISPLAY=:0" >> /home/gitpod/.bashrc.d/300-vnc
+RUN echo "[ ! -e /tmp/.X0-lock ] && (/usr/bin/start-vnc-session.sh &> /tmp/display-\${DISPLAY}.log)" >> /home/gitpod/.bashrc.d/300-vnc
 
+USER root
 ### checks ###
 # no root-owned files in the home directory
 RUN notOwnedFile=$(find . -not "(" -user gitpod -and -group gitpod ")" -print -quit) \

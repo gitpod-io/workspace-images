@@ -4,6 +4,7 @@ FROM ${base}
 # Install PostgreSQL
 RUN sudo install-packages postgresql-12 postgresql-contrib-12
 
+ENV TRIGGER_REBUILD=1
 # Setup PostgreSQL server for user gitpod
 ENV PATH="$PATH:/usr/lib/postgresql/12/bin"
 ENV PGDATA="/workspace/.pgsql/data"

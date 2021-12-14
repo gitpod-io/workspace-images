@@ -2,7 +2,7 @@ ARG base
 FROM ${base}
 
 USER root
-ENV TRIGGER_REBUILD=2
+ENV TRIGGER_REBUILD=1
 # https://docs.docker.com/engine/install/ubuntu/
 RUN curl -o /var/lib/apt/dazzle-marks/docker.gpg -fsSL https://download.docker.com/linux/ubuntu/gpg \
     && apt-key add /var/lib/apt/dazzle-marks/docker.gpg \

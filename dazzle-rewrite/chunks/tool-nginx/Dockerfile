@@ -2,7 +2,7 @@ ARG base
 FROM ${base}
 
 USER root
-ENV TRIGGER_REBUILD=2
+ENV TRIGGER_REBUILD=1
 RUN install-packages \
         apache2 \
         nginx \

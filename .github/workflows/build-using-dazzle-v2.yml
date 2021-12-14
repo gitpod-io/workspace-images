@@ -11,11 +11,12 @@ jobs:
       - name: Checkout dazzle
         uses: actions/checkout@v2
         with:
-          repository: gitpod-io/dazzle
+          repository: aledbf/dazzle
+          ref: aledbf/deps
       - name: Setup go
         uses: actions/setup-go@v2
         with:
-          go-version: 1.16.1
+          go-version: 1.17.5
       - run: go get -v ./...
       - run: go generate -v ./...
       - run: go install
@@ -24,7 +25,7 @@ jobs:
         uses: actions/checkout@v2
         with:
           repository: gitpod-io/workspace-images
-      - run: sudo su -c "cd /usr; curl -L https://github.com/moby/buildkit/releases/download/v0.8.3/buildkit-v0.8.3.linux-amd64.tar.gz | tar xvz"
+      - run: sudo su -c "cd /usr; curl -L https://github.com/moby/buildkit/releases/download/v0.9.3/buildkit-v0.9.3.linux-amd64.tar.gz | tar xvz"
       - run: sudo buildkitd --group docker &
       - run: sudo chmod +777 /run/buildkit/buildkitd.sock
       - id: 'auth'
@@ -39,4 +40,5 @@ jobs:
         with:
           version: 366.0.0
       - run: gcloud auth configure-docker europe-docker.pkg.dev
-      - run: cd dazzle-rewrite && gcloud artifacts repositories list && dazzle build europe-docker.pkg.dev/prince-tf-experiments/dazzle/workspace-images
+      - run: cd dazzle-rewrite && dazzle build europe-docker.pkg.dev/prince-tf-experiments/dazzle/workspace-images
+      - run: cd dazzle-rewrite && dazzle combine europe-docker.pkg.dev/prince-tf-experiments/dazzle/workspace-images --all -v

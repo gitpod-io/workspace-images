@@ -2,6 +2,7 @@ ARG base
 FROM ${base}
 
 USER gitpod
+ENV TRIGGER_REBUILD=1
 RUN curl -fsSL https://rvm.io/mpapis.asc | gpg --import - \
     && curl -fsSL https://rvm.io/pkuczynski.asc | gpg --import - \
     && curl -fsSL https://get.rvm.io | bash -s stable \

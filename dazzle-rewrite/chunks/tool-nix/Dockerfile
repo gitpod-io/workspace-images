@@ -5,7 +5,7 @@ ARG NIX_VERSION
 
 ENV NIX_VERSION=${NIX_VERSION}
 # Dazzle does not rebuild a layer until one of its lines are changed. Increase this counter to rebuild this layer.
-ENV TRIGGER_REBUILD=1
+ENV TRIGGER_REBUILD=2
 
 USER root
 RUN addgroup --system nixbld \
@@ -21,7 +21,7 @@ WORKDIR /home/gitpod
 
 RUN curl https://nixos.org/releases/nix/nix-$NIX_VERSION/install | sh
 
-RUN echo '. /home/gitpod/.nix-profile/etc/profile.d/nix.sh' >> /home/gitpod/.bashrc
+RUN echo '. /home/gitpod/.nix-profile/etc/profile.d/nix.sh' >> /home/gitpod/.bashrc.d/200-nix
 RUN mkdir -p /home/gitpod/.config/nixpkgs && echo '{ allowUnfree = true; }' >> /home/gitpod/.config/nixpkgs/config.nix
 
 # Install cachix

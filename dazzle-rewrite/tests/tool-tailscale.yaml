@@ -2,4 +2,4 @@
   command: [which, tailscale]
   assert:
   - status == 0
-  - stdout.indexOf("/usr/bin/tailscale") != -1
+  - stdout.indexOf("/bin/tailscale") != -1

@@ -2,6 +2,7 @@ ARG base
 FROM ${base}
 
 USER gitpod
+ENV TRIGGER_REBUILD=1
 RUN cp /home/gitpod/.profile /home/gitpod/.profile_orig && \
     curl -fsSL https://sh.rustup.rs | sh -s -- -y --profile minimal --default-toolchain 1.56.1 \
     && .cargo/bin/rustup component add \
