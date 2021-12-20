@@ -1,7 +1,20 @@
 combiner:
   combinations:
     - name: base
-    - name: debug20
+    - name: essentials
+      chunks:
+      - tool-docker
+    - name: lang-c
+      ref:
+      - essentials
+      chunks:
+      - lang-c
+    - name: lang-clojure
+      ref:
+      - essentials
+      chunks:
+      - lang-clojure
+    - name: full
       chunks:
       - lang-c
       - lang-clojure
