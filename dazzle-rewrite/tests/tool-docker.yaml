@@ -2,7 +2,7 @@
   command: [which, docker]
   assert:
   - status == 0
-  - stdout.indexOf("/usr/bin/docker") != -1
+  - stdout.indexOf("/bin/docker") != -1
 - desc: containerd should be installed
   command: [containerd, config, dump]
   assert:
