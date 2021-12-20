@@ -1,18 +1,23 @@
 #!/bin/bash
 
-# Lazy-load NVM
-# Based on https://www.reddit.com/r/node/comments/4tg5jg/lazy_load_nvm_for_faster_shell_start/d5ib9fs
+export NVM_DIR="$HOME/.nvm"
 
-declare -a NODE_GLOBALS=(`find ~/.nvm/versions/node -maxdepth 3 -type l -wholename '*/bin/*' | xargs -n1 basename | sort | uniq`)
-NODE_GLOBALS+=("node")
-NODE_GLOBALS+=("nvm")
+node_versions=("$NVM_DIR"/versions/node/*)
 
-load_nvm () {
-    export NVM_DIR=~/.nvm
-    [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
-    [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-}
+if (( "${#node_versions[@]}" > 0 )); then
+    PATH="$PATH:${node_versions[$((${#node_versions[@]} - 1))]}/bin"
+fi
 
-for cmd in "${NODE_GLOBALS[@]}"; do
-    eval "${cmd}(){ unset -f ${NODE_GLOBALS[@]}; load_nvm; ${cmd} \$@; }"
-done
+if [ -s "$NVM_DIR/nvm.sh" ]; then
+    # load the real nvm on first use
+    nvm() {
+        # shellcheck disable=SC1090,SC1091
+        source "$NVM_DIR"/nvm.sh
+        nvm "$@"
+    }
+fi
+
+if [ -s "$NVM_DIR/bash_completion" ]; then
+    # shellcheck disable=SC1090,SC1091
+    source "$NVM_DIR"/bash_completion
+fi

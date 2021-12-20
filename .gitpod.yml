@@ -12,7 +12,7 @@ tasks:
     command: |
       docker run -p 5000:5000 --name registry --rm registry:2
   - name: get latest version of dazzle, build and test images
-    before: |            
+    before: |
       git clone --depth=1 https://github.com/gitpod-io/dazzle/
       cd ./dazzle
       go get -v ./...
@@ -20,7 +20,7 @@ tasks:
       go install
       go build
       cd ..
-    command: |      
+    command: |
       gp await-port 5000
       cd ./dazzle-rewrite && sudo $(which dazzle) build localhost:5000/dazzle
 
