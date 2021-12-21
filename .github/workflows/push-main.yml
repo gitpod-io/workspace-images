@@ -1,0 +1,93 @@
+name: Build and Sync container images
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  # Sync container images between the local registry and GCP Artifact registry.
+  # To implementr manual approvals, the workflow uses an Environment.
+  #
+  # From your GitHub repo clock Settings. In the left menu, click Environments.
+  # Click New environment, set the name production, and click Configure environment.
+  # Check the "Required reviewers" box and enter at least one user or team name.
+  sync:
+    runs-on: ubuntu-latest
+    environment: "production"
+    permissions:
+      contents: "read"
+      id-token: "write"
+    env:
+      WORKLOAD_IDENTITY_POOL_ID: projects/119379277405/locations/global/workloadIdentityPools/workspace-images-github-actions/providers/workspace-images-gha-provider
+      IMAGE_REPO: europe-docker.pkg.dev/workspace-base-images/
+      IAM_SERVICE_ACCOUNT: workspace-images-gha-sa@workspace-base-images.iam.gserviceaccount.com
+
+    steps:
+      - name: 📥 Checkout workspace-images
+        uses: actions/checkout@v2
+        with:
+          repository: gitpod-io/workspace-images
+
+      - name: 🔆 Install dazzle
+        run: |
+          curl -sSL https://github.com/gitpod-io/dazzle/releases/download/v0.1.6/dazzle_0.1.6_Linux_x86_64.tar.gz | sudo tar -xvz -C /usr/local/bin
+
+      - name: 🔆 Install skopeo
+        run: |
+          . /etc/os-release
+          # Update ca-certificates to avoid issues with letsencrypt SSL certificates
+          sudo apt update && sudo apt --only-upgrade install ca-certificates -y
+          echo "deb https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/xUbuntu_${VERSION_ID}/ /" | sudo tee /etc/apt/sources.list.d/devel:kubic:libcontainers:stable.list
+          curl -L https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/xUbuntu_${VERSION_ID}/Release.key | sudo apt-key add -
+          sudo apt update && sudo apt install -y skopeo
+
+      - name: 🏗️ Setup buildkit
+        run: |
+          curl -sSL https://github.com/moby/buildkit/releases/download/v0.9.3/buildkit-v0.9.3.linux-amd64.tar.gz | sudo tar xvz -C /usr
+          sudo buildkitd --oci-worker=true --oci-worker-net=host --debug --group docker &
+          sudo su -c "while ! test -S /run/buildkit/buildkitd.sock; do sleep 0.1; done"
+          sudo chmod +777 /run/buildkit/buildkitd.sock
+
+      - name: 🗄️ Registry cache
+        uses: actions/cache@v2
+        with:
+          path: ~/registry
+          key: ${{ runner.os }}-main-cache
+
+      - name: 📦 Setup local registry
+        run: |
+          docker run -it --detach --publish 5000:5000 --volume ~/registry:/var/lib/registry registry:2
+
+      - name: 🔨 Dazzle build
+        run: |
+          cd dazzle-rewrite
+          dazzle build localhost:5000/workspace-images
+
+      - name: 🖇️ Dazzle combine
+        run: |
+          cd dazzle-rewrite
+          dazzle combine localhost:5000/workspace-images --all
+
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@master
+        with:
+          version: 366.0.0
+
+      - name: Authenticate to Google Cloud
+        uses: "google-github-actions/auth@v0.4.3"
+        with:
+          token_format: "access_token"
+          workload_identity_provider: ${{env.WORKLOAD_IDENTITY_POOL_ID}}
+          service_account: ${{env.IAM_SERVICE_ACCOUNT}}
+
+      - name: Configuring container registry credentials
+        run: |
+          echo "${{ steps.auth.outputs.access_token }}" | skopeo login -u oauth2accesstoken --password-stdin https://europe-docker.pkg.dev
+
+      - name: 🐳 Sync images to Artifact Registry
+        run: |
+          skopeo sync \
+            --src yaml \
+            --dest docker \
+            .github/sync-containers.yml europe-docker.pkg.dev/workspace-images
