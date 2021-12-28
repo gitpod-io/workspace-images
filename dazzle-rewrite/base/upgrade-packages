@@ -4,8 +4,8 @@ set -o errexit
 
 # Block users from running this unless they're root.
 if [[ $EUID != 0 ]]; then
-  echo >&2 "Run this script again as root to upgrade packages."
-  exit 1
+	echo >&2 "Run this script again as root to upgrade packages."
+	exit 1
 fi
 
 # Set a runlevel to avoid invoke-rc.d warnings
@@ -20,7 +20,7 @@ DAZZLE_MARKS="/var/lib/apt/dazzle-marks/"
 TIMESTAMP=$(date +%s)
 
 if [ ! -d "${DAZZLE_MARKS}" ]; then
-  mkdir -p "${DAZZLE_MARKS}"
+	mkdir -p "${DAZZLE_MARKS}"
 fi
 
 apt-get update
@@ -31,7 +31,7 @@ cp /var/lib/dpkg/status "${DAZZLE_MARKS}/${TIMESTAMP}.status"
 apt-get clean -y
 
 rm -rf \
-   /var/cache/debconf/* \
-   /var/lib/apt/lists/* \
-   /tmp/* \
-   /var/tmp/*
+	/var/cache/debconf/* \
+	/var/lib/apt/lists/* \
+	/tmp/* \
+	/var/tmp/*

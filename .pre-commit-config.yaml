@@ -1,30 +1,26 @@
 repos:
-- repo: https://github.com/pre-commit/pre-commit-hooks
-  rev: v4.0.1
-  hooks:
-    - id: check-yaml
-      args: [--allow-multiple-documents]
-    - id: end-of-file-fixer
-    - id: trailing-whitespace
-    - id: check-symlinks
-    - id: mixed-line-ending
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.1.0
+    hooks:
+      - id: check-yaml
+        args: [--allow-multiple-documents]
+      - id: end-of-file-fixer
+      - id: trailing-whitespace
+      - id: check-symlinks
+      - id: mixed-line-ending
 
-- repo: https://github.com/jumanjihouse/pre-commit-hooks
-  rev: "2.1.5"
-  hooks:
-    - id: forbid-binary
-    - id: script-must-have-extension
+  - repo: https://github.com/jumanjihouse/pre-commit-hooks
+    rev: "2.1.5"
+    hooks:
+      - id: forbid-binary
+      - id: script-must-have-extension
+      - id: shellcheck
+      - id: shfmt
 
-# pre-commit.ci errors out if below shell check is not used
-- repo: https://github.com/koalaman/shellcheck
-  rev: "v0.8.0"
-  hooks:
-    - id: shellcheck
-
-- repo: https://github.com/igorshubovych/markdownlint-cli
-  rev: v0.28.1
-  hooks:
-    - id: markdownlint
+  - repo: https://github.com/igorshubovych/markdownlint-cli
+    rev: v0.30.0
+    hooks:
+      - id: markdownlint
 
 # TODO: enable after fixing lint errors
 #- repo: https://github.com/hadolint/hadolint
