@@ -1,36 +1,58 @@
 combiner:
   combinations:
     - name: base
-    # - name: essentials
-    #   chunks:
-    #   - tool-docker
-    # - name: lang-c
-    #   ref:
-    #   - essentials
-    #   chunks:
-    #   - lang-c
-    # - name: lang-clojure
-    #   ref:
-    #   - essentials
-    #   chunks:
-    #   - lang-clojure
+      chunks:
+        - tool-docker
+    - name: c
+      chunks:
+        - lang-c
+    - name: clojure
+      chunks:
+        - lang-clojure
+    - name: dev-environment
+      chunks:
+        - lang-c
+        - lang-go:1.17.5
+        - lang-java:11
+        - lang-node:16.13.0
+        - lang-python
     - name: full
       chunks:
-      - lang-c
-      - lang-clojure
-      - lang-go:1.17.2
-      - lang-java
-      - lang-node:16.13.0
-      - lang-python
-      - lang-ruby
-      - lang-rust
-      - tool-brew
-      - tool-docker
-      - tool-nginx
-      - tool-nix:2.3.14
-      - tool-postgresql
-      - tool-tailscale
-      - tool-vnc
+        - lang-c
+        - lang-clojure
+        - lang-go:1.17.5
+        - lang-java:11
+        - lang-node:16.13.0
+        - lang-python
+        - lang-ruby:2.7
+        - lang-rust
+        - tool-brew
+        - tool-nginx
+        - tool-nix:2.3.14
+        - tool-postgresql
+        - tool-tailscale
+        - tool-vnc
+    - name: go
+      chunks:
+        - lang-go:1.17.5
+    - name: node
+      chunks:
+        - lang-node:16.13.1
+    - name: node-lts
+      chunks:
+        - lang-node:16.13.1
+    - name: python
+      chunks:
+        - lang-python
+    - name: ruby-2
+      chunks:
+        - lang-ruby:2.7
+    - name: ruby
+      chunks:
+        - lang-ruby:3
+    - name: rust
+      chunks:
+        - lang-rust
   envvars:
     - name: PATH
       action: merge-unique

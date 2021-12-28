@@ -1,6 +1,8 @@
 ARG base
 FROM ${base}
 
+ARG RUBY_VERSION
+
 USER gitpod
 ENV TRIGGER_REBUILD=1
 RUN curl -fsSL https://rvm.io/mpapis.asc | gpg --import - \
@@ -8,8 +10,8 @@ RUN curl -fsSL https://rvm.io/mpapis.asc | gpg --import - \
     && curl -fsSL https://get.rvm.io | bash -s stable \
     && bash -lc " \
         rvm requirements \
-        && rvm install 2.7.4 \
-        && rvm use 2.7.4 --default \
+        && rvm install ${RUBY_VERSION} \
+        && rvm use ${RUBY_VERSION} --default \
         && rvm rubygems current \
         && gem install bundler --no-document \
         && gem install solargraph --no-document" \
