@@ -90,6 +90,7 @@ jobs:
         run: |
           sudo skopeo sync \
             --src-tls-verify=false \
+            --registries-conf=.github/registries.conf \
             --src yaml \
             --dest docker \
             .github/sync-containers.yml ${{env.IMAGE_REPO}}/workspace-base-images/workspace-base-images/workspace-image
