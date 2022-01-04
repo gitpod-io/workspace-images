@@ -7,22 +7,40 @@ ports:
 
 tasks:
   - name: start up buildkitd
-    command: sudo /usr/bin/buildkitd
+    command: |
+      cd dazzle-rewrite
+      sudo /usr/bin/buildkitd --debug  --config ./buildkitd.toml --group gitpod
   - name: server a local docker registry
     command: |
-      docker run -p 5000:5000 --name registry --rm registry:2
+      mkdir -p /workspace/registry
+      docker run -p 5000:5000 --name registry --rm -v /workspace/registry:/var/lib/registry registry:2 
+    openMode: split-right
   - name: get latest version of dazzle, build and test images
-    before: |
-      git clone --depth=1 https://github.com/gitpod-io/dazzle/
+    before: |            
+      git clone https://github.com/gitpod-io/dazzle/
       cd ./dazzle
+      git fetch -v
+      git checkout combine-testing
       go get -v ./...
       go generate -v ./...
       go install
-      go build
-      cd ..
-    command: |
+      cd ..      
+    command: |      
+      cd dazzle-rewrite
       gp await-port 5000
-      cd ./dazzle-rewrite && sudo $(which dazzle) build localhost:5000/dazzle
+      REPO=localhost:5000/dazzle
+      echo "To build and test chunks 'time sudo $(which dazzle) build $REPO -v'"
+      echo "To build and test combinations 'time sudo $(which dazzle) combine $REPO --all -v'"
+      echo "To list chunk images, which can be tested individually with docker 'sudo $(which dazzle) project image-name $REPO'"
+      echo "To list hashes for chunked images 'sudo $(which dazzle) project hash $REPO'"
+      echo "To print the combined image maniest 'sudo $(which dazzle) project manifest $REPO'"      
+      echo "Image content cached in this workspace...'du -shc /workspace/registry/*'"
+    openMode: tab-after
+  - name: watch file system
+    command: watch -n 5 df -H
+  - name: watch buildkit disk usage
+    command: watch -n 5 'buildctl du | grep "Total"'
+    openMode: split-right
 
 vscode:
   extensions:

@@ -1,0 +1,5 @@
+root = "/workspace/buildkit"
+
+[worker.oci]
+max-parallelism = 10
+gckeepstorage = 40000
