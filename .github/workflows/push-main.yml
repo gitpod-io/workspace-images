@@ -62,6 +62,7 @@ jobs:
       - name: 🔨 Dazzle build
         run: |
           cd dazzle-rewrite
+          dazzle build localhost:5000/workspace-images --chunked-without-hash
           dazzle build localhost:5000/workspace-images
 
       - name: 🖇️ Dazzle combine
