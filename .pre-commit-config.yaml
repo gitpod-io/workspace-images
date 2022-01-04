@@ -8,6 +8,10 @@ repos:
       - id: trailing-whitespace
       - id: check-symlinks
       - id: mixed-line-ending
+      - id: check-case-conflict
+      - id: check-executables-have-shebangs
+      - id: check-shebang-scripts-are-executable
+      - id: check-merge-conflict
 
   - repo: https://github.com/jumanjihouse/pre-commit-hooks
     rev: "2.1.5"
@@ -23,7 +27,7 @@ repos:
       - id: markdownlint
 
 # TODO: enable after fixing lint errors
-#- repo: https://github.com/hadolint/hadolint
-#  rev: v2.4.1
-#  hooks:
-#    - id: hadolint-docker
+  # - repo: https://github.com/hadolint/hadolint
+  #   rev: v2.4.1
+  #   hooks:
+  #     - id: hadolint-docker

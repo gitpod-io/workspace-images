@@ -11,6 +11,17 @@ jobs:
         with:
           repository: gitpod-io/workspace-images
 
+      - name: 🔧 Setup pre-commit
+        run: |
+          sudo apt-get install python3-pip shellcheck
+          curl -sSL https://github.com/mvdan/sh/releases/download/v3.4.2/shfmt_v3.4.2_linux_amd64 -o shfmt
+          sudo mv shfmt /usr/local/bin/shfmt && sudo chmod +x /usr/local/bin/shfmt
+          sudo pip3 install pre-commit
+
+      - name: 🤓 Run pre-commit
+        run: |
+          pre-commit run --all-files
+
       - name: 🔆 Install dazzle
         run: |
           curl -sSL https://github.com/gitpod-io/dazzle/releases/download/v0.1.6/dazzle_0.1.6_Linux_x86_64.tar.gz | sudo tar -xvz -C /usr/local/bin
