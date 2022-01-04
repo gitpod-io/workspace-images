@@ -84,11 +84,12 @@ jobs:
 
       - name: Configuring container registry credentials
         run: |
-          skopeo login -u oauth2accesstoken --password=${{ steps.auth.outputs.access_token }} https://${{env.IMAGE_REPO}}
+          sudo skopeo login -u oauth2accesstoken --password=${{ steps.auth.outputs.access_token }} https://${{env.IMAGE_REPO}}
 
       - name: 🐳 Sync images to Artifact Registry
         run: |
-          skopeo sync \
+          sudo skopeo sync \
+            --src-tls-verify=false \
             --src yaml \
             --dest docker \
             .github/sync-containers.yml ${{env.IMAGE_REPO}}/workspace-base-images/workspace-base-images/workspace-image
