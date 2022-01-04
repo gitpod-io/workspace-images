@@ -20,7 +20,7 @@ jobs:
       id-token: "write"
     env:
       WORKLOAD_IDENTITY_POOL_ID: projects/119379277405/locations/global/workloadIdentityPools/workspace-images-github-actions/providers/workspace-images-gha-provider
-      IMAGE_REPO: europe-docker.pkg.dev/workspace-base-images/
+      IMAGE_REPO: europe-docker.pkg.dev
       IAM_SERVICE_ACCOUNT: workspace-images-gha-sa@workspace-base-images.iam.gserviceaccount.com
 
     steps:
@@ -75,6 +75,7 @@ jobs:
           version: 366.0.0
 
       - name: Authenticate to Google Cloud
+        id: "auth"
         uses: "google-github-actions/auth@v0.4.3"
         with:
           token_format: "access_token"
@@ -83,11 +84,11 @@ jobs:
 
       - name: Configuring container registry credentials
         run: |
-          echo "${{ steps.auth.outputs.access_token }}" | skopeo login -u oauth2accesstoken --password-stdin https://europe-docker.pkg.dev
+          echo "${{ steps.auth.outputs.access_token }}" | skopeo login -u oauth2accesstoken --password-stdin https://${{env.IMAGE_REPO}}
 
       - name: 🐳 Sync images to Artifact Registry
         run: |
           skopeo sync \
             --src yaml \
             --dest docker \
-            .github/sync-containers.yml europe-docker.pkg.dev/workspace-images
+            .github/sync-containers.yml ${{env.IMAGE_REPO}}/workspace-base-images/workspace-base-images/workspace-image
