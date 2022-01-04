@@ -1,8 +1,4 @@
 # https://github.com/containers/skopeo/blob/main/docs/skopeo-sync.1.md#yaml-file-content-used-source-for---src-yaml
 localhost:5000:
   images:
-    workspace-base: []
-    workspace-full:
-      - "1.0"
-      - "2.0"
-      - "sha256:0000000000000000000000000000000011111111111111111111111111111111"
+    workspace-images: []

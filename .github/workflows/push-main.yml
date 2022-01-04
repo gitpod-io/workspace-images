@@ -3,7 +3,7 @@ name: Build and Sync container images
 on:
   push:
     branches:
-      - master
+      - ws-team/dazzle-rewrite
 
 jobs:
   # Sync container images between the local registry and GCP Artifact registry.
@@ -84,7 +84,7 @@ jobs:
 
       - name: Configuring container registry credentials
         run: |
-          echo "${{ steps.auth.outputs.access_token }}" | skopeo login -u oauth2accesstoken --password-stdin https://${{env.IMAGE_REPO}}
+          skopeo login -u oauth2accesstoken --password=${{ steps.auth.outputs.access_token }} https://${{env.IMAGE_REPO}}
 
       - name: 🐳 Sync images to Artifact Registry
         run: |

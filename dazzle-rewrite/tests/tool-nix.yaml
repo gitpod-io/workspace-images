@@ -8,3 +8,4 @@
   entrypoint: [bash, -i, -c]
   assert:
   - status == 0
+  - stdout.indexOf("2.3.14") != -1

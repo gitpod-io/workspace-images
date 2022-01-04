@@ -2,6 +2,14 @@
   command: [go, version]
   assert:
   - stdout.indexOf("go version") != -1
+  # intentional space after version num in order to avoid matching other
+  # go1.17.x
+  - stdout.indexOf("go1.17 ")  != -1 ||
+    stdout.indexOf("go1.17.1") != -1 ||
+    stdout.indexOf("go1.17.2") != -1 ||
+    stdout.indexOf("go1.17.3") != -1 ||
+    stdout.indexOf("go1.17.4") != -1 ||
+    stdout.indexOf("go1.17.5") != -1
   - status == 0
 - desc: it should have gopkgs
   command: [gopkgs]

@@ -3,6 +3,9 @@
   entrypoint: [bash, -i, -c]
   assert:
   - status == 0
+  - stdout.indexOf("v16.13.0") != -1 ||
+    stdout.indexOf("v16.13.1") != -1 ||
+    stdout.indexOf("v17.3.0")  != -1
 - desc: it should have yarn
   command: [yarn --version]
   entrypoint: [bash, -i, -c]
