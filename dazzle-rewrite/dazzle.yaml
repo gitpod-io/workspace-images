@@ -3,6 +3,7 @@ combiner:
     - name: base
       chunks:
         - tool-docker
+        - tool-tailscale
     - name: c
       chunks:
         - lang-c
@@ -30,7 +31,6 @@ combiner:
         - tool-nginx
         - tool-nix:2.3.14
         - tool-postgresql
-        - tool-tailscale
         - tool-vnc
     - name: go
       chunks:
