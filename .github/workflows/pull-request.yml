@@ -33,11 +33,21 @@ jobs:
           sudo su -c "while ! test -S /run/buildkit/buildkitd.sock; do sleep 0.1; done"
           sudo chmod +777 /run/buildkit/buildkitd.sock
 
-      - name: 🗄️ Registry cache
+      # A hack as GH action does not allow you to force override cache storing if there was a cache hit
+      # https://github.com/actions/cache/issues/628#issuecomment-986118455
+      - name: 🗄️ Force Save Registry Cache Per Sha
         uses: actions/cache@v2
         with:
           path: ~/registry
-          key: ${{ runner.os }}-pull-request-cache
+          key: ${{ runner.os }}-pull-request-cache-${{ github.sha }}
+
+      - name: 🗄️ Restore Registry Cache
+        uses: actions/cache@v2
+        with:
+          path: ~/registry
+          key: ${{ runner.os }}-pull-request-cache-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-pull-request-cache-
 
       - name: 📦 Setup local registry
         run: |
