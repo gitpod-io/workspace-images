@@ -7,7 +7,7 @@ on:
 
 jobs:
   # Sync container images between the local registry and GCP Artifact registry.
-  # To implementr manual approvals, the workflow uses an Environment.
+  # To implement manual approvals, the workflow uses an Environment.
   #
   # From your GitHub repo clock Settings. In the left menu, click Environments.
   # Click New environment, set the name production, and click Configure environment.
@@ -19,9 +19,9 @@ jobs:
       contents: "read"
       id-token: "write"
     env:
-      WORKLOAD_IDENTITY_POOL_ID: projects/119379277405/locations/global/workloadIdentityPools/workspace-images-github-actions/providers/workspace-images-gha-provider
-      IMAGE_REPO: europe-docker.pkg.dev
-      IAM_SERVICE_ACCOUNT: workspace-images-gha-sa@workspace-base-images.iam.gserviceaccount.com
+      WORKLOAD_IDENTITY_POOL_ID: projects/665270063338/locations/global/workloadIdentityPools/workspace-images-github-actions/providers/workspace-images-gha-provider
+      IMAGE_REGISTRY: europe-docker.pkg.dev
+      IAM_SERVICE_ACCOUNT: workspace-images-gha-sa@gitpod-artifacts.iam.gserviceaccount.com
 
     steps:
       - name: 📥 Checkout workspace-images
@@ -96,7 +96,7 @@ jobs:
 
       - name: Configuring container registry credentials
         run: |
-          sudo skopeo login -u oauth2accesstoken --password=${{ steps.auth.outputs.access_token }} https://${{env.IMAGE_REPO}}
+          sudo skopeo login -u oauth2accesstoken --password=${{ steps.auth.outputs.access_token }} https://${{env.IMAGE_REGISTRY}}
 
       - name: 🐳 Sync images to Artifact Registry
         run: |
@@ -105,4 +105,4 @@ jobs:
             --registries-conf=.github/registries.conf \
             --src yaml \
             --dest docker \
-            .github/sync-containers.yml ${{env.IMAGE_REPO}}/workspace-base-images/workspace-base-images/workspace-image
+            .github/sync-containers.yml ${{env.IMAGE_REGISTRY}}/gitpod-artifacts/docker-dev/workspace-base-images
