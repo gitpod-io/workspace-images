@@ -1,7 +1,7 @@
 # https://github.com/containers/skopeo/blob/main/docs/skopeo-sync.1.md#yaml-file-content-used-source-for---src-yaml
 localhost:5000:
   images:
-    workspace-images:
+    workspace-base-images:
     - base
     - c
     - clojure

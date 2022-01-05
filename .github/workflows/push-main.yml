@@ -83,13 +83,13 @@ jobs:
       - name: 🔨 Dazzle build
         run: |
           cd dazzle-rewrite
-          dazzle build localhost:5000/workspace-images --chunked-without-hash
-          dazzle build localhost:5000/workspace-images
+          dazzle build localhost:5000/workspace-base-images --chunked-without-hash
+          dazzle build localhost:5000/workspace-base-images
 
       - name: 🖇️ Dazzle combine
         run: |
           cd dazzle-rewrite
-          dazzle combine localhost:5000/workspace-images --all
+          dazzle combine localhost:5000/workspace-base-images --all
 
       - name: Set up Cloud SDK
         uses: google-github-actions/setup-gcloud@master
@@ -115,4 +115,4 @@ jobs:
             --registries-conf=.github/registries.conf \
             --src yaml \
             --dest docker \
-            .github/sync-containers.yml ${{env.IMAGE_REGISTRY}}/gitpod-artifacts/docker-dev/workspace-base-images
+            .github/sync-containers.yml ${{env.IMAGE_REGISTRY}}/gitpod-artifacts/docker-dev
