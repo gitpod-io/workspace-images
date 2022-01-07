@@ -92,7 +92,7 @@ jobs:
           dazzle combine localhost:5000/workspace-base-images --all
 
       - name: Set up Cloud SDK
-        uses: google-github-actions/setup-gcloud@master
+        uses: google-github-actions/setup-gcloud@v0
         with:
           version: 366.0.0
 

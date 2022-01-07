@@ -10,13 +10,6 @@ combiner:
     - name: clojure
       chunks:
         - lang-clojure
-    - name: dev-environment
-      chunks:
-        - lang-c
-        - lang-go:1.17.5
-        - lang-java:11
-        - lang-node:16.13.0
-        - lang-python
     - name: full
       chunks:
         - lang-c
