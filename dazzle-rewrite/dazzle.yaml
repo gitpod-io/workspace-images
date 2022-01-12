@@ -5,12 +5,18 @@ combiner:
         - tool-docker
         - tool-tailscale
     - name: c
+      ref:
+      - base
       chunks:
         - lang-c
     - name: clojure
+      ref:
+      - base
       chunks:
         - lang-clojure
     - name: full
+      ref:
+      - base
       chunks:
         - lang-c
         - lang-clojure
@@ -26,24 +32,38 @@ combiner:
         - tool-postgresql
         - tool-vnc
     - name: go
+      ref:
+      - base
       chunks:
         - lang-go:1.17.5
     - name: node
+      ref:
+      - base
       chunks:
         - lang-node:16.13.1
     - name: node-lts
+      ref:
+      - base
       chunks:
         - lang-node:16.13.1
     - name: python
+      ref:
+      - base
       chunks:
         - lang-python
     - name: ruby-2
+      ref:
+      - base
       chunks:
         - lang-ruby:2.7
     - name: ruby
+      ref:
+      - base
       chunks:
         - lang-ruby:3
     - name: rust
+      ref:
+      - base
       chunks:
         - lang-rust
   envvars:
