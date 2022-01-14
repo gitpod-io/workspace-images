@@ -29,8 +29,9 @@ tasks:
       cd dazzle-rewrite
       gp await-port 5000
       REPO=localhost:5000/dazzle
-      echo "To build and test chunks 'time sudo $(which dazzle) build $REPO -v'"
-      echo "To build and test combinations 'time sudo $(which dazzle) combine $REPO --all -v'"
+      echo "First, build chunks without hashes 'time sudo $(which dazzle) build $REPO -v --chunked-without-hash'"
+      echo "Second, build again 'time sudo $(which dazzle) build $REPO -v'"
+      echo "Third, create combinations of chunks 'time sudo $(which dazzle) combine $REPO --all -v'"
       echo "To list chunk images, which can be tested individually with docker 'sudo $(which dazzle) project image-name $REPO'"
       echo "To list hashes for chunked images 'sudo $(which dazzle) project hash $REPO'"
       echo "To print the combined image maniest 'sudo $(which dazzle) project manifest $REPO'"
