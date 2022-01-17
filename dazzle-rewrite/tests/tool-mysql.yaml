@@ -1,0 +1,6 @@
+- desc: it should run mysqlcli
+  command: [mysql -V]
+  entrypoint: [bash, -i, -c]
+  assert:
+  - status == 0
+  - stdout.indexOf("mysql") != -1

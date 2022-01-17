@@ -1,6 +1,6 @@
-- desc: "it should say hello"
-  command: ["echo", "hello"]
+- desc: it should run postgresql cli
+  command: [postgres -V]
+  entrypoint: [bash, -i, -c]
   assert:
   - status == 0
-  - stdout.indexOf("hello") != -1
-  - stderr.length == 0
+  - stdout.indexOf("(PostgreSQL) 12") != -1

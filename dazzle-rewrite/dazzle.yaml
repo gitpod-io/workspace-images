@@ -66,6 +66,27 @@ combiner:
       - base
       chunks:
         - lang-rust
+    - name: dotnet-vnc
+      ref:
+      - base
+      chunks:
+        - tool-vnc
+        - tool-dotnet
+    - name: wasm
+      ref:
+      - base
+      chunks:
+        - tool-wasm
+    - name: postgresql
+      ref:
+      - base
+      chunks:
+        - tool-postgresql
+    - name: mysql
+      ref:
+      - base
+      chunks:
+        - tool-mysql
   envvars:
     - name: PATH
       action: merge-unique
