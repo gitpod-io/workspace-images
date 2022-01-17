@@ -33,6 +33,8 @@ RUN yes | unminimize \
 
 ENV LANG=en_US.UTF-8
 
+ENV TRIGGER_REBUILD=1
+
 ### Update and upgrade the base image ###
 RUN upgrade-packages
 
