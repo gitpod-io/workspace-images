@@ -4,7 +4,7 @@ jobs:
   validate-changes:
     docker:
       # pre-commit package is included since 20.10
-      - image: ubuntu:20.10
+      - image: ubuntu:22.04
     steps:
       - checkout
       - attach_workspace:
@@ -12,6 +12,7 @@ jobs:
       - run:
           name: Run pre-commit checks
           command: |
+            export DEBIAN_FRONTEND=noninteractive
             apt update && apt install -y shellcheck pre-commit git
             pre-commit run --all-files
 
