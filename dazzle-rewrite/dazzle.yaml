@@ -72,11 +72,6 @@ combiner:
       chunks:
         - tool-vnc
         - tool-dotnet
-    - name: wasm
-      ref:
-      - base
-      chunks:
-        - tool-wasm
     - name: postgresql
       ref:
       - base
@@ -87,6 +82,11 @@ combiner:
       - base
       chunks:
         - tool-mysql
+    - name: mongodb
+      ref:
+      - base
+      chunks:
+        - tool-mongodb
   envvars:
     - name: PATH
       action: merge-unique
