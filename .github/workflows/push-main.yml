@@ -142,7 +142,7 @@ jobs:
       - name: 🕰️ Create timestamp tag
         id: create-timestamp-tag
         run: |
-          echo "::set-output name=TIMESTAMP_TAG::$(date '+%Y-%m-%d-%H-%M-%S')"
+          echo "TIMESTAMP_TAG=$(date '+%Y-%m-%d-%H-%M-%S')" >> $GITHUB_ENV
 
       - name: 🗄️ Use Registry Cache From Sha
         uses: actions/cache@v2
@@ -181,8 +181,18 @@ jobs:
       - name: 📋 Copy images to Artifact Registry
         run: |
           IMAGE_TAGS=$(cat .github/sync-containers.yml | yq '.["localhost:5000"].images."workspace-base-images"|join(" ")' -r)
-          echo $IMAGE_TAGS | xargs -P 4 sudo skopeo copy \
+          COPY_JOBS_PIDS=""
+          for IMAGE_TAG in $IMAGE_TAGS;
+          do
+            sudo skopeo copy \
               --src-tls-verify=false \
               --registries-conf=.github/registries.conf \
-              docker://${{env.IMAGE_REGISTRY}}//gitpod-artifacts/docker-dev/workspace-base-images:$IMAGE_TAG \
-              docker://${{env.IMAGE_REGISTRY}}//gitpod-artifacts/docker-dev/workspace-$IMAGE_TAG:${{ steps.create-timestamp-tag.TIMESTAMP_TAG }}
+              docker://localhost:5000/workspace-base-images:$IMAGE_TAG \
+              docker://${{ env.IMAGE_REGISTRY }}/gitpod-artifacts/docker-dev/workspace-$IMAGE_TAG:${{ env.TIMESTAMP_TAG }} &
+
+              COPY_JOBS_PIDS="$COPY_JOBS_PIDS $!"
+          done
+
+          for COPY_JOBS_PID in $COPY_JOBS_PIDS; do
+              wait $COPY_JOBS_PID || exit 1
+          done
