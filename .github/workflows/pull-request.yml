@@ -6,12 +6,6 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: 🔧 Setup tools
-        run: |
-          sudo apt-get install python3-pip shellcheck
-          curl -sSL https://github.com/mvdan/sh/releases/download/v3.4.2/shfmt_v3.4.2_linux_amd64 -o shfmt
-          sudo mv shfmt /usr/local/bin/shfmt && sudo chmod +x /usr/local/bin/shfmt
-          sudo pip3 install pre-commit
 
       - name: 📥 Checkout workspace-images
         uses: actions/checkout@v2
@@ -22,9 +16,9 @@ jobs:
         id: create-timestamp-tag
         run: |
           echo "::set-output name=TIMESTAMP_TAG::$(date '+%Y-%m-%d-%H-%M-%S')"
+          echo  TIMESTAMP_TAG=$(date '+%Y-%m-%d-%H-%M-%S') >> $GITHUB_ENV
 
       - name: 🤓 test step
         run: |
-          IMAGE_TAGS=$(cat .github/sync-containers.yml | yq '.["localhost:5000"].images."workspace-base-images"|join(" ")' -r)
-          echo $IMAGE_TAGS
           echo Image_tags ${{ steps.create-timestamp-tag.TIMESTAMP_TAG }}
+          echo envimgtag ${{ TIMESTAMP_TAG }}
