@@ -6,8 +6,8 @@ on:
       - Build and Sync container images
     types:
       - requested
-    branches:
-      - ws-team/dazzle-rewrite
+    # branches:
+    #   - ws-team/dazzle-rewrite
 
 jobs:
   # Copy promotes (copies) the ${{ IMAGE_REGISTRY }}/workspace-base-images:<combination> images to dedicated images
