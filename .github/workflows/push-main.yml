@@ -180,5 +180,5 @@ jobs:
           echo $IMAGE_TAGS | xargs -P 4 sudo skopeo copy \
               --src-tls-verify=false \
               --registries-conf=.github/registries.conf \
-              docker://localhost:5000/workspace-base-images:$IMAGE_TAG \
+              docker://${{env.IMAGE_REGISTRY}}//gitpod-artifacts/docker-dev/workspace-base-images:$IMAGE_TAG \
               docker://${{env.IMAGE_REGISTRY}}//gitpod-artifacts/docker-dev/workspace-$IMAGE_TAG:${{ steps.create-timestamp-tag.TIMESTAMP_TAG }}
