@@ -29,12 +29,13 @@ jobs:
         with:
           repository: gitpod-io/workspace-images
 
-      - name: 🔧 Setup pre-commit
+      - name: 🔧 Setup tools
         run: |
           sudo apt-get install python3-pip shellcheck
           curl -sSL https://github.com/mvdan/sh/releases/download/v3.4.2/shfmt_v3.4.2_linux_amd64 -o shfmt
           sudo mv shfmt /usr/local/bin/shfmt && sudo chmod +x /usr/local/bin/shfmt
           sudo pip3 install pre-commit
+          sudo pip3 install yq
 
       - name: 🤓 Run pre-commit
         run: |
