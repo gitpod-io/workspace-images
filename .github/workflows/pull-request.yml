@@ -15,11 +15,10 @@ jobs:
       - name: 🕰️ Create timestamp tag
         id: create-timestamp-tag
         run: |
-          export timestamp=$(date '+%Y-%m-%d-%H-%M-%S')
-          echo "::set-output name=TIMESTAMP_TAG::$timestamp"
-          echo  "TIMESTAMP_TAG=$timestamp" >> $GITHUB_ENV
+          echo "TIMESTAMP_TAG=$(date '+%Y-%m-%d-%H-%M-%S')" >> $GITHUB_ENV
 
       - name: 🤓 test step
         run: |
           echo Image_tags ${{ steps.create-timestamp-tag.TIMESTAMP_TAG }}
           echo envimgtag ${{ env.TIMESTAMP_TAG }}
+
