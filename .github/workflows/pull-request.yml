@@ -18,7 +18,13 @@ jobs:
         with:
           repository: gitpod-io/workspace-images
 
+      - name: 🕰️ Create timestamp tag
+        id: create-timestamp-tag
+        run: |
+          echo "::set-output name=TIMESTAMP_TAG::$(date '+%Y-%m-%d-%H-%M-%S')"
+
       - name: 🤓 test step
         run: |
           IMAGE_TAGS=$(cat .github/sync-containers.yml | yq '.["localhost:5000"].images."workspace-base-images"|join(" ")' -r)
           echo $IMAGE_TAGS
+          echo Image_tags ${{ steps.create-timestamp-tag.TIMESTAMP_TAG }}
