@@ -1,0 +1,75 @@
+name: Copy images to dedicated repositories
+
+on:
+  workflow_run:
+    workflows:
+      - Build and Sync container images
+    types:
+      - completed
+    branches:
+      - ws-team/dazzle-rewrite
+
+jobs:
+  # Copy promotes (copies) the ${{ IMAGE_REGISTRY }}/workspace-base-images:<combination> images to dedicated images
+  # ${{ IMAGE_REGISTRY }}/workspace-<combination>:<timestamp-tag> where <timestamp-tag> is tag generated from timestamp
+  copy:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    runs-on: ubuntu-latest
+    environment: "production"
+    needs: sync
+    permissions:
+      contents: "read"
+      id-token: "write"
+    env:
+      WORKLOAD_IDENTITY_POOL_ID: projects/665270063338/locations/global/workloadIdentityPools/workspace-images-github-actions/providers/workspace-images-gha-provider
+      IMAGE_REGISTRY: europe-docker.pkg.dev
+      IAM_SERVICE_ACCOUNT: workspace-images-gha-sa@gitpod-artifacts.iam.gserviceaccount.com
+
+    steps:
+      - name: 🕰️ Create timestamp tag
+        id: create-timestamp-tag
+        run: |
+          echo "::set-output name=TIMESTAMP_TAG::$(date '+%Y-%m-%d-%H-%M-%S')"
+
+      - name: 🗄️ Use Registry Cache From Sha
+        uses: actions/cache@v2
+        with:
+          path: ~/registry
+          key: ${{ runner.os }}-main-cache-${{ github.sha }}
+
+      - name: 🏗️ Setup buildkit
+        run: |
+          curl -sSL https://github.com/moby/buildkit/releases/download/v0.9.3/buildkit-v0.9.3.linux-amd64.tar.gz | sudo tar xvz -C /usr
+          sudo buildkitd --oci-worker=true --oci-worker-net=host --debug --group docker &
+          sudo su -c "while ! test -S /run/buildkit/buildkitd.sock; do sleep 0.1; done"
+          sudo chmod +777 /run/buildkit/buildkitd.sock
+
+      - name: 📦 Setup local registry
+        run: |
+          docker run -it --detach --publish 5000:5000 --volume ~/registry:/var/lib/registry registry:2
+
+      - name: ☁️ Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v0
+        with:
+          version: 366.0.0
+
+      - name: 🔐 Authenticate to Google Cloud
+        id: "auth"
+        uses: "google-github-actions/auth@v0.4.3"
+        with:
+          token_format: "access_token"
+          workload_identity_provider: ${{env.WORKLOAD_IDENTITY_POOL_ID}}
+          service_account: ${{env.IAM_SERVICE_ACCOUNT}}
+
+      - name: ✍🏽 Configuring container registry credentials
+        run: |
+          sudo skopeo login -u oauth2accesstoken --password=${{ steps.auth.outputs.access_token }} https://${{env.IMAGE_REGISTRY}}
+
+      - name: 📋 Copy images to Artifact Registry
+        run: |
+          IMAGE_TAGS=$(cat .github/sync-containers.yml | yq '.["localhost:5000"].images."workspace-base-images"|join(" ")' -r)
+          echo $IMAGE_TAGS | xargs -P 4 sudo skopeo copy \
+              --src-tls-verify=false \
+              --registries-conf=.github/registries.conf \
+              docker://localhost:5000/workspace-base-images:$IMAGE_TAG \
+              docker://${{env.IMAGE_REGISTRY}}//gitpod-artifacts/docker-dev/workspace-$IMAGE_TAG:${{ steps.create-timestamp-tag.TIMESTAMP_TAG }}
