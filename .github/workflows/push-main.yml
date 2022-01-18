@@ -35,7 +35,6 @@ jobs:
           curl -sSL https://github.com/mvdan/sh/releases/download/v3.4.2/shfmt_v3.4.2_linux_amd64 -o shfmt
           sudo mv shfmt /usr/local/bin/shfmt && sudo chmod +x /usr/local/bin/shfmt
           sudo pip3 install pre-commit
-          sudo pip3 install yq
 
       - name: 🤓 Run pre-commit
         run: |
@@ -120,7 +119,6 @@ jobs:
 
   copy:
     runs-on: ubuntu-latest
-    environment: "production"
     needs: sync
     permissions:
       contents: "read"
@@ -131,6 +129,11 @@ jobs:
       IAM_SERVICE_ACCOUNT: workspace-images-gha-sa@gitpod-artifacts.iam.gserviceaccount.com
 
     steps:
+      - name: 🔧 Setup tools
+        run: |
+          sudo apt-get install python3-pip
+          sudo pip3 install yq
+
       - name: 📥 Checkout workspace-images
         uses: actions/checkout@v2
         with:
