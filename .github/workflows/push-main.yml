@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - ws-team/dazzle-rewrite
+      - master
 
 jobs:
   # Sync container images between the local registry and GCP Artifact registry.
@@ -91,12 +92,12 @@ jobs:
           cd dazzle-rewrite
           dazzle combine localhost:5000/workspace-base-images --all
 
-      - name: Set up Cloud SDK
+      - name: ☁️ Set up Cloud SDK
         uses: google-github-actions/setup-gcloud@v0
         with:
           version: 366.0.0
 
-      - name: Authenticate to Google Cloud
+      - name: 🔐 Authenticate to Google Cloud
         id: "auth"
         uses: "google-github-actions/auth@v0.4.3"
         with:
@@ -104,7 +105,7 @@ jobs:
           workload_identity_provider: ${{env.WORKLOAD_IDENTITY_POOL_ID}}
           service_account: ${{env.IAM_SERVICE_ACCOUNT}}
 
-      - name: Configuring container registry credentials
+      - name: ✍🏽 Configuring container registry credentials
         run: |
           sudo skopeo login -u oauth2accesstoken --password=${{ steps.auth.outputs.access_token }} https://${{env.IMAGE_REGISTRY}}
 

@@ -17,14 +17,7 @@ tasks:
     openMode: split-right
   - name: get latest version of dazzle, build and test images
     before: |
-      git clone https://github.com/gitpod-io/dazzle/
-      cd ./dazzle
-      git fetch -v
-      git checkout combine-testing
-      go get -v ./...
-      go generate -v ./...
-      go install
-      cd ..
+      curl -sSL https://github.com/gitpod-io/dazzle/releases/download/v0.1.6/dazzle_0.1.6_Linux_x86_64.tar.gz | sudo tar -xvz -C /usr/local/bin
     command: |
       cd dazzle-rewrite
       gp await-port 5000
