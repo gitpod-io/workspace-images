@@ -10,7 +10,7 @@ jobs:
   # To implement manual approvals, the workflow uses an Environment.
   sync:
     runs-on: ubuntu-latest
-    # environment: "production"
+    environment: "production"
     # permissions:
     #   contents: "read"
     #   id-token: "write"
@@ -22,10 +22,10 @@ jobs:
 
     steps:
       - name: Test
-        with:
-          mysecret: thisisasecretexample
+        env:
+          mysecret: ${{ secrets.DOCKERHUB_USER_NAME}}
         run: |
-          echo ${{ inputs.mysecret }}
+          echo ${{ env.mysecret }}
       # - name: 📥 Checkout workspace-images
       #   uses: actions/checkout@v2
       #   with:
