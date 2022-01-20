@@ -8,7 +8,6 @@ ports:
 tasks:
   - name: start up buildkitd
     command: |
-      cd dazzle-rewrite
       sudo /usr/bin/buildkitd --debug  --config ./buildkitd.toml --group gitpod
   - name: server a local docker registry
     command: |
@@ -19,7 +18,6 @@ tasks:
     before: |
       curl -sSL https://github.com/gitpod-io/dazzle/releases/download/v0.1.6/dazzle_0.1.6_Linux_x86_64.tar.gz | sudo tar -xvz -C /usr/local/bin
     command: |
-      cd dazzle-rewrite
       gp await-port 5000
       REPO=localhost:5000/dazzle
       echo "First, build chunks without hashes 'time sudo $(which dazzle) build $REPO -v --chunked-without-hash'"
