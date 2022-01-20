@@ -2,7 +2,10 @@ ARG base
 FROM ${base}
 
 USER root
+
+# Dazzle does not rebuild a layer until one of its lines are changed. Increase this counter to rebuild this layer.
 ENV TRIGGER_REBUILD=1
+
 RUN install-packages \
         apache2 \
         nginx \
@@ -35,3 +38,5 @@ COPY --chown=gitpod:gitpod nginx /etc/nginx/
 ## The directory relative to your git repository that will be served by Apache / Nginx
 ENV APACHE_DOCROOT_IN_REPO="public"
 ENV NGINX_DOCROOT_IN_REPO="public"
+
+USER gitpod

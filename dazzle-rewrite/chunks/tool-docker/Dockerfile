@@ -3,7 +3,9 @@ FROM ${base}
 
 USER root
 
+# Dazzle does not rebuild a layer until one of its lines are changed. Increase this counter to rebuild this layer.
 ENV TRIGGER_REBUILD=1
+
 # https://docs.docker.com/engine/install/ubuntu/
 RUN curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg \
     && echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu \
@@ -21,3 +23,5 @@ RUN curl -o /usr/local/bin/docker-compose -fsSL https://github.com/docker/compos
 RUN curl -o /tmp/dive.deb -fsSL https://github.com/wagoodman/dive/releases/download/v0.10.0/dive_0.10.0_linux_amd64.deb \
     && apt install /tmp/dive.deb \
     && rm /tmp/dive.deb
+
+USER gitpod

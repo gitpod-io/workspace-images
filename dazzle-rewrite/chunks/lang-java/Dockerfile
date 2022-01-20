@@ -3,8 +3,11 @@ FROM ${base}
 
 ARG JAVA_VERSION
 
-ENV TRIGGER_REBUILD=1
 USER gitpod
+
+# Dazzle does not rebuild a layer until one of its lines are changed. Increase this counter to rebuild this layer.
+ENV TRIGGER_REBUILD=1
+
 RUN curl -fsSL "https://get.sdkman.io" | bash \
  && bash -c ". /home/gitpod/.sdkman/bin/sdkman-init.sh \
              && sdk install java ${JAVA_VERSION}.fx-zulu \

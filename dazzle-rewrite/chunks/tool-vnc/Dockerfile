@@ -1,6 +1,9 @@
 ARG base
 FROM ${base}
 
+# Dazzle does not rebuild a layer until one of its lines are changed. Increase this counter to rebuild this layer.
+ENV TRIGGER_REBUILD=1
+
 # Install Xvfb, JavaFX-helpers and Openbox window manager
 RUN sudo install-packages xvfb x11vnc xterm openjfx libopenjfx-java openbox
 
@@ -9,7 +12,6 @@ ENV WINDOW_MANAGER="openbox"
 
 USER root
 
-ENV TRIGGER_REBUILD=1
 # Change the default number of virtual desktops from 4 to 1 (footgun)
 RUN sed -ri "s/<number>4<\/number>/<number>1<\/number>/" /etc/xdg/openbox/rc.xml
 
@@ -35,3 +37,5 @@ USER root
 RUN notOwnedFile=$(find . -not "(" -user gitpod -and -group gitpod ")" -print -quit) \
     && { [ -z "$notOwnedFile" ] \
         || { echo "Error: not all files/dirs in $HOME are owned by 'gitpod' user & group"; exit 1; } }
+
+USER gitpod

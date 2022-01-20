@@ -2,9 +2,11 @@ ARG base
 FROM ${base}
 
 USER gitpod
+# Dazzle does not rebuild a layer until one of its lines are changed. Increase this counter to rebuild this layer.
+ENV TRIGGER_REBUILD=1
+
 RUN sudo install-packages python3-pip
 
-ENV TRIGGER_REBUILD=1
 ENV PATH=$HOME/.pyenv/bin:$HOME/.pyenv/shims:$PATH
 RUN curl -fsSL https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-installer | bash \
     && { echo; \
