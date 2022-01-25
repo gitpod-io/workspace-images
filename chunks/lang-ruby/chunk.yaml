@@ -1,0 +1,19 @@
+variants:
+  - name: "2.7"
+    args:
+      RUBY_VERSION: 2.7.5
+  - name: "3.0"
+    args:
+      RUBY_VERSION: 3.0.3
+  - name: "3"
+    args:
+      RUBY_VERSION: 3.1.0
+  - name: "2.7.5"
+    args:
+      RUBY_VERSION: 2.7.5
+  - name: "3.0.3"
+    args:
+      RUBY_VERSION: 3.0.3
+  - name: "3.1.0"
+    args:
+      RUBY_VERSION: 3.1.0

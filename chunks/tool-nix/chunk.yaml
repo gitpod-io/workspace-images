@@ -1,0 +1,4 @@
+variants:
+  - name: "2.3.14"
+    args:
+      NIX_VERSION: 2.3.14

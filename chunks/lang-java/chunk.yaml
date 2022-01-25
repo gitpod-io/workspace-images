@@ -1,0 +1,19 @@
+variants:
+  - name: "8"
+    args:
+      JAVA_VERSION: 8.0.312
+  - name: "11"
+    args:
+      JAVA_VERSION: 11.0.13
+  - name: "17"
+    args:
+      JAVA_VERSION: 17.0.1
+  - name: "8.0.312"
+    args:
+      JAVA_VERSION: 8.0.312
+  - name: "11.0.13"
+    args:
+      JAVA_VERSION: 11.0.13
+  - name: "17.0.1"
+    args:
+      JAVA_VERSION: 17.0.1

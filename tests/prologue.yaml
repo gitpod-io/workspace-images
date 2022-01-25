@@ -1,0 +1,6 @@
+- desc: it should not have root-owned files in the home directory
+  command: [find /home/gitpod -not "(" -user gitpod -and -group gitpod ")" -print -quit]
+  entrypoint: [bash, -i, -c]
+  assert:
+  - status == 0
+  - stdout.trim().length == 0

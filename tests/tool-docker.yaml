@@ -1,0 +1,23 @@
+- desc: docker should be installed
+  command: [which, docker]
+  assert:
+  - status == 0
+  - stdout.indexOf("/bin/docker") != -1
+- desc: docker-compose should be installed
+  entrypoint: [bash, -i, -c]
+  command: [docker-compose --version]
+  assert:
+  - status == 0
+  - stdout.indexOf("2.2.2") != -1
+- desc: containerd should be installed
+  command: [containerd, config, dump]
+  assert:
+  - status == 0
+- desc: dive should be installed
+  command: [dive, version]
+  assert:
+  - status == 0
+- desc: it should find docker.list
+  command: [wc,/etc/apt/sources.list.d/docker.list]
+  assert:
+  - status == 0
