@@ -1,0 +1,62 @@
+name: Build from Pull Request
+on:
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 📥 Checkout workspace-images
+        uses: actions/checkout@v2
+        with:
+          repository: gitpod-io/workspace-images
+
+      - name: 🔧 Setup pre-commit
+        run: |
+          sudo apt-get install python3-pip shellcheck
+          curl -sSL https://github.com/mvdan/sh/releases/download/v3.4.2/shfmt_v3.4.2_linux_amd64 -o shfmt
+          sudo mv shfmt /usr/local/bin/shfmt && sudo chmod +x /usr/local/bin/shfmt
+          sudo pip3 install pre-commit
+
+      - name: 🤓 Run pre-commit
+        run: |
+          pre-commit run --all-files
+
+      - name: 🔆 Install dazzle
+        run: |
+          curl -sSL https://github.com/gitpod-io/dazzle/releases/download/v0.1.6/dazzle_0.1.6_Linux_x86_64.tar.gz | sudo tar -xvz -C /usr/local/bin
+
+      - name: 🏗️ Setup buildkit
+        run: |
+          curl -sSL https://github.com/moby/buildkit/releases/download/v0.9.3/buildkit-v0.9.3.linux-amd64.tar.gz | sudo tar xvz -C /usr
+          sudo buildkitd --oci-worker=true --oci-worker-net=host --debug --group docker &
+          sudo su -c "while ! test -S /run/buildkit/buildkitd.sock; do sleep 0.1; done"
+          sudo chmod +777 /run/buildkit/buildkitd.sock
+
+      # A hack as GH action does not allow you to force override cache storing if there was a cache hit
+      # https://github.com/actions/cache/issues/628#issuecomment-986118455
+      - name: 🗄️ Force Save Registry Cache Per Sha
+        uses: actions/cache@v2
+        with:
+          path: ~/registry
+          key: ${{ runner.os }}-pull-request-cache-${{ github.sha }}
+
+      - name: 🗄️ Restore Registry Cache
+        uses: actions/cache@v2
+        with:
+          path: ~/registry
+          key: ${{ runner.os }}-pull-request-cache-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-pull-request-cache-
+
+      - name: 📦 Setup local registry
+        run: |
+          docker run -it --detach --publish 5000:5000 --volume ~/registry:/var/lib/registry registry:2
+
+      - name: 🔨 Dazzle build
+        run: |
+          dazzle build localhost:5000/workspace-base-images
+
+      - name: 🖇️ Dazzle combine
+        run: |
+          dazzle combine localhost:5000/workspace-base-images --all

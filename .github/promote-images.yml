@@ -1,0 +1,5 @@
+# for now we intentionally put a hardcoded tag. Going forward we can make this empty to sync all tags. This is hardcoded so we don't endup updating the latest tag
+europe-docker.pkg.dev/gitpod-artifacts/docker-dev:
+  images:
+    workspace-full:
+    - 2022-01-18-18-10-37

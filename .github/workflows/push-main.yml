@@ -1,0 +1,144 @@
+name: Build from Main
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  # Sync container images between the local registry and GCP Artifact registry.
+  # To implement manual approvals, the workflow uses an Environment.
+  #
+  # From your GitHub repo clock Settings. In the left menu, click Environments.
+  # Click New environment, set the name production, and click Configure environment.
+  # Check the "Required reviewers" box and enter at least one user or team name.
+  sync:
+    runs-on: ubuntu-latest
+    environment: "production"
+    permissions:
+      contents: "read"
+      id-token: "write"
+    env:
+      WORKLOAD_IDENTITY_POOL_ID: projects/665270063338/locations/global/workloadIdentityPools/workspace-images-github-actions/providers/workspace-images-gha-provider
+      IMAGE_REGISTRY: europe-docker.pkg.dev
+      IAM_SERVICE_ACCOUNT: workspace-images-gha-sa@gitpod-artifacts.iam.gserviceaccount.com
+
+    steps:
+      - name: 📥 Checkout workspace-images
+        uses: actions/checkout@v2
+        with:
+          repository: gitpod-io/workspace-images
+
+      - name: 🔧 Setup tools
+        run: |
+          sudo apt-get install python3-pip shellcheck
+          curl -sSL https://github.com/mvdan/sh/releases/download/v3.4.2/shfmt_v3.4.2_linux_amd64 -o shfmt
+          sudo mv shfmt /usr/local/bin/shfmt && sudo chmod +x /usr/local/bin/shfmt
+          sudo pip3 install pre-commit
+
+      - name: 🤓 Run pre-commit
+        run: |
+          pre-commit run --all-files
+
+      - name: 🔆 Install dazzle
+        run: |
+          curl -sSL https://github.com/gitpod-io/dazzle/releases/download/v0.1.6/dazzle_0.1.6_Linux_x86_64.tar.gz | sudo tar -xvz -C /usr/local/bin
+
+      - name: 🔆 Install skopeo
+        run: |
+          . /etc/os-release
+          # Update ca-certificates to avoid issues with letsencrypt SSL certificates
+          sudo apt update && sudo apt --only-upgrade install ca-certificates -y
+          echo "deb https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/xUbuntu_${VERSION_ID}/ /" | sudo tee /etc/apt/sources.list.d/devel:kubic:libcontainers:stable.list
+          curl -L https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/xUbuntu_${VERSION_ID}/Release.key | sudo apt-key add -
+          sudo apt update && sudo apt install -y skopeo
+
+      - name: 🏗️ Setup buildkit
+        run: |
+          curl -sSL https://github.com/moby/buildkit/releases/download/v0.9.3/buildkit-v0.9.3.linux-amd64.tar.gz | sudo tar xvz -C /usr
+          sudo buildkitd --oci-worker=true --oci-worker-net=host --debug --group docker &
+          sudo su -c "while ! test -S /run/buildkit/buildkitd.sock; do sleep 0.1; done"
+          sudo chmod +777 /run/buildkit/buildkitd.sock
+
+      # A hack as GH action does not allow you to force override cache storing if there was a cache hit
+      # https://github.com/actions/cache/issues/628#issuecomment-986118455
+      - name: 🗄️ Force Save Registry Cache Per Sha
+        uses: actions/cache@v2
+        with:
+          path: ~/registry
+          key: ${{ runner.os }}-main-cache-${{ github.sha }}
+
+      - name: 🗄️ Restore Registry Cache
+        uses: actions/cache@v2
+        with:
+          path: ~/registry
+          key: ${{ runner.os }}-main-cache-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-main-cache-
+
+      - name: 📦 Setup local registry
+        run: |
+          docker run -it --detach --publish 5000:5000 --volume ~/registry:/var/lib/registry registry:2
+
+      - name: 🔨 Dazzle build
+        run: |
+          dazzle build localhost:5000/workspace-base-images --chunked-without-hash
+          dazzle build localhost:5000/workspace-base-images
+
+      - name: 🖇️ Dazzle combine
+        run: |
+          dazzle combine localhost:5000/workspace-base-images --all
+
+      - name: ☁️ Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v0
+        with:
+          version: 366.0.0
+
+      - name: 🔐 Authenticate to Google Cloud
+        id: "auth"
+        uses: "google-github-actions/auth@v0.4.3"
+        with:
+          token_format: "access_token"
+          workload_identity_provider: ${{env.WORKLOAD_IDENTITY_POOL_ID}}
+          service_account: ${{env.IAM_SERVICE_ACCOUNT}}
+
+      - name: ✍🏽 Configuring container registry credentials
+        run: |
+          sudo skopeo login -u oauth2accesstoken --password=${{ steps.auth.outputs.access_token }} https://${{env.IMAGE_REGISTRY}}
+
+      - name: 🐳 Sync combined images to Artifact Registry
+        run: |
+          sudo skopeo sync \
+            --src-tls-verify=false \
+            --registries-conf=.github/registries.conf \
+            --src yaml \
+            --dest docker \
+            .github/sync-containers.yml ${{env.IMAGE_REGISTRY}}/gitpod-artifacts/docker-dev
+
+      - name: 🕰️ Create timestamp tag
+        id: create-timestamp-tag
+        run: |
+          echo "TIMESTAMP_TAG=$(date '+%Y-%m-%d-%H-%M-%S')" >> $GITHUB_ENV
+
+      - name: 🔧 Setup copy tools
+        run: |
+          sudo pip3 install yq
+
+      - name: 📋 Copy tagged images to exclusive Docker Hub repositories
+        run: |
+          IMAGE_TAGS=$(cat .github/sync-containers.yml | yq '.["localhost:5000"].images."workspace-base-images"|join(" ")' -r)
+          COPY_JOBS_PIDS=""
+          for IMAGE_TAG in $IMAGE_TAGS;
+          do
+            sudo skopeo copy \
+              --src-tls-verify=false \
+              --registries-conf=.github/registries.conf \
+              docker://localhost:5000/workspace-base-images:$IMAGE_TAG \
+              docker://${{ env.IMAGE_REGISTRY }}/gitpod-artifacts/docker-dev/workspace-$IMAGE_TAG:${{ env.TIMESTAMP_TAG }} &
+
+              COPY_JOBS_PIDS="$COPY_JOBS_PIDS $!"
+          done
+
+          for COPY_JOBS_PID in $COPY_JOBS_PIDS; do
+              wait $COPY_JOBS_PID || exit 1
+          done
