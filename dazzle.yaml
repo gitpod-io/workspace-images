@@ -30,7 +30,6 @@ combiner:
         - tool-brew
         - tool-nginx
         - tool-nix:2.3.14
-        - tool-postgresql
         - tool-vnc
     - name: go
       ref:
