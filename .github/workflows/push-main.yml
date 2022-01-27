@@ -125,7 +125,7 @@ jobs:
         run: |
           sudo pip3 install yq
 
-      - name: 📋 Copy tagged images to exclusive Docker Hub repositories
+      - name: 📋 Copy images with tag in the Artifact Registry
         run: |
           IMAGE_TAGS=$(cat .github/sync-containers.yml | yq '.["localhost:5000"].images."workspace-base-images"|join(" ")' -r)
           COPY_JOBS_PIDS=""
