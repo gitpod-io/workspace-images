@@ -103,9 +103,9 @@ jobs:
           workload_identity_provider: ${{env.WORKLOAD_IDENTITY_POOL_ID}}
           service_account: ${{env.IAM_SERVICE_ACCOUNT}}
 
-      - name: ✍🏽 Configuring container registry credentials
+      - name: ✍🏽 Login to GAR
         run: |
-          sudo skopeo login -u oauth2accesstoken --password=${{ steps.auth.outputs.access_token }} https://${{env.IMAGE_REGISTRY}}
+          sudo skopeo login -u oauth2accesstoken --password=${{ steps.auth.outputs.access_token }} https://${{env.GAR_IMAGE_REGISTRY}}
 
       - name: 🐳 Sync combined images to Artifact Registry
         run: |
