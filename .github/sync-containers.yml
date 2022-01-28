@@ -6,6 +6,7 @@ localhost:5000:
     - c
     - clojure
     - full
+    - full-vnc
     - go
     - node
     - node-lts
@@ -13,18 +14,17 @@ localhost:5000:
     - ruby-2
     - ruby
     - rust
+    - dotnet-vnc
+    - postgresql
+    - mysql
+    - mongodb
 
 # these images are missing and need chunks and/or combinations
 
 # workspace-dotnet-lts-vnc
-# workspace-dotnet-vnc
 # workspace-wasm
 # mdbook ?
 # workspace-flutter
-# workspace-full-vnc
 # workspace-dotnet-lts
 # workspace-dotnet
-# workspace-mysql
-# workspace-postgres
-# workspace-mongodb
 # workspace-gecko
