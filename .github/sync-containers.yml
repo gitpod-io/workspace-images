@@ -18,6 +18,7 @@ localhost:5000:
     - postgresql
     - mysql
     - mongodb
+    - java-11
 
 # these images are missing and need chunks and/or combinations
 
