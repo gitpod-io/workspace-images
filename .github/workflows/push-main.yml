@@ -20,7 +20,8 @@ jobs:
       id-token: "write"
     env:
       WORKLOAD_IDENTITY_POOL_ID: projects/665270063338/locations/global/workloadIdentityPools/workspace-images-github-actions/providers/workspace-images-gha-provider
-      IMAGE_REGISTRY: europe-docker.pkg.dev
+      GAR_IMAGE_REGISTRY: europe-docker.pkg.dev
+      DH_IMAGE_REGISTRY: registry.hub.docker.com
       IAM_SERVICE_ACCOUNT: workspace-images-gha-sa@gitpod-artifacts.iam.gserviceaccount.com
 
     steps:
@@ -113,7 +114,7 @@ jobs:
             --registries-conf=.github/registries.conf \
             --src yaml \
             --dest docker \
-            .github/sync-containers.yml ${{env.IMAGE_REGISTRY}}/gitpod-artifacts/docker-dev
+            .github/sync-containers.yml ${{env.GAR_IMAGE_REGISTRY}}/gitpod-artifacts/docker-dev
 
       - name: 🕰️ Create timestamp tag
         id: create-timestamp-tag
@@ -134,7 +135,7 @@ jobs:
               --src-tls-verify=false \
               --registries-conf=.github/registries.conf \
               docker://localhost:5000/workspace-base-images:$IMAGE_TAG \
-              docker://${{ env.IMAGE_REGISTRY }}/gitpod-artifacts/docker-dev/workspace-$IMAGE_TAG:${{ env.TIMESTAMP_TAG }} &
+              docker://${{ env.GAR_IMAGE_REGISTRY }}/gitpod-artifacts/docker-dev/workspace-$IMAGE_TAG:${{ env.TIMESTAMP_TAG }} &
 
               COPY_JOBS_PIDS="$COPY_JOBS_PIDS $!"
           done
@@ -142,3 +143,16 @@ jobs:
           for COPY_JOBS_PID in $COPY_JOBS_PIDS; do
               wait $COPY_JOBS_PID || exit 1
           done
+
+      - name: ✍🏽 Configuring Skopeo for Docker Hub
+        env:
+          docker_user: ${{ secrets.DOCKERHUB_USER_NAME }}
+          docker_password: ${{ secrets.DOCKERHUB_ACCESS_TOKEN }}
+        run: |
+          sudo skopeo login -u ${{ env.docker_user }} --password=${{ env.docker_password }} https://${{ env.DH_IMAGE_REGISTRY }}
+
+      - name: 🐳 Sync workspace-full to Docker Hub
+        run: |
+          sudo skopeo copy \
+            docker://${{ env.GAR_IMAGE_REGISTRY }}/gitpod-artifacts/docker-dev/workspace-full:${{ env.TIMESTAMP_TAG }} \
+            docker://${{ env.DH_IMAGE_REGISTRY }}/gitpod/workspace-full:${{ env.TIMESTAMP_TAG }}
