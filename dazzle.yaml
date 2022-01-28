@@ -23,7 +23,7 @@ combiner:
         - lang-clojure
         - lang-go:1.17.5
         - lang-java:11
-        - lang-node:16.13.0
+        - lang-node:16.13.2
         - lang-python
         - lang-ruby:2.7
         - lang-rust
@@ -44,12 +44,12 @@ combiner:
       ref:
       - base
       chunks:
-        - lang-node:16.13.1
+        - lang-node:17.4.0
     - name: node-lts
       ref:
       - base
       chunks:
-        - lang-node:16.13.1
+        - lang-node:16.13.2
     - name: python
       ref:
       - base
