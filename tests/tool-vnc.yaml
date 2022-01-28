@@ -1,6 +1,5 @@
-- desc: "it should say hello"
-  command: ["echo", "hello"]
+- desc: "it should have vnc installed"
+  command: [which, x11vnc]
   assert:
   - status == 0
-  - stdout.indexOf("hello") != -1
-  - stderr.length == 0
+  - stdout.indexOf("/bin/x11vnc") != -1
