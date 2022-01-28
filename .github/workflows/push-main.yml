@@ -154,5 +154,8 @@ jobs:
       - name: 🐳 Sync workspace-full to Docker Hub
         run: |
           sudo skopeo copy \
-            docker://${{ env.GAR_IMAGE_REGISTRY }}/gitpod-artifacts/docker-dev/workspace-full:${{ env.TIMESTAMP_TAG }} \
-            docker://${{ env.DH_IMAGE_REGISTRY }}/gitpod/workspace-full:${{ env.TIMESTAMP_TAG }}
+          docker://${{ env.GAR_IMAGE_REGISTRY }}/gitpod-artifacts/docker-dev/workspace-full:${{ env.TIMESTAMP_TAG }} \
+          docker://${{ env.DH_IMAGE_REGISTRY }}/gitpod/workspace-full:${{ env.TIMESTAMP_TAG }}
+          sudo skopeo copy \
+          docker://${{ env.GAR_IMAGE_REGISTRY }}/gitpod-artifacts/docker-dev/workspace-full:${{ env.TIMESTAMP_TAG }} \
+          docker://${{ env.DH_IMAGE_REGISTRY }}/gitpod/workspace-full:latest
