@@ -1,0 +1,6 @@
+- desc: it should run dotnet
+  command: [dotnet --info]
+  entrypoint: [bash, -i, -c]
+  assert:
+  - status == 0
+  - stdout.indexOf("Microsoft.AspNetCore.App 6.0.1") != -1

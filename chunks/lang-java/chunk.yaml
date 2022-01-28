@@ -1,0 +1,7 @@
+variants:
+  - name: "11"
+    args:
+      JAVA_VERSION: 11.0.13
+  - name: "17"
+    args:
+      JAVA_VERSION: 17.0.1

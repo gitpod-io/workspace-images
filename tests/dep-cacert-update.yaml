@@ -1,0 +1,5 @@
+- desc: ca-certificates should be installed
+  command: [apt, show, ca-certificates]
+  assert:
+  - status == 0
+  - stdout.indexOf("ca-certificates") != -1

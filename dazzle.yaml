@@ -1,0 +1,108 @@
+combiner:
+  combinations:
+    - name: base
+      chunks:
+        - dep-cacert-update
+        - tool-docker
+        - tool-tailscale
+    - name: c
+      ref:
+      - base
+      chunks:
+        - lang-c
+    - name: clojure
+      ref:
+      - base
+      chunks:
+        - lang-clojure
+    - name: full
+      ref:
+      - base
+      chunks:
+        - lang-c
+        - lang-clojure
+        - lang-go:1.17.5
+        - lang-java:11
+        - lang-node:16.13.2
+        - lang-python
+        - lang-ruby:2.7
+        - lang-rust
+        - tool-brew
+        - tool-nginx
+        - tool-nix:2.3.14
+    - name: full-vnc
+      ref:
+      - full
+      chunks:
+        - tool-vnc
+    - name: go
+      ref:
+      - base
+      chunks:
+        - lang-go:1.17.5
+    - name: node
+      ref:
+      - base
+      chunks:
+        - lang-node:17.4.0
+    - name: node-lts
+      ref:
+      - base
+      chunks:
+        - lang-node:16.13.2
+    - name: python
+      ref:
+      - base
+      chunks:
+        - lang-python
+    - name: ruby-2
+      ref:
+      - base
+      chunks:
+        - lang-ruby:2.7
+    - name: ruby-3
+      ref:
+      - base
+      chunks:
+        - lang-ruby:3
+    - name: rust
+      ref:
+      - base
+      chunks:
+        - lang-rust
+    - name: dotnet-vnc
+      ref:
+      - base
+      chunks:
+        - tool-vnc
+        - tool-dotnet
+    - name: postgresql
+      ref:
+      - base
+      chunks:
+        - tool-postgresql
+    - name: mysql
+      ref:
+      - base
+      chunks:
+        - tool-mysql
+    - name: mongodb
+      ref:
+      - base
+      chunks:
+        - tool-mongodb
+    - name: java-11
+      ref:
+      - base
+      chunks:
+        - lang-java:11
+    - name: java-17
+      ref:
+      - base
+      chunks:
+        - lang-java:17
+  envvars:
+    - name: PATH
+      action: merge-unique
+    - name: HOME
+      action: use-last

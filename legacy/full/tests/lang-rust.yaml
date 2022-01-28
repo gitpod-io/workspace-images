@@ -1,0 +1,25 @@
+- desc: it should run rustc
+  command: [rustc --version]
+  entrypoint: [bash, -i, -c]
+  assert:
+  - status == 0
+  - stdout.indexOf("rustc") != -1
+- desc: it should have properly configured rustup
+  command: [rustup show]
+  entrypoint: [bash, -i, -c]
+  assert:
+  - status == 0
+  - stdout.indexOf("/home/gitpod/.rustup") != -1
+  - stdout.indexOf("x86_64-unknown-linux-gnu") != -1
+  - stdout.indexOf("x86_64-unknown-linux-musl") == -1
+- desc: it should have cargo
+  command: [cargo --version]
+  entrypoint: [bash, -i, -c]
+  assert:
+  - status == 0
+# - desc: it should have matching rustc and cargo versions
+#   command: [cargo --version; rustc --version]
+#   entrypoint: [bash, -i, -c]
+#   assert:
+#   - status == 0
+#   - stdout.split("\n")[0].split(" ")[1] == stdout.split("\n")[1].split(" ")[1]

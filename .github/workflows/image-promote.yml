@@ -1,0 +1,71 @@
+name: Sync to Docker Hub
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'The tag to apply to the image'
+        required: true
+
+jobs:
+  # Sync container images between the GCP Artifact registry and Docker Hub
+  # To implement manual approvals, the workflow uses an Environment.
+  promote:
+    runs-on: ubuntu-latest
+    environment: "production"
+    permissions:
+      contents: "read"
+      id-token: "write"
+    env:
+      WORKLOAD_IDENTITY_POOL_ID: projects/665270063338/locations/global/workloadIdentityPools/workspace-images-github-actions/providers/workspace-images-gha-provider
+      SOURCE_IMAGE_REGISTRY: europe-docker.pkg.dev
+      IAM_SERVICE_ACCOUNT: workspace-images-gha-sa@gitpod-artifacts.iam.gserviceaccount.com
+      DEST_IMAGE_REGISTRY: registry.hub.docker.com
+
+    steps:
+      - name: 📥 Checkout workspace-images
+        uses: actions/checkout@v2
+        with:
+          repository: gitpod-io/workspace-images
+
+      - name: 🔆 Install skopeo
+        run: |
+          . /etc/os-release
+          # Update ca-certificates to avoid issues with letsencrypt SSL certificates
+          sudo apt update && sudo apt --only-upgrade install ca-certificates -y
+          echo "deb https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/xUbuntu_${VERSION_ID}/ /" | sudo tee /etc/apt/sources.list.d/devel:kubic:libcontainers:stable.list
+          curl -L https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/xUbuntu_${VERSION_ID}/Release.key | sudo apt-key add -
+          sudo apt update && sudo apt install -y skopeo
+
+      - name: ☁️ Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v0
+        with:
+          version: 366.0.0
+
+      - name: 🔐 Authenticate to Google Cloud
+        id: "auth"
+        uses: "google-github-actions/auth@v0.4.3"
+        with:
+          token_format: "access_token"
+          workload_identity_provider: ${{env.WORKLOAD_IDENTITY_POOL_ID}}
+          service_account: ${{env.IAM_SERVICE_ACCOUNT}}
+
+      - name: ✍🏽 Configuring Skopeo for Google Artifact Registry
+        run: |
+          sudo skopeo login -u oauth2accesstoken --password=${{ steps.auth.outputs.access_token }} https://${{env.SOURCE_IMAGE_REGISTRY}}
+
+      - name: ✍🏽 Configuring Skopeo for Docker Hub
+        env:
+          docker_user: ${{secrets.DOCKERHUB_USER_NAME}}
+          docker_password: ${{secrets.DOCKERHUB_ACCESS_TOKEN}}
+        run: |
+          sudo skopeo login -u ${{env.docker_user}} --password=${{env.docker_password}} https://${{env.DEST_IMAGE_REGISTRY}}
+
+      - name: 🐳 Sync images to Docker Hub
+        env:
+          IMAGE_TAG: ${{github.events.input.tag}}
+        run: |
+          sudo skopeo sync \
+            --src docker \
+            --dest docker \
+            ${{env.SOURCE_IMAGE_REGISTRY}}/gitpod-artifacts/docker-dev/workspace-full:$IMAGE_TAG ${{env.DEST_IMAGE_REGISTRY}}/gitpod
