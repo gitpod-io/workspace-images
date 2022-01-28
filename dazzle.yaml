@@ -60,7 +60,7 @@ combiner:
       - base
       chunks:
         - lang-ruby:2.7
-    - name: ruby
+    - name: ruby-3
       ref:
       - base
       chunks:

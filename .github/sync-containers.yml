@@ -12,19 +12,19 @@ localhost:5000:
     - node-lts
     - python
     - ruby-2
-    - ruby
+    - ruby-3
     - rust
     - dotnet-vnc
     - postgresql
     - mysql
     - mongodb
     - java-11
+    - java-17
 
 # these images are missing and need chunks and/or combinations
 
 # workspace-dotnet-lts-vnc
 # workspace-wasm
-# mdbook ?
 # workspace-flutter
 # workspace-dotnet-lts
 # workspace-dotnet
