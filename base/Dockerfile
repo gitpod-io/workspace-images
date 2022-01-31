@@ -56,7 +56,7 @@ USER gitpod
 RUN sudo echo "Running 'sudo' for Gitpod: success" && \
     # create .bashrc.d folder and source it in the bashrc
     mkdir -p /home/gitpod/.bashrc.d && \
-    (echo; echo "for i in \$(ls -A \$HOME/.bashrc.d/); do source \$HOME/.bashrc.d/\$i; done"; echo) >> /home/gitpod/.bashrc
+    printf '\n%s\n' 'source $HOME/.bashrc.d/*' >> "$HOME/.bashrc"
 
 # configure git-lfs
 RUN sudo git lfs install --system
