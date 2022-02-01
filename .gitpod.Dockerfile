@@ -1,5 +1,7 @@
 FROM gitpod/workspace-full
 
+ENV RETRIGGER=1
+
 ENV BUILDKIT_VERSION=0.9.3
 ENV BUILDKIT_FILENAME=buildkit-v${BUILDKIT_VERSION}.linux-amd64.tar.gz
 
