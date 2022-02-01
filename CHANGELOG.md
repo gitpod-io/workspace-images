@@ -2,6 +2,11 @@
 
 A curated, chronologically ordered list of notable changes in [Gitpod's default workspace images](https://hub.docker.com/u/gitpod).
 
+## 2022-02-01
+
+- Release workspace-full latest tag built using dazzle v2
+- Upgrade to dazzle v2 & use Github Actions for build
+
 ## 2021-08-01
 
 - Bump Go version to 1.16.6
