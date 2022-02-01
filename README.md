@@ -64,6 +64,7 @@ These images are no longer being published, and not planned for Upgrade:
 1. gitpod/workspace-webassembly
 
 ## Contributing
+
 You can follow the detailed guide on how to contribute [here](CONTRIBUTING.md).
 
 [![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/gitpod-io/workspace-images)
