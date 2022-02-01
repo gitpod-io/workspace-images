@@ -6,7 +6,7 @@
 
 Before you start on adding a new image you need to get an acknowledgement from the maintainers.
 The first step would be to ensure that we already don't have an image or an issue that has the tool/language that you want to add.
-Post that create an issue explaining how this image would be useful to the community or comment on the existing issue expressing your interest.
+After that create an issue explaining how this image would be useful to the community or comment on the existing issue expressing your interest.
 One of the maintainers will review the issue and acknowledge if you can work on the issue.
 
 You need to have a gitpod account in order to seamlessly contribute to this repo.
@@ -45,7 +45,7 @@ The images will be pushed to the local registry server running on port 5000. You
 docker pull localhost:5000/dazzle:combo
 ```
 
-where `combo` is the name of the combination defined in [dazzle.yml](dazzle.yml) e.g. `full`.
+where `combo` is the name of the combination defined in [dazzle.yaml](dazzle.yaml) e.g. `full`, clojure, postgresql.
 
 > **NOTE:** Building images locally consumes a lot of resources and is often slow.
 It might take 1.25 hours to build the images locally.
@@ -114,13 +114,13 @@ Here is a list of best practices you should keep in mind while adding a chunk:
 1. Add variants through `chunk.yaml` if more than one version is popular for the chunk.
 e.g. `java-11` and `java-17`.
 1. Install specific version of the tool/language.
-1. Make sure the user `gitpod` can access the intalled tool/lang.
+1. Make sure the user `gitpod` can access the installed tool/lang.
 1. The last `USER` command of the image should always be `gitpod` and **NOT** `root`.
 1. Always add new path as prefix to existing path.
 e.g. `ENV PATH=/my-tool/path/bin:$PATH`.
 Not doing so can cause path conflicts and can potentially break other images.
 1. **DO NOT** update the default shell rc files like `.bashrc` unless you are making change in the base layer.
-1. Always create an rc file in the `.bashrc.d` directory.
+1. If you need to create an rc file you should put it in the `.bashrc.d` directory.
 All the files are sourced from this directory for a bash session.
 e.g. `RUN echo "/etc/mydb/mydb-bashrc-launch.sh" >> /home/gitpod/.bashrc.d/100-my-service-launch.sh`
 1. Use `gpg` to unpack and store keyrings and add them to apt sources explicitly.
@@ -160,12 +160,12 @@ Here is a list of best practices you should keep in mind while adding a combinat
 e.g. `ruby-3`
 1. Use `base` combination as reference rather than other combination unless there is an exception.
 e.g. `full-vnc` is one of the cases which uses the `full` combination rather than the `base`.
-This is because combination as the vnc combination only adds an extra `tool-vnc` chunk and nothing else.
+This is because the vnc combination only adds an extra `tool-vnc` chunk and nothing else.
 This combination should always change whenever the `full` combination changes.
 
 ### Updating Release configuration files
 
 The final step to make sure your newly added image gets published is to update these files:
 
-1. **sync-containers.yml** : To publish images from local registry to GAR
-1. **promote-images.yml** : To copy images from GAR to Docker Hub
+1. **[.github/sync-containers.yml](.github/sync-containers.yml)** : To publish images from local registry to GAR.
+1. **[.github/promote-images.yml](.github/promote-images.yml)** : To copy images from GAR to Docker Hub.
