@@ -1,6 +1,24 @@
-- desc: "it should say hello"
-  command: ["echo", "hello"]
+- desc: "it should have nginx installed"
+  command: [nginx -v]
+  entrypoint: [/bin/bash, -c]
   assert:
   - status == 0
-  - stdout.indexOf("hello") != -1
-  - stderr.length == 0
+  - stderr.indexOf("nginx version") != -1
+- desc: "it should have php installed"
+  command: [php -v]
+  entrypoint: [/bin/bash, -c]
+  assert:
+  - status == 0
+  - stdout.indexOf("PHP") != -1
+- desc: "it should have composer installed"
+  command: [composer -v]
+  entrypoint: [/bin/bash, -c]
+  assert:
+  - status == 0
+  - stdout.indexOf("Composer version 2.2.5") != -1
+- desc: "it should have apache2 installed"
+  command: [apache2 -v]
+  entrypoint: [/bin/bash, -c]
+  assert:
+  - status == 0
+  - stdout.indexOf("Apache") != -1

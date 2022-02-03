@@ -10,7 +10,6 @@ RUN install-packages \
         apache2 \
         nginx \
         nginx-extras \
-        composer \
         php \
         php-all-dev \
         php-bcmath \
@@ -28,6 +27,10 @@ RUN install-packages \
         php-tokenizer \
         php-xml \
         php-zip \
+    && curl -sS https://getcomposer.org/installer -o /tmp/composer-setup.php \
+    && php /tmp/composer-setup.php  --version=2.2.5 --install-dir=/tmp \
+    && sudo mv /tmp/composer.phar /usr/bin/composer \
+    && rm /tmp/composer-setup.php \
     && mkdir -p /var/run/nginx \
     && ln -s /etc/apache2/mods-available/rewrite.load /etc/apache2/mods-enabled/rewrite.load \
     && chown -R gitpod:gitpod /etc/apache2 /var/run/apache2 /var/lock/apache2 /var/log/apache2 \
