@@ -154,6 +154,6 @@ jobs:
       - name: 🐳 Sync images to Docker Hub
         run: |
           sudo skopeo sync \
-            --src yml \
+            --src yaml \
             --dest docker \
             .github/promote-images.yml ${{ env.DH_IMAGE_REGISTRY }}/gitpod
