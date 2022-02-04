@@ -1,5 +1,21 @@
-# for now we intentionally put a hardcoded tag. Going forward we can make this empty to sync all tags. This is hardcoded so we don't endup updating the latest tag
+# Sync all the image tags including latest
 europe-docker.pkg.dev/gitpod-artifacts/docker-dev:
   images:
-    workspace-full:
-    - 2022-01-18-18-10-37
+    workspace-base: []
+    workspace-c: []
+    workspace-clojure: []
+    workspace-full: []
+    workspace-full-vnc: []
+    workspace-go: []
+    workspace-node: []
+    workspace-node-lts: []
+    workspace-python: []
+    workspace-ruby-2: []
+    workspace-ruby-3: []
+    workspace-rust: []
+    workspace-dotnet-vnc: []
+    workspace-postgresql: []
+    workspace-mysql: []
+    workspace-mongodb: []
+    workspace-java-11: []
+    workspace-java-17: []
