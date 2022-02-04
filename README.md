@@ -19,17 +19,17 @@ The old build process which used dazzle v1 and CircleCI is deprecated, and will 
 ### 📷 Images we'll upgrade
 
 1. gitpod/workspace-full ✅
-1. gitpod/workspace-base
+1. gitpod/workspace-base ✅
 1. gitpod/workspace-dotnet
 1. gitpod/workspace-dotnet-lts
 1. gitpod/workspace-dotnet-lts-vnc
-1. gitpod/workspace-dotnet-vnc
+1. gitpod/workspace-dotnet-vnc ✅
 1. gitpod/workspace-flutter
-1. gitpod/workspace-full-vnc
+1. gitpod/workspace-full-vnc ✅
 1. gitpod/workspace-gecko
-1. gitpod/workspace-mongodb
-1. gitpod/workspace-mysql
-1. gitpod/workspace-postgres
+1. gitpod/workspace-mongodb ✅
+1. gitpod/workspace-mysql ✅
+1. gitpod/workspace-postgres ✅
 1. gitpod/workspace-wasm
 
 ### 🆕 Images
