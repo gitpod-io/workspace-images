@@ -132,12 +132,21 @@ jobs:
           for IMAGE_TAG in $IMAGE_TAGS;
           do
             sudo skopeo copy \
-              --src-tls-verify=false \
-              --registries-conf=.github/registries.conf \
-              docker://localhost:5000/workspace-base-images:$IMAGE_TAG \
-              docker://${{ env.GAR_IMAGE_REGISTRY }}/gitpod-artifacts/docker-dev/workspace-$IMAGE_TAG:${{ env.TIMESTAMP_TAG }} &
+            --src-tls-verify=false \
+            --registries-conf=.github/registries.conf \
+            docker://localhost:5000/workspace-base-images:$IMAGE_TAG \
+            docker://${{ env.GAR_IMAGE_REGISTRY }}/gitpod-artifacts/docker-dev/workspace-$IMAGE_TAG:${{ env.TIMESTAMP_TAG }} &
 
-              COPY_JOBS_PIDS="$COPY_JOBS_PIDS $!"
+            COPY_JOBS_PIDS="$COPY_JOBS_PIDS $!"
+
+            sudo skopeo copy \
+            --src-tls-verify=false \
+            --registries-conf=.github/registries.conf \
+            docker://localhost:5000/workspace-base-images:$IMAGE_TAG \
+            docker://${{ env.GAR_IMAGE_REGISTRY }}/gitpod-artifacts/docker-dev/workspace-$IMAGE_TAG:latest &
+
+            COPY_JOBS_PIDS="$COPY_JOBS_PIDS $!"
+
           done
 
           for COPY_JOBS_PID in $COPY_JOBS_PIDS; do
