@@ -46,11 +46,13 @@ combiner:
       - base
       chunks:
         - lang-node:17.4.0
+        - tool-chrome
     - name: node-lts
       ref:
       - base
       chunks:
         - lang-node:16.13.2
+        - tool-chrome
     - name: python
       ref:
       - base
