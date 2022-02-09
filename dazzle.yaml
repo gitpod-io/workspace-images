@@ -28,7 +28,6 @@ combiner:
         - lang-ruby:2.7
         - lang-rust
         - tool-brew
-        - tool-chrome
         - tool-nginx
         - tool-nix:2.6.0
     - name: full-vnc
