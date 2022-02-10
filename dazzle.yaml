@@ -72,23 +72,23 @@ combiner:
         - lang-rust
     - name: dotnet-vnc
       ref:
-      - base
+      - full
       chunks:
         - tool-vnc
         - tool-dotnet
     - name: postgresql
       ref:
-      - base
+      - full
       chunks:
         - tool-postgresql
     - name: mysql
       ref:
-      - base
+      - full
       chunks:
         - tool-mysql
     - name: mongodb
       ref:
-      - base
+      - full
       chunks:
         - tool-mongodb
     - name: java-11
