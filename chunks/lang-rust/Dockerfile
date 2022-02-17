@@ -6,18 +6,24 @@ USER gitpod
 # Dazzle does not rebuild a layer until one of its lines are changed. Increase this counter to rebuild this layer.
 ENV TRIGGER_REBUILD=1
 
-RUN cp /home/gitpod/.profile /home/gitpod/.profile_orig && \
-    curl -fsSL https://sh.rustup.rs | sh -s -- -y --profile minimal --default-toolchain 1.58.1 \
-    && .cargo/bin/rustup component add \
+ENV PATH=$HOME/.cargo/bin:$PATH
+RUN cp $HOME/.profile $HOME/.profile_orig \
+    && curl -fsSL https://sh.rustup.rs | sh -s -- -y --profile minimal --default-toolchain 1.58.1 \
+    && rustup component add \
         rls \
         rust-analysis \
         rust-src \
         rustfmt \
-    && .cargo/bin/rustup completions bash | sudo tee /etc/bash_completion.d/rustup.bash-completion > /dev/null \
-    && .cargo/bin/rustup completions bash cargo | sudo tee /etc/bash_completion.d/rustup.cargo-bash-completion > /dev/null \
-    && grep -v -F -x -f /home/gitpod/.profile_orig /home/gitpod/.profile > /home/gitpod/.bashrc.d/80-rust
-ENV PATH=$HOME/.cargo/bin:$PATH
-# TODO: setting CARGO_HOME to /workspace/.cargo avoids manual updates. Remove after full workspace backups are GA.
+    && rustup completions bash | sudo tee /etc/bash_completion.d/rustup.bash-completion > /dev/null \
+    && rustup completions bash cargo | sudo tee /etc/bash_completion.d/rustup.cargo-bash-completion > /dev/null \
+    && printf '%s\n' "$(grep -v -F -x -f $HOME/.profile_orig $HOME/.profile)" \
+                        'mkdir -m 0755 -p "${CARGO_HOME:-/workspace/.cargo}" 2>/dev/null' > $HOME/.bashrc.d/80-rust \
+    && _rustup_path="$(command -v rustup)" && mv "$_rustup_path" "${_rustup_path}.main" \
+    && printf '%s\n' '#!/usr/bin/bash -eu' \
+                        'exec env -u CARGO_HOME "$(command -v rustup.main)" "$@"' > "$_rustup_path" \
+    && chmod 0755 "$_rustup_path"
+
+RUN cargo install cargo-watch cargo-edit cargo-workspaces
 ENV CARGO_HOME=/workspace/.cargo
 ENV PATH=$CARGO_HOME/bin:$PATH
 
