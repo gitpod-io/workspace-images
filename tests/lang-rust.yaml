@@ -3,7 +3,7 @@
   entrypoint: [bash, -i, -c]
   assert:
   - status == 0
-  - stdout.indexOf("rustc") != -1
+  - stdout.indexOf("rustc 1.58") != -1
 - desc: it should have properly configured rustup
   command: [rustup show]
   entrypoint: [bash, -i, -c]
@@ -17,9 +17,23 @@
   entrypoint: [bash, -i, -c]
   assert:
   - status == 0
-# - desc: it should have matching rustc and cargo versions
-#   command: [cargo --version; rustc --version]
-#   entrypoint: [bash, -i, -c]
-#   assert:
-#   - status == 0
-#   - stdout.split("\n")[0].split(" ")[1] == stdout.split("\n")[1].split(" ")[1]
+  - stdout.indexOf("cargo 1.58") != -1
+
+- desc: it should have watch subcommand for cargo
+  entrypoint: [bash, -i, -c]
+  command: [cargo watch --help]
+  assert:
+  - status == 0
+  - stdout.indexOf("cargo-watch") != -1
+- desc: it should have one of edit(add, rm, upgrade, set-version) subcommand(s) for cargo
+  entrypoint: [bash, -i, -c]
+  command: [cargo add --help]
+  assert:
+  - status == 0
+  - stdout.indexOf("cargo-add") != -1
+- desc: it should have workspaces subcommand for cargo
+  entrypoint: [bash, -i, -c]
+  command: [cargo workspaces --help]
+  assert:
+  - status == 0
+  - stdout.indexOf("cargo-workspaces") != -1
