@@ -1,0 +1,21 @@
+name: Issue and PR Triage
+on:
+  pull_request:
+    types: [review_requested]
+  issues:
+    types: [opened]
+env:
+  GITHUB_TOKEN: ${{ secrets.LABELER_TOKEN }}
+jobs:
+  triage:
+    name: Triage issue/PR
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Add team label
+        uses: andymckay/labeler@1.0.4
+        with:
+          add-labels: "team: workspace"
+      - name: Assign to Project
+        uses: srggrs/assign-one-project-github-action@1.2.1
+        with:
+          project: 'https://github.com/orgs/gitpod-io/projects/16'
