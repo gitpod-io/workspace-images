@@ -4,8 +4,6 @@ on:
     types: [review_requested]
   issues:
     types: [opened]
-env:
-  GITHUB_TOKEN: ${{ secrets.LABELER_TOKEN }}
 jobs:
   triage:
     name: Triage issue/PR
@@ -15,7 +13,17 @@ jobs:
         uses: andymckay/labeler@1.0.4
         with:
           add-labels: "team: workspace"
-      - name: Assign to Project
-        uses: srggrs/assign-one-project-github-action@1.2.1
+      - name: Assign PR to Project
+        uses: alex-page/github-project-automation-plus@v0.8.1
+        if: github.event_name == 'pull_request'
         with:
           project: 'https://github.com/orgs/gitpod-io/projects/16'
+          column: 'In Progress'
+          repo-token: ${{ secrets.LABELER_TOKEN }}
+      - name: Assign Issue to Project
+        uses: alex-page/github-project-automation-plus@v0.8.1
+        if: github.event_name == 'issues'
+        with:
+          project: 'https://github.com/orgs/gitpod-io/projects/16'
+          column: 'No status'
+          repo-token: ${{ secrets.LABELER_TOKEN }}
