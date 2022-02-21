@@ -23,11 +23,12 @@ jobs:
           gh api graphql -f query='
             query($org: String!, $slug: String!, $number: Int!) {
               organization(login: $org){
+                id
+                team(slug: $slug) {
+                  id
+                }
                 projectNext(number: $number) {
                   id
-                  team(slug: $slug) {
-                    id
-                  }
                   fields(first:20) {
                     nodes {
                       id
