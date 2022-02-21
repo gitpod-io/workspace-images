@@ -88,13 +88,11 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.LABELER_TOKEN }}
           ISSUE_ID: ${{ github.event.issues.node_id }}
         run: |
-          item_id="$( gh api graphql -f query='
+          gh api graphql -f query='
             mutation($project:ID!, $issue:ID!) {
               addProjectNextItem(input: {projectId: $project, contentId: $issue}) {
                 projectNextItem {
                   id
                 }
               }
-            }' -f project=$PROJECT_ID -f pr=$ISSUE_ID --jq '.data.addProjectNextItem.projectNextItem.id')"
-
-          echo 'ITEM_ID='$item_id >> $GITHUB_ENV
+            }' -f project=$PROJECT_ID -f pr=$ISSUE_ID --jq '.data.addProjectNextItem.projectNextItem.id'
