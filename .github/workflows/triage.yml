@@ -17,13 +17,17 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.LABELER_TOKEN }}
           ORGANIZATION: gitpod-io
+          TEAM_SLUG: engineering-workspace
           PROJECT_NUMBER: 16
         run: |
           gh api graphql -f query='
-            query($org: String!, $number: Int!) {
+            query($org: String!, $slug: String!, $number: Int!) {
               organization(login: $org){
                 projectNext(number: $number) {
                   id
+                  team(slug: $slug) {
+                    id
+                  }
                   fields(first:20) {
                     nodes {
                       id
@@ -33,27 +37,30 @@ jobs:
                   }
                 }
               }
-            }' -f org=$ORGANIZATION -F number=$PROJECT_NUMBER > project_data.json
+            }' -f org=$ORGANIZATION -f slug=$TEAM_SLUG -F number=$PROJECT_NUMBER > project_data.json
 
           echo 'PROJECT_ID='$(jq '.data.organization.projectNext.id' project_data.json) >> $GITHUB_ENV
           echo 'STATUS_FIELD_ID='$(jq '.data.organization.projectNext.fields.nodes[] | select(.name== "Status") | .id' project_data.json) >> $GITHUB_ENV
           echo 'IN_PROGRESS_OPTION_ID='$(jq '.data.organization.projectNext.fields.nodes[] | select(.name== "Status") |.settings | fromjson.options[] | select(.name=="In Progress") |.id' project_data.json) >> $GITHUB_ENV
+          echo 'TEAM_ID='$(jq '.data.organization.team.id' project_data.json) >> $GITHUB_ENV
+          cat project_data.json
+      # - name: Get team data
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.LABELER_TOKEN }}
+      #     ORGANIZATION: gitpod-io
+      #     TEAM_SLUG: engineering-workspace
+      #   run: |
+      #     gh api graphql -f query='
+      #       query($org: String!, $slug: String!) {
+      #         organization(login: $org){
+      #           id
+      #           team(slug: $slug) {
+      #             id
+      #           }
+      #         }
+      #       }' -f org=$ORGANIZATION -f slug=$TEAM_SLUG > team_data.json
 
-      - name: Get team data
-        env:
-          GITHUB_TOKEN: ${{ secrets.LABELER_TOKEN }}
-          ORGANIZATION: gitpod-io
-          TEAM_SLUG: engineering-workspace
-        run: |
-          gh api graphql -f query='
-            query($org: String!, $slug: String!) {
-              organization(login: $org){
-                id
-                team(slug: $slug) {
-                  id
-                }
-              }
-            }' -f org=$ORGANIZATION -f slug=$TEAM_SLUG
+      #     echo 'TEAM_ID='$(jq '.data.organization.team.id' project_data.json) >> $GITHUB_ENV
 
       - name: Add PR to project
         if: github.event_name == 'pull_request'
