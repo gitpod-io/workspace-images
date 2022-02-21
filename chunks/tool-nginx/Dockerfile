@@ -6,14 +6,16 @@ USER root
 # Dazzle does not rebuild a layer until one of its lines are changed. Increase this counter to rebuild this layer.
 ENV TRIGGER_REBUILD=1
 
-RUN install-packages \
+RUN for _ppa in 'ppa:ondrej/php' 'ppa:ondrej/apache2' 'ppa:ondrej/nginx-mainline'; do add-apt-repository -y "$_ppa"; done \
+    && install-packages \
         apache2 \
         nginx \
         nginx-extras \
+        nginx-doc \
         php \
         php-all-dev \
         php-bcmath \
-        php-ctype \
+        php-common \
         php-curl \
         php-date \
         php-gd \
@@ -23,6 +25,7 @@ RUN install-packages \
         php-mysql \
         php-net-ftp \
         php-pgsql \
+        php-pear \
         php-sqlite3 \
         php-tokenizer \
         php-xml \
