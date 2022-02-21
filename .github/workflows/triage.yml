@@ -46,12 +46,11 @@ jobs:
           TEAM_SLUG: engineering-workspace
         run: |
           gh api graphql -f query='
-            query($org: String!) {
+            query($org: String!, $slug: String!) {
               organization(login: $org){
-                nodes {
-                  team(slug: $slug) {
-                    id
-                  }
+                id
+                team(slug: $slug) {
+                  id
                 }
               }
             }' -f org=$ORGANIZATION -f slug=$TEAM_SLUG
