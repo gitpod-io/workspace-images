@@ -1,11 +1,9 @@
 name: Issue and PR Triage
 on:
   pull_request:
-    types: [review_requested]
+    types: [ready_for_review]
   issues:
     types: [opened]
-env:
-  GITHUB_TOKEN: ${{ secrets.LABELER_TOKEN }}
 jobs:
   triage:
     name: Triage issue/PR
@@ -15,7 +13,93 @@ jobs:
         uses: andymckay/labeler@1.0.4
         with:
           add-labels: "team: workspace"
-      - name: Assign to Project
-        uses: srggrs/assign-one-project-github-action@1.2.1
-        with:
-          project: 'https://github.com/orgs/gitpod-io/projects/16'
+
+      - name: Get project and team data
+        env:
+          GITHUB_TOKEN: ${{ secrets.LABELER_TOKEN }}
+          ORGANIZATION: gitpod-io
+          TEAM_SLUG: engineering-workspace
+          PROJECT_NUMBER: 16
+        run: |
+          gh api graphql -f query='
+            query($org: String!, $slug: String!, $number: Int!) {
+              organization(login: $org){
+                id
+                team(slug: $slug) {
+                  id
+                }
+                projectNext(number: $number) {
+                  id
+                  fields(first:20) {
+                    nodes {
+                      id
+                      name
+                      settings
+                    }
+                  }
+                }
+              }
+            }' -f org=$ORGANIZATION -f slug=$TEAM_SLUG -F number=$PROJECT_NUMBER > project_data.json
+
+          echo 'PROJECT_ID='$(jq '.data.organization.projectNext.id' project_data.json) >> $GITHUB_ENV
+          echo 'STATUS_FIELD_ID='$(jq '.data.organization.projectNext.fields.nodes[] | select(.name== "Status") | .id' project_data.json) >> $GITHUB_ENV
+          echo 'IN_PROGRESS_OPTION_ID='$(jq '.data.organization.projectNext.fields.nodes[] | select(.name== "Status") |.settings | fromjson.options[] | select(.name=="In Progress") |.id' project_data.json) >> $GITHUB_ENV
+          echo 'TEAM_ID='$(jq '.data.organization.team.id' project_data.json) >> $GITHUB_ENV
+
+      - name: Add PR to project
+        if: github.event_name == 'pull_request'
+        env:
+          GITHUB_TOKEN: ${{ secrets.LABELER_TOKEN }}
+          PR_ID: ${{ github.event.pull_request.node_id }}
+        run: |
+          item_id="$( gh api graphql -f query='
+            mutation($project:ID!, $pr:ID!) {
+              addProjectNextItem(input: {projectId: $project, contentId: $pr}) {
+                projectNextItem {
+                  id
+                }
+              }
+            }' -f project=$PROJECT_ID -f pr=$PR_ID --jq '.data.addProjectNextItem.projectNextItem.id')"
+
+          echo 'ITEM_ID='$item_id >> $GITHUB_ENV
+
+      - name: Set PR status
+        if: github.event_name == 'pull_request'
+        env:
+          GITHUB_TOKEN: ${{ secrets.LABELER_TOKEN }}
+        run: |
+          gh api graphql -f query='
+            mutation (
+              $project: ID!
+              $item: ID!
+              $status_field: ID!
+              $status_value: String!
+            ) {
+              set_status: updateProjectNextItemField(input: {
+                projectId: $project
+                itemId: $item
+                fieldId: $status_field
+                value: $status_value
+              }) {
+                projectNextItem {
+                  id
+                  }
+              }
+            }' -f project=$PROJECT_ID -f item=$ITEM_ID -f status_field=$STATUS_FIELD_ID -f status_value=${{ env.IN_PROGRESS_OPTION_ID }} --silent
+
+      - name: Add Issue to project
+        if: github.event_name == 'issues'
+        env:
+          GITHUB_TOKEN: ${{ secrets.LABELER_TOKEN }}
+          ISSUE_ID: ${{ github.event.issues.node_id }}
+        run: |
+          item_id="$( gh api graphql -f query='
+            mutation($project:ID!, $issue:ID!) {
+              addProjectNextItem(input: {projectId: $project, contentId: $issue}) {
+                projectNextItem {
+                  id
+                }
+              }
+            }' -f project=$PROJECT_ID -f pr=$ISSUE_ID --jq '.data.addProjectNextItem.projectNextItem.id')"
+
+          echo 'ITEM_ID='$item_id >> $GITHUB_ENV
