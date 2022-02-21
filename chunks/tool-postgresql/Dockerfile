@@ -20,7 +20,7 @@ RUN PGDATA="${PGDATA//\/workspace/$HOME}" \
  && printf '#!/bin/bash\npg_ctl -D $PGDATA -l ~/.pg_ctl/log -o "-k ~/.pg_ctl/sockets" stop\n' > ~/.pg_ctl/bin/pg_stop \
  && chmod +x ~/.pg_ctl/bin/* \
  && printf '%s\n' '# Auto-start PostgreSQL server' \
-                  "test ! -e \$PGWORKSPACE && mkdir -p /workspace && test -e ${PGDATA%/data} && mv ${PGDATA%/data} /workspace" \ 
+                  "test ! -e \$PGWORKSPACE && mkdir -p /workspace && test -e ${PGDATA%/data} && mv ${PGDATA%/data} /workspace" \
                   # Making the /workspace dir just to make sure it doesnt fail in docker env in case
                   '[[ $(pg_ctl status | grep PID) ]] || pg_start > /dev/null' > ~/.bashrc.d/200-postgresql-launch
 ENV PATH="$HOME/.pg_ctl/bin:$PATH"
