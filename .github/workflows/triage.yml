@@ -77,7 +77,7 @@ jobs:
                 value: $status_value
               }) {
                 projectNextItem {
-                  id
+                    id
                   }
               }
             }' -f project=$PROJECT_ID -f item=$ITEM_ID -f status_field=$STATUS_FIELD_ID -f status_value=${{ env.IN_PROGRESS_OPTION_ID }} --silent
