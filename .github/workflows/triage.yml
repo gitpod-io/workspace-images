@@ -21,7 +21,7 @@ jobs:
           PROJECT_NUMBER: 16
         run: |
           gh api graphql -f query='
-            query($org: String!, $slug: String!, $number: Int!) {
+            query($org: String!, $number: Int!) {
               organization(login: $org){
                 id
                 projectNext(number: $number) {
