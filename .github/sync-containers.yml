@@ -1,4 +1,3 @@
-# https://github.com/containers/skopeo/blob/main/docs/skopeo-sync.1.md#yaml-file-content-used-source-for---src-yaml
 sync:
   images:
     workspace-base-images:
