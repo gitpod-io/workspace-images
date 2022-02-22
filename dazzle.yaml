@@ -29,7 +29,7 @@ combiner:
         - lang-rust
         - tool-brew
         - tool-nginx
-        - tool-nix:2.3.14
+        - tool-nix:2.6.0
     - name: full-vnc
       ref:
       - full
