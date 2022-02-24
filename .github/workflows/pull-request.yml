@@ -24,7 +24,7 @@ jobs:
 
       - name: 🔆 Install dazzle
         run: |
-          curl -sSL https://github.com/gitpod-io/dazzle/releases/download/v0.1.6/dazzle_0.1.6_Linux_x86_64.tar.gz | sudo tar -xvz -C /usr/local/bin
+          curl -sSL https://github.com/gitpod-io/dazzle/releases/download/v0.1.7/dazzle_0.1.7_Linux_x86_64.tar.gz | sudo tar -xvz -C /usr/local/bin
 
       - name: 🏗️ Setup buildkit
         run: |

@@ -16,7 +16,7 @@ tasks:
     openMode: split-right
   - name: dazzle build and test
     before: |
-      curl -sSL https://github.com/gitpod-io/dazzle/releases/download/v0.1.6/dazzle_0.1.6_Linux_x86_64.tar.gz | sudo tar -xvz -C /usr/local/bin
+      curl -sSL https://github.com/gitpod-io/dazzle/releases/download/v0.1.7/dazzle_0.1.7_Linux_x86_64.tar.gz | sudo tar -xvz -C /usr/local/bin
     command: |
       gp await-port 5000
       REPO=localhost:5000/dazzle
