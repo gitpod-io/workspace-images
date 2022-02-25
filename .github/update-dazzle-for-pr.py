@@ -19,9 +19,9 @@ shutil.copy2("dazzle.yaml", "dazzle.yaml.orig")
 
 yaml = YAML(typ="safe")
 
-fp = open("dazzle.yaml.orig")
-data = yaml.load(fp)
-fp.close()
+with open("dazzle.yaml.orig") as fp:
+    data = yaml.load(fp)
+    fp.close()
 
 # add suffix '-<suffix>' to all the combo names and the references
 for combo in data["combiner"]["combinations"]:
@@ -30,6 +30,6 @@ for combo in data["combiner"]["combinations"]:
         for i in range(len(combo["ref"])):
             combo["ref"][i] += "-" + suffix
 
-final_fp = open("dazzle.yaml", "w")
-yaml.dump(data, final_fp)
-final_fp.close()
+with open("dazzle.yaml", "w") as final_fp:
+    yaml.dump(data, final_fp)
+    final_fp.close()
