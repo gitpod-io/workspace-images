@@ -1,0 +1,85 @@
+name: Publish latest images to Docker Hub
+
+on:
+  workflow_dispatch:
+
+jobs:
+  # Sync the 'latest' tag from GAR to Docker Hub
+  #
+  # From your GitHub repo clock Settings. In the left menu, click Environments.
+  # Click New environment, set the name production, and click Configure environment.
+  # Check the "Required reviewers" box and enter at least one user or team name.
+  promote-latest:
+    runs-on: ubuntu-latest
+    environment: "production"
+    permissions:
+      contents: "read"
+      id-token: "write"
+    env:
+      WORKLOAD_IDENTITY_POOL_ID: projects/665270063338/locations/global/workloadIdentityPools/workspace-images-github-actions/providers/workspace-images-gha-provider
+      GAR_IMAGE_REGISTRY: europe-docker.pkg.dev
+      DH_IMAGE_REGISTRY: registry.hub.docker.com
+      IAM_SERVICE_ACCOUNT: workspace-images-gha-sa@gitpod-artifacts.iam.gserviceaccount.com
+
+    steps:
+      - name: 📥 Checkout workspace-images
+        uses: actions/checkout@v2
+        with:
+          repository: gitpod-io/workspace-images
+
+      - name: 🔧 Setup tools
+        run: |
+          sudo apt-get install python3-pip
+          sudo pip3 install yq
+
+      - name: 🔆 Install skopeo
+        run: |
+          . /etc/os-release
+          # Update ca-certificates to avoid issues with letsencrypt SSL certificates
+          sudo apt update && sudo apt --only-upgrade install ca-certificates -y
+          echo "deb https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/xUbuntu_${VERSION_ID}/ /" | sudo tee /etc/apt/sources.list.d/devel:kubic:libcontainers:stable.list
+          curl -L https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/xUbuntu_${VERSION_ID}/Release.key | sudo apt-key add -
+          sudo apt update && sudo apt install -y skopeo
+
+      - name: ☁️ Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v0
+        with:
+          version: 366.0.0
+
+      - name: 🔐 Authenticate to Google Cloud
+        id: "auth"
+        uses: "google-github-actions/auth@v0.4.3"
+        with:
+          token_format: "access_token"
+          workload_identity_provider: ${{env.WORKLOAD_IDENTITY_POOL_ID}}
+          service_account: ${{env.IAM_SERVICE_ACCOUNT}}
+
+      - name: ✍🏽 Login to GAR using skopeo
+        run: |
+          sudo skopeo login -u oauth2accesstoken --password=${{ steps.auth.outputs.access_token }} https://${{env.GAR_IMAGE_REGISTRY}}
+
+      - name: ✍🏽 Login to Docker Hub using skopeo
+        env:
+          docker_user: ${{ secrets.DOCKERHUB_USER_NAME }}
+          docker_password: ${{ secrets.DOCKERHUB_ACCESS_TOKEN }}
+        run: |
+          sudo skopeo login -u ${{ env.docker_user }} --password=${{ env.docker_password }} https://${{ env.DH_IMAGE_REGISTRY }}
+
+      - name: 📋 Copy latest tags to Docker Hub
+        run: |
+          IMAGES=$(cat .github/promote-images.yml | yq '."europe-docker.pkg.dev/gitpod-artifacts/docker-dev"."images-by-tag-regex"|keys[]' -r)
+          COPY_JOBS_PIDS=""
+
+          for IMAGE in $IMAGES;
+          do
+            sudo skopeo copy \
+            docker://${{ env.GAR_IMAGE_REGISTRY }}/gitpod-artifacts/docker-dev/$IMAGE:latest
+            docker://${{ env.DH_IMAGE_REGISTRY }}/gitpod/$IMAGE:latest &
+
+            COPY_JOBS_PIDS="$COPY_JOBS_PIDS $!"
+
+          done
+
+          for COPY_JOBS_PID in $COPY_JOBS_PIDS; do
+              wait $COPY_JOBS_PID || exit 1
+          done
