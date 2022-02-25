@@ -108,7 +108,6 @@ jobs:
           do
             sudo skopeo copy \
             --src-tls-verify=false \
-            --registries-conf=.github/registries.conf \
             docker://${{ env.GAR_IMAGE_REGISTRY }}/gitpod-artifacts/docker-dev/workspace-base-images:$IMAGE_TAG \
             docker://${{ env.GAR_IMAGE_REGISTRY }}/gitpod-artifacts/docker-dev/workspace-$IMAGE_TAG:${{ env.TIMESTAMP_TAG }} &
 
@@ -116,7 +115,6 @@ jobs:
 
             sudo skopeo copy \
             --src-tls-verify=false \
-            --registries-conf=.github/registries.conf \
             docker://${{ env.GAR_IMAGE_REGISTRY }}/gitpod-artifacts/docker-dev/workspace-base-images:$IMAGE_TAG \
             docker://${{ env.GAR_IMAGE_REGISTRY }}/gitpod-artifacts/docker-dev/workspace-$IMAGE_TAG:latest &
 

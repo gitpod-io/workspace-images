@@ -1,21 +1,23 @@
-# Sync all the image tags including latest
+# Sync all the iamges that are tagged using date time stamp
+# format +%Y-%m-%d-%H-%M-%S e.g. 2022-02-22-10-10-54
+# Use simple regex to avoid confusion. Below will work for 20xx years.
 europe-docker.pkg.dev/gitpod-artifacts/docker-dev:
-  images:
-    workspace-base: []
-    workspace-c: []
-    workspace-clojure: []
-    workspace-full: []
-    workspace-full-vnc: []
-    workspace-go: []
-    workspace-node: []
-    workspace-node-lts: []
-    workspace-python: []
-    workspace-ruby-2: []
-    workspace-ruby-3: []
-    workspace-rust: []
-    workspace-dotnet-vnc: []
-    workspace-postgresql: []
-    workspace-mysql: []
-    workspace-mongodb: []
-    workspace-java-11: []
-    workspace-java-17: []
+  images-by-tag-regex:
+    workspace-base: "20.*"
+    workspace-c: "20.*"
+    workspace-clojure: "20.*"
+    workspace-full: "20.*"
+    workspace-full-vnc: "20.*"
+    workspace-go: "20.*"
+    workspace-node: "20.*"
+    workspace-node-lts: "20.*"
+    workspace-python: "20.*"
+    workspace-ruby-2: "20.*"
+    workspace-ruby-3: "20.*"
+    workspace-rust: "20.*"
+    workspace-dotnet-vnc: "20.*"
+    workspace-postgresql: "20.*"
+    workspace-mysql: "20.*"
+    workspace-mongodb: "20.*"
+    workspace-java-11: "20.*"
+    workspace-java-17: "20.*"
