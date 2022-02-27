@@ -5,6 +5,14 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    environment: "pull-request"
+    permissions:
+      contents: "read"
+      id-token: "write"
+    env:
+      WORKLOAD_IDENTITY_POOL_ID: projects/665270063338/locations/global/workloadIdentityPools/workspace-images-gh-actions-pr/providers/workspace-images-gha-provider-pr
+      GAR_IMAGE_REGISTRY: europe-docker.pkg.dev
+      IAM_SERVICE_ACCOUNT: workspace-images-gha-pr-sa@gitpod-artifacts.iam.gserviceaccount.com
     steps:
       - name: 📥 Checkout workspace-images
         uses: actions/checkout@v2
@@ -33,30 +41,34 @@ jobs:
           sudo su -c "while ! test -S /run/buildkit/buildkitd.sock; do sleep 0.1; done"
           sudo chmod +777 /run/buildkit/buildkitd.sock
 
-      # A hack as GH action does not allow you to force override cache storing if there was a cache hit
-      # https://github.com/actions/cache/issues/628#issuecomment-986118455
-      - name: 🗄️ Force Save Registry Cache Per Sha
-        uses: actions/cache@v2
-        with:
-          path: ~/registry
-          key: ${{ runner.os }}-pull-request-cache-${{ github.sha }}
-
-      - name: 🗄️ Restore Registry Cache
-        uses: actions/cache@v2
-        with:
-          path: ~/registry
-          key: ${{ runner.os }}-pull-request-cache-${{ github.sha }}
-          restore-keys: |
-            ${{ runner.os }}-pull-request-cache-
-
-      - name: 📦 Setup local registry
+      - name: 🤓 Update dazzle.yaml
         run: |
-          docker run -it --detach --publish 5000:5000 --volume ~/registry:/var/lib/registry registry:2
+          pip3 install ruamel.yaml
+          python3 .github/update-dazzle-for-pr.py ${{ github.event.pull_request.number }}
+          echo "Updated dazzle.yaml:"
+          cat dazzle.yaml
+
+      - name: ☁️ Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v0
+        with:
+          version: 366.0.0
+
+      - name: 🔐 Authenticate to Google Cloud
+        id: "auth"
+        uses: "google-github-actions/auth@v0.4.3"
+        with:
+          token_format: "access_token"
+          workload_identity_provider: ${{env.WORKLOAD_IDENTITY_POOL_ID}}
+          service_account: ${{env.IAM_SERVICE_ACCOUNT}}
+
+      - name: ✍🏽 Login to GAR using docker
+        run: |
+          docker login -u oauth2accesstoken --password=${{ steps.auth.outputs.access_token }} https://${{env.GAR_IMAGE_REGISTRY}}
 
       - name: 🔨 Dazzle build
         run: |
-          dazzle build localhost:5000/workspace-base-images
+          dazzle build ${{ env.GAR_IMAGE_REGISTRY }}/gitpod-artifacts/docker-dev-pr/workspace-base-images-pr
 
       - name: 🖇️ Dazzle combine
         run: |
-          dazzle combine localhost:5000/workspace-base-images --all
+          dazzle combine ${{ env.GAR_IMAGE_REGISTRY }}/gitpod-artifacts/docker-dev-pr/workspace-base-images-pr --all
