@@ -13,7 +13,7 @@ USAGE:
   gargc.sh REPOSITORY DATE
 EXAMPLE
   gargc.sh  europe-docker.pkg.dev/gitpod-artifacts/docker-dev-pr/workspace-base-images-pr 2017-04-01
-  would clean up all images tags pushed before 2017-04-01 for
+  would clean up all images tags pushed before 2017-04-01 (i.e. < 2017-04-01 ) for
   europe-docker.pkg.dev/gitpod-artifacts/docker-dev-pr/workspace-base-images-pr image.
 EOF
 	exit 1
