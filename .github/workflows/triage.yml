@@ -86,7 +86,7 @@ jobs:
         if: github.event_name == 'issues'
         env:
           GITHUB_TOKEN: ${{ secrets.LABELER_TOKEN }}
-          ISSUE_ID: ${{ github.event.issues.node_id }}
+          ISSUE_ID: ${{ github.event.issue.node_id }}
         run: |
           gh api graphql -f query='
             mutation($project:ID!, $issue:ID!) {
@@ -95,4 +95,4 @@ jobs:
                   id
                 }
               }
-            }' -f project=$PROJECT_ID -f pr=$ISSUE_ID --jq '.data.addProjectNextItem.projectNextItem.id'
+            }' -f project=$PROJECT_ID -f issue=$ISSUE_ID --jq '.data.addProjectNextItem.projectNextItem.id'
