@@ -8,7 +8,7 @@ jobs:
     environment: "pull-request"
     permissions:
       contents: "read"
-      id-token: "write"
+      # id-token: "write"
     env:
       WORKLOAD_IDENTITY_POOL_ID: projects/665270063338/locations/global/workloadIdentityPools/workspace-images-gh-actions-pr/providers/workspace-images-gha-provider-pr
       GAR_IMAGE_REGISTRY: europe-docker.pkg.dev
