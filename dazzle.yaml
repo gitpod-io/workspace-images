@@ -70,11 +70,10 @@ combiner:
       - base
       chunks:
         - lang-rust
-    - name: dotnet-vnc
+    - name: dotnet
       ref:
       - full
       chunks:
-        - tool-vnc
         - tool-dotnet
     - name: postgresql
       ref:
