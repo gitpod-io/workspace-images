@@ -13,7 +13,7 @@ europe-docker.pkg.dev/gitpod-artifacts/docker-dev:
     workspace-ruby-2: []
     workspace-ruby-3: []
     workspace-rust: []
-    workspace-dotnet-vnc: []
+    workspace-dotnet: []
     workspace-postgresql: []
     workspace-mysql: []
     workspace-mongodb: []
