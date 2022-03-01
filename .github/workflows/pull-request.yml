@@ -15,7 +15,7 @@ jobs:
       IAM_SERVICE_ACCOUNT: workspace-images-gha-pr-sa@gitpod-artifacts.iam.gserviceaccount.com
     steps:
       - name: 📥 Checkout workspace-images
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           repository: gitpod-io/workspace-images
 
