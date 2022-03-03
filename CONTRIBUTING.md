@@ -70,9 +70,10 @@ Subsequent pushes would be faster (~25 mins) depending on the number of chunks m
 
 ### Release
 
-We have a Release pipeline:
+We have two Release workflows:
 
-1. **[Build from Main](.github/workflows/push-main.yml)** - On push to the default branch `master`
+1. **[Build from Main](.github/workflows/push-main.yml)** - On push to the default branch `master` release datetimestamp tagged images to dockerhub. Does **NOT** update the `latest` tag
+1. **[Update latest tags](.github/workflows/dockerhub-release.yml)** - Weekly update the `latest` tag of all images in dockerhub with current latest datetimestamp image
 
 We do not release any images from pull requests.
 All the images are built within GH Actions and tested using dazzle.
