@@ -14,6 +14,7 @@ RUN cp $HOME/.profile $HOME/.profile_orig \
         rust-analysis \
         rust-src \
         rustfmt \
+        clippy \
     && rustup completions bash | sudo tee /etc/bash_completion.d/rustup.bash-completion > /dev/null \
     && rustup completions bash cargo | sudo tee /etc/bash_completion.d/rustup.cargo-bash-completion > /dev/null \
     && printf '%s\n' "$(grep -v -F -x -f $HOME/.profile_orig $HOME/.profile)" \
