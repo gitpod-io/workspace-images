@@ -65,9 +65,12 @@ jobs:
         run: |
           sudo skopeo login -u ${{ env.docker_user }} --password=${{ env.docker_password }} https://${{ env.DH_IMAGE_REGISTRY }}
 
-      - name: 🐳 Sync images to Docker Hub
+      - name: 🐳 Sync latest tag of images to Docker Hub
         run: |
-          sudo skopeo sync \
-            --src yaml \
-            --dest docker \
-            .github/promote-images.yml ${{ env.DH_IMAGE_REGISTRY }}/gitpod
+          IMAGES=$(cat .github/promote-images.yml | yq '."europe-docker.pkg.dev/gitpod-artifacts/docker-dev"."images-by-tag-regex"|keys[]' -r)
+          for IMAGE in $IMAGES;
+          do
+            sudo skopeo copy \
+            docker://${{ env.GAR_IMAGE_REGISTRY }}/gitpod-artifacts/docker-dev/$IMAGE:latest \
+            docker://${{ env.DH_IMAGE_REGISTRY }}/gitpod/$IMAGE:latest
+          done
