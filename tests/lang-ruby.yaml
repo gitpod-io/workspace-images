@@ -5,7 +5,6 @@
   - status == 0
   - stdout.indexOf("ruby") != -1
   - stdout.indexOf("2.7.5") != -1 ||
-    stdout.indexOf("3.0.3") != -1 ||
     stdout.indexOf("3.1.0") != -1
 - desc: it should have rvm
   command: [rvm --version]
