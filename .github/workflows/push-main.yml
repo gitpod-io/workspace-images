@@ -3,7 +3,7 @@ name: Build from Main
 on:
   push:
     branches:
-      - master
+      - main
 
 jobs:
   # Build images using artifactory as image registry.
