@@ -6,8 +6,8 @@ ports:
     onOpen: ignore
 
 tasks:
-  - name: install pre-commit and initialize it
-    init: pip3 install pre-commit && pre-commit install
+  - name: install pre-commit git hooks
+    init: pre-commit install
   - name: start up buildkitd
     command: |
       sudo /usr/bin/buildkitd --debug  --config ./buildkitd.toml --group gitpod
