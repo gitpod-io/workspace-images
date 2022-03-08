@@ -1,6 +1,9 @@
 #!/bin/bash
 set -euo pipefail
-set +x
+trap ctrl_c INT
+
+readonly YELLOW=$(tput setaf 3)
+readonly NC=$(tput sgr0)
 
 readonly BACKUP_FILE=".dazzle.yaml.orig"
 readonly TEMP_FILE=".dazzle.yaml.temp"
@@ -10,28 +13,48 @@ readonly REPO="localhost:5000/dazzle"
 
 function usage() {
 	cat <<EOF
-Usage: dazzle-up.sh [OPTION]...
+Usage: ./dazzle-up.sh [OPTION]...
+Example: ./dazzle-up.sh  -c lang-c -c dep-cacert-update -n mychangecombo
 Options for build:
   -h, --help      Display this help
-  -c, --chunk     Chunk to build, You can build multiple chunks: -c chunk1 -c chunk2
-  -n, --name      Combination name
+  -c, --chunk     Chunk to build, You can build multiple chunks: -c chunk1 -c chunk2. If no chunks are supplied then build using existing config
+  -n, --name      Combination name, by default a combination name 'default' is created. This flag only works when -c flag is specified
 EOF
 }
 
-function build_all() {
-	# # First, build chunks without hashes
-	dazzle build $REPO -v --chunked-without-hash
-	# # Second, build again, but with hashes
-	dazzle build $REPO -v
-	# # Third, create combinations of chunks
-	dazzle combine $REPO --all -v
+function restore_original() {
+	echo "${YELLOW}Restoring backup file ${BACKUP_FILE} to original file ${ORIGINAL_FILE}${NC}"
+	cp ${BACKUP_FILE} ${ORIGINAL_FILE}
+}
 
+function ctrl_c() {
+	echo "${YELLOW}** Trapped CTRL-C${NC}"
+	restore_original
+}
+
+function build_and_combine() {
+	dazzle build ${REPO} -v --chunked-without-hash && dazzle build ${REPO} -v && dazzle combine ${REPO} --all -v
+}
+
+function extract_variants() {
+	local chunk_name=${1}
+	shift 1
+	local variants=""
+
+	if [[ ! -f "chunks/${chunk_name}/chunk.yaml" ]]; then
+		variants+=("${chunk_name}")
+	else
+		for variant in $(yq '.variants[].name' -r <"chunks/${chunk_name}/chunk.yaml"); do
+			variants+=("${chunk_name}:${variant}")
+		done
+	fi
+	echo "${variants[*]}"
 }
 
 ARGS=$(getopt -o h,:c:n: --long help:,chunk:,name: -- "$@")
 eval set -- "${ARGS}"
 
-[ ! -f ${BACKUP_FILE} ] && echo "Creating a backup of dazzle.yaml as it does not exist yet..." && cp ${ORIGINAL_FILE} ${BACKUP_FILE}
+[ ! -f ${BACKUP_FILE} ] && echo "${YELLOW}Creating a backup of ${ORIGINAL_FILE} as it does not exist yet...${NC}" && cp ${ORIGINAL_FILE} ${BACKUP_FILE}
 
 CHUNKS=""
 COMBINATION="default"
@@ -62,35 +85,36 @@ while true; do
 		;;
 	*)
 		echo Error: unknown flag "$1"
-		echo "Run 'dazzle-up.sh --help' for usage."
+		echo "${YELLOW}Run 'dazzle-up.sh --help' for usage.${NC}"
 		exit 1
 		;;
 	esac
 done
 
-# branch off to default dazzle config build for all combination
-[ -z "${CHUNKS}" ] && echo "no chunks specified, will build using the existing ${ORIGINAL_FILE}" && build_all && exit 0
+# if no chunks specified then build using existing dazzle.yaml
+if [[ -z "${CHUNKS[*]}" ]]; then
+	echo "${YELLOW}No chunks specified, will build using the existing ${ORIGINAL_FILE}${NC}"
+else
+	# else build for supplied arguments
+	[ -f ${ORIGINAL_FILE} ] && echo "${YELLOW}Deleting ${ORIGINAL_FILE}, will produce a new config with supplied arguments${NC}" && rm ${ORIGINAL_FILE}
 
-# else build for supplied arguments
+	for CN in ${AVAILABLE_CHUNKS}; do
+		if [[ ! ${CHUNKS[*]} =~ ${CN} ]]; then
+			dazzle project ignore "${CN}"
+		else
+			VARIANTS=$(extract_variants "${CN}")
+			for VARIANT in ${VARIANTS}; do
+				CHUNKS_TO_COMBINE+=("${VARIANT}")
+			done
+		fi
+	done
 
-[ -f ${ORIGINAL_FILE} ] && echo "Deleting ${ORIGINAL_FILE}" && rm ${ORIGINAL_FILE}
+	dazzle project add-combination "${COMBINATION}" "${CHUNKS_TO_COMBINE[@]}"
+fi
 
-for CN in ${AVAILABLE_CHUNKS}; do
-	if [[ ! ${CHUNKS[@]} =~ ${CN} ]]; then
-		dazzle project ignore ${CN}
-	else
-		VARIANTS=extract_variants
-		for VARIANT in ${VARIANTS}; do
-			CHUNKS_TO_COMBINE+=("${VARIANT}")
-		done
-	fi
-done
+build_and_combine
 
-dazzle project add-combination ${COMBINATION} "${CHUNKS_TO_COMBINE[@]}"
-
-echo "Saving temperory generated dazzle config in ${TEMP_FILE}"
+echo "${YELLOW}Saving dazzle config used to generate build in ${TEMP_FILE}${NC}"
 cp ${ORIGINAL_FILE} ${TEMP_FILE}
 
-# add logic to handle sigterm ctrl+c
-echo "Copying backup file to original location"
-cp ${BACKUP_FILE} ${ORIGINAL_FILE}
+restore_original
