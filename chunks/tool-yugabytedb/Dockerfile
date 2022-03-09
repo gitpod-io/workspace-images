@@ -22,7 +22,7 @@ RUN curl -sSLo ./yugabyte.tar.gz https://downloads.yugabyte.com/releases/${YB_VE
   && chmod +x $YB_BIN_PATH/bin/* \
   && rm ./yugabyte.tar.gz
 
-# configure the interpreter  
+# configure the interpreter
 RUN ["/usr/local/yugabyte/bin/post_install.sh"]
 
 # set the execution path and other env variables
@@ -36,7 +36,7 @@ ENV TSERVER_WEB_PORT=9000
 ENV YSQL_API_PORT=13000
 ENV YCQL_API_PORT=12000
 
-# re-initialization is automatically handled 
+# re-initialization is automatically handled
 RUN echo "\n# yugabytedb start command" >> /home/gitpod/.bashrc.d/100-yugabyedb-launch
 RUN echo "yugabyted start --base_dir=$STORE --listen=$HOST" >> /home/gitpod/.bashrc.d/100-yugabyedb-launch
 
