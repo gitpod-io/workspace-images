@@ -102,6 +102,11 @@ combiner:
       - base
       chunks:
         - lang-java:17
+    - name: yugabytedb
+      ref:
+      - full
+      chunks:
+        - tool-yugabytedb
   envvars:
     - name: PATH
       action: merge-unique
