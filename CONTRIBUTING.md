@@ -31,11 +31,7 @@ Here is a list of dependencies and tools:
 
 ## Locally
 
-We ship a shell script [dazzle-up.sh](dazzle-up.sh) that can be used to build the images locally. Run it in a shell:
-
-```bash
-./dazzle-up.sh
-```
+We ship a shell script [dazzle-up.sh](dazzle-up.sh) that can be used to build the images locally. See the following sub sections for usage.
 
 This script will first build the chunks and run tests followed by creation of container images. It uses `dazzle` to perform these tasks.
 
@@ -45,7 +41,25 @@ The images will be pushed to the local registry server running on port 5000. You
 docker pull localhost:5000/dazzle:combo
 ```
 
-where `combo` is the name of the combination defined in [dazzle.yaml](dazzle.yaml) e.g. `full`, clojure, postgresql.
+where `combo` is the name of the combination defined in [dazzle.yaml](dazzle.yaml) e.g. `full`, `clojure`, `postgresql`.
+
+### Build Specific Chunks
+
+Often, you would want to test only the chunks that you modify. You can do that by using the `-c` flag.
+
+```console
+./dazzle-up.sh -c lang-c -c dep-cacert-update -n mychangecombo
+```
+
+Above command will build only chunks `lang-c` and `dep-cacert-update` and combine the created chunks (all variants, if any exists) as a combination with name `mychangecombo`.
+
+### Build All Chunks
+
+Execute the following command to build using the default config `dazzle.yaml` shipped in this repo:
+
+```bash
+./dazzle-up.sh
+```
 
 > **NOTE:** Building images locally consumes a lot of resources and is often slow.
 It might take 1.25 hours to build the images locally.
