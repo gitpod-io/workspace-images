@@ -43,7 +43,7 @@ jobs:
 
       - name: 🔆 Install dazzle
         run: |
-          curl -sSL https://github.com/gitpod-io/dazzle/releases/download/v0.1.7/dazzle_0.1.7_Linux_x86_64.tar.gz | sudo tar -xvz -C /usr/local/bin
+          curl -sSL https://github.com/gitpod-io/dazzle/releases/download/v0.1.8/dazzle_0.1.8_Linux_x86_64.tar.gz | sudo tar -xvz -C /usr/local/bin
 
       - name: 🔆 Install skopeo
         run: |
