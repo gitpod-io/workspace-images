@@ -107,6 +107,11 @@ combiner:
       - full
       chunks:
         - tool-yugabytedb
+    - name: elixir
+      ref:
+      - base
+      chunks:
+        - lang-elixir
   envvars:
     - name: PATH
       action: merge-unique
