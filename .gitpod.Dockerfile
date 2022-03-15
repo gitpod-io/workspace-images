@@ -14,4 +14,5 @@ RUN cd /usr \
     && curl -sSL https://github.com/mvdan/sh/releases/download/v3.4.2/shfmt_v3.4.2_linux_amd64 -o /usr/bin/shfmt \
     && chmod +x /usr/bin/shfmt \
     && install-packages shellcheck \
-    && sudo pip3 install pre-commit
+    && sudo pip3 install pre-commit \
+    && curl -o /usr/bin/yq -L https://github.com/mikefarah/yq/releases/download/v4.22.1/yq_linux_amd64 && chmod +x yq
