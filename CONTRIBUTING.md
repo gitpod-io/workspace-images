@@ -31,7 +31,7 @@ Here is a list of dependencies and tools:
 
 ## Locally
 
-We ship a shell script [dazzle-up.sh](dazzle-up.sh) that can be used to build the images locally. See the following sub sections for usage.
+We ship a shell script [build-all.sh](build-all.sh) that can be used to build the images locally. See the following sub sections for usage.
 
 This script will first build the chunks and run tests followed by creation of container images. It uses `dazzle` to perform these tasks.
 
@@ -45,20 +45,30 @@ where `combo` is the name of the combination defined in [dazzle.yaml](dazzle.yam
 
 ### Build Specific Chunks
 
-Often, you would want to test only the chunks that you modify. You can do that by using the `-c` flag.
+Often, you would want to test only the chunks that you modify. You can do that with build-chunk.sh using the `-c` flag and specifying the name for your combination with `-n`.
 
 ```console
-./dazzle-up.sh -c lang-c -c dep-cacert-update -n mychangecombo
+./build-chunk.sh -c lang-c -c dep-cacert-update -c lang-go:1.17.5 -n mychangecombo
 ```
 
 Above command will build only chunks `lang-c` and `dep-cacert-update` and combine the created chunks (all variants, if any exists) as a combination with name `mychangecombo`.
+
+### Build Specific Combination
+
+Sometimes you only want to build one specific combination e.g. the `postgresql` or the `go` image. You can do that with
+
+```console
+./build-combo.sh <comboName> e.g. ./build-combo.sh postgresql
+```
+
+This will build all chunks that are referenced by the `go` combination and then combine them to create the `go` image.
 
 ### Build All Chunks
 
 Execute the following command to build using the default config `dazzle.yaml` shipped in this repo:
 
 ```bash
-./dazzle-up.sh
+./build-all.sh
 ```
 
 > **NOTE:** Building images locally consumes a lot of resources and is often slow.

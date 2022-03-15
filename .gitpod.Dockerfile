@@ -8,11 +8,10 @@ ENV BUILDKIT_FILENAME=buildkit-v${BUILDKIT_VERSION}.linux-amd64.tar.gz
 USER root
 
 # Install dazzle, buildkit and pre-commit
-RUN cd /usr \
-    && curl -sSL https://github.com/moby/buildkit/releases/download/v${BUILDKIT_VERSION}/${BUILDKIT_FILENAME} | tar -xvz \
-    && curl -sSL https://github.com/gitpod-io/dazzle/releases/download/v0.1.8/dazzle_0.1.8_Linux_x86_64.tar.gz | tar -xvz dazzle \
+RUN curl -sSL https://github.com/moby/buildkit/releases/download/v${BUILDKIT_VERSION}/${BUILDKIT_FILENAME} | tar -xvz -C /usr \
+    && curl -sSL https://github.com/gitpod-io/dazzle/releases/download/v0.1.8/dazzle_0.1.8_Linux_x86_64.tar.gz | tar -xvz -C /usr/local/bin \
     && curl -sSL https://github.com/mvdan/sh/releases/download/v3.4.2/shfmt_v3.4.2_linux_amd64 -o /usr/bin/shfmt \
     && chmod +x /usr/bin/shfmt \
     && install-packages shellcheck \
     && sudo pip3 install pre-commit \
-    && curl -o /usr/bin/yq -L https://github.com/mikefarah/yq/releases/download/v4.22.1/yq_linux_amd64 && chmod +x yq
+    && curl -sSL https://github.com/mikefarah/yq/releases/download/v4.22.1/yq_linux_amd64 -o /usr/bin/yq && chmod +x /usr/bin/yq
