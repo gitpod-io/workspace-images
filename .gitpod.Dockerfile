@@ -14,4 +14,4 @@ RUN cd /usr \
     && curl -sSL https://github.com/mvdan/sh/releases/download/v3.4.2/shfmt_v3.4.2_linux_amd64 -o /usr/bin/shfmt \
     && chmod +x /usr/bin/shfmt \
     && install-packages shellcheck \
-    && sudo -u gitpod pip3 install pre-commit
+    && sudo pip3 install pre-commit
