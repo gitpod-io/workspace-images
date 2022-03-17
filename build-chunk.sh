@@ -11,16 +11,15 @@ readonly REPO="localhost:5000/dazzle"
 function usage() {
 	cat <<EOF
 Usage: ./build-chunk.sh [OPTION]...
-Example: ./build-chunk.sh -c lang-c -c dep-cacert-update -c lang-go:1.17.5 -n mychangecombo
+Example: ./build-chunk.sh -c lang-c -c dep-cacert-update -c lang-go:1.17.5
 Options for build:
   -h, --help      Display this help
   -c, --chunk     Chunk to build, You can build multiple chunks: -c chunk1 -c chunk2. If no chunks are supplied then build using existing config
-  -n, --name      Combination name, by default a combination name 'default' is created. This flag only works when -c flag is specified
 EOF
 }
 
-function build_and_combine() {
-	dazzle build ${REPO} -v --chunked-without-hash && dazzle build ${REPO} -v && dazzle combine ${REPO} --all -v
+function build_chunks() {
+	dazzle build ${REPO} -v --chunked-without-hash && dazzle build ${REPO} -v
 }
 
 function extract_variants() {
@@ -44,7 +43,6 @@ eval set -- "${ARGS}"
 save_original
 
 CHUNKS=""
-COMBINATION="default"
 
 while true; do
 	case "$1" in
@@ -60,10 +58,6 @@ while true; do
 			# else append
 			CHUNKS+=("$2")
 		fi
-		shift 2
-		;;
-	-n | --name)
-		COMBINATION="$2"
 		shift 2
 		;;
 	--)
@@ -96,10 +90,10 @@ else
 		fi
 	done
 
-	dazzle project add-combination "${COMBINATION}" "${CHUNKS_TO_COMBINE[@]}"
+	# dazzle project add-combination "${COMBINATION}" "${CHUNKS_TO_COMBINE[@]}"
 fi
 
-build_and_combine
+build_chunks
 
 echo "${YELLOW}Saving dazzle config used to generate build in ${TEMP_FILE}${NC}"
 cp "${ORIGINAL_FILE}" ${TEMP_FILE}
