@@ -6,6 +6,8 @@ ports:
     onOpen: ignore
 
 tasks:
+  - name: install pre-commit git hooks
+    init: pre-commit install
   - name: start up buildkitd
     command: |
       sudo /usr/bin/buildkitd --debug  --config ./buildkitd.toml --group gitpod
@@ -15,8 +17,6 @@ tasks:
       docker run -p 5000:5000 --name registry --rm -v /workspace/registry:/var/lib/registry registry:2
     openMode: split-right
   - name: dazzle build and test
-    before: |
-      curl -sSL https://github.com/gitpod-io/dazzle/releases/download/v0.1.8/dazzle_0.1.8_Linux_x86_64.tar.gz | sudo tar -xvz -C /usr/local/bin
     command: |
       gp await-port 5000
       REPO=localhost:5000/dazzle
