@@ -14,7 +14,6 @@ jobs:
   # Check the "Required reviewers" box and enter at least one user or team name.
   sync:
     runs-on: ubuntu-latest
-    environment: "production"
     permissions:
       contents: "read"
       id-token: "write"
