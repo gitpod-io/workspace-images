@@ -11,7 +11,7 @@ jobs:
   # Check the "Required reviewers" box and enter at least one user or team name.
   promote-latest:
     runs-on: ubuntu-latest
-    environment: "production"
+    environment: "production-restricted"
     permissions:
       contents: "read"
       id-token: "write"
