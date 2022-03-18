@@ -45,13 +45,15 @@ where `combo` is the name of the combination defined in [dazzle.yaml](dazzle.yam
 
 ### Build Specific Chunks
 
-Often, you would want to test only the chunks that you modify. You can do that with build-chunk.sh using the `-c` flag and specifying the name for your combination with `-n`.
+Often, you would want to test only the chunks that you modify. You can do that with build-chunk.sh using the `-c` flag.
 
 ```console
-./build-chunk.sh -c lang-c -c dep-cacert-update -c lang-go:1.17.5 -n mychangecombo
+./build-chunk.sh -c lang-c -c dep-cacert-update -c lang-go:1.17.5
 ```
 
-Above command will build only chunks `lang-c` and `dep-cacert-update` and combine the created chunks (all variants, if any exists) as a combination with name `mychangecombo`.
+Above command will build only chunks `lang-c` and `dep-cacert-update`.
+
+The next step, is to test your changes with [./build-combo](#build-specific-combination).
 
 ### Build Specific Combination
 
