@@ -20,8 +20,9 @@ tasks:
     command: |
       gp await-port 5000
       REPO=localhost:5000/dazzle
-      echo "To build specific chunks and combinations 'time ./dazzle-up.sh  -c chunk1 -c chunk2 -n combo'"
-      echo "To build all the chunks and combinations 'time ./dazzle-up.sh'"
+      echo "To build specific chunks and combine them 'time ./build-chunk.sh  -c chunk1 -c chunk2:variant1.2.3 -n combo'"
+      echo "To build all the chunks and combinations 'time ./build-all.sh'"
+      echo "To build a specific combination 'time ./build-combo.sh combo'"
       echo "To list image chunks 'dazzle project image-name $REPO'"
       echo "To list hashes for image chunks 'dazzle project hash $REPO'"
       echo "To print the combined image maniest 'dazzle project manifest $REPO'"
