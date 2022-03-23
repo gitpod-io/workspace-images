@@ -58,3 +58,6 @@ RUN sudo echo "Running 'sudo' for Gitpod: success" && \
 
 # configure git-lfs
 RUN sudo git lfs install --system
+
+# Custom PATH additions
+ENV PATH=/usr/games:$PATH
