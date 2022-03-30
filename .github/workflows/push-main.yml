@@ -132,7 +132,7 @@ jobs:
           sudo skopeo login -u ${{ env.docker_user }} --password=${{ env.docker_password }} https://${{ env.DH_IMAGE_REGISTRY }}
 
       - name: 🔐 Authenticate to Google Cloud again
-        id: "auth"
+        id: "auth_again"
         uses: google-github-actions/auth@v0.6.0
         with:
           token_format: "access_token"
@@ -141,7 +141,7 @@ jobs:
 
       - name: ✍🏽 Login to GAR using skopeo again
         run: |
-          sudo skopeo login -u oauth2accesstoken --password=${{ steps.auth.outputs.access_token }} https://${{env.GAR_IMAGE_REGISTRY}}
+          sudo skopeo login -u oauth2accesstoken --password=${{ steps.auth_again.outputs.access_token }} https://${{env.GAR_IMAGE_REGISTRY}}
 
       - name: 🐳 Sync images with specific tags to Docker Hub
         run: |
