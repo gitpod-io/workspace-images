@@ -4,6 +4,7 @@ sync:
     - base
     - c
     - clojure
+    - elixir
     - full
     - full-vnc
     - go
