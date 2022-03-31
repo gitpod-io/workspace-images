@@ -2,7 +2,6 @@
   command: [go, version]
   assert:
   - stdout.indexOf("go version") != -1
-  - stdout.indexOf("go1.17.5") != -1
   - status == 0
 - desc: it should have gopkgs
   command: [gopkgs]
