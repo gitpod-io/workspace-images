@@ -31,11 +31,7 @@ Here is a list of dependencies and tools:
 
 ## Locally
 
-We ship a shell script [dazzle-up.sh](dazzle-up.sh) that can be used to build the images locally. Run it in a shell:
-
-```bash
-./dazzle-up.sh
-```
+We ship a shell script [build-all.sh](build-all.sh) that can be used to build the images locally. See the following sub sections for usage.
 
 This script will first build the chunks and run tests followed by creation of container images. It uses `dazzle` to perform these tasks.
 
@@ -45,7 +41,37 @@ The images will be pushed to the local registry server running on port 5000. You
 docker pull localhost:5000/dazzle:combo
 ```
 
-where `combo` is the name of the combination defined in [dazzle.yaml](dazzle.yaml) e.g. `full`, clojure, postgresql.
+where `combo` is the name of the combination defined in [dazzle.yaml](dazzle.yaml) e.g. `full`, `clojure`, `postgresql`.
+
+### Build Specific Chunks
+
+Often, you would want to test only the chunks that you modify. You can do that with build-chunk.sh using the `-c` flag.
+
+```console
+./build-chunk.sh -c lang-c -c dep-cacert-update -c lang-go:1.17.5
+```
+
+Above command will build only chunks `lang-c` and `dep-cacert-update`.
+
+The next step, is to test your changes with [./build-combo](#build-specific-combination).
+
+### Build Specific Combination
+
+Sometimes you only want to build one specific combination e.g. the `postgresql` or the `go` image. You can do that with
+
+```console
+./build-combo.sh <comboName> e.g. ./build-combo.sh postgresql
+```
+
+This will build all chunks that are referenced by the `go` combination and then combine them to create the `go` image.
+
+### Build All Chunks
+
+Execute the following command to build using the default config `dazzle.yaml` shipped in this repo:
+
+```bash
+./build-all.sh
+```
 
 > **NOTE:** Building images locally consumes a lot of resources and is often slow.
 It might take 1.25 hours to build the images locally.
@@ -59,7 +85,7 @@ We use [Github Actions](https://docs.github.com/en/actions) for our pipelines.
 
 We have a Build pipeline which gets triggered on the following two events:
 
-1. **[Build from Main](.github/workflows/push-main.yml)** - On push to the default branch `master`.
+1. **[Build from Main](.github/workflows/push-main.yml)** - On push to the default branch `main`.
 1. **[Build from Pull Request](.github/workflows/pull-request.yml)** - On Raising a Pull Request.
 If it is raised from a fork then it requires an approval from a maintainer.
 
@@ -70,9 +96,10 @@ Subsequent pushes would be faster (~25 mins) depending on the number of chunks m
 
 ### Release
 
-We have a Release pipeline:
+We have two Release workflows:
 
-1. **[Build from Main](.github/workflows/push-main.yml)** - On push to the default branch `master`
+1. **[Build from Main](.github/workflows/push-main.yml)** - On push to the default branch `main` release datetimestamp tagged images to dockerhub. Does **NOT** update the `latest` tag
+1. **[Update latest tags](.github/workflows/dockerhub-release.yml)** - Weekly update the `latest` tag of all images in dockerhub with current latest datetimestamp image
 
 We do not release any images from pull requests.
 All the images are built within GH Actions and tested using dazzle.

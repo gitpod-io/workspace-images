@@ -1,0 +1,19 @@
+# ysql api
+- desc: it should run ysql(postgres)-api cli
+  entrypoint: [bash, -i, -c]
+  command: [ysqlsh -V]
+  assert:
+  - stdout.indexOf("psql (PostgreSQL) 11.2-YB-2.12.1.0-b0") != -1
+  - status == 0
+# ycql api
+- desc: it should run ycql(cassandra)-api cli
+  entrypoint: [bash, -i, -c]
+  command: [ycqlsh --version]
+  assert:
+  - stdout.indexOf("ycqlsh 5.0.1") != -1
+  - status == 0
+# data path
+- desc: it should find the data folder path
+  command: [ls, /var/ybdp]
+  assert:
+  - status == 0

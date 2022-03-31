@@ -1,9 +1,27 @@
-#!/bin/bash
+#!/bin/bash -eu
 
-set -o errexit
+_mode="$(
+	_self="${0##*/}"
+	case "$_self" in
+	'install-packages' | 'upgrade-packages')
+		: "${_self%%-*}"
+		;;
+	*)
+		:
+		;;
+	esac
+	printf '%s\n' "$_" # Return value
+)"
 
-if [ $# = 0 ]; then
+test "$_mode" == ':' && printf '%s\n' 'Invalid mode' && exit 1
+if test "$_mode" == 'install' && [ $# = 0 ]; then
 	echo >&2 "No packages specified"
+	exit 1
+fi
+
+# Block users from running this unless they're root.
+if [[ $EUID != 0 ]]; then
+	echo >&2 "Run this script again as root to $_mode packages."
 	exit 1
 fi
 
@@ -12,9 +30,6 @@ fi
 # shellcheck disable=SC2034
 RUNLEVEL=1
 
-# shellcheck disable=SC2034
-DEBIAN_FRONTEND=noninteractive
-
 DAZZLE_MARKS="/var/lib/apt/dazzle-marks/"
 TIMESTAMP=$(date +%s)
 
@@ -22,8 +37,10 @@ if [ ! -d "${DAZZLE_MARKS}" ]; then
 	mkdir -p "${DAZZLE_MARKS}"
 fi
 
+debconf-set-selections <<<'debconf debconf/frontend select Noninteractive'
 apt-get update
-apt-get install -yq --no-install-recommends "$@"
+apt-get "$_mode" -yq --no-install-recommends "$@"
+debconf-set-selections <<<'debconf debconf/frontend select Readline'
 
 cp /var/lib/dpkg/status "${DAZZLE_MARKS}/${TIMESTAMP}.status"
 

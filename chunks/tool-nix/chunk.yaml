@@ -1,4 +1,5 @@
 variants:
-  - name: "2.3.14"
+  - name: "2.6.0"
     args:
-      NIX_VERSION: 2.3.14
+      NIX_VERSION: 2.6.0
+      NIX_CONFIG: "experimental-features = nix-command flakes"

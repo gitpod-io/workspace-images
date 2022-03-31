@@ -3,8 +3,6 @@ FROM buildpack-deps:focal
 COPY install-packages upgrade-packages /usr/bin/
 
 ### base ###
-ARG DEBIAN_FRONTEND=noninteractive
-
 RUN yes | unminimize \
     && install-packages \
         zip \
@@ -60,3 +58,6 @@ RUN sudo echo "Running 'sudo' for Gitpod: success" && \
 
 # configure git-lfs
 RUN sudo git lfs install --system
+
+# Custom PATH additions
+ENV PATH=/usr/games:$PATH

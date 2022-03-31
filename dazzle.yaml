@@ -29,7 +29,7 @@ combiner:
         - lang-rust
         - tool-brew
         - tool-nginx
-        - tool-nix:2.3.14
+        - tool-nix:2.6.0
     - name: full-vnc
       ref:
       - full
@@ -45,11 +45,13 @@ combiner:
       - base
       chunks:
         - lang-node:17.4.0
+        - tool-chrome
     - name: node-lts
       ref:
       - base
       chunks:
         - lang-node:16.13.2
+        - tool-chrome
     - name: python
       ref:
       - base
@@ -70,11 +72,10 @@ combiner:
       - base
       chunks:
         - lang-rust
-    - name: dotnet-vnc
+    - name: dotnet
       ref:
       - full
       chunks:
-        - tool-vnc
         - tool-dotnet
     - name: postgresql
       ref:
@@ -101,6 +102,11 @@ combiner:
       - base
       chunks:
         - lang-java:17
+    - name: yugabytedb
+      ref:
+      - full
+      chunks:
+        - tool-yugabytedb
   envvars:
     - name: PATH
       action: merge-unique

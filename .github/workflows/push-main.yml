@@ -3,10 +3,10 @@ name: Build from Main
 on:
   push:
     branches:
-      - master
+      - main
 
 jobs:
-  # Sync container images between the local registry and GCP Artifact registry.
+  # Build images using artifactory as image registry.
   # To implement manual approvals, the workflow uses an Environment.
   #
   # From your GitHub repo clock Settings. In the left menu, click Environments.
@@ -26,7 +26,7 @@ jobs:
 
     steps:
       - name: 📥 Checkout workspace-images
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
         with:
           repository: gitpod-io/workspace-images
 
@@ -43,7 +43,7 @@ jobs:
 
       - name: 🔆 Install dazzle
         run: |
-          curl -sSL https://github.com/gitpod-io/dazzle/releases/download/v0.1.6/dazzle_0.1.6_Linux_x86_64.tar.gz | sudo tar -xvz -C /usr/local/bin
+          curl -sSL https://github.com/gitpod-io/dazzle/releases/download/v0.1.10/dazzle_0.1.10_Linux_x86_64.tar.gz | sudo tar -xvz -C /usr/local/bin
 
       - name: 🔆 Install skopeo
         run: |
@@ -56,39 +56,10 @@ jobs:
 
       - name: 🏗️ Setup buildkit
         run: |
-          curl -sSL https://github.com/moby/buildkit/releases/download/v0.9.3/buildkit-v0.9.3.linux-amd64.tar.gz | sudo tar xvz -C /usr
+          curl -sSL https://github.com/moby/buildkit/releases/download/v0.10.0/buildkit-v0.10.0.linux-amd64.tar.gz | sudo tar xvz -C /usr
           sudo buildkitd --oci-worker=true --oci-worker-net=host --debug --group docker &
           sudo su -c "while ! test -S /run/buildkit/buildkitd.sock; do sleep 0.1; done"
           sudo chmod +777 /run/buildkit/buildkitd.sock
-
-      # A hack as GH action does not allow you to force override cache storing if there was a cache hit
-      # https://github.com/actions/cache/issues/628#issuecomment-986118455
-      - name: 🗄️ Force Save Registry Cache Per Sha
-        uses: actions/cache@v2
-        with:
-          path: ~/registry
-          key: ${{ runner.os }}-main-cache-${{ github.sha }}
-
-      - name: 🗄️ Restore Registry Cache
-        uses: actions/cache@v2
-        with:
-          path: ~/registry
-          key: ${{ runner.os }}-main-cache-${{ github.sha }}
-          restore-keys: |
-            ${{ runner.os }}-main-cache-
-
-      - name: 📦 Setup local registry
-        run: |
-          docker run -it --detach --publish 5000:5000 --volume ~/registry:/var/lib/registry registry:2
-
-      - name: 🔨 Dazzle build
-        run: |
-          dazzle build localhost:5000/workspace-base-images --chunked-without-hash
-          dazzle build localhost:5000/workspace-base-images
-
-      - name: 🖇️ Dazzle combine
-        run: |
-          dazzle combine localhost:5000/workspace-base-images --all
 
       - name: ☁️ Set up Cloud SDK
         uses: google-github-actions/setup-gcloud@v0
@@ -97,24 +68,28 @@ jobs:
 
       - name: 🔐 Authenticate to Google Cloud
         id: "auth"
-        uses: "google-github-actions/auth@v0.4.3"
+        uses: google-github-actions/auth@v0.6.0
         with:
           token_format: "access_token"
           workload_identity_provider: ${{env.WORKLOAD_IDENTITY_POOL_ID}}
           service_account: ${{env.IAM_SERVICE_ACCOUNT}}
 
-      - name: ✍🏽 Login to GAR
+      - name: ✍🏽 Login to GAR using skopeo
         run: |
           sudo skopeo login -u oauth2accesstoken --password=${{ steps.auth.outputs.access_token }} https://${{env.GAR_IMAGE_REGISTRY}}
 
-      - name: 🐳 Sync combined images to Artifact Registry
+      - name: ✍🏽 Login to GAR using docker cli
         run: |
-          sudo skopeo sync \
-            --src-tls-verify=false \
-            --registries-conf=.github/registries.conf \
-            --src yaml \
-            --dest docker \
-            .github/sync-containers.yml ${{env.GAR_IMAGE_REGISTRY}}/gitpod-artifacts/docker-dev
+          docker login -u oauth2accesstoken --password=${{ steps.auth.outputs.access_token }} https://${{env.GAR_IMAGE_REGISTRY}}
+
+      - name: 🔨 Dazzle build
+        run: |
+          dazzle build ${{ env.GAR_IMAGE_REGISTRY }}/gitpod-artifacts/docker-dev/workspace-base-images --chunked-without-hash
+          dazzle build ${{ env.GAR_IMAGE_REGISTRY }}/gitpod-artifacts/docker-dev/workspace-base-images
+
+      - name: 🖇️ Dazzle combine
+        run: |
+          dazzle combine ${{ env.GAR_IMAGE_REGISTRY }}/gitpod-artifacts/docker-dev/workspace-base-images --all
 
       - name: 🕰️ Create timestamp tag
         id: create-timestamp-tag
@@ -127,22 +102,18 @@ jobs:
 
       - name: 📋 Copy images with tag in the Artifact Registry
         run: |
-          IMAGE_TAGS=$(cat .github/sync-containers.yml | yq '.["localhost:5000"].images."workspace-base-images"|join(" ")' -r)
+          IMAGE_TAGS=$(cat .github/sync-containers.yml | yq '.sync.images."workspace-base-images"|join(" ")' -r)
           COPY_JOBS_PIDS=""
           for IMAGE_TAG in $IMAGE_TAGS;
           do
             sudo skopeo copy \
-            --src-tls-verify=false \
-            --registries-conf=.github/registries.conf \
-            docker://localhost:5000/workspace-base-images:$IMAGE_TAG \
+            docker://${{ env.GAR_IMAGE_REGISTRY }}/gitpod-artifacts/docker-dev/workspace-base-images:$IMAGE_TAG \
             docker://${{ env.GAR_IMAGE_REGISTRY }}/gitpod-artifacts/docker-dev/workspace-$IMAGE_TAG:${{ env.TIMESTAMP_TAG }} &
 
             COPY_JOBS_PIDS="$COPY_JOBS_PIDS $!"
 
             sudo skopeo copy \
-            --src-tls-verify=false \
-            --registries-conf=.github/registries.conf \
-            docker://localhost:5000/workspace-base-images:$IMAGE_TAG \
+            docker://${{ env.GAR_IMAGE_REGISTRY }}/gitpod-artifacts/docker-dev/workspace-base-images:$IMAGE_TAG \
             docker://${{ env.GAR_IMAGE_REGISTRY }}/gitpod-artifacts/docker-dev/workspace-$IMAGE_TAG:latest &
 
             COPY_JOBS_PIDS="$COPY_JOBS_PIDS $!"
@@ -153,16 +124,28 @@ jobs:
               wait $COPY_JOBS_PID || exit 1
           done
 
-      - name: ✍🏽 Configuring Skopeo for Docker Hub
+      - name: ✍🏽 Login to Docker Hub using skopeo
         env:
           docker_user: ${{ secrets.DOCKERHUB_USER_NAME }}
           docker_password: ${{ secrets.DOCKERHUB_ACCESS_TOKEN }}
         run: |
           sudo skopeo login -u ${{ env.docker_user }} --password=${{ env.docker_password }} https://${{ env.DH_IMAGE_REGISTRY }}
 
-      - name: 🐳 Sync images to Docker Hub
+      - name: 🔐 Authenticate to Google Cloud again
+        id: "auth_again"
+        uses: google-github-actions/auth@v0.6.0
+        with:
+          token_format: "access_token"
+          workload_identity_provider: ${{env.WORKLOAD_IDENTITY_POOL_ID}}
+          service_account: ${{env.IAM_SERVICE_ACCOUNT}}
+
+      - name: ✍🏽 Login to GAR using skopeo again
         run: |
-          sudo skopeo sync \
+          sudo skopeo login -u oauth2accesstoken --password=${{ steps.auth_again.outputs.access_token }} https://${{env.GAR_IMAGE_REGISTRY}}
+
+      - name: 🐳 Sync images with specific tags to Docker Hub
+        run: |
+            sudo skopeo sync \
             --src yaml \
             --dest docker \
             .github/promote-images.yml ${{ env.DH_IMAGE_REGISTRY }}/gitpod

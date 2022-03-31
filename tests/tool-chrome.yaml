@@ -1,0 +1,5 @@
+- desc: it should run chrome shell
+  command: [google-chrome --version]
+  entrypoint: [bash, -i, -c]
+  assert:
+  - status == 0

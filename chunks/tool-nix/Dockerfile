@@ -2,6 +2,7 @@ ARG base
 FROM ${base}
 
 ARG NIX_VERSION
+ARG NIX_CONFIG=""
 
 ENV NIX_VERSION=${NIX_VERSION}
 
@@ -25,6 +26,7 @@ RUN curl https://nixos.org/releases/nix/nix-$NIX_VERSION/install | sh
 
 RUN echo '. /home/gitpod/.nix-profile/etc/profile.d/nix.sh' >> /home/gitpod/.bashrc.d/200-nix
 RUN mkdir -p /home/gitpod/.config/nixpkgs && echo '{ allowUnfree = true; }' >> /home/gitpod/.config/nixpkgs/config.nix
+RUN mkdir -p /home/gitpod/.config/nix && echo $NIX_CONFIG >> /home/gitpod/.config/nix/nix.conf
 
 # Install cachix
 RUN . /home/gitpod/.nix-profile/etc/profile.d/nix.sh \

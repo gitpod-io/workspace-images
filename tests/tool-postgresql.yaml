@@ -4,10 +4,6 @@
   assert:
   - status == 0
   - stdout.indexOf("(PostgreSQL) 12") != -1
-- desc: it should find data folder
-  command: [ls, /workspace/.pgsql/data]
-  assert:
-  - status == 0
 - desc: it should serve postgres
   entrypoint: [bash, -i, -c]
   command: [psql -l]
