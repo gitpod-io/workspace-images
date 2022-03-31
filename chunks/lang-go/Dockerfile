@@ -14,17 +14,15 @@ ENV PATH=$GOROOT/bin:$GOPATH/bin:$PATH
 RUN curl -fsSL https://dl.google.com/go/go$GO_VERSION.linux-amd64.tar.gz | tar xzs && \
 # install VS Code Go tools for use with gopls as per https://github.com/golang/vscode-go/blob/master/docs/tools.md
 # also https://github.com/golang/vscode-go/blob/27bbf42a1523cadb19fad21e0f9d7c316b625684/src/goTools.ts#L139
-    go get -v \
-        github.com/uudashr/gopkgs/cmd/gopkgs@v2 \
-        github.com/ramya-rao-a/go-outline \
-        github.com/cweill/gotests/gotests \
-        github.com/fatih/gomodifytags \
-        github.com/josharian/impl \
-        github.com/haya14busa/goplay/cmd/goplay \
-        github.com/go-delve/delve/cmd/dlv \
-        github.com/golangci/golangci-lint/cmd/golangci-lint && \
-    GO111MODULE=on go get -v \
-        golang.org/x/tools/gopls@v0.7.4 && \
+    go install -v github.com/uudashr/gopkgs/cmd/gopkgs@v2 && \
+    go install -v github.com/ramya-rao-a/go-outline@latest && \
+    go install -v github.com/cweill/gotests/gotests@latest && \
+    go install -v github.com/fatih/gomodifytags@latest && \
+    go install -v github.com/josharian/impl@latest && \
+    go install -v github.com/haya14busa/goplay/cmd/goplay@latest && \
+    go install -v github.com/go-delve/delve/cmd/dlv@latest && \
+    go install -v github.com/golangci/golangci-lint/cmd/golangci-lint@latest && \
+    go install -v golang.org/x/tools/gopls@latest && \
     sudo rm -rf $GOPATH/src $GOPATH/pkg /home/gitpod/.cache/go /home/gitpod/.cache/go-build
 # user Go packages
 ENV GOPATH=/workspace/go \
