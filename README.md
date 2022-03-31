@@ -4,7 +4,7 @@
 [![Build from Main](https://github.com/gitpod-io/workspace-images/actions/workflows/push-main.yml/badge.svg)](https://github.com/gitpod-io/workspace-images/actions/workflows/push-main.yml)
 
 Ready-to-use Docker images for [gitpod.io](https://www.gitpod.io) workspaces. All images are available on Docker Hub under [gitpod/*](https://hub.docker.com/u/gitpod).
-
+For examples on how to use these images please take a look at the [documentation](https://www.gitpod.io/docs/config-docker#configure-a-public-docker-image).
 
 ## 📢 Announcements
 
