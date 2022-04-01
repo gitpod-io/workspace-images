@@ -1,6 +1,8 @@
 ARG base
 FROM ${base}
 
+ARG PYTHON_VERSION
+
 USER gitpod
 # Dazzle does not rebuild a layer until one of its lines are changed. Increase this counter to rebuild this layer.
 ENV TRIGGER_REBUILD=1
@@ -13,8 +15,8 @@ RUN curl -fsSL https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-ins
         echo 'eval "$(pyenv init -)"'; \
         echo 'eval "$(pyenv virtualenv-init -)"'; } >> /home/gitpod/.bashrc.d/60-python \
     && pyenv update \
-    && pyenv install 3.8.12 \
-    && pyenv global 3.8.12 \
+    && pyenv install ${PYTHON_VERSION} \
+    && pyenv global ${PYTHON_VERSION} \
     && python3 -m pip install --no-cache-dir --upgrade pip \
     && python3 -m pip install --no-cache-dir --upgrade \
         setuptools wheel virtualenv pipenv pylint rope flake8 \

@@ -1,0 +1,16 @@
+variants:
+  - name: "3.6"
+    args:
+      PYTHON_VERSION: 3.6.15
+  - name: "3.7"
+    args:
+      PYTHON_VERSION: 3.7.13
+  - name: "3.8"
+    args:
+      PYTHON_VERSION: 3.8.12
+  - name: "3.9"
+    args:
+      PYTHON_VERSION: 3.9.10
+  - name: "3.10"
+    args:
+      PYTHON_VERSION: 3.10.2
