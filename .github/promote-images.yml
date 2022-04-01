@@ -7,6 +7,7 @@
     workspace-base: "20.*"
     workspace-c: "20.*"
     workspace-clojure: "20.*"
+    workspace-elixir: "20.*"
     workspace-full: "20.*"
     workspace-full-vnc: "20.*"
     workspace-go: "20.*"

@@ -15,6 +15,11 @@ combiner:
       - base
       chunks:
         - lang-clojure
+    - name: elixir
+      ref:
+      - base
+      chunks:
+        - lang-elixir
     - name: full
       ref:
       - base
