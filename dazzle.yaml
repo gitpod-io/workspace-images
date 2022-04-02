@@ -29,7 +29,7 @@ combiner:
         - lang-go:1.18.0
         - lang-java:11
         - lang-node:16.13.2
-        - lang-python
+        - lang-python:3.8
         - lang-ruby:2.7
         - lang-rust
         - tool-brew
@@ -61,7 +61,32 @@ combiner:
       ref:
       - base
       chunks:
-        - lang-python
+        - lang-python:3.8
+    - name: python-3.6
+      ref:
+      - base
+      chunks:
+        - lang-python:3.6
+    - name: python-3.7
+      ref:
+      - base
+      chunks:
+        - lang-python:3.7
+    - name: python-3.8
+      ref:
+      - base
+      chunks:
+        - lang-python:3.8
+    - name: python-3.9
+      ref:
+      - base
+      chunks:
+        - lang-python:3.9
+    - name: python-3.10
+      ref:
+      - base
+      chunks:
+        - lang-python:3.10
     - name: ruby-2
       ref:
       - base
