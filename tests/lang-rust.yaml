@@ -3,7 +3,7 @@
   entrypoint: [bash, -i, -c]
   assert:
   - status == 0
-  - stdout.indexOf("rustc 1.58") != -1
+  - stdout.indexOf("rustc") != -1
 - desc: it should have properly configured rustup
   command: [rustup show]
   entrypoint: [bash, -i, -c]
@@ -17,8 +17,7 @@
   entrypoint: [bash, -i, -c]
   assert:
   - status == 0
-  - stdout.indexOf("cargo 1.58") != -1
-
+  - stdout.indexOf("cargo") != -1
 - desc: it should have watch subcommand for cargo
   entrypoint: [bash, -i, -c]
   command: [cargo watch --help]
