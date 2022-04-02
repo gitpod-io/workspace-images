@@ -8,7 +8,7 @@ ENV TRIGGER_REBUILD=1
 
 ENV PATH=$HOME/.cargo/bin:$PATH
 RUN cp $HOME/.profile $HOME/.profile_orig \
-    && curl -fsSL https://sh.rustup.rs | sh -s -- -y --profile minimal --default-toolchain 1.58.1 \
+    && curl -fsSL https://sh.rustup.rs | sh -s -- -y --profile minimal --default-toolchain 1.59.0 \
     && rustup component add \
         rls \
         rust-analysis \
