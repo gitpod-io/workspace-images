@@ -17,7 +17,7 @@ You need to have a gitpod account in order to seamlessly contribute to this repo
 
 ## Tools
 
-This repo is already configured with a [.gitpod.yml](.gitpod.yml) which installs and sets up all the required dependency.
+This repo is already configured with a [.gitpod.yml](.gitpod.yml) which installs and sets up all the required dependencies.
 It also starts the services that are required to build this repo in dedicated bash shells.
 
 Here is a list of dependencies and tools:
