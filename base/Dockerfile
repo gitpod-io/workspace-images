@@ -38,6 +38,10 @@ RUN upgrade-packages
 RUN add-apt-repository -y ppa:git-core/ppa \
     && install-packages git git-lfs
 
+### neovim ###
+RUN sudo add-apt-repository -y ppa:neovim-ppa/stable \
+  && install-packages neovim
+
 ### Gitpod user ###
 # '-l': see https://docs.docker.com/develop/develop-images/dockerfile_best-practices/#user
 RUN useradd -l -u 33333 -G sudo -md /home/gitpod -s /bin/bash -p gitpod gitpod \
