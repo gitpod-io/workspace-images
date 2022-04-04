@@ -24,6 +24,6 @@ exports.register = async (fixers) => {
     cmd: Object.keys(patchVersionReplacements).map(pattern => {
         return `sed ${os.type() === 'Darwin' ? '-i "" -E' : '-i -e'} "s/\\(PYTHON_VERSION.*\\)${pattern}/\\1${patchVersionReplacements[pattern]}/g" chunks/lang-python/chunk.yaml`;
     }).join('\n'),
-    description: 'Update Python variants',
+    description: 'update lang python',
   });
 };
