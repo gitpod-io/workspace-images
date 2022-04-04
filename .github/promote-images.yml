@@ -11,6 +11,7 @@
     workspace-full: "20.*"
     workspace-full-vnc: "20.*"
     workspace-go: "20.*"
+    workspace-nix: "20.*"
     workspace-node: "20.*"
     workspace-node-lts: "20.*"
     workspace-python: "20.*"

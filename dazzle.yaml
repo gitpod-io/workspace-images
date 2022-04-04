@@ -45,6 +45,11 @@ combiner:
       - base
       chunks:
         - lang-go:1.18.0
+    - name: nix
+      ref:
+      - base
+      chunks:
+        - tool-nix:2.6.0
     - name: node
       ref:
       - base
