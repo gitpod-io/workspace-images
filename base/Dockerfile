@@ -28,6 +28,7 @@ RUN yes | unminimize \
         fish \
         zsh \
         tmux \
+        fzf \
     && locale-gen en_US.UTF-8
 
 ENV LANG=en_US.UTF-8
