@@ -7,23 +7,16 @@ USER gitpod
 ENV TRIGGER_REBUILD=1
 
 ENV PATH=$HOME/.cargo/bin:$PATH
-RUN cp $HOME/.profile $HOME/.profile_orig \
-    && curl -fsSL https://sh.rustup.rs | sh -s -- -y --profile minimal --default-toolchain 1.60.0 \
-    && rustup component add \
-        rls \
-        rust-analysis \
-        rust-src \
-        rustfmt \
-        clippy \
+
+RUN curl -fsSL https://sh.rustup.rs | sh -s -- -y --profile minimal --no-modify-path --default-toolchain stable \
+        -c rls rust-analysis rust-src rustfmt clippy \
     && rustup completions bash | sudo tee /etc/bash_completion.d/rustup.bash-completion > /dev/null \
     && rustup completions bash cargo | sudo tee /etc/bash_completion.d/rustup.cargo-bash-completion > /dev/null \
-    && printf '%s\n' "$(grep -v -F -x -f $HOME/.profile_orig $HOME/.profile)" \
-                        'mkdir -m 0755 -p "${CARGO_HOME:-/workspace/.cargo}" 2>/dev/null' \
-                        'export CARGO_HOME=/workspace/.cargo' \
+    && printf '%s\n'    'export CARGO_HOME=/workspace/.cargo' \
+                        'mkdir -m 0755 -p "$CARGO_HOME" 2>/dev/null' \
                         'export PATH=$CARGO_HOME/bin:$PATH' > $HOME/.bashrc.d/80-rust \
-    && _rustup_path="$(command -v rustup)" && mv "$_rustup_path" "${_rustup_path}.main" \
-    && printf '%s\n' '#!/usr/bin/bash -eu' \
-                        'exec env -u CARGO_HOME "$(command -v rustup.main)" "$@"' > "$_rustup_path" \
-    && chmod 0755 "$_rustup_path" && rm $HOME/.profile_orig
+    && _rustup_path="$(which rustup)" && mv "$_rustup_path" "${_rustup_path}.main" \
+    && cargo install cargo-watch cargo-edit cargo-workspaces \
+    && rm -r "${_rustup_path%/*/*}/registry" # This registry cache is now useless as we change the CARGO_HOME path to `/workspace`
 
-RUN cargo install cargo-watch cargo-edit cargo-workspaces
+COPY --chown=gitpod:gitpod rustup $HOME/.cargo/bin

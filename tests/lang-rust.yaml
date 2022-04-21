@@ -4,8 +4,10 @@
   assert:
   - status == 0
   - stdout.indexOf("rustc") != -1
-- desc: it should have properly configured rustup
-  command: [rustup show]
+- desc: it should have properly functioning rustup
+  command: [
+      rustup show && rustup update && rustup toolchain install nightly && cargo new /tmp/foo,
+    ] # Testing out `cargo` at the end is necessary to assert that rustup isn't messing things up
   entrypoint: [bash, -i, -c]
   assert:
   - status == 0
