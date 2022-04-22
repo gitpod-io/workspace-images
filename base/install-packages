@@ -26,7 +26,7 @@ if [[ $EUID != 0 ]]; then
 fi
 
 # Set a runlevel to avoid invoke-rc.d warnings
-# http://manpages.ubuntu.com/manpages/focal/man8/runlevel.8.html#environment
+# http://manpages.ubuntu.com/manpages/jammy/man8/runlevel.8.html#environment
 # shellcheck disable=SC2034
 RUNLEVEL=1
 
