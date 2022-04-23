@@ -1,0 +1,6 @@
+- desc: neovim should be installed
+  command: [nvim --version]
+  entrypoint: [bash, -i, -c]
+  assert:
+  - status == 0
+  - stdout.indexOf("NVIM v0.7.0") != -1
