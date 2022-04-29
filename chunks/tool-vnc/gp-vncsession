@@ -42,19 +42,19 @@ if test ! -e /tmp/.X0-lock; then {
 	# Start vncserver
 	log::info "Starting tigerVNC server on port $VNC_PORT"
 	vncserver -kill "${DISPLAY}"
-	vncserver -geometry "${TIGERVNC_GEOMETRY:-1920x1080}" -SecurityTypes None $DISPLAY >/dev/null 2>&1
+	{ vncserver -geometry "${TIGERVNC_GEOMETRY:-1920x1080}" -SecurityTypes None $DISPLAY 2>&1; } >/tmp/vncserver.log 2>&1
 
 	# Start web vncclient
 	no_vnc_cmd="bash novnc_proxy --vnc localhost:${VNC_PORT} --listen ${NOVNC_PORT}"
 	if ! pgrep -f "$no_vnc_cmd" 1>/dev/null; then {
 		log::info "Starting noVNC web client on $NOVNC_PORT"
-		tmux new-session -d -s novnc_client \
-			"{ cd /opt/novnc/utils && exec $no_vnc_cmd 2>&1; } > /tmp/novnc.log 2>&1"
+		{ cd /opt/novnc/utils && $no_vnc_cmd 2>&1; } >/tmp/novnc.log 2>&1 &
+		disown
 	}; fi
 
 	# Wait
 	log::info "Waiting for the desktop to be fully loaded ..."
 	until pgrep xfdesktop 1>/dev/null; do {
-		sleep 1
+		sleep 0.2
 	}; done
 }; fi
