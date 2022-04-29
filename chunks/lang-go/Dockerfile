@@ -23,6 +23,7 @@ RUN curl -fsSL https://dl.google.com/go/go$GO_VERSION.linux-amd64.tar.gz | tar x
     go install -v github.com/go-delve/delve/cmd/dlv@latest && \
     go install -v github.com/golangci/golangci-lint/cmd/golangci-lint@latest && \
     go install -v golang.org/x/tools/gopls@latest && \
+    go install -v mvdan.cc/gofumpt@latest && \
     sudo rm -rf $GOPATH/src $GOPATH/pkg $HOME/.cache/go $HOME/.cache/go-build && \
     printf '%s\n' 'export GOPATH=/workspace/go' \
                   'export PATH=$GOPATH/bin:$PATH' > $HOME/.bashrc.d/300-go
