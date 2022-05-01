@@ -36,6 +36,7 @@ combiner:
         - tool-nginx
         - tool-nix:2.6.0
         - tool-neovim
+        - tool-tmux
     - name: full-vnc
       ref:
       - full
