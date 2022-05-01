@@ -1,0 +1,6 @@
+- desc: tmux should be installed
+  command: [tmux -V]
+  entrypoint: [bash, -i, -c]
+  assert:
+  - status == 0
+  - stdout.indexOf("tmux") != -1
