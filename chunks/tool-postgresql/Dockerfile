@@ -21,10 +21,7 @@ RUN PGDATA="${PGDATA//\/workspace/$HOME}" \
  && chmod +x ~/.pg_ctl/bin/* \
  && printf '%s\n' '# Auto-start PostgreSQL server' \
                   "test ! -e \$PGWORKSPACE && test -e ${PGDATA%/data} && mv ${PGDATA%/data} /workspace" \
-                  # Making the /workspace dir just to make sure it doesnt fail in docker env in case
-                  '[[ $(pg_ctl status | grep PID) ]] || pg_start > /dev/null' > ~/.bashrc.d/200-postgresql-launch \
- # Just to emulate the workspace-session behavior within docker-build env
- && sudo bash -c 'mkdir -p /workspace && chown -hR gitpod:gitpod /workspace'
+                  '[[ $(pg_ctl status | grep PID) ]] || pg_start > /dev/null' > ~/.bashrc.d/200-postgresql-launch
 ENV PATH="$HOME/.pg_ctl/bin:$PATH"
 ENV DATABASE_URL="postgresql://gitpod@localhost"
 ENV PGHOSTADDR="127.0.0.1"
