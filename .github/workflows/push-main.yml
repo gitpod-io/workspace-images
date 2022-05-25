@@ -76,11 +76,11 @@ jobs:
 
       - name: ✍🏽 Login to GAR using skopeo
         run: |
-          sudo skopeo login -u oauth2accesstoken --password=${{ steps.auth.outputs.access_token }} https://${{env.GAR_IMAGE_REGISTRY}}
+          sudo skopeo login -u oauth2accesstoken --password=${{ steps.auth.outputs.access_token }} ${{env.GAR_IMAGE_REGISTRY}}
 
       - name: ✍🏽 Login to GAR using docker cli
         run: |
-          docker login -u oauth2accesstoken --password=${{ steps.auth.outputs.access_token }} https://${{env.GAR_IMAGE_REGISTRY}}
+          docker login -u oauth2accesstoken --password=${{ steps.auth.outputs.access_token }} ${{env.GAR_IMAGE_REGISTRY}}
 
       - name: 🔨 Dazzle build
         run: |
@@ -129,7 +129,7 @@ jobs:
           docker_user: ${{ secrets.DOCKERHUB_USER_NAME }}
           docker_password: ${{ secrets.DOCKERHUB_ACCESS_TOKEN }}
         run: |
-          sudo skopeo login -u ${{ env.docker_user }} --password=${{ env.docker_password }} https://${{ env.DH_IMAGE_REGISTRY }}
+          sudo skopeo login -u ${{ env.docker_user }} --password=${{ env.docker_password }} ${{ env.DH_IMAGE_REGISTRY }}
 
       - name: 🔐 Authenticate to Google Cloud again
         id: "auth_again"
@@ -141,7 +141,7 @@ jobs:
 
       - name: ✍🏽 Login to GAR using skopeo again
         run: |
-          sudo skopeo login -u oauth2accesstoken --password=${{ steps.auth_again.outputs.access_token }} https://${{env.GAR_IMAGE_REGISTRY}}
+          sudo skopeo login -u oauth2accesstoken --password=${{ steps.auth_again.outputs.access_token }} ${{env.GAR_IMAGE_REGISTRY}}
 
       - name: 🐳 Sync images with specific tags to Docker Hub
         run: |
