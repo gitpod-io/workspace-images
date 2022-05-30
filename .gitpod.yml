@@ -28,6 +28,12 @@ tasks:
       echo "To print the combined image maniest 'dazzle project manifest $REPO'"
 
     openMode: tab-after
+  - name: create custom combo image and build
+    command: |
+      dazzle project add-combination base-node-vnc dep-cacert-update tool-docker lang-node:16 tool-vnc
+      ./build-combo.sh base-node-vnc
+      cd custom
+      docker build -t test --build-arg image="localhost:5000/dazzle:base-node-vnc" -f .gitpod.Dockerfile .
 
 vscode:
   extensions:
