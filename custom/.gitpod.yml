@@ -1,0 +1,60 @@
+image:
+  file: .gitpod.Dockerfile
+
+github:
+  prebuilds:
+    master: true
+    pullRequests: true
+
+tasks:
+  - before: |
+      mkdir -p /home/gitpod/.config/composer && echo "${COMPOSER_AUTH}" > "/home/gitpod/.config/composer/auth.json"
+      mkdir -p /home/gitpod/.config/gcloud && echo "${GCLOUD_SA_KEY}" > "/home/gitpod/.config/gcloud/application_default_credentials.json"
+      mkdir -p /home/gitpod/.docker && echo "${DOCKER_AUTH_CONFIG}" > "/home/gitpod/.docker/config.json"
+      gcloud auth activate-service-account --key-file="/home/gitpod/.config/gcloud/application_default_credentials.json"
+      gcloud --quiet auth configure-docker
+
+    init: |
+      # frontend dependencies
+      cd /workspace/questions/frontend
+      yarn install
+      # yarn lint || true
+      ng build packback-testing
+      ng build packback-shared
+      ng build questions-frontend
+
+      # backend dependencies
+      sudo apt update
+      cd /workspace/questions/backend/app-api
+      composer install
+
+      cd /workspace/questions
+      make build-secrets
+      COMPOSE_PROFILES=core,logs docker-compose pull
+
+      # cd /workspace/questions/backend/analytics-api
+      # pipenv --python 3 install
+      # cd /workspace/questions/backend/curiosity-api
+      # pipenv --python 3 install
+      # cd /workspace/questions/backend/docgen-api
+      # pipenv --python 3 install
+
+      cd /workspace/questions
+
+    command: |
+      git config pull.rebase false
+      git config core.hooksPath .githooks
+      COMPOSE_PROFILES=core,logs make start-live
+
+ports:
+  - port: 80
+  - port: 443
+
+vscode:
+  extensions:
+    - eamodio.gitlens
+    - dbaeumer.vscode-eslint
+    - bmewburn.vscode-intelephense-client
+    - ms-python.python
+    - stylelint.vscode-stylelint
+    - felixfbecker.php-debug
