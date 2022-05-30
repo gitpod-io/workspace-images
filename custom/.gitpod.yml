@@ -1,12 +1,27 @@
-image:
-  file: .gitpod.Dockerfile
+image: axonasif/gitpod-base-node-vnc:latest # Locally available as `.gitpod.Dockerfile`
 
 github:
   prebuilds:
     master: true
     pullRequests: true
 
+gitConfig:
+  pull.rebase: "false"
+  core.hooksPath: ".githooks"
+
 tasks:
+  # Re(from meeting notes): Is it possible to create workspaces that are specific to a part of the codebase?
+  # e.g. the front-end team don’t need access to the whole application, just the front end.
+  # Having a multi-configuration per repo would be ideal. Apparently, Codespaces has this feature.
+  ###########
+  # We have https://www.gitpod.io/docs/multi-repo-workspaces, but it might not be what you're looking for.
+  # Perhaps our webapp team can look into implementing such a feature.
+
+  # Re(from meeting notes): Is there anything in their set-up/configuration that they can do to speed up their workspace boot-up times?
+  ###########
+  # What if you guys split up the frontend and backend into two repositories(if feasible, considering that you utilize monorepos)?
+  # Later you can remove the build steps that is unrelated(backend) to frontend and vise versa from the repo specific `.gitpod.yml`
+  # Also, you may then use git submodules for each other for the ease of access from one repo to another.
   - before: |
       mkdir -p /home/gitpod/.config/composer && echo "${COMPOSER_AUTH}" > "/home/gitpod/.config/composer/auth.json"
       mkdir -p /home/gitpod/.config/gcloud && echo "${GCLOUD_SA_KEY}" > "/home/gitpod/.config/gcloud/application_default_credentials.json"
@@ -16,7 +31,7 @@ tasks:
 
     init: |
       # frontend dependencies
-      cd /workspace/questions/frontend
+      cd $GITPOD_REPO_ROOT/frontend
       yarn install
       # yarn lint || true
       ng build packback-testing
@@ -24,27 +39,23 @@ tasks:
       ng build questions-frontend
 
       # backend dependencies
-      sudo apt update
-      cd /workspace/questions/backend/app-api
+      cd $GITPOD_REPO_ROOT/backend/app-api
       composer install
 
-      cd /workspace/questions
+      cd $GITPOD_REPO_ROOT
       make build-secrets
       COMPOSE_PROFILES=core,logs docker-compose pull
 
-      # cd /workspace/questions/backend/analytics-api
+      # cd $GITPOD_REPO_ROOT/backend/analytics-api
       # pipenv --python 3 install
-      # cd /workspace/questions/backend/curiosity-api
+      # cd $GITPOD_REPO_ROOT/backend/curiosity-api
       # pipenv --python 3 install
-      # cd /workspace/questions/backend/docgen-api
+      # cd $GITPOD_REPO_ROOT/backend/docgen-api
       # pipenv --python 3 install
 
-      cd /workspace/questions
+      # cd $GITPOD_REPO_ROOT
 
-    command: |
-      git config pull.rebase false
-      git config core.hooksPath .githooks
-      COMPOSE_PROFILES=core,logs make start-live
+    command: COMPOSE_PROFILES=core,logs make start-live
 
 ports:
   - port: 80
