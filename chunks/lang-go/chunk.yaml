@@ -8,3 +8,6 @@ variants:
   - name: "1.18.2"
     args:
       GO_VERSION: 1.18.2
+  - name: "1.18.3"
+    args:
+      GO_VERSION: 1.18.3
