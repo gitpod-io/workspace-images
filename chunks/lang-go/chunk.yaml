@@ -1,13 +1,4 @@
 variants:
-  - name: "1.18.0"
-    args:
-      GO_VERSION: 1.18
-  - name: "1.18.1"
-    args:
-      GO_VERSION: 1.18.1
-  - name: "1.18.2"
-    args:
-      GO_VERSION: 1.18.2
   - name: "1.18.3"
     args:
       GO_VERSION: 1.18.3
