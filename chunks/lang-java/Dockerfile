@@ -12,7 +12,7 @@ RUN curl -fsSL "https://get.sdkman.io" | bash \
  && bash -c ". /home/gitpod/.sdkman/bin/sdkman-init.sh \
              && sed -i 's/sdkman_selfupdate_enable=true/sdkman_selfupdate_enable=false/g' /home/gitpod/.sdkman/etc/config \
              && sed -i 's/sdkman_selfupdate_feature=true/sdkman_selfupdate_feature=false/g' /home/gitpod/.sdkman/etc/config \
-             && sdk install java ${JAVA_VERSION}.fx-zulu \
+             && sdk install java ${JAVA_VERSION} \
              && sdk install gradle \
              && sdk install maven \
              && sdk flush archives \
