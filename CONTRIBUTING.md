@@ -41,7 +41,7 @@ The images will be pushed to the local registry server running on port 5000. You
 docker pull localhost:5000/dazzle:combo
 ```
 
-where `combo` is the name of the combination defined in [dazzle.yaml](dazzle.yaml) e.g. `full`, `clojure`, `postgresql`.
+where `combo` is the name of the combination defined in [dazzle.yaml](dazzle.yaml) e.g. `full`, `clojure`, `postgres`.
 
 ### Build Specific Chunks
 

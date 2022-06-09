@@ -65,6 +65,12 @@ These images are no longer being published, and not planned for Upgrade:
 1. gitpod/workspace-thin
 1. gitpod/workspace-webassembly
 
+### 📢 Deprecated images
+
+These images are no longer being published:
+
+1. gitpod/workspace-postgresql (please use `gitpod/workspace-postgres` instead)
+
 ## Contributing
 
 You can follow the detailed guide on how to contribute [here](CONTRIBUTING.md).

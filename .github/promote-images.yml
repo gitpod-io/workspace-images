@@ -24,7 +24,7 @@
     workspace-ruby-3: "20.*"
     workspace-rust: "20.*"
     workspace-dotnet: "20.*"
-    workspace-postgresql: "20.*"
+    workspace-postgres: "20.*"
     workspace-mysql: "20.*"
     workspace-mongodb: "20.*"
     workspace-java-11: "20.*"

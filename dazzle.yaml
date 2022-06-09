@@ -112,7 +112,7 @@ combiner:
       - full
       chunks:
         - tool-dotnet
-    - name: postgresql
+    - name: postgres
       ref:
       - full
       chunks:
