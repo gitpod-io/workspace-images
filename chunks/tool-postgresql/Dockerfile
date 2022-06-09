@@ -2,7 +2,7 @@ ARG base
 FROM ${base}
 
 # Dazzle does not rebuild a layer until one of its lines are changed. Increase this counter to rebuild this layer.
-ENV TRIGGER_REBUILD=2
+ENV TRIGGER_REBUILD=3
 ENV PGWORKSPACE="/workspace/.pgsql"
 ENV PGDATA="$PGWORKSPACE/data"
 
