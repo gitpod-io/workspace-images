@@ -21,7 +21,7 @@ sync:
     - ruby-3
     - rust
     - dotnet
-    - postgresql
+    - postgres
     - mysql
     - mongodb
     - java-11
