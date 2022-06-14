@@ -40,6 +40,8 @@ Each contains a set of chunks: a common base, a language, and includes Docker an
 1. gitpod/workspace-python ✅
 1. gitpod/workspace-ruby-2 ✅
 1. gitpod/workspace-ruby-3 ✅
+1. gitpod/workspace-ruby-3.0 ✅
+1. gitpod/workspace-ruby-3.1 ✅
 1. gitpod/workspace-rust ✅
 1. gitpod/workspace-elixir ✅
 
