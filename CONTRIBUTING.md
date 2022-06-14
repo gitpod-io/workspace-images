@@ -79,7 +79,7 @@ Subsequent builds are faster if the number modified chunks is less.
 
 ## Pipeline
 
-We use [Github Actions](https://docs.github.com/en/actions) for our pipelines.
+We use [GitHub Actions](https://docs.github.com/en/actions) for our pipelines.
 
 ### Build
 
@@ -104,7 +104,7 @@ We have two Release workflows:
 We do not release any images from pull requests.
 All the images are built within GH Actions and tested using dazzle.
 
-As evident from previous sections, we use a single Github Actions Workflow to build and then release the created images.
+As evident from previous sections, we use a single GitHub Actions Workflow to build and then release the created images.
 
 #### Images
 
