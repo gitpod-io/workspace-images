@@ -5,7 +5,7 @@ A curated, chronologically ordered list of notable changes in [Gitpod's default 
 ## 2022-02-01
 
 - Release workspace-full latest tag built using dazzle v2
-- Upgrade to dazzle v2 & use Github Actions for build
+- Upgrade to dazzle v2 & use GitHub Actions for build
 
 ## 2021-08-01
 
