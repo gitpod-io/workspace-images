@@ -69,6 +69,7 @@ These images are no longer being published, and not planned for Upgrade:
 
 These images are no longer being published:
 
+1. gitpod/workspace-python-3.6 (please use `gitpod/workspace-python-3.7` instead)
 1. gitpod/workspace-postgresql (please use `gitpod/workspace-postgres` instead)
 
 ## Contributing
