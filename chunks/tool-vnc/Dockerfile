@@ -12,7 +12,7 @@ RUN curl -sSL https://download.opensuse.org/repositories/home:/ungoogled_chromiu
   && install-packages xfce4 xfce4-terminal \
   tigervnc-standalone-server tigervnc-xorg-extension \
   dbus dbus-x11 gnome-keyring \
-  ungoogled-chromium xdg-utils x11-xserver-utils \
+  ungoogled-chromium xdg-utils x11-xserver-utils pip \
   && ln -srf /usr/bin/chromium /usr/bin/google-chrome
 # To make ungoogled_chromium discoverable by tools like flutter
 
