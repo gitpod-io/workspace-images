@@ -34,6 +34,9 @@ RUN . /home/gitpod/.nix-profile/etc/profile.d/nix.sh \
   && cachix use cachix
 
 # Install direnv
-RUN . /home/gitpod/.nix-profile/etc/profile.d/nix.sh \
+RUN mkdir -p /home/gitpod/.config/direnv \
+  && echo '[whitelist]' > .config/direnv/config.toml \
+  && echo 'prefix = [ "/workspace" ]' >> .config/direnv/config.toml \
+  && . /home/gitpod/.nix-profile/etc/profile.d/nix.sh \
   && nix-env -i direnv \
   && direnv hook bash >> /home/gitpod/.bashrc
