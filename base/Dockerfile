@@ -19,6 +19,7 @@ RUN yes | unminimize \
         ripgrep \
         software-properties-common \
         sudo \
+        stow \
         time \
         emacs-nox \
         vim \
