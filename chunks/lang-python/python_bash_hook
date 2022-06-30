@@ -1,9 +1,21 @@
 if test -v GITPOD_REPO_ROOT; then {
     export PYENV_HOOK_PATH="$HOME/.gp_pyenv.d"
+    export GP_PYENV_MIRROR="/workspace/.pyenv_mirror"
+    export GP_PYENV_FAKEROOT="$GP_PYENV_MIRROR/fakeroot"
+
+    if test ! -v GP_PYENV_INIT && test -e "$GP_PYENV_FAKEROOT/versions"; then {
+        for version_dir in "$GP_PYENV_FAKEROOT/versions/"*; do {
+            target="$PYENV_ROOT/versions/${version_dir##*/}"
+            mkdir -p "$target"
+            if ! mountpoint -q "$target" && ! sudo mount --bind "$version_dir" "$target" 2>/dev/null; then {
+                rm -rf "$target"
+                ln -s "$version_dir" "$target"
+            } fi
+        } done
+    } fi && export GP_PYENV_INIT=true
+
+    export PYTHONUSERBASE="$GP_PYENV_MIRROR/user"
+    export PATH="$PYTHONUSERBASE/bin:$PATH"
 } fi
-export GP_PYENV_MIRROR="/workspace/.pyenv_mirror"
-export GP_PYENV_FAKEROOT="$GP_PYENV_MIRROR/fakeroot"
-export PYTHONUSERBASE="$GP_PYENV_MIRROR/user"
-export PATH="$PYTHONUSERBASE/bin:$PATH"
 eval "$(pyenv init -)"
 eval "$(pyenv virtualenv-init -)"
