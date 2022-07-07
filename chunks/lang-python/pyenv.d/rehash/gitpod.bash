@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 gitpod_shims=()
-for file in "$GP_PYENV_MIRROR"/site/*/bin/*; do {
+for file in "$GP_PYENV_MIRROR"/user/*/bin/*; do {
 	gitpod_shims+=("${file##*/}")
-}; done
+}; done 2>/dev/null
 make_shims "${gitpod_shims[@]}"
