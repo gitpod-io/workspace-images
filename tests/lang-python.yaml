@@ -32,7 +32,7 @@
     - stdout.indexOf("/home/gitpod/.pyenv/versions") != -1
 
 - desc: pip packages should be installed inside /workspace/.pyenv_mirror for workspace-session env
-  entrypoint: [env, GITPOD_REPO_ROOT=0, bash, -ci]
+  entrypoint: [env, GITPOD_REPO_ROOT=/workspace, bash, -ci]
   command:
     [
       pip install cowsay && python -c 'import cowsay; cowsay.cow("Gitpod")' && pip show cowsay,
@@ -51,7 +51,7 @@
     - status == 0
 
 - desc: "`pyenv install <ver>` should use /workspace/.pyenv_mirror/fakeroot/versions/ for workspace-session env"
-  entrypoint: [env, GITPOD_REPO_ROOT=0, bash, -ci]
+  entrypoint: [env, GITPOD_REPO_ROOT=/workspace, bash, -ci]
   command:
     [
       ver=3.9.0; pyenv install $ver && test -d $GP_PYENV_FAKEROOT/versions/$ver && test -L $PYENV_ROOT/versions/$ver,
