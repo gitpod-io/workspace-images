@@ -18,7 +18,7 @@ function after_job() {
 	unset GP_PYENV_INIT
 	# shellcheck disable=SC1090
 	source "$HOME/.bashrc.d/"*-python
-	pip install --upgrade pip
+	# pyenv-rehash && PYENV_VERSION="$ver" pip install --upgrade pip
 }
 
 after_install "after_job"
