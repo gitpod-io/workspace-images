@@ -1,9 +1,10 @@
-if test -v GITPOD_REPO_ROOT; then {
+if test -e "$GITPOD_REPO_ROOT"; then {
     export PYENV_HOOK_PATH="$HOME/.gp_pyenv.d"
     export GP_PYENV_MIRROR="/workspace/.pyenv_mirror"
     export GP_PYENV_FAKEROOT="$GP_PYENV_MIRROR/fakeroot"
 
-    if test ! -v GP_PYENV_INIT && test -e "$GP_PYENV_FAKEROOT/versions"; then {
+    if test ! -v GP_PYENV_INIT; then {
+        # Restore installed python versions
         for version_dir in "$GP_PYENV_FAKEROOT/versions/"*; do {
             target="$PYENV_ROOT/versions/${version_dir##*/}"
             mkdir -p "$target"
@@ -11,11 +12,22 @@ if test -v GITPOD_REPO_ROOT; then {
                 rm -rf "$target"
                 ln -s "$version_dir" "$target"
             } fi
-        } done
-    } fi && export GP_PYENV_INIT=true
+        } done 2>/dev/null; unset version_dir target
 
-    export PYTHONUSERBASE="$GP_PYENV_MIRROR/user"
-    export PATH="$PYTHONUSERBASE/bin:$PATH"
+        # Persistent `pyenv global` version
+        p_version_file="$GP_PYENV_FAKEROOT/version"
+        o_version_file="$PYENV_ROOT/version"
+        if test ! -e "$p_version_file"; then {
+            mkdir -p "${p_version_file%/*}"
+            mv "$o_version_file" "$p_version_file"
+        } fi
+        ln -sf "$p_version_file" "$o_version_file"
+        unset p_version_file o_version_file
+    } fi && export GP_PYENV_INIT=true
 } fi
-eval "$(pyenv init -)"
-eval "$(pyenv virtualenv-init -)"
+
+# Do not init when sourced internally from `pyenv`
+if test ! -v PYENV_DIR; then {
+    eval "$(pyenv init -)"
+    eval "$(pyenv virtualenv-init -)"
+} fi
