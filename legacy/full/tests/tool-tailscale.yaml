@@ -1,5 +1,0 @@
-- desc: tailscale should be installed
-  command: [which, tailscale]
-  assert:
-  - status == 0
-  - stdout.indexOf("/usr/bin/tailscale") != -1
