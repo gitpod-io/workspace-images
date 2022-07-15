@@ -66,7 +66,7 @@ RUN sudo echo "Running 'sudo' for Gitpod: success" && \
     mkdir -p /home/gitpod/.local/share/bash-completion/completions
 
 # configure git-lfs
-RUN sudo git lfs install --system
+RUN sudo git lfs install --system --skip-repo
 
 # Custom PATH additions
 ENV PATH=/usr/games:$PATH
