@@ -36,8 +36,8 @@ ENV LANG=en_US.UTF-8
 RUN upgrade-packages
 
 ### Git ###
-RUN add-apt-repository -y ppa:git-core/ppa \
-    && install-packages git git-lfs
+RUN add-apt-repository -y ppa:git-core/ppa
+RUN install-packages git git-lfs
 
 ### Gitpod user ###
 # '-l': see https://docs.docker.com/develop/develop-images/dockerfile_best-practices/#user
