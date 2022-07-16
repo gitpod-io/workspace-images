@@ -52,8 +52,11 @@ WORKDIR $HOME
 # custom Bash prompt
 RUN { echo && echo "PS1='\[\033[01;32m\]\u\[\033[00m\] \[\033[01;34m\]\w\[\033[00m\]\$(__git_ps1 \" (%s)\") $ '" ; } >> .bashrc
 
-COPY default.gitconfig /root/.gitconfig
+COPY default.gitconfig /etc/gitconfig
 COPY --chown=gitpod:gitpod default.gitconfig /home/gitpod/.gitconfig
+
+# configure git-lfs
+RUN git lfs install --system --skip-repo
 
 ### Gitpod user (2) ###
 USER gitpod
@@ -64,9 +67,6 @@ RUN sudo echo "Running 'sudo' for Gitpod: success" && \
     (echo; echo "for i in \$(ls -A \$HOME/.bashrc.d/); do source \$HOME/.bashrc.d/\$i; done"; echo) >> /home/gitpod/.bashrc && \
     # create a completions dir for gitpod user
     mkdir -p /home/gitpod/.local/share/bash-completion/completions
-
-# configure git-lfs
-RUN sudo git lfs install --system --skip-repo
 
 # Custom PATH additions
 ENV PATH=/usr/games:$PATH
