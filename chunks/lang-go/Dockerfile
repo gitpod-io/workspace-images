@@ -1,4 +1,5 @@
 ARG base
+# hadolint ignore=DL3006
 FROM ${base}
 
 ARG GO_VERSION
@@ -11,6 +12,7 @@ ENV GO_VERSION=${GO_VERSION}
 ENV GOPATH=$HOME/go-packages
 ENV GOROOT=$HOME/go
 ENV PATH=$GOROOT/bin:$GOPATH/bin:$PATH
+# hadolint ignore=DL4006
 RUN curl -fsSL https://dl.google.com/go/go$GO_VERSION.linux-amd64.tar.gz | tar xzs && \
 # install VS Code Go tools for use with gopls as per https://github.com/golang/vscode-go/blob/master/docs/tools.md
 # also https://github.com/golang/vscode-go/blob/27bbf42a1523cadb19fad21e0f9d7c316b625684/src/goTools.ts#L139
@@ -23,6 +25,6 @@ RUN curl -fsSL https://dl.google.com/go/go$GO_VERSION.linux-amd64.tar.gz | tar x
     go install -v github.com/go-delve/delve/cmd/dlv@latest && \
     go install -v github.com/golangci/golangci-lint/cmd/golangci-lint@latest && \
     go install -v golang.org/x/tools/gopls@latest && \
-    sudo rm -rf $GOPATH/src $GOPATH/pkg $HOME/.cache/go $HOME/.cache/go-build && \
+    gosu root rm -rf $GOPATH/src $GOPATH/pkg $HOME/.cache/go $HOME/.cache/go-build && \
     printf '%s\n' 'export GOPATH=/workspace/go' \
                   'export PATH=$GOPATH/bin:$PATH' > $HOME/.bashrc.d/300-go

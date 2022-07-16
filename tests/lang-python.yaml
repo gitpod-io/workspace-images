@@ -25,7 +25,7 @@
   entrypoint: [bash, -c]
   command:
     [
-      pip install cowsay && python -c 'import cowsay; cowsay.cow("Gitpod")' && pip show cowsay,
+      pip install --no-cache-dir cowsay && python -c 'import cowsay; cowsay.cow("Gitpod")' && pip show cowsay,
     ]
   assert:
     - status == 0
@@ -35,7 +35,7 @@
   entrypoint: [env, GITPOD_REPO_ROOT=/workspace, bash, -ci]
   command:
     [
-      pip install cowsay && python -c 'import cowsay; cowsay.cow("Gitpod")' && pip show cowsay,
+      pip install --no-cache-dir cowsay && python -c 'import cowsay; cowsay.cow("Gitpod")' && pip show cowsay,
     ]
   assert:
     - status == 0

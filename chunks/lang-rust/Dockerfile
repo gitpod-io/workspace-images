@@ -1,4 +1,5 @@
 ARG base
+# hadolint ignore=DL3006
 FROM ${base}
 
 USER gitpod
@@ -7,9 +8,8 @@ USER gitpod
 ENV TRIGGER_REBUILD=1
 
 ENV PATH=$HOME/.cargo/bin:$PATH
-
-RUN curl -fsSL https://sh.rustup.rs | sh -s -- -y --profile minimal --no-modify-path --default-toolchain stable \
-        -c rls rust-analysis rust-src rustfmt clippy \
+# hadolint ignore=DL4006
+RUN curl -fsSL https://sh.rustup.rs | sh -s -- -y --profile minimal --no-modify-path --default-toolchain stable -c rls rust-analysis rust-src rustfmt clippy \
     && for cmp in rustup cargo; do rustup completions bash "$cmp" > "$HOME/.local/share/bash-completion/completions/$cmp"; done \
     && printf '%s\n'    'export CARGO_HOME=/workspace/.cargo' \
                         'mkdir -m 0755 -p "$CARGO_HOME/bin" 2>/dev/null' \

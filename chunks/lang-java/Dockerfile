@@ -1,4 +1,5 @@
 ARG base
+# hadolint ignore=DL3006
 FROM ${base}
 
 ARG JAVA_VERSION
@@ -8,6 +9,7 @@ USER gitpod
 # Dazzle does not rebuild a layer until one of its lines are changed. Increase this counter to rebuild this layer.
 ENV TRIGGER_REBUILD=1
 
+# hadolint ignore=DL4006
 RUN curl -fsSL "https://get.sdkman.io" | bash \
  && bash -c ". /home/gitpod/.sdkman/bin/sdkman-init.sh \
              && sed -i 's/sdkman_selfupdate_enable=true/sdkman_selfupdate_enable=false/g' /home/gitpod/.sdkman/etc/config \

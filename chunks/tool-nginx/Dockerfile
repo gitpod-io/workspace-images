@@ -1,4 +1,5 @@
 ARG base
+# hadolint ignore=DL3006
 FROM ${base}
 
 USER root
@@ -32,7 +33,7 @@ RUN for _ppa in 'ppa:ondrej/php' 'ppa:ondrej/apache2' 'ppa:ondrej/nginx-mainline
         php-zip \
     && curl -sS https://getcomposer.org/installer -o /tmp/composer-setup.php \
     && php /tmp/composer-setup.php  --version=2.2.5 --install-dir=/tmp \
-    && sudo mv /tmp/composer.phar /usr/bin/composer \
+    && gosu root mv /tmp/composer.phar /usr/bin/composer \
     && rm /tmp/composer-setup.php \
     && mkdir -p /var/run/nginx \
     && ln -s /etc/apache2/mods-available/rewrite.load /etc/apache2/mods-enabled/rewrite.load \

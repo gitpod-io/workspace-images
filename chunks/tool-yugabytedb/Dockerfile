@@ -1,4 +1,5 @@
 ARG base
+# hadolint ignore=DL3006
 FROM ${base}
 
 # Added for dazzle as it does not rebuild a layer until one of its lines are changed. Increase this counter to rebuild this layer.
@@ -10,11 +11,11 @@ ARG ROLE=gitpod
 
 USER $ROLE
 # create bin and data path
-RUN sudo mkdir -p $YB_BIN_PATH \
-  && sudo mkdir -p /var/ybdp
+RUN gosu root mkdir -p $YB_BIN_PATH \
+  && gosu root mkdir -p /var/ybdp
 # set permission
-RUN sudo chown -R $ROLE:$ROLE /var/ybdp \
-  && sudo chown -R $ROLE:$ROLE /usr/local/yugabyte
+RUN gosu root chown -R $ROLE:$ROLE /var/ybdp \
+  && gosu root chown -R $ROLE:$ROLE /usr/local/yugabyte
 
 # fetch the binary
 RUN curl -sSLo ./yugabyte.tar.gz https://downloads.yugabyte.com/releases/${YB_VERSION}/yugabyte-${YB_VERSION}-b${YB_BUILD}-linux-x86_64.tar.gz \

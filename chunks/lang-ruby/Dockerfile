@@ -1,4 +1,5 @@
 ARG base
+# hadolint ignore=DL3006
 FROM ${base}
 
 ARG RUBY_VERSION
@@ -7,7 +8,7 @@ USER gitpod
 
 # Dazzle does not rebuild a layer until one of its lines are changed. Increase this counter to rebuild this layer.
 ENV TRIGGER_REBUILD=1
-
+# hadolint ignore=DL4006
 RUN curl -fsSL https://rvm.io/mpapis.asc | gpg --import - \
     && curl -fsSL https://rvm.io/pkuczynski.asc | gpg --import - \
     && curl -fsSL https://get.rvm.io | bash -s stable \
@@ -18,6 +19,7 @@ RUN curl -fsSL https://rvm.io/mpapis.asc | gpg --import - \
         && rvm rubygems current \
         && gem install bundler --no-document \
         && gem install solargraph --no-document" \
+    # hadolint ignore=SC2016
     && echo '[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*' >> /home/gitpod/.bashrc.d/70-ruby
 RUN echo "rvm_gems_path=/workspace/.rvm" > ~/.rvmrc
 

@@ -1,4 +1,5 @@
 ARG base
+# hadolint ignore=DL3006
 FROM ${base}
 
 ARG NODE_VERSION
@@ -8,7 +9,7 @@ USER gitpod
 # Dazzle does not rebuild a layer until one of its lines are changed. Increase this counter to rebuild this layer.
 ENV TRIGGER_REBUILD=1
 ENV NODE_VERSION=${NODE_VERSION}
-
+# hadolint ignore=DL4006
 RUN curl -fsSL https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | PROFILE=/dev/null bash \
     && bash -c ". .nvm/nvm.sh \
         && nvm install v${NODE_VERSION} \

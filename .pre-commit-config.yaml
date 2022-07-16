@@ -1,6 +1,6 @@
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.1.0
+    rev: v4.3.0
     hooks:
       - id: check-yaml
         args: [--allow-multiple-documents]
@@ -14,7 +14,7 @@ repos:
       - id: check-merge-conflict
 
   - repo: https://github.com/jumanjihouse/pre-commit-hooks
-    rev: "2.1.5"
+    rev: 2.1.6
     hooks:
       - id: forbid-binary
       - id: script-must-have-extension
@@ -22,12 +22,11 @@ repos:
       - id: shfmt
 
   - repo: https://github.com/igorshubovych/markdownlint-cli
-    rev: v0.30.0
+    rev: v0.31.1
     hooks:
       - id: markdownlint
 
-# TODO: enable after fixing lint errors
-  # - repo: https://github.com/hadolint/hadolint
-  #   rev: v2.4.1
-  #   hooks:
-  #     - id: hadolint-docker
+  - repo: https://github.com/hadolint/hadolint
+    rev: v2.10.0
+    hooks:
+      - id: hadolint-docker

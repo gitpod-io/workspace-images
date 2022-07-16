@@ -1,4 +1,5 @@
 ARG base
+# hadolint ignore=DL3006
 FROM ${base}
 
 USER gitpod
@@ -12,5 +13,5 @@ ENV MANPATH="$MANPATH:/home/linuxbrew/.linuxbrew/share/man"
 ENV INFOPATH="$INFOPATH:/home/linuxbrew/.linuxbrew/share/info"
 ENV HOMEBREW_NO_AUTO_UPDATE=1
 
-RUN sudo apt remove -y cmake \
+RUN gosu root apt remove -y cmake \
     && brew install cmake

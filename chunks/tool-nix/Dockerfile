@@ -1,4 +1,5 @@
 ARG base
+# hadolint ignore=DL3006
 FROM ${base}
 
 ARG NIX_VERSION
@@ -21,7 +22,7 @@ RUN addgroup --system nixbld \
 USER gitpod
 ENV USER gitpod
 WORKDIR /home/gitpod
-
+# hadolint ignore=DL4006
 RUN curl https://nixos.org/releases/nix/nix-$NIX_VERSION/install | sh
 
 RUN echo '. /home/gitpod/.nix-profile/etc/profile.d/nix.sh' >> /home/gitpod/.bashrc.d/200-nix
@@ -29,11 +30,13 @@ RUN mkdir -p /home/gitpod/.config/nixpkgs && echo '{ allowUnfree = true; }' >> /
 RUN mkdir -p /home/gitpod/.config/nix && echo $NIX_CONFIG >> /home/gitpod/.config/nix/nix.conf
 
 # Install cachix
+# hadolint ignore=SC1091
 RUN . /home/gitpod/.nix-profile/etc/profile.d/nix.sh \
   && nix-env -iA cachix -f https://cachix.org/api/v1/install \
   && cachix use cachix
 
 # Install direnv
+# hadolint ignore=SC1091
 RUN mkdir -p /home/gitpod/.config/direnv \
   && echo '[whitelist]' > .config/direnv/config.toml \
   && echo 'prefix = [ "/workspace" ]' >> .config/direnv/config.toml \
