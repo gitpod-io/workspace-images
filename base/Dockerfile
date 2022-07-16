@@ -36,8 +36,8 @@ ENV LANG=en_US.UTF-8
 RUN upgrade-packages
 
 ### Git ###
-RUN add-apt-repository -y ppa:git-core/ppa \
-    && install-packages git git-lfs
+RUN add-apt-repository -y ppa:git-core/ppa
+RUN install-packages git git-lfs
 
 ### Gitpod user ###
 # '-l': see https://docs.docker.com/develop/develop-images/dockerfile_best-practices/#user
@@ -52,6 +52,9 @@ WORKDIR $HOME
 # custom Bash prompt
 RUN { echo && echo "PS1='\[\033[01;32m\]\u\[\033[00m\] \[\033[01;34m\]\w\[\033[00m\]\$(__git_ps1 \" (%s)\") $ '" ; } >> .bashrc
 
+COPY default.gitconfig /root/.gitconfig
+COPY --chown=gitpod:gitpod default.gitconfig /home/gitpod/.gitconfig
+
 ### Gitpod user (2) ###
 USER gitpod
 # use sudo so that user does not get sudo usage info on (the first) login
@@ -63,7 +66,7 @@ RUN sudo echo "Running 'sudo' for Gitpod: success" && \
     mkdir -p /home/gitpod/.local/share/bash-completion/completions
 
 # configure git-lfs
-RUN sudo git lfs install --system
+RUN sudo git lfs install --system --skip-repo
 
 # Custom PATH additions
 ENV PATH=/usr/games:$PATH
