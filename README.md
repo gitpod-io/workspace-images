@@ -10,10 +10,6 @@ For examples on how to use these images please take a look at the [documentation
 
 We upgraded to support [dazzle v2](https://github.com/gitpod-io/dazzle) and build with GitHub Actions.
 
-Some images may break briefly as part of the upgrade effort. If you have trouble using the `latest` tag, please try `legacy-dazzle-v1`. Think of it as an "escape hatch".
-
-The old build process which used dazzle v1 and CircleCI is deprecated, and will not be used for future builds.
-
 ### 📷 Images we'll upgrade
 
 1. gitpod/workspace-full ✅
