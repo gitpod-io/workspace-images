@@ -4,4 +4,4 @@ variants:
       NODE_VERSION: 16.16.0
   - name: "18"
     args:
-      NODE_VERSION: 18.5.0
+      NODE_VERSION: 18.6.0
