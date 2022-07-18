@@ -31,3 +31,4 @@
     workspace-java-11: "20.*"
     workspace-java-17: "20.*"
     workspace-yugabytedb: "20.*"
+    workspace-yugabytedb-preview: "20.*"
