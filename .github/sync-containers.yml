@@ -20,3 +20,4 @@ sync:
     - java-11
     - java-17
     - yugabytedb
+    - yugabytedb-preview
