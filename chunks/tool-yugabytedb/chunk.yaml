@@ -1,0 +1,9 @@
+variants:
+  - name: "2.14-stable"
+    args:
+      YB_VERSION: 2.14.0.0
+      YB_BUILD: b94
+  - name: "2.15-preview"
+    args:
+      YB_VERSION: 2.15.0.0
+      YB_BUILD: b11

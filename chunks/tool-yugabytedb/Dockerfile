@@ -3,8 +3,8 @@ FROM ${base}
 
 # Added for dazzle as it does not rebuild a layer until one of its lines are changed. Increase this counter to rebuild this layer.
 ENV TRIGGER_REBUILD=1
-ARG YB_VERSION=2.12.1.0
-ARG YB_BUILD=41
+ARG YB_VERSION
+ARG YB_BUILD
 ARG YB_BIN_PATH=/usr/local/yugabyte
 ARG ROLE=gitpod
 
