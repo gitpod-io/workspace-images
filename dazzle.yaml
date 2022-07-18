@@ -106,7 +106,12 @@ combiner:
       ref:
       - full
       chunks:
-        - tool-yugabytedb
+        - tool-yugabytedb:2.14
+    - name: yugabytedb-preview
+      ref:
+      - full
+      chunks:
+        - tool-yugabytedb:2.15
   envvars:
     - name: PATH
       action: merge-unique

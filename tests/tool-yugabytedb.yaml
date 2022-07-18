@@ -3,7 +3,8 @@
   entrypoint: [bash, -i, -c]
   command: [ysqlsh -V]
   assert:
-  - stdout.indexOf("psql (PostgreSQL) 11.2-YB-2.12.1.0-b0") != -1
+  - stdout.indexOf("psql (PostgreSQL) 11.2-YB-2.15.0.1-b0") != -1 ||
+    stdout.indexOf("psql (PostgreSQL) 11.2-YB-2.14.0.0-b0") != -1
   - status == 0
 # ycql api
 - desc: it should run ycql(cassandra)-api cli
