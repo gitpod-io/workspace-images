@@ -1,0 +1,5 @@
+- desc: bazel cache should be persisted to /workspaces
+  command: [file, /workspace/.bazel]
+  assert:
+  - status == 0
+  - stdout.indexOf("/workspace/.bazel: symbolic link to /home/gitpod/.cache/bazel") != -1

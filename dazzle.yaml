@@ -32,6 +32,7 @@ combiner:
         - lang-python:3.8
         - lang-ruby:3.1
         - lang-rust
+        - tool-bazel
         - tool-brew
         - tool-nginx
         - tool-nix:2.6.0
