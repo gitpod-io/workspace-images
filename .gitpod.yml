@@ -18,7 +18,7 @@ tasks:
     openMode: split-right
   - name: dazzle build and test
     command: |
-      gp await-port 5000
+      gp ports await 5000
       REPO=localhost:5000/dazzle
       echo "To build specific chunks and combine them 'time ./build-chunk.sh  -c chunk1 -c chunk2:variant1.2.3 -n combo'"
       echo "To build all the chunks and combinations 'time ./build-all.sh'"
