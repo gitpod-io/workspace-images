@@ -27,7 +27,7 @@ combiner:
         - lang-c
         - lang-clojure
         - lang-go:1.18.4
-        - lang-java:11plus17
+        - lang-java:11
         - lang-node:16
         - lang-python:3.8
         - lang-ruby:2.7

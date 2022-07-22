@@ -5,7 +5,3 @@ variants:
   - name: "17"
     args:
       JAVA_VERSION: 17.0.3.fx-zulu
-  - name: "11plus17"
-    args:
-      JAVA_VERSION: 11.0.15.fx-zulu
-      JAVA_VERSION_SECONDARY: 17.0.3.fx-zulu # TODO(ft): add an autofix rule for this
