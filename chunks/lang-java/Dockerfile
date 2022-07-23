@@ -2,7 +2,6 @@ ARG base
 FROM ${base}
 
 ARG JAVA_VERSION
-ARG JAVA_VERSION_SECONDARY
 
 USER gitpod
 
