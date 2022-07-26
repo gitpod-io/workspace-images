@@ -69,4 +69,4 @@ RUN sudo echo "Running 'sudo' for Gitpod: success" && \
     mkdir -p /home/gitpod/.local/share/bash-completion/completions
 
 # Custom PATH additions
-ENV PATH=/usr/games:$PATH
+ENV PATH=$HOME/.local/bin:/usr/games:$PATH

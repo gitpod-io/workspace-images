@@ -27,6 +27,8 @@ RUN sudo install-packages \
         setuptools wheel virtualenv pipenv pylint rope flake8 \
         mypy autopep8 pep8 pylama pydocstyle bandit notebook \
         twine \
+	# Install poetry
+	&& curl -sSL https://install.python-poetry.org | python \
     && sudo rm -rf /tmp/*
 
 COPY --chown=gitpod:gitpod pyenv.d $HOME/.gp_pyenv.d

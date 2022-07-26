@@ -24,6 +24,10 @@ if test -e "$GITPOD_REPO_ROOT"; then {
         ln -sf "$p_version_file" "$o_version_file"
         unset p_version_file o_version_file
     } fi && export GP_PYENV_INIT=true
+
+	# Poetry customizations
+	export POETRY_CACHE_DIR="$GP_PYENV_MIRROR/poetry"
+
 } fi
 
 # Do not init when sourced internally from `pyenv`
