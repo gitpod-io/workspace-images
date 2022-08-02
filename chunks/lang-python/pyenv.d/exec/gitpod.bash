@@ -8,7 +8,8 @@
 
 # Do not set PIP_USER when `--target` arg is passed to `pip install` to avoid
 ## ERROR: Can not combine '--user' and '--target'.
-export PYTHONUSERBASE="$GP_PYENV_MIRROR/user/$PYENV_VERSION"
+# source "$HOME/.gp_pyenv.d/userbase.bash"
+export PYTHONUSERBASE="$GP_PYENV_MIRROR/user/${PYENV_VERSION%%:*}"
 if [[ "$*" =~ ^pip ]] || [[ "$*" =~ ^python.*-m\ pip ]] && [[ ! "$*" =~ pip.*install.*--target ]]; then {
 	export PIP_USER=true PIP_NO_WARN_SCRIPT_LOCATION=false
 }; fi
