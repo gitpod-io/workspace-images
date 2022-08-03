@@ -12,7 +12,7 @@ RUN curl -fsSL https://rvm.io/mpapis.asc | gpg --import - \
     && curl -fsSL https://rvm.io/pkuczynski.asc | gpg --import - \
     && curl -fsSL https://get.rvm.io | bash -s stable
 
-SHELL ["/usr/bin/bash", "-ic"]
+SHELL ["/usr/bin/bash", "-lc"]
 RUN rvm requirements \
         && rvm install ${RUBY_VERSION} \
         && rvm use ${RUBY_VERSION} --default \
