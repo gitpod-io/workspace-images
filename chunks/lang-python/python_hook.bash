@@ -28,7 +28,7 @@ function pyenv_gitpod_init() {
 			ln -sf "$p_version_file" "$o_version_file"
 
 			# Init userbase hook
-			# shellcheck source=/dev/null
+			# shellcheck source=$HOME
 			(PYENV_VERSION="$(pyenv version-name)" && export PYENV_VERSION && source "$HOME/.gp_pyenv.d/userbase.bash")
 		}; fi && export GP_PYENV_INIT=true
 
