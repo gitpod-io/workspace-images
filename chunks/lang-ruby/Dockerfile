@@ -9,13 +9,15 @@ USER gitpod
 ENV TRIGGER_REBUILD=1
 
 RUN curl -fsSL https://rvm.io/mpapis.asc | gpg --import - \
-    && curl -fsSL https://rvm.io/pkuczynski.asc | gpg --import - \
-    && curl -fsSL https://get.rvm.io | bash -s stable
+	&& curl -fsSL https://rvm.io/pkuczynski.asc | gpg --import - \
+	&& curl -fsSL https://get.rvm.io | bash -s stable
 
 SHELL ["/usr/bin/bash", "-lc"]
 RUN rvm requirements \
-        && rvm install ${RUBY_VERSION} \
-        && rvm use ${RUBY_VERSION} --default \
-        && rvm rubygems current \
-        && gem install bundler --no-document \
-        && gem install solargraph --no-document
+	&& rvm install ${RUBY_VERSION} \
+	&& rvm use ${RUBY_VERSION} --default \
+	&& rvm rubygems current \
+	&& gem install bundler --no-document \
+	&& gem install solargraph --no-document
+
+COPY --chown=gitpod:gitpod ruby_hook.bash $HOME/.bashrc.d/70-ruby
