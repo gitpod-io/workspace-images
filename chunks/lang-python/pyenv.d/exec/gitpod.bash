@@ -18,13 +18,12 @@ if test "$pyenv_version" != "$mounted_version"; then {
 }; fi
 
 # For pyenv-global multiple-version shims
-if [[ "$PYENV_VERSION" =~ : ]] && [[ "$PYENV_COMMAND_PATH" =~ "$GP_PYENV_MIRROR"/user ]] &&
-	[[ "$(<"$PYENV_COMMAND_PATH")" =~ \#\!"${GP_PYENV_FAKEROOT}"/versions/([0-9]+(\.[0-9]+)*)/bin ]]; then {
-		multi_shim_version="${BASH_REMATCH[1]}"
-		if test "$mounted_version" != "$multi_shim_version"; then {
-			export PYTHONUSERBASE="${PYTHONUSERBASE%/*}/$multi_shim_version"
-		}; fi
-	}; fi 2>/dev/null
+if [[ "$PYENV_VERSION" =~ : ]] && [[ "$PYENV_COMMAND_PATH" =~ "$GP_PYENV_MIRROR"/user ]] && [[ "$(<"$PYENV_COMMAND_PATH")" =~ \#\!("${GP_PYENV_FAKEROOT}"|"$PYENV_ROOT")/versions/([0-9]+(\.[0-9]+)*)/bin ]]; then {
+	multi_shim_version="${BASH_REMATCH[2]}"
+	if test "$mounted_version" != "$multi_shim_version"; then {
+		export PYTHONUSERBASE="${PYTHONUSERBASE%/*}/$multi_shim_version"
+	}; fi
+}; fi 2>/dev/null
 
 # Do not set PIP_USER when `--target` arg is passed to `pip install` to avoid
 ## ERROR: Can not combine '--user' and '--target'.
