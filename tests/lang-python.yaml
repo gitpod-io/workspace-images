@@ -50,11 +50,11 @@
   assert:
     - status == 0
 
-- desc: "`pyenv install <ver>` should use /workspace/.pyenv_mirror/fakeroot/versions/ for workspace-session env"
+- desc: "`pyenv install <ver>` should use /workspace/.pyenv_mirror/fakeroot/versions/ for workspace-session env and multi-version shims should work"
   entrypoint: [env, GITPOD_REPO_ROOT=/workspace, bash, -ci]
   command:
     [
-      ver=3.9.0; pyenv install $ver && test -d $GP_PYENV_FAKEROOT/versions/$ver && test -L $PYENV_ROOT/versions/$ver,
+      ver=3.9.0; pyenv install $ver && test -d $GP_PYENV_FAKEROOT/versions/$ver && test -L $PYENV_ROOT/versions/$ver && pip install cowsay && pyenv global $(pyenv version-name) $ver && cowsay Gitpod,
     ]
   assert:
     - status == 0
