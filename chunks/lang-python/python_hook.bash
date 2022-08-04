@@ -5,18 +5,23 @@ function pyenv_gitpod_init() {
 		export GP_PYENV_MIRROR="/workspace/.pyenv_mirror"
 		export GP_PYENV_FAKEROOT="$GP_PYENV_MIRROR/fakeroot"
 		export PYTHONUSERBASE="$GP_PYENV_MIRROR/user/current"
+		export PYTHONUSERBASE_VERSION_FILE="${PYTHONUSERBASE%/*}/.mounted_version"
+		export PIP_CACHE_DIR="$GP_PYENV_MIRROR/pip_cache"
 
 		if test ! -v GP_PYENV_INIT; then {
 			# Restore installed python versions
 			local target version_dir
-			for version_dir in "$GP_PYENV_FAKEROOT/versions/"*; do {
-				target="$PYENV_ROOT/versions/${version_dir##*/}"
-				mkdir -p "$target" 2>/dev/null
-				if ! mountpoint -q "$target" && ! sudo mount --bind "$version_dir" "$target" 2>/dev/null; then {
-					rm -rf "$target"
-					ln -s "$version_dir" "$target"
-				}; fi
-			}; done 2>/dev/null
+			(
+				shopt -s nullglob
+				for version_dir in "$GP_PYENV_FAKEROOT/versions/"*; do {
+					target="$PYENV_ROOT/versions/${version_dir##*/}"
+					mkdir -p "$target" 2>/dev/null
+					if ! mountpoint -q "$target" && ! sudo mount --bind "$version_dir" "$target" 2>/dev/null; then {
+						rm -rf "$target"
+						ln -s "$version_dir" "$target"
+					}; fi
+				}; done
+			)
 
 			# Persistent `pyenv global` version
 			local p_version_file="$GP_PYENV_FAKEROOT/version"
@@ -28,8 +33,7 @@ function pyenv_gitpod_init() {
 			ln -sf "$p_version_file" "$o_version_file"
 
 			# Init userbase hook
-			# shellcheck source=$HOME
-			(PYENV_VERSION="$(pyenv version-name)" && export PYENV_VERSION && source "$HOME/.gp_pyenv.d/userbase.bash")
+			pyenv global 1>/dev/null
 		}; fi && export GP_PYENV_INIT=true
 
 		# Set $HOME/.pyenv/shims/python as the default Interpreter for ms-python.python VSCode extension

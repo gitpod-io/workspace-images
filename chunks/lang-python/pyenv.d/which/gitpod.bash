@@ -2,11 +2,14 @@
 # if test ! -x "$PYENV_COMMAND_PATH"; then {\
 ## Give user variant higher priority
 # shellcheck disable=SC2154
-_check_upath="${GP_PYENV_MIRROR}/user/${versions[0]}/bin/$PYENV_COMMAND"
-if test -x "$_check_upath"; then {
-	# shellcheck disable=SC2034
-	PYENV_COMMAND_PATH="$_check_upath"
-}; fi
+for version in "${versions[@]}"; do {
+	_check_upath="${GP_PYENV_MIRROR}/user/${version}/bin/$PYENV_COMMAND"
+	if test -x "$_check_upath"; then {
+		# shellcheck disable=SC2034
+		PYENV_COMMAND_PATH="$_check_upath"
+		break
+	}; fi
+}; done
 
 # Hijack into `pyenv-prefix` to be called from pyenv-whence <arg>
 # This is necessary for pyenv-which to recognize an installed but
