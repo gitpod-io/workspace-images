@@ -14,3 +14,9 @@ variants:
   - name: "1.18.4"
     args:
       GO_VERSION: 1.18.4
+  - name: "1.18.5"
+    args:
+      GO_VERSION: 1.18.5
+  - name: "1.19"
+    args:
+      GO_VERSION: 1.19
