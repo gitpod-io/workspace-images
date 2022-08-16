@@ -40,6 +40,7 @@ combiner:
       ref:
       - full
       chunks:
+        - tool-chrome
         - tool-vnc
     - name: go
       ref:

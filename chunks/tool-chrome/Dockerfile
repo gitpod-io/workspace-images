@@ -7,18 +7,24 @@ USER root
 ENV TRIGGER_REBUILD=1
 
 # chrome and basic render font
-RUN curl -fsSL https://dl.google.com/linux/linux_signing_key.pub | gpg --dearmor -o /usr/share/keyrings/chrome-archive-keyring.gpg \
-    && echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/chrome-archive-keyring.gpg] https://dl.google.com/linux/chrome/deb/ \
-    stable main" | tee /etc/apt/sources.list.d/google-chrome.list > /dev/null \
-    && apt update \
-    && install-packages google-chrome-stable
-
-USER gitpod
-
+# google-chrome
 # misc deps for electron and puppeteer to run
-RUN sudo install-packages \
-    libasound2-dev libgtk-3-dev libnss3-dev \
-    fonts-noto fonts-noto-cjk
+RUN cd /tmp && glink="https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb" \
+	&& wget -q "$glink" \
+	&& install-packages libasound2-dev libgtk-3-dev libnss3-dev \
+	fonts-noto fonts-noto-cjk ./"${glink##*/}" \
+	\
+	# OLD: && ln -srf /usr/bin/chromium /usr/bin/google-chrome
+	# OLD: To make ungoogled_chromium discoverable by tools like flutter
+	&& ln -srf /usr/bin/google-chrome /usr/bin/chromium \
+	\
+	# Extra chrome tweaks
+	## Disables welcome screen
+	&& t="$HOME/.config/google-chrome/First Run" && sudo -u gitpod mkdir -p "${t%/*}" && sudo -u gitpod touch "$t" \
+	## Disables default browser prompt
+	&& t="/etc/opt/chrome/policies/managed/managed_policies.json" && mkdir -p "${t%/*}" && printf '{ "%s": %s }\n' DefaultBrowserSettingEnabled false > "$t"
 
 # For Qt WebEngine on docker
 ENV QTWEBENGINE_DISABLE_SANDBOX 1
+
+USER gitpod

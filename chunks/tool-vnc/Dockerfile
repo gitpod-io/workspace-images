@@ -6,21 +6,11 @@ ENV TRIGGER_REBUILD=1
 
 USER root
 
-# Install Desktop-ENV, tools and google-chrome
-RUN cd /tmp && glink="https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb" \
-	&& wget -q "$glink" \
-	&& install-packages \
+# Install Desktop-ENV, tools
+RUN install-packages \
 	tigervnc-standalone-server tigervnc-xorg-extension \
 	dbus dbus-x11 gnome-keyring xfce4 xfce4-terminal \
-	xdg-utils x11-xserver-utils pip ./"${glink##*/}" \
-	&& ln -srf /usr/bin/google-chrome /usr/bin/chromium \
-	# Extra chrome tweaks
-	## Disables welcome screen
-	&& t="$HOME/.config/google-chrome/First Run" && sudo -u gitpod mkdir -p "${t%/*}" && sudo -u gitpod touch "$t" \
-	## Disables default browser prompt
-	&& t="/etc/opt/chrome/policies/managed/managed_policies.json" && mkdir -p "${t%/*}" && printf '{ "%s": %s }\n' DefaultBrowserSettingEnabled false > "$t"
-# OLD: && ln -srf /usr/bin/chromium /usr/bin/google-chrome
-# OLD: To make ungoogled_chromium discoverable by tools like flutter
+	xdg-utils x11-xserver-utils pip
 
 # Install novnc and numpy module for it
 RUN git clone --depth 1 https://github.com/novnc/noVNC.git /opt/novnc \
