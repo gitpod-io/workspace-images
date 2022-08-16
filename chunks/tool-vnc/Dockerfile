@@ -7,10 +7,12 @@ ENV TRIGGER_REBUILD=1
 USER root
 
 # Install Desktop-ENV, tools and google-chrome
-RUN install-packages \
+RUN cd /tmp && glink="https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb" \
+	&& wget -q "$glink" \
+	&& install-packages \
 	tigervnc-standalone-server tigervnc-xorg-extension \
 	dbus dbus-x11 gnome-keyring xfce4 xfce4-terminal \
-	xdg-utils x11-xserver-utils pip \
+	xdg-utils x11-xserver-utils pip ./"${glink##*/}" \
 	&& ln -srf /usr/bin/google-chrome /usr/bin/chromium \
 	# Extra chrome tweaks
 	## Disables welcome screen
