@@ -9,12 +9,15 @@ USER gitpod
 ENV TRIGGER_REBUILD=1
 ENV NODE_VERSION=${NODE_VERSION}
 
+ENV PNPM_HOME=/home/gitpod/.pnpm
+ENV PATH=/home/gitpod/.nvm/versions/node/v${NODE_VERSION}/bin:/home/gitpod/.yarn/bin:${PNPM_HOME}:$PATH
+
 RUN curl -fsSL https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | PROFILE=/dev/null bash \
     && bash -c ". .nvm/nvm.sh \
         && nvm install v${NODE_VERSION} \
         && nvm alias default v${NODE_VERSION} \
-        && npm install -g typescript yarn pnpm node-gyp" \
+        && npm install -g yarn \
+        && yarn global add typescript yarn pnpm node-gyp" \
     && echo ". ~/.nvm/nvm-lazy.sh"  >> /home/gitpod/.bashrc.d/50-node
 # above, we are adding the lazy nvm init to .bashrc, because one is executed on interactive shells, the other for non-interactive shells (e.g. plugin-host)
 COPY --chown=gitpod:gitpod nvm-lazy.sh /home/gitpod/.nvm/nvm-lazy.sh
-ENV PATH=/home/gitpod/.nvm/versions/node/v${NODE_VERSION}/bin:$PATH
