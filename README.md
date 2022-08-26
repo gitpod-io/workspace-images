@@ -3,70 +3,83 @@
 [![Gitpod ready-to-code](https://img.shields.io/badge/Gitpod-ready--to--code-908a85?logo=gitpod)](https://gitpod.io/#https://github.com/gitpod-io/workspace-images)
 [![Build from Main](https://github.com/gitpod-io/workspace-images/actions/workflows/push-main.yml/badge.svg)](https://github.com/gitpod-io/workspace-images/actions/workflows/push-main.yml)
 
-Ready-to-use Docker images for [gitpod.io](https://www.gitpod.io) workspaces. All images are available on Docker Hub under [gitpod/*](https://hub.docker.com/u/gitpod).
-For examples on how to use these images please take a look at the [documentation](https://www.gitpod.io/docs/config-docker#configure-a-public-docker-image).
+Ready-to-use Docker images for [gitpod.io](https://www.gitpod.io) workspaces. All images are available on [Gitpod's Dockerhub page](https://hub.docker.com/u/gitpod).
+
+For an example of how to use these images, please take a look at the [documentation](https://www.gitpod.io/docs/config-docker#configure-a-public-docker-image).
 
 ## 📢 Announcements
 
 We upgraded to support [dazzle v2](https://github.com/gitpod-io/dazzle) and build with GitHub Actions.
 
-### 📷 Images we'll upgrade
+## Summary
 
-1. gitpod/workspace-full ✅
-1. gitpod/workspace-base ✅
-1. gitpod/workspace-dotnet ✅
-1. gitpod/workspace-full-vnc ✅
-1. gitpod/workspace-mongodb ✅
-1. gitpod/workspace-mysql ✅
-1. gitpod/workspace-postgres ✅
+- **Operating System**: Ubuntu 20.04.4 LTS
+- **OS Type**: linux
+- **Architecture**: x86_64
 
-### 🆕 Images
+## Images
+
+By default, Gitpod uses a standard Docker Image called [`workspace-full`](https://github.com/gitpod-io/workspace-images/blob/1ad468e8452aa8a9c14ab5ba4cab10d4f4bb1c90/dazzle.yaml#L23) as the foundation for workspaces. Workspaces started based on this default image come pre-installed with Docker, Nix, Go, Java, Node.js, C/C++, Python, Ruby, Rust, PHP as well as tools such as Homebrew, Tailscale, Nginx and several more.
+
+If this image does not include the tools you need for your repository, we recommend you to use [`workspace-base`](https://github.com/gitpod-io/workspace-images/blob/1ad468e8452aa8a9c14ab5ba4cab10d4f4bb1c90/dazzle.yaml#L3) & [Bring your Dockerfile](https://www.gitpod.io/blog/docker-in-gitpod), according to your repository. You can refer this [documentation to setup a custom docker image](https://www.gitpod.io/docs/config-docker).
+
+### 📷 Images we'll maintain
+
+- [`gitpod/workspace-full`](https://hub.docker.com/r/gitpod/workspace-full) ✅
+- [`gitpod/workspace-base`](https://hub.docker.com/r/gitpod/workspace-base) ✅
+- [`gitpod/workspace-dotnet`](https://hub.docker.com/r/gitpod/workspace-dotnet) ✅
+- [`gitpod/workspace-full-vnc`](https://hub.docker.com/r/gitpod/workspace-full-vnc) ✅
+- [`gitpod/workspace-mongodb`](https://hub.docker.com/r/gitpod/workspace-mongodb) ✅
+- [`gitpod/workspace-mysql`](https://hub.docker.com/r/gitpod/workspace-mysql) ✅
+- [`gitpod/workspace-postgres`](https://hub.docker.com/r/gitpod/workspace-postgres) ✅
+
+### 🆕 Specific Images
 
 These are lightweight compared to `gitpod/workspace-full`.
 
-Each contains a set of chunks: a common base, a language, and includes Docker and Tailscale.
+Each contains a set of chunks: a common base, and a language, and includes Docker and Tailscale.
 
-1. gitpod/workspace-c ✅
-1. gitpod/workspace-clojure ✅
-1. gitpod/workspace-go ✅
-1. gitpod/workspace-java-11 ✅
-1. gitpod/workspace-java-17 ✅
-1. gitpod/workspace-node ✅
-1. gitpod/workspace-node-lts ✅
-1. gitpod/workspace-python ✅
-1. gitpod/workspace-ruby-2 ✅
-1. gitpod/workspace-ruby-3 ✅
-1. gitpod/workspace-ruby-3.0 ✅
-1. gitpod/workspace-ruby-3.1 ✅
-1. gitpod/workspace-rust ✅
-1. gitpod/workspace-elixir ✅
+- [`gitpod/workspace-c`](https://hub.docker.com/r/gitpod/workspace-c) ✅
+- [`gitpod/workspace-clojure`](https://hub.docker.com/r/gitpod/workspace-clojure) ✅
+- [`gitpod/workspace-go`](https://hub.docker.com/r/gitpod/workspace-go) ✅
+- [`gitpod/workspace-java-11`](https://hub.docker.com/r/gitpod/workspace-java-11) ✅
+- [`gitpod/workspace-java-17`](https://hub.docker.com/r/gitpod/workspace-java-17) ✅
+- [`gitpod/workspace-node`](https://hub.docker.com/r/gitpod/workspace-node) ✅
+- [`gitpod/workspace-node-lts`](https://hub.docker.com/r/gitpod/workspace-node-lts) ✅
+- [`gitpod/workspace-python`](https://hub.docker.com/r/gitpod/workspace-python) ✅
+- [`gitpod/workspace-ruby-2`](https://hub.docker.com/r/gitpod/workspace-ruby-2) ✅
+- [`gitpod/workspace-ruby-3`](https://hub.docker.com/r/gitpod/workspace-ruby-3) ✅
+- [`gitpod/workspace-ruby-3.0`](https://hub.docker.com/r/gitpod/workspace-ruby-3.0) ✅
+- [`gitpod/workspace-ruby-3.1`](https://hub.docker.com/r/gitpod/workspace-ruby-3.1) ✅
+- [`gitpod/workspace-rust`](https://hub.docker.com/r/gitpod/workspace-rust) ✅
+- [`gitpod/workspace-elixir`](https://hub.docker.com/r/gitpod/workspace-elixir) ✅
 
 ### 🎬 No upgrade planned
 
-These images are no longer being published, and not planned for Upgrade:
+⚠️ These images are no longer being published, and are not planned for Upgrade:
 
-1. gitpod/workspace-images-dazzle
-1. gitpod/workspace-dotnet-vnc
-1. gitpod/workspace-dotnet-lts
-1. gitpod/workspace-dotnet-lts-vnc
-1. gitpod/workspace-flutter
-1. gitpod/workspace-gecko
-1. gitpod/workspace-wasm
-1. gitpod/workspace-firefox
-1. gitpod/workspace-full-dazzle
-1. gitpod/workspace-mysql-8
-1. gitpod/workspace-python-tk-vnc
-1. gitpod/workspace-python-tk
-1. gitpod/workspace-rethinkdb
-1. gitpod/workspace-thin
-1. gitpod/workspace-webassembly
+- gitpod/workspace-images-dazzle
+- gitpod/workspace-dotnet-vnc
+- gitpod/workspace-dotnet-lts
+- gitpod/workspace-dotnet-lts-vnc
+- gitpod/workspace-flutter
+- gitpod/workspace-gecko
+- gitpod/workspace-wasm
+- gitpod/workspace-firefox
+- gitpod/workspace-full-dazzle
+- gitpod/workspace-mysql-8
+- gitpod/workspace-python-tk-vnc
+- gitpod/workspace-python-tk
+- gitpod/workspace-rethinkdb
+- gitpod/workspace-thin
+- gitpod/workspace-webassembly
 
 ### 📢 Deprecated images
 
 These images are no longer being published:
 
-1. gitpod/workspace-python-3.6 (please use `gitpod/workspace-python-3.7` instead)
-1. gitpod/workspace-postgresql (please use `gitpod/workspace-postgres` instead)
+- gitpod/workspace-python-3.6 (please use [`gitpod/workspace-python-3.7`](https://hub.docker.com/r/gitpod/workspace-python-3.7) instead)
+- gitpod/workspace-postgresql (please use [`gitpod/workspace-postgres`](https://hub.docker.com/r/gitpod/workspace-postgres) instead)
 
 ## Contributing
 
