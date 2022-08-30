@@ -28,8 +28,12 @@ function pyenv_gitpod_init() {
 			local o_version_file="$PYENV_ROOT/version"
 			if test ! -e "$p_version_file"; then {
 				mkdir -p "${p_version_file%/*}"
-				mv "$o_version_file" "$p_version_file"
+				if test -e "$o_version_file"; then {
+					printf '%s\n' "$(<"$o_version_file")" >"$p_version_file" || :
+				}; fi
 			}; fi
+			touch "$p_version_file"
+			rm -f "$o_version_file"
 			ln -sf "$p_version_file" "$o_version_file"
 
 			# Init userbase hook
