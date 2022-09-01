@@ -11,6 +11,7 @@ RUN yes | unminimize \
         build-essential \
         ninja-build \
         htop \
+        iputils-ping \
         jq \
         less \
         locales \
