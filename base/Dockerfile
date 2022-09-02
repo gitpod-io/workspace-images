@@ -71,3 +71,6 @@ RUN sudo echo "Running 'sudo' for Gitpod: success" && \
 
 # Custom PATH additions
 ENV PATH="$HOME/.local/bin:/usr/games:$PATH"
+
+# Install bashrc.d scripts
+COPY --chown=gitpod:gitpod bashrc.d/* $HOME/.bashrc.d
