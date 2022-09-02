@@ -27,10 +27,14 @@ RUN sudo install-packages \
 	&& pip install --no-cache-dir --upgrade \
 	setuptools wheel virtualenv pipenv pylint rope flake8 \
 	mypy autopep8 pep8 pylama pydocstyle bandit notebook \
-	twine \
-	# Install poetry
-	&& curl -sSL https://install.python-poetry.org | python \
-	&& sudo rm -rf /tmp/*
+	twine
+# Install poetry
+RUN if echo $PYTHON_VERSION | grep -q "3.6.*"; then \
+		curl -sSL https://install.python-poetry.org | POETRY_VERSION=1.1.15 python; \
+    else \
+		curl -sSL https://install.python-poetry.org | python; \
+	fi
+RUN sudo rm -rf /tmp/*
 
 COPY --chown=gitpod:gitpod pyenv.d $HOME/.gp_pyenv.d
 COPY --chown=gitpod:gitpod userbase.bash $HOME/.gp_pyenv.d
