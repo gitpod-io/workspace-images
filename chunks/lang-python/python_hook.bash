@@ -44,7 +44,7 @@ function pyenv_gitpod_init() {
 					}; fi
 
 					# Check json syntax
-					if ! jq -e . "$vscode_machine_settings_file" >/dev/null 2>&1; then {
+					if test ! -s "$vscode_machine_settings_file" || ! jq -reM '""' "$vscode_machine_settings_file" 1>/dev/null; then {
 						printf '{}\n' >"$vscode_machine_settings_file"
 					}; fi
 
@@ -88,15 +88,15 @@ function pyenv_gitpod_init() {
 
 			# Init userbase hook
 			pyenv global 1>/dev/null
-		}; fi && export GP_PYENV_INIT=true
 
-		# Set $HOME/.pyenv/shims/python as the default Interpreter for ms-python.python VSCode extension
-		vscode::add_settings <<-JSON
-			{
-				"python.defaultInterpreterPath": "$HOME/.pyenv/shims/python",
-				"python.terminal.activateEnvironment": false
-			}
-		JSON
+			# Set $HOME/.pyenv/shims/python as the default Interpreter for ms-python.python VSCode extension
+			vscode::add_settings <<-JSON
+				{
+					"python.defaultInterpreterPath": "$HOME/.pyenv/shims/python",
+					"python.terminal.activateEnvironment": false
+				}
+			JSON
+		}; fi && export GP_PYENV_INIT=true
 
 		# Poetry customizations
 		export POETRY_CACHE_DIR="$GP_PYENV_MIRROR/poetry"
