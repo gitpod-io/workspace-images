@@ -53,10 +53,7 @@ jobs:
         run: |
           docker run -it --detach --publish 5000:5000 --volume ~/registry:/var/lib/registry registry:2
 
-      - name: 🔨 Dazzle build
+      - name: 🔨 Dazzle build & 🖇️ Dazzle combine
         run: |
           dazzle build localhost:5000/workspace-base-images
-
-      - name: 🖇️ Dazzle combine
-        run: |
           dazzle combine localhost:5000/workspace-base-images --all
