@@ -65,7 +65,7 @@ USER gitpod
 RUN sudo echo "Running 'sudo' for Gitpod: success" && \
     # create .bashrc.d folder and source it in the bashrc
     mkdir -p "$HOME/.bashrc.d" && \
-    printf '\n%s\n' 'for s in "$HOME/.bashrc.d/"*; do source "$s"; done 2>/dev/null || :' >> "$HOME/.bashrc" && \
+    printf '\n%s\n' 'shopt -s nullglob; for s in "$HOME/.bashrc.d/"*; do source "$s"; done; shopt -u nullglob' >> "$HOME/.bashrc" && \
     # create a completions dir for gitpod user
     mkdir -p "$HOME/.local/share/bash-completion/completions"
 

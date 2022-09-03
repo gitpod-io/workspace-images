@@ -3,9 +3,8 @@ if test -e "$GITPOD_REPO_ROOT" && test ! -v HIST_PERIST_INIT && export HIST_PERI
 	# Taken from https://github.com/axonasif/dotfiles/blob/34c8663cac2656cdfb0ade40bcf6317c97cc239d/src/config/shell.sh#L7
 	function config::shell::persist_history() {
 		local -r _shell_hist_files=(
-			# Not going to use HISTFILE env var for bash and zsh
-			"$HOME/.bash_history"
-			"$HOME/.zsh_history"
+			"${HISTFILE:-"$HOME/.bash_history"}"
+			"${HISTFILE:-"$HOME/.zsh_history"}"
 			"$HOME/.local/share/fish/fish_history"
 		)
 
