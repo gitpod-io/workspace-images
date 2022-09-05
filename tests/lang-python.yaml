@@ -58,3 +58,9 @@
     ]
   assert:
     - status == 0
+
+- desc: "VSCode Python settings are correctly applied"
+  entrypoint: [bash, -c]
+  command: [msjson="/workspace/.vscode-remote/data/Machine/settings.json"; export GITPOD_REPO_ROOT=/workspace/test; mkdir -p $(dirname "$msjson") "$GITPOD_REPO_ROOT" && touch "$msjson" && bash -cli 'exit' && grep -q 'python' "$msjson"]
+  assert:
+    - status == 0
