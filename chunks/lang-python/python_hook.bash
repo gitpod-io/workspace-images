@@ -13,10 +13,12 @@ function pyenv_gitpod_init() {
 
 		if test ! -v GP_PYENV_INIT; then {
 
+			local vscode_machine_settings_file="/workspace/.vscode-remote/data/Machine/settings.json"
+			local ms_vscode_server_settings="$HOME/.vscode-server/data/Machine/settings.json"
+
 			function vscode::add_settings() {
 				# From https://github.com/axonasif/dotfiles/blob/main/src/utils/common.sh
 				local lockfile="/tmp/.vscs_add.lock"
-				local vscode_machine_settings_file="/workspace/.vscode-remote/data/Machine/settings.json"
 				local vscode_machine_settings_file="${SETTINGS_TARGET:-$vscode_machine_settings_file}"
 				trap 'rm -f $lockfile' ERR SIGINT RETURN
 				while test -e "$lockfile" && sleep 0.2; do {
@@ -44,7 +46,7 @@ function pyenv_gitpod_init() {
 					}; fi
 
 					# Check json syntax
-					if ! jq -e . "$vscode_machine_settings_file" >/dev/null 2>&1; then {
+					if test ! -s "$vscode_machine_settings_file" || ! jq -reM '""' "$vscode_machine_settings_file" 1>/dev/null; then {
 						printf '{}\n' >"$vscode_machine_settings_file"
 					}; fi
 
@@ -88,15 +90,18 @@ function pyenv_gitpod_init() {
 
 			# Init userbase hook
 			pyenv global 1>/dev/null
-		}; fi && export GP_PYENV_INIT=true
 
-		# Set $HOME/.pyenv/shims/python as the default Interpreter for ms-python.python VSCode extension
-		vscode::add_settings <<-JSON
-			{
-				"python.defaultInterpreterPath": "$HOME/.pyenv/shims/python",
-				"python.terminal.activateEnvironment": false
-			}
-		JSON
+			# Set $HOME/.pyenv/shims/python as the default Interpreter for ms-python.python VSCode extension
+
+			for sf in "$vscode_machine_settings_file" "$ms_vscode_server_settings"; do {
+				SETTINGS_TARGET="$sf" vscode::add_settings <<-JSON
+					{
+						"python.defaultInterpreterPath": "$HOME/.pyenv/shims/python",
+						"python.terminal.activateEnvironment": false
+					}
+				JSON
+			}; done
+		}; fi && export GP_PYENV_INIT=true
 
 		# Poetry customizations
 		export POETRY_CACHE_DIR="$GP_PYENV_MIRROR/poetry"
