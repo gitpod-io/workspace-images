@@ -34,7 +34,6 @@ combiner:
         - lang-rust
         - tool-brew
         - tool-nginx
-        - tool-chrome
         - tool-nix:2.6.0
     - name: full-vnc
       ref:
