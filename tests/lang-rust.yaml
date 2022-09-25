@@ -6,7 +6,7 @@
   - stdout.indexOf("rustc") != -1
 - desc: it should have properly functioning rustup
   command: [
-      rustup show && rustup update && rustup toolchain install nightly && cargo new /tmp/foo,
+      rustup show && rustup update && rustup toolchain install nightly && cargo new /tmp/foo && rustup target install wasm32-unknown-unknown,
     ] # Testing out `cargo` at the end is necessary to assert that rustup isn't messing things up
   entrypoint: [bash, -i, -c]
   assert:
@@ -19,22 +19,26 @@
   entrypoint: [bash, -i, -c]
   assert:
   - status == 0
-  - stdout.indexOf("cargo") != -1
+  - stdout.indexOf("cargo") != -1 ||
+    stderr.indexOf("cargo") != -1
 - desc: it should have watch subcommand for cargo
   entrypoint: [bash, -i, -c]
   command: [cargo watch --help]
   assert:
   - status == 0
-  - stdout.indexOf("cargo-watch") != -1
+  - stdout.indexOf("cargo-watch") != -1 ||
+    stderr.indexOf("cargo-watch") != -1
 - desc: it should have one of edit(add, rm, upgrade, set-version) subcommand(s) for cargo
   entrypoint: [bash, -i, -c]
   command: [cargo add --help]
   assert:
   - status == 0
-  - stdout.indexOf("cargo-add") != -1
+  - stdout.indexOf("cargo-add") != -1 ||
+    stderr.indexOf("cargo-add") != -1
 - desc: it should have workspaces subcommand for cargo
   entrypoint: [bash, -i, -c]
   command: [cargo workspaces --help]
   assert:
   - status == 0
-  - stdout.indexOf("cargo-workspaces") != -1
+  - stdout.indexOf("cargo-workspaces") != -1 ||
+    stderr.indexOf("cargo-workspaces") != -1

@@ -1,5 +1,0 @@
-- desc: clj should be installed
-  command: [which, /usr/local/bin/clj]
-  assert:
-  - status == 0
-  - stdout.indexOf("/usr/local/bin/clj") != -1

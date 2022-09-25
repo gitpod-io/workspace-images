@@ -8,13 +8,7 @@ For examples on how to use these images please take a look at the [documentation
 
 ## 📢 Announcements
 
-We're upgrading to support [dazzle v2](https://github.com/gitpod-io/dazzle) and build with Github Actions.
-
-Some images may break briefly as part of the upgrade effort. If you have trouble using the `latest` tag, please try `legacy-dazzle-v1`. Think of it as an "escape hatch".
-
-We'll initially release `gitpod/workspace-full`, and then others, updating this page as we go.
-
-The old build process which used dazzle v1 and CircleCI is deprecated, and will not be used for future builds.
+We upgraded to support [dazzle v2](https://github.com/gitpod-io/dazzle) and build with GitHub Actions.
 
 ### 📷 Images we'll upgrade
 
@@ -42,6 +36,8 @@ Each contains a set of chunks: a common base, a language, and includes Docker an
 1. gitpod/workspace-python ✅
 1. gitpod/workspace-ruby-2 ✅
 1. gitpod/workspace-ruby-3 ✅
+1. gitpod/workspace-ruby-3.0 ✅
+1. gitpod/workspace-ruby-3.1 ✅
 1. gitpod/workspace-rust ✅
 1. gitpod/workspace-elixir ✅
 
@@ -64,6 +60,13 @@ These images are no longer being published, and not planned for Upgrade:
 1. gitpod/workspace-rethinkdb
 1. gitpod/workspace-thin
 1. gitpod/workspace-webassembly
+
+### 📢 Deprecated images
+
+These images are no longer being published:
+
+1. gitpod/workspace-python-3.6 (please use `gitpod/workspace-python-3.7` instead)
+1. gitpod/workspace-postgresql (please use `gitpod/workspace-postgres` instead)
 
 ## Contributing
 

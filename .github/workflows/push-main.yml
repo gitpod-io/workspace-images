@@ -33,7 +33,7 @@ jobs:
       - name: 🔧 Setup tools
         run: |
           sudo apt-get install python3-pip shellcheck
-          curl -sSL https://github.com/mvdan/sh/releases/download/v3.4.2/shfmt_v3.4.2_linux_amd64 -o shfmt
+          curl -sSL https://github.com/mvdan/sh/releases/download/v3.5.0/shfmt_v3.5.0_linux_amd64 -o shfmt
           sudo mv shfmt /usr/local/bin/shfmt && sudo chmod +x /usr/local/bin/shfmt
           sudo pip3 install pre-commit
 
@@ -43,7 +43,7 @@ jobs:
 
       - name: 🔆 Install dazzle
         run: |
-          curl -sSL https://github.com/gitpod-io/dazzle/releases/download/v0.1.11/dazzle_0.1.11_Linux_x86_64.tar.gz | sudo tar -xvz -C /usr/local/bin
+          curl -sSL https://github.com/gitpod-io/dazzle/releases/download/v0.1.12/dazzle_0.1.12_Linux_x86_64.tar.gz | sudo tar -xvz -C /usr/local/bin
 
       - name: 🔆 Install skopeo
         run: |
@@ -56,31 +56,32 @@ jobs:
 
       - name: 🏗️ Setup buildkit
         run: |
-          curl -sSL https://github.com/moby/buildkit/releases/download/v0.10.1/buildkit-v0.10.1.linux-amd64.tar.gz | sudo tar xvz -C /usr
+          curl -sSL https://github.com/moby/buildkit/releases/download/v0.10.4/buildkit-v0.10.4.linux-amd64.tar.gz | sudo tar xvz -C /usr
           sudo buildkitd --oci-worker=true --oci-worker-net=host --debug --group docker &
           sudo su -c "while ! test -S /run/buildkit/buildkitd.sock; do sleep 0.1; done"
           sudo chmod +777 /run/buildkit/buildkitd.sock
 
       - name: ☁️ Set up Cloud SDK
-        uses: google-github-actions/setup-gcloud@v0
+        uses: google-github-actions/setup-gcloud@v0.6.0
         with:
-          version: 366.0.0
+          version: 393.0.0
 
       - name: 🔐 Authenticate to Google Cloud
         id: "auth"
-        uses: google-github-actions/auth@v0.7.0
+        uses: google-github-actions/auth@v0.8.1
         with:
           token_format: "access_token"
+          access_token_lifetime: "43200s"
           workload_identity_provider: ${{env.WORKLOAD_IDENTITY_POOL_ID}}
           service_account: ${{env.IAM_SERVICE_ACCOUNT}}
 
       - name: ✍🏽 Login to GAR using skopeo
         run: |
-          sudo skopeo login -u oauth2accesstoken --password=${{ steps.auth.outputs.access_token }} https://${{env.GAR_IMAGE_REGISTRY}}
+          sudo skopeo login -u oauth2accesstoken --password=${{ steps.auth.outputs.access_token }} ${{env.GAR_IMAGE_REGISTRY}}
 
       - name: ✍🏽 Login to GAR using docker cli
         run: |
-          docker login -u oauth2accesstoken --password=${{ steps.auth.outputs.access_token }} https://${{env.GAR_IMAGE_REGISTRY}}
+          docker login -u oauth2accesstoken --password=${{ steps.auth.outputs.access_token }} ${{env.GAR_IMAGE_REGISTRY}}
 
       - name: 🔨 Dazzle build
         run: |
@@ -129,19 +130,7 @@ jobs:
           docker_user: ${{ secrets.DOCKERHUB_USER_NAME }}
           docker_password: ${{ secrets.DOCKERHUB_ACCESS_TOKEN }}
         run: |
-          sudo skopeo login -u ${{ env.docker_user }} --password=${{ env.docker_password }} https://${{ env.DH_IMAGE_REGISTRY }}
-
-      - name: 🔐 Authenticate to Google Cloud again
-        id: "auth_again"
-        uses: google-github-actions/auth@v0.7.0
-        with:
-          token_format: "access_token"
-          workload_identity_provider: ${{env.WORKLOAD_IDENTITY_POOL_ID}}
-          service_account: ${{env.IAM_SERVICE_ACCOUNT}}
-
-      - name: ✍🏽 Login to GAR using skopeo again
-        run: |
-          sudo skopeo login -u oauth2accesstoken --password=${{ steps.auth_again.outputs.access_token }} https://${{env.GAR_IMAGE_REGISTRY}}
+          sudo skopeo login -u ${{ env.docker_user }} --password=${{ env.docker_password }} ${{ env.DH_IMAGE_REGISTRY }}
 
       - name: 🐳 Sync images with specific tags to Docker Hub
         run: |

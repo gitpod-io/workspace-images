@@ -1,0 +1,9 @@
+variants:
+  - name: "2.14"
+    args:
+      YB_VERSION: 2.14.0.0
+      YB_BUILD: 94
+  - name: "2.15"
+    args:
+      YB_VERSION: 2.15.0.1
+      YB_BUILD: 4
