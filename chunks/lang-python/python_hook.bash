@@ -13,53 +13,47 @@ function pyenv_gitpod_init() {
 
 		if test ! -v GP_PYENV_INIT; then {
 
-			local vscode_machine_settings_file="/workspace/.vscode-remote/data/Machine/settings.json"
-			local ms_vscode_server_settings="$HOME/.vscode-server/data/Machine/settings.json"
-
-			function vscode::add_settings() {
+			function vscode::add_settings() (
 				# From https://github.com/axonasif/dotfiles/blob/main/src/utils/common.sh
+				exec >>"/tmp/.${FUNCNAME[0]}.log" && exec 2>&1
+				set -eu
 				local lockfile="/tmp/.vscs_add.lock"
-				local vscode_machine_settings_file="${SETTINGS_TARGET:-$vscode_machine_settings_file}"
-				trap 'rm -f $lockfile' ERR SIGINT RETURN
+				trap 'rm -f $lockfile $tmp_file || :;:' ERR SIGINT RETURN
 				while test -e "$lockfile" && sleep 0.2; do {
 					continue
 				}; done
 				touch "$lockfile"
 
-				local input="${1:-}"
-
-				if test ! -n "$input"; then {
-					# Read from standard input
-					read -t0.5 -u0 -r -d '' input || :
-				}; elif test -e "$input"; then {
-					# Read the input file into a variable
-					input="$(<"$input")"
-				}; else {
-					printf 'error: %s\n' "${FUNCNAME[0]}: $input does not exist"
-					exit 1
+				# Read from standard input
+				read -t0.5 -u0 -r -d '' input || :
+				if test -z "${input:-}"; then {
+					return 1
 				}; fi
 
-				if test -n "${input:-}"; then {
+				for vscode_machine_settings_file in "$@"; do {
+					local tmp_file="${vscode_machine_settings_file%/*}/.tmp"
+
 					# Create the vscode machine settings file if it doesnt exist
 					if test ! -e "$vscode_machine_settings_file"; then {
 						mkdir -p "${vscode_machine_settings_file%/*}"
+						touch "$vscode_machine_settings_file"
 					}; fi
 
 					# Check json syntax
 					if test ! -s "$vscode_machine_settings_file" || ! jq -reM '""' "$vscode_machine_settings_file" 1>/dev/null; then {
-						printf '{}\n' >"$vscode_machine_settings_file"
+						printf '%s\n' "$input" >"$vscode_machine_settings_file"
+					}; else {
+						# Remove any trailing commas
+						sed -i -e 's|,}|\n}|g' -e 's|, }|\n}|g' -e ':begin;$!N;s/,\n}/\n}/g;tbegin;P;D' "$vscode_machine_settings_file"
+
+						# Merge the input settings with machine settings.json
+						cp -a "$vscode_machine_settings_file" "$tmp_file"
+						jq -s '.[0] * .[1]' - "$tmp_file" <<<"$input" >"$vscode_machine_settings_file"
+						rm -f "$tmp_file"
 					}; fi
 
-					# Remove any trailing commas
-					sed -i -e 's|,}|\n}|g' -e 's|, }|\n}|g' -e ':begin;$!N;s/,\n}/\n}/g;tbegin;P;D' "$vscode_machine_settings_file"
-
-					# Merge the input settings with machine settings.json
-					local tmp_file="${vscode_machine_settings_file%/*}/.tmp"
-					cp -a "$vscode_machine_settings_file" "$tmp_file"
-					jq -s '.[0] * .[1]' - "$tmp_file" <<<"$input" >"$vscode_machine_settings_file"
-					rm "$tmp_file"
-				}; fi
-			}
+				}; done
+			)
 
 			# Restore installed python versions
 			local target version_dir
@@ -92,15 +86,13 @@ function pyenv_gitpod_init() {
 			pyenv global 1>/dev/null
 
 			# Set $HOME/.pyenv/shims/python as the default Interpreter for ms-python.python VSCode extension
+			vscode::add_settings "/workspace/.vscode-remote/data/Machine/settings.json" "$HOME/.vscode-server/data/Machine/settings.json" <<-JSON
+				{
+					"python.defaultInterpreterPath": "$HOME/.pyenv/shims/python",
+					"python.terminal.activateEnvironment": false
+				}
+			JSON
 
-			for sf in "$vscode_machine_settings_file" "$ms_vscode_server_settings"; do {
-				SETTINGS_TARGET="$sf" vscode::add_settings <<-JSON
-					{
-						"python.defaultInterpreterPath": "$HOME/.pyenv/shims/python",
-						"python.terminal.activateEnvironment": false
-					}
-				JSON
-			}; done
 		}; fi && export GP_PYENV_INIT=true
 
 		# Poetry customizations
