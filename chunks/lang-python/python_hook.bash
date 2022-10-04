@@ -18,7 +18,7 @@ function pyenv_gitpod_init() {
 				exec >>"/tmp/.${FUNCNAME[0]}.log" && exec 2>&1
 				set -eu
 				local lockfile="/tmp/.vscs_add.lock"
-				trap 'rm -f $lockfile $tmp_file || :;:' ERR SIGINT RETURN
+				trap 'rm -f $lockfile $tmp_file || :;:' ERR SIGINT RETURN EXIT
 				while test -e "$lockfile" && sleep 0.2; do {
 					continue
 				}; done
