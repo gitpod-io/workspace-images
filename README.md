@@ -5,7 +5,7 @@
 
 Ready-to-use Docker images for [gitpod.io](https://www.gitpod.io) workspaces. All images are available on [Gitpod's Dockerhub page](https://hub.docker.com/u/gitpod).
 
-For an example of how to use these images, please take a look at the [documentation](https://www.gitpod.io/docs/config-docker#configure-a-public-docker-image).
+For an example of how to use these images, please take a look at the [documentation](https://www.gitpod.io/docs/configure/workspaces/workspace-image#configure-a-public-docker-image).
 
 ## 📢 Announcements
 
@@ -21,7 +21,7 @@ We upgraded to support [dazzle v2](https://github.com/gitpod-io/dazzle) and buil
 
 By default, Gitpod uses a standard Docker Image called [`workspace-full`](https://github.com/gitpod-io/workspace-images/blob/1ad468e8452aa8a9c14ab5ba4cab10d4f4bb1c90/dazzle.yaml#L23) as the foundation for workspaces. Workspaces started based on this default image come pre-installed with Docker, Nix, Go, Java, Node.js, C/C++, Python, Ruby, Rust, PHP as well as tools such as Homebrew, Tailscale, Nginx and several more.
 
-If this image does not include the tools you need for your repository, we recommend you to use [`workspace-base`](https://github.com/gitpod-io/workspace-images/blob/1ad468e8452aa8a9c14ab5ba4cab10d4f4bb1c90/dazzle.yaml#L3) & [Bring your Dockerfile](https://www.gitpod.io/blog/docker-in-gitpod), according to your repository. You can refer this [documentation to setup a custom docker image](https://www.gitpod.io/docs/config-docker).
+If this image does not include the tools you need for your repository, we recommend you to use [`workspace-base`](https://github.com/gitpod-io/workspace-images/blob/1ad468e8452aa8a9c14ab5ba4cab10d4f4bb1c90/dazzle.yaml#L3) & [Bring your Dockerfile](https://www.gitpod.io/blog/docker-in-gitpod), according to your repository. You can refer this [documentation to setup a custom docker image](https://www.gitpod.io/docs/configure/workspaces/workspace-image).
 
 ### 📷 Images we'll maintain
 
