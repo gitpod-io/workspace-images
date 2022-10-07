@@ -15,4 +15,4 @@ ENV HOMEBREW_NO_AUTO_UPDATE=1
 RUN sudo apt remove -y cmake \
     && brew install cmake
 
-COPY --chown=gitpod:gitpod completion-hook.bash $HOME/.bashrc.d/60-python
+COPY --chown=gitpod:gitpod completion-hook.bash $HOME/.bashrc.d/60-homebrew
