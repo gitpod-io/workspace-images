@@ -1,0 +1,137 @@
+(
+	set -eu
+	function remove_self() {
+		# Remove the hook file, because we no longer need it to be loaded.
+		if [[ "${BASH_SOURCE[0]}" =~ \.bashrc.d/[0-9]+- ]]; then {
+			rm -f "${BASH_SOURCE[0]}"
+		} fi
+	}
+	lockfile=/tmp/.wsinfo_lck
+	trap '{ remove_self; rm -f "$lockfile"; } || :' EXIT ERR
+
+	# Return early if user opted out
+	if test "${GITPOD_DISABLE_WORKSPACE_IMAGE_INFO:-false}" == true; then {
+		exit 0 # This is a subshell
+	} fi
+
+	if test ! -e "$lockfile"; then {
+		remove_self
+		printf '' > "$lockfile"
+
+		# The supervisor creates the task terminals, supervisor calls BASH from `/bin/bash` instead of the realpath `/usr/bin/bash`
+		# So we will only print the info once, on a non-task terminal that the user created manually
+		if ! [ "$BASH" == /bin/bash ] || ! [ "$PPID" == "$(pgrep -f "supervisor run" | head -n1)" ]; then {
+
+			# Get image source
+			gitpod_yml_path="$GITPOD_REPO_ROOT/.gitpod.yml"
+			if test ! -e "$gitpod_yml_path"; then {
+				: "workspace-full"
+			} elif res="$(awk '/image:/,/file:/' "$gitpod_yml_path" | awk '{ if (NR==2) { print $2; exit } }')" && test -n "${res:-}"; then {
+				if res="$(awk '{ if ($1 ~ /^FROM/) { print  $2; exit } }' "$GITPOD_REPO_ROOT/$res")" && test -n "${res:-}"; then {
+					: "${res#*/}"
+				} else {
+					: "workspace-full"
+				} fi
+			} elif res="$(sed -n 's/^image: //p' "$gitpod_yml_path")" && test -n "${res:-}"; then {
+				: "${res#*/}"
+			} else {
+				: "workspace-full"
+			} fi
+			image_source="$_"
+
+			wsimgs_repo_root="https://github.com/gitpod-io/workspace-images/tree/main"
+			username="${GITPOD_GIT_USER_NAME:-"gitpodder"}"
+			published_wsimgs=(
+				"workspace-base"
+				"workspace-c"
+				"workspace-cojure"
+				"workspace-elixir"
+				"workspace-go"
+				"workspace-java"
+				"workspace-node"
+				"workspace-python"
+				"workspace-ruby"
+				"workspace-rust"
+				"workspace-nix"
+				"workspace-mysql"
+			)
+			published_wsimgs_withfull=(
+				"${published_wsimgs[@]}"
+				"workspace-full"
+				"workspace-full-vnc"
+			)
+
+			# Check if a recognized image
+			if ! [[ "${published_wsimgs_withfull[*]}" =~ (^| )${image_source}($| ) ]]; then {
+				exit 0;
+			} fi
+
+			# Colors
+			readonly RC='\033[0m' RED='\033[0;31m' BRED='\033[1;31m' GRAY='\033[1;30m'
+			readonly BLUE='\033[0;34m' BBLUE='\033[1;34m' CYAN='\033[0;34m' BCYAN='\033[1;34m'
+			readonly WHITE='\033[1;37m' GREEN='\033[0;32m' BGREEN='\033[1;32m' YELLOW='\033[1;33m'
+			readonly PURPLE='\033[0;35m' BPURPLE='\033[1;35m' ORANGE='\033[0;33m'
+
+
+			# Header
+			printf "Hello $username 👋, your workspace is based on the ${BBLUE}%s${RC} docker image.\n\n" \
+				"${image_source}"
+
+			# Body
+			case "${image_source}" in
+				"workspace-base")
+					printf '%s\n\n' "⚡️ This is the most minimal image, used for bootstrapping bigger images. It includes:";
+					printf '\t✨ %s\n' \
+						'build-essential' \
+						'docker' \
+						'shells: bash, zsh and fish' \
+						'git' \
+						'htop, jq, ripgrep' \
+						'sudo' \
+						'CLI editors such as nano and vim' \
+						'tailscale' \
+						'And some other must-have tools'
+					: "base"
+				;;
+				"workspace-full")
+					printf '%s\n' "🔋 This is the most loaded image with tons of common tooling installed." \
+						"🎗  It's a compilation of the following images:"
+					printf '\n'
+					printf '\t💥 %s, %s\n' "${published_wsimgs[@]}"
+
+					: "chunks"
+				;;
+				"workspace-full-vnc")
+					printf '%s\n' '🖥  This image is mainly useful for GUI application development where you need a display server.'
+					printf "🔋 It's based on ${BGREEN}%s${RC}, it additionally contains:\n\n" 'workspace-full'
+					printf '\t🍭 %s\n' \
+						'tigervnc server' \
+						'noVNC viewer' \
+						'google-chrome' \
+						'xfce4 desktop environment' \
+						'"gp-vncsession" script'
+
+					: "chunks/tool-vnc"
+				;;
+				*)
+					if [[ "${published_wsimgs[*]}" =~ (^| )${image_source}($| ) ]]; then {
+						chunk_name="${image_source#*-}" && chunk_name="${chunk_name^}"
+						printf "⚙️  This is mainly optimized for ${BGREEN}%s${RC}, and is likely based on ${GRAY}workspace-base${RC}.\n" "$chunk_name"
+
+						# tool vs lang
+						if [[ "$image_source" =~ -nix|-mysql ]]; then {
+							: "chunks/tool-${image_source#*-}"
+						} else {
+							: "chunks/lang-${image_source#*-}"
+						} fi
+					} fi
+				;;
+			esac
+
+			# Footer
+			printf "\n📚 Learn more about ${image_source} at ${ORANGE}%s${RC}\n" "${wsimgs_repo_root}/$_"
+
+			# TODO: Observe if people are wanting to disable this one-time info. There likely won't be many requests.
+		} fi
+	} fi
+) 2>/dev/null
