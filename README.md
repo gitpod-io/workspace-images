@@ -27,7 +27,6 @@ If this image does not include the tools you need for your repository, we recomm
 
 OR, [Bring your Dockerfile](https://www.gitpod.io/docs/configure/workspaces/workspace-image#configure-a-public-docker-image).
 
-According to your repository. You can refer to this [documentation to setup a custom docker image](https://www.gitpod.io/docs/configure/workspaces/workspace-image).
 
 ### 📷 Images we'll maintain
 
