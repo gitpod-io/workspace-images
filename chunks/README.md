@@ -14,7 +14,7 @@ Lastly, [see it in action!](https://www.gitpod.io/docs/introduction/learn-gitpod
 
 ## Details
 
-The subdirectories here contain several independent `Dockerfile`s built on top of [base](../base/) image. Most of these will be used to build `workspace-full` image[1](../dazzle.yaml#L23).
+The subdirectories here contain several independent `Dockerfile`s built on top of [base](../base/) image. Most of these will be used to build `workspace-full` image[[1]](../dazzle.yaml#L23).
 
 🔋 `workspace-full` is the most loaded image with tons of common tooling installed.
 
