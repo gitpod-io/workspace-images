@@ -1,7 +1,7 @@
 variants:
   - name: "16"
     args:
-      NODE_VERSION: 16.17.1
+      NODE_VERSION: 16.18.0
   - name: "18"
     args:
-      NODE_VERSION: 18.10.0
+      NODE_VERSION: 18.11.0
