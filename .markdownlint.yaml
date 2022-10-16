@@ -4,7 +4,7 @@ MD003:
 MD007:
   indent: 4
 MD013:
-  line_length: 200
+  line_length: 400
 MD033: false
 no-inline-html:
   allowed_elements:
