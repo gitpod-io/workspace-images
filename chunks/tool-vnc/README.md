@@ -7,7 +7,7 @@ Put the following line in your `.gitpod.yml`:
 If you do not have a `.gitpod.yml`, run `gp init` on your terminal to create one.
 
 ```yaml
-image: gitpod/workspace-full-vnc:latest
+image: gitpod/workspace-full-vnc
 ```
 
 Lastly, [see it in action!](https://www.gitpod.io/docs/introduction/learn-gitpod/gitpod-yaml#see-it-in-action)

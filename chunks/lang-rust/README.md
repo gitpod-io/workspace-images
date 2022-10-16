@@ -7,7 +7,7 @@ Put the following line in your `.gitpod.yml`:
 If you do not have a `.gitpod.yml`, run `gp init` on your terminal to create one.
 
 ```yaml
-image: gitpod/workspace-rust:latest
+image: gitpod/workspace-rust
 ```
 
 Lastly, [see it in action!](https://www.gitpod.io/docs/introduction/learn-gitpod/gitpod-yaml#see-it-in-action)
@@ -34,4 +34,4 @@ The following are installed for you, you can extend using a [custom-docker-image
 
 `CARGO_HOME` environment variable is set to `/workspace/.cargo` when a workspace is running (i.e. the user is using it).
 
-However, for a [custom-docker-image](https://www.gitpod.io/docs/configure/workspaces/workspace-image#configure-a-custom-dockerfile) build environment, `CARGO_HOME` is set not set and thus it defaults to `$HOME/.cargo`.
+However, for a [custom-docker-image](https://www.gitpod.io/docs/configure/workspaces/workspace-image#configure-a-custom-dockerfile) build environment, `CARGO_HOME` is not set and thus it defaults to `$HOME/.cargo`.
