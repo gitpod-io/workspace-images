@@ -16,9 +16,9 @@ Lastly, [see it in action!](https://www.gitpod.io/docs/introduction/learn-gitpod
 
 We provide multiple variants of the `gitpod/workspace-ruby-*` docker image as per [chunk.yaml](./chunk.yaml). Each containing a different version of Ruby:
 
-- `gitpod/workspace-ruby-2.7` (This is ruby 2.7.6)
-- `gitpod/workspace-ruby-3.0` (This is ruby 3.0.4)
-- `gitpod/workspace-ruby-3.1` (This is ruby 3.1.2)
+- `gitpod/workspace-ruby-2.7` (This being ruby 2.7.x)
+- `gitpod/workspace-ruby-3.0` (This being ruby 3.0.x)
+- `gitpod/workspace-ruby-3.1` (This being ruby 3.1.x)
 
 You could use these on your `.gitpod.yml` as well.
 
