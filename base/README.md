@@ -14,7 +14,7 @@ Lastly, [see it in action!](https://www.gitpod.io/docs/introduction/learn-gitpod
 
 ## Details
 
-All of the resulting images (from [chunks](../chunks/#workspace-full)) are built on top of the `workspace-base` image.
+All of the resulting images (from [chunks](../chunks#workspace-full)) are built on top of the `workspace-base` image.
 
 ⚡️ This is the most minimal image, used for bootstrapping bigger images. It includes:
 
