@@ -31,12 +31,12 @@ The subdirectories here contain several independent `Dockerfile`s built on top o
 - [workspace-ruby](./lang-ruby/)
 - [workspace-rust](./lang-rust/)
 
-Also Used to build `workspace-full` but no individual public docker image is produced for the following:
+👻 Also Used to build `workspace-full` but no individual public docker image is produced for the following:
 
 - [brew](./tool-brew/)
 - [nginx](./tool-nginx/)
 
-Idividual public docker images that are not a part of `workspace-full`:
+🪖 Idividual public docker images that are not a part of `workspace-full`:
 
 - [workspace-elixir](./lang-elixir)
 - [workspace-dotnet](./tool-dotnet)
