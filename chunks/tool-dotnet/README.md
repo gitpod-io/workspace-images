@@ -1,4 +1,4 @@
-# workspace-elixir
+# workspace-dotnet
 
 ## How to use for a Gitpod workspace
 
@@ -7,23 +7,26 @@ Put the following line in your `.gitpod.yml`:
 If you do not have a `.gitpod.yml`, run `gp init` on your terminal to create one.
 
 ```yaml
-image: gitpod/workspace-elixir
+image: gitpod/workspace-dotnet
 ```
 
 Lastly, [see it in action!](https://www.gitpod.io/docs/introduction/learn-gitpod/gitpod-yaml#see-it-in-action)
 
 ## Details
 
-This is mainly optimized for [Elixir](https://elixir-lang.org/), and is based on [workspace-base](../../base/)
+This is mainly optimized for [Dotnet](https://dotnet.microsoft.com/en-us/), and is based on [workspace-full](../README.md#workspace-full)
 
 The following are installed for you, you can extend using a [custom-docker-image](https://www.gitpod.io/docs/configure/workspaces/workspace-image#configure-a-custom-dockerfile) if you wish.
 
-- A standard Elixir installation
+- A standard dotnet installation is included.
 
 For more details, check the [Dockerfile](./Dockerfile)
 
+## To be aware of
+
+Please keep in mind that this is the cross-platform **.NET Core**. It is not **.NET Framework**, so do not expect to do things like Windows application development.
+
 ## Learn more
 
-- Additional resource:
-    - https://github.com/gitpod-io/template-elixir
-    - https://github.com/peet86/gitpod-phoenix
+- Docs:
+    - https://www.gitpod.io/docs/introduction/languages/dotnet

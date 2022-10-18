@@ -35,3 +35,5 @@ Also Used to build `workspace-full` but no individual public docker image is pro
 
 - [brew](./tool-brew/)
 - [nginx](./tool-nginx/)
+
+For more details, check the [dazzle.yml](../dazzle.yaml)

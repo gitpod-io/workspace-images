@@ -1,5 +1,3 @@
-ARG base
-FROM ${base}
 
 ARG RUBY_VERSION
 

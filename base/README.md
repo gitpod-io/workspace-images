@@ -19,15 +19,18 @@ All of the resulting images (from [chunks](../chunks)) are built on top of the `
 ⚡️ This is the most minimal image, used for bootstrapping bigger images. It includes:
 
 - build-essential
-- docker
+- [docker](../chunks/tool-docker/)
 - shells: bash, zsh and fish
 - git
 - htop, jq, ripgrep
 - sudo
 - CLI editors such as nano and vim
-- tailscale
+- [tailscale](../chunks/tool-tailscale/)
 - And some other must-have tools
 
 For more details, check the [Dockerfile](./Dockerfile)
 
-If you wish to build your custom base image, you can also check our [documentation](https://www.gitpod.io/docs/configure/workspaces/workspace-image#custom-base-image).
+## Learn more
+
+- Docs:
+    - Check [this](https://www.gitpod.io/docs/configure/workspaces/workspace-image#custom-base-image) if you wish to build your custom base image.

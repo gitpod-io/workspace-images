@@ -35,3 +35,10 @@ The following are installed for you, you can extend using a [custom-docker-image
     - pnpm
     - node-gyp
 - [Google Chrome](../tool-chrome/) for headless use.
+
+For more details, check the [Dockerfile](./Dockerfile)
+
+## Learn more
+
+- Docs:
+    - https://www.gitpod.io/docs/introduction/languages/javascript

@@ -6,6 +6,7 @@ MD007:
 MD013:
   line_length: 400
 MD033: false
+MD034: false
 no-inline-html:
   allowed_elements:
     - br

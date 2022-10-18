@@ -39,6 +39,9 @@ The following are installed for you, you can extend using a [custom-docker-image
     - bandit, notebook, twine
 - Poetry is also installed and configured
 
+
+For more details, check the [Dockerfile](./Dockerfile)
+
 ### To be aware of
 
 Several _hacks_ were implemented to persist `pip` packages or `pyenv install <ver>` that were installed from [custom-docker-image](https://www.gitpod.io/docs/configure/workspaces/workspace-image#configure-a-custom-dockerfile) build environment, [prebuilds](https://www.gitpod.io/docs/configure/projects/prebuilds) environment and in between workspace reboots. These hacks are utilizing [`pyenv` hooks](https://github.com/pyenv/pyenv/wiki/Authoring-plugins#pyenv-hooks).
@@ -61,3 +64,11 @@ We also set some defaults for the VSCode Pylance extension:
     "python.terminal.activateEnvironment": false
 }
 ```
+
+## Learn more
+
+- Docs:
+    - https://www.gitpod.io/docs/introduction/languages/python
+- Additional resource:
+    - https://github.com/gitpod-io/template-python-django
+    - https://www.gitpod.io/for/education/bruno-rocha

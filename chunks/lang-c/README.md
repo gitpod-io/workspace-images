@@ -23,3 +23,10 @@ The following are installed for you, you can extend using a [custom-docker-image
 - formatters (i.e. `clang-{format,tidy}`)
 - gdb
 - lld
+
+For more details, check the [Dockerfile](./Dockerfile)
+
+## Learn more
+
+- Additional resource:
+    - https://github.com/gitpod-io/template-c

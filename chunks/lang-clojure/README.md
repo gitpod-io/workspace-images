@@ -19,3 +19,10 @@ This is mainly optimized for [Clojure](https://clojure.org/), and is based on [w
 The following are installed for you, you can extend using a [custom-docker-image](https://www.gitpod.io/docs/configure/workspaces/workspace-image#configure-a-custom-dockerfile) if you wish.
 
 - A standard Clojure installation
+
+For more details, check the [Dockerfile](./Dockerfile)
+
+## Learn more
+
+- Additional resource:
+    - https://github.com/gitpod-io/template-clojure

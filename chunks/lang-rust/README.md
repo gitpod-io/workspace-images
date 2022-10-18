@@ -30,8 +30,15 @@ The following are installed for you, you can extend using a [custom-docker-image
     - cargo-edit
     - cargo-workspaces
 
+For more details, check the [Dockerfile](./Dockerfile)
+
 ### To be aware of
 
 `CARGO_HOME` environment variable is set to `/workspace/.cargo` when a workspace is running (i.e. the user is using it).
 
 However, for a [custom-docker-image](https://www.gitpod.io/docs/configure/workspaces/workspace-image#configure-a-custom-dockerfile) build environment, `CARGO_HOME` is not set and thus it defaults to `$HOME/.cargo`.
+
+## Learn more
+
+- Docs:
+    - https://www.gitpod.io/docs/introduction/languages/rust

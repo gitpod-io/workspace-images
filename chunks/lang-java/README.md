@@ -33,6 +33,9 @@ The following are installed for you, you can extend using a [custom-docker-image
     - gradle
     - maven
 
+
+For more details, check the [Dockerfile](./Dockerfile)
+
 ### To be aware of
 
 - `GRADLE_USER_HOME` environment variable is set to `/workspace/.gradle`
@@ -42,3 +45,10 @@ The following are installed for you, you can extend using a [custom-docker-image
 ---
 
 So that means, if you try to extend this image using a [custom-docker-image](https://www.gitpod.io/docs/configure/workspaces/workspace-image#configure-a-custom-dockerfile) and install things with gradle or maven, those installations will be lost when a workspace starts.
+
+## Learn more
+
+- Docs:
+    - https://www.gitpod.io/docs/introduction/languages/java
+- Blogs:
+    - https://www.gitpod.io/guides/set-up-spring-boot-application-remotely-with-gitpod-and-jetBrains-gateway

@@ -31,3 +31,17 @@ This image could be used for:
 - E2E testing requires a GUI based browser. (cypress, playwright, selenium and etc.)
 - Some CLIs try to launch browser auth by default, it could help in that.
 - GUI application development. Or just simply to run any Linux GUI application.
+
+For more details, check the [Dockerfile](./Dockerfile)
+
+## To be aware of
+
+- There is no GPU acceleration. It's completely software rendered.
+- Some complex 3D applications might crash.
+
+## Learn more
+
+- Docs:
+    - https://www.gitpod.io/docs/introduction/languages/python#gui-applications-with-wxpython
+- Blogs:
+    - https://www.gitpod.io/blog/native-ui-with-vnc
