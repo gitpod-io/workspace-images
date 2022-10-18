@@ -36,4 +36,13 @@ Also Used to build `workspace-full` but no individual public docker image is pro
 - [brew](./tool-brew/)
 - [nginx](./tool-nginx/)
 
+Idividual public docker images that are not a part of `workspace-full`:
+
+- [workspace-elixir](./lang-elixir)
+- [workspace-dotnet](./tool-dotnet)
+- [workspace-mongodb](./tool-mongodb)
+- [workspace-mysql](./tool-mysql)
+- [workspace-nix](./tool-nix)
+- [workspace-postgres](./tool-postgresql)
+
 For more details, check the [dazzle.yml](../dazzle.yaml)
