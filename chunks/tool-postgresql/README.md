@@ -14,7 +14,7 @@ Lastly, [see it in action!](https://www.gitpod.io/docs/introduction/learn-gitpod
 
 ## Details
 
-This is mainly optimized for [PostgreSQL](https://www.postgresql.org/), and is based on [workspace-full](../README.md#workspace-full)
+This is mainly optimized for [PostgreSQL](https://www.postgresql.org/), and is based on [workspace-full](../)
 
 The following are installed for you, you can extend using a [custom-docker-image](https://www.gitpod.io/docs/configure/workspaces/workspace-image#configure-a-custom-dockerfile) if you wish.
 
