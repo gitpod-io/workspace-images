@@ -25,9 +25,6 @@ Workspaces started based on this default image come pre-installed with Docker, N
 
 If this image does not include the tools you need for your repository, we recommend you start with [`workspace-base`](https://github.com/gitpod-io/workspace-images/blob/HEAD/dazzle.yaml#L3) and customize it according to your needs. You can refer to this [document to setup a custom docker image](https://www.gitpod.io/docs/configure/workspaces/workspace-image).
 
-OR, [Bring your Dockerfile](https://www.gitpod.io/docs/configure/workspaces/workspace-image#configure-a-public-docker-image).
-
-
 ### 📷 Images we'll maintain
 
 - [`gitpod/workspace-full`](https://hub.docker.com/r/gitpod/workspace-full) ✅
