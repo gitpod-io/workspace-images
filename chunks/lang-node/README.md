@@ -16,8 +16,8 @@ Lastly, [see it in action!](https://www.gitpod.io/docs/introduction/learn-gitpod
 
 We provide multiple variants of the `gitpod/workspace-node` docker image as per [chunk.yaml](./chunk.yaml). Each containing a different version of Node:
 
-- `gitpod/workspace-node` (This is node 18)
-- `gitpod/workspace-node-lts` (This is node 16, hence LTS)
+- `gitpod/workspace-node` (This being node 18)
+- `gitpod/workspace-node-lts` (This being node 16, hence LTS)
 
 You could use these on your `.gitpod.yml` as well.
 
