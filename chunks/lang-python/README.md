@@ -16,10 +16,10 @@ Lastly, [see it in action!](https://www.gitpod.io/docs/introduction/learn-gitpod
 
 We provide multiple variants of the `gitpod/workspace-python` docker image as per [chunk.yaml](./chunk.yaml). Each containing a different version of Python:
 
-- `gitpod/workspace-python-3.7` (This is python 3.7.13)
-- `gitpod/workspace-python` (This is python 3.8.13)
-- `gitpod/workspace-python-3.9` (This is python 3.9.13)
-- `gitpod/workspace-python-3.10` (This is python 3.10.6)
+- `gitpod/workspace-python-3.7` (This being python 3.7.x)
+- `gitpod/workspace-python` (This being python 3.8.x)
+- `gitpod/workspace-python-3.9` (This being python 3.9.x)
+- `gitpod/workspace-python-3.10` (This being python 3.10.x)
 
 You could use these on your `.gitpod.yml` as well.
 
