@@ -3,8 +3,6 @@ MD003:
   style: atx
 MD007:
   indent: 4
-MD013:
-  line_length: 200
 MD033: false
 no-inline-html:
   allowed_elements:
