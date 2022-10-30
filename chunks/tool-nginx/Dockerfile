@@ -7,7 +7,7 @@ USER root
 ENV TRIGGER_REBUILD=2
 
 # Install composer
-COPY --from=composer:2.4.4 /usr/bin/composer /usr/bin/composer
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 RUN for _ppa in 'ppa:ondrej/php' 'ppa:ondrej/apache2' 'ppa:ondrej/nginx-mainline'; do add-apt-repository -y "$_ppa"; done \
     && install-packages \
