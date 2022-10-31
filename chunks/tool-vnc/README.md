@@ -22,7 +22,7 @@ Lastly, [see it in action!](https://www.gitpod.io/docs/introduction/learn-gitpod
 - noVNC viewer
 - google-chrome
 - xfce4 desktop environment
-- `gp-vncsession` script
+- [gp-vncsession](./gp-vncsession) script
 
 Every time a Gitpod workspace is started, `gp-vncsession` script is executed from the workspace [`.bashrc`](./Dockerfile#L26) file.
 
