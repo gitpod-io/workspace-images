@@ -36,7 +36,7 @@ The subdirectories here contain several independent `Dockerfile`s built on top o
 - [brew](./tool-brew/)
 - [nginx](./tool-nginx/)
 
-🪖 Individual public docker images that are not a part of `workspace-full`:
+🪖 Individual public docker images that are not used to build or a part of `workspace-full`:
 
 - [workspace-elixir](./lang-elixir)
 - [workspace-dotnet](./tool-dotnet)
@@ -44,5 +44,6 @@ The subdirectories here contain several independent `Dockerfile`s built on top o
 - [workspace-mysql](./tool-mysql)
 - [workspace-nix](./tool-nix)
 - [workspace-postgres](./tool-postgresql)
+- [workspace-full-vnc](./tool-vnc)
 
 For more details, check the [dazzle.yml](../dazzle.yaml)
