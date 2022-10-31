@@ -26,9 +26,9 @@ Lastly, [see it in action!](https://www.gitpod.io/docs/introduction/learn-gitpod
 
 Every time a Gitpod workspace is started, `gp-vncsession` script is executed from the workspace [`.bashrc`](./Dockerfile#L26) file.
 
-The web VNC client (i.e. noVNC) can be accessed by opening the preview of port `6080`.
+The web VNC client (i.e. noVNC) can be accessed by opening the preview of port `6080`. (e.g. `gp preview "$(gp url 6080)" --external`)
 
-If you wish to use a local VNC client such as [RealVNC](https://www.realvnc.com/en/connect/download/viewer/) or tigervnc-viewer, you would need to forward the workspace ports to your localhost[^1].
+If you wish to use a local VNC client such as [RealVNC](https://www.realvnc.com/en/connect/download/viewer/) or tigervnc-viewer, you would need to forward the workspace ports to your localhost[^1] and connect to `localhost:5900`.
 
 This image could be used for:
 
