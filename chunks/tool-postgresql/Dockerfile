@@ -18,15 +18,11 @@ RUN PGDATA="${PGDATA//\/workspace/$HOME}" \
  && initdb -D $PGDATA \
  && printf '#!/bin/bash\npg_ctl -D $PGDATA -l ~/.pg_ctl/log -o "-k ~/.pg_ctl/sockets" start\n' > ~/.pg_ctl/bin/pg_start \
  && printf '#!/bin/bash\npg_ctl -D $PGDATA -l ~/.pg_ctl/log -o "-k ~/.pg_ctl/sockets" stop\n' > ~/.pg_ctl/bin/pg_stop \
- && chmod +x ~/.pg_ctl/bin/* \
- && printf '%s\n' '# Auto-start PostgreSQL server' \
-                  '(' \
-                  "mkdir \$PGWORKSPACE 2>/dev/null || exit 0; test -e ${PGDATA%/data} && mv ${PGDATA%/data} /workspace" \
-                  '[[ $(pg_ctl status | grep PID) ]] || pg_start > /dev/null' \
-                  ') & disown' > ~/.bashrc.d/200-postgresql-launch
+ && chmod +x ~/.pg_ctl/bin/*
 ENV PATH="$HOME/.pg_ctl/bin:$PATH"
 ENV DATABASE_URL="postgresql://gitpod@localhost"
 ENV PGHOSTADDR="127.0.0.1"
 ENV PGDATABASE="postgres"
+COPY --chown=gitpod:gitpod postgresql-hook.bash $HOME/.bashrc.d/200-postgresql-launch
 
 USER gitpod
