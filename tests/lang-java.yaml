@@ -6,12 +6,12 @@
   - stderr.indexOf("OpenJDK")   != -1
   - stderr.indexOf("11.0.")   != -1 ||
     stderr.indexOf("17.0.")    != -1
-- desc: it should have a functioning java 17.0.4 installed
+- desc: it should have a functioning java 17.0.5 installed
   entrypoint: [env, GITPOD_REPO_ROOT=/workspace, bash, -ci]
-  command: [sdk default java 17.0.4.fx-zulu && java -version && mvn -v]
+  command: [sdk default java 17.0.5.fx-zulu && java -version && mvn -v]
   assert:
   - status == 0
-  - stderr.indexOf('openjdk version "17.0.4"') != -1
+  - stderr.indexOf('openjdk version "17.0.5"') != -1
   - stdout.indexOf("Apache Maven") != -1
 - desc: it should run maven
   command: [mvn -v]
