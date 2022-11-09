@@ -4,7 +4,10 @@ FROM ${base}
 USER root
 
 # Dazzle does not rebuild a layer until one of its lines are changed. Increase this counter to rebuild this layer.
-ENV TRIGGER_REBUILD=1
+ENV TRIGGER_REBUILD=2
+
+# Install composer
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 RUN for _ppa in 'ppa:ondrej/php' 'ppa:ondrej/apache2' 'ppa:ondrej/nginx-mainline'; do add-apt-repository -y "$_ppa"; done \
     && install-packages \
@@ -18,6 +21,7 @@ RUN for _ppa in 'ppa:ondrej/php' 'ppa:ondrej/apache2' 'ppa:ondrej/nginx-mainline
         php-common \
         php-curl \
         php-date \
+        php-fpm \
         php-gd \
         php-intl \
         php-json \
@@ -30,10 +34,6 @@ RUN for _ppa in 'ppa:ondrej/php' 'ppa:ondrej/apache2' 'ppa:ondrej/nginx-mainline
         php-tokenizer \
         php-xml \
         php-zip \
-    && curl -sS https://getcomposer.org/installer -o /tmp/composer-setup.php \
-    && php /tmp/composer-setup.php  --version=2.2.5 --install-dir=/tmp \
-    && sudo mv /tmp/composer.phar /usr/bin/composer \
-    && rm /tmp/composer-setup.php \
     && mkdir -p /var/run/nginx \
     && ln -s /etc/apache2/mods-available/rewrite.load /etc/apache2/mods-enabled/rewrite.load \
     && chown -R gitpod:gitpod /etc/apache2 /var/run/apache2 /var/lock/apache2 /var/log/apache2 \

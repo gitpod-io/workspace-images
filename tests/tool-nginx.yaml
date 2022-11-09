@@ -43,7 +43,7 @@
   entrypoint: [/bin/bash, -c]
   assert:
   - status == 0
-  - stdout.indexOf("Composer version 2.2.5") != -1
+  - stdout.indexOf("Composer version 2") != -1
 - desc: "it should have apache2 installed"
   command: [apache2 -v]
   entrypoint: [/bin/bash, -c]
