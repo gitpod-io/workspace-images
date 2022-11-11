@@ -26,7 +26,7 @@ combiner:
       chunks:
         - lang-c
         - lang-clojure
-        - lang-go:1.19.2
+        - lang-go:1.19.3
         - lang-java:11
         - lang-node:16
         - lang-python:3.8
@@ -45,7 +45,7 @@ combiner:
       ref:
       - base
       chunks:
-        - lang-go:1.19.2
+        - lang-go:1.19.3
     - name: nix
       ref:
       - base
