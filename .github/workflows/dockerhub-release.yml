@@ -3,7 +3,7 @@ name: Publish latest images to Docker Hub
 on:
   workflow_dispatch:
   schedule:
-    - cron: "0 10 * * TUE"
+    - cron: "0 10 * * MON"
 
 jobs:
   # Sync the 'latest' tag from GAR to Docker Hub
