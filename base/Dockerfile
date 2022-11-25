@@ -59,6 +59,13 @@ COPY --chown=gitpod:gitpod default.gitconfig /home/gitpod/.gitconfig
 # configure git-lfs
 RUN git lfs install --system --skip-repo
 
+# Autoload .bashrc.d for other SHELLs (fish and zsh)
+RUN mkdir -m 755 -p /usr/share/fish/vendor_conf.d /etc/zsh \
+    && printf 'source %s\n' /etc/zsh/autoload_bash.zsh >> /etc/zsh/zshrc
+COPY fish/autoload_bash.fish /usr/share/fish/vendor_conf.d
+COPY zsh/autoload_bash.zsh /etc/zsh
+RUN chmod 755 /etc/zsh/autoload_bash.zsh && touch $HOME/.zshrc
+
 ### Gitpod user (2) ###
 USER gitpod
 # use sudo so that user does not get sudo usage info on (the first) login
