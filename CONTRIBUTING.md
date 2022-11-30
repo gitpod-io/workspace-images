@@ -198,3 +198,5 @@ The final step to make sure your newly added image gets published is to update t
 
 1. **[.github/sync-containers.yml](.github/sync-containers.yml)** : To publish images from local registry to GAR.
 1. **[.github/promote-images.yml](.github/promote-images.yml)** : To copy images from GAR to Docker Hub.
+
+test me
