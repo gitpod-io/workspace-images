@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 # Auto-start PostgreSQL server
+set +m
 (
 	if mkdir /tmp/.pgsql_lock 2>/dev/null; then {
 		target="${PGWORKSPACE}"
@@ -26,3 +27,4 @@
 	}; fi
 ) &
 disown
+set -m
