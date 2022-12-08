@@ -10,7 +10,8 @@ ENV TRIGGER_REBUILD=1
 ENV GO_VERSION=${GO_VERSION}
 ENV GOPATH=$HOME/go-packages
 ENV GOROOT=$HOME/go
-ENV PATH=$GOROOT/bin:$GOPATH/bin:$PATH
+ENV GOBIN=$GOROOT/bin
+ENV PATH=$GOBIN:$GOPATH/bin:$PATH
 RUN curl -fsSL https://dl.google.com/go/go$GO_VERSION.linux-amd64.tar.gz | tar xzs && \
 # install VS Code Go tools for use with gopls as per https://github.com/golang/vscode-go/blob/master/docs/tools.md
 # also https://github.com/golang/vscode-go/blob/27bbf42a1523cadb19fad21e0f9d7c316b625684/src/goTools.ts#L139
