@@ -38,20 +38,20 @@ jobs:
       - name: 🗄️ Force Save Registry Cache Per Sha
         uses: actions/cache@v3
         with:
-          path: ~/registry
+          path: registry
           key: ${{ runner.os }}-pull-request-cache-${{ github.sha }}
 
       - name: 🗄️ Restore Registry Cache
         uses: actions/cache@v3
         with:
-          path: ~/registry
+          path: registry
           key: ${{ runner.os }}-pull-request-cache-${{ github.sha }}
           restore-keys: |
             ${{ runner.os }}-pull-request-cache-
 
       - name: 📦 Setup local registry
         run: |
-          docker run -it --detach --publish 5000:5000 --volume ~/registry:/var/lib/registry registry:2
+          docker run -it --detach --publish 5000:5000 --volume registry:/var/lib/registry registry:2
 
       - name: 🔨 Dazzle build
         run: |
