@@ -13,7 +13,7 @@ jobs:
   # Click New environment, set the name production, and click Configure environment.
   # Check the "Required reviewers" box and enter at least one user or team name.
   sync:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     environment: "production"
     permissions:
       contents: "read"
