@@ -3,7 +3,7 @@ name: Publish latest images to Docker Hub
 on:
   workflow_dispatch:
   schedule:
-    - cron: "0 10 * * TUE"
+    - cron: "0 10 * * MON"
 
 jobs:
   # Sync the 'latest' tag from GAR to Docker Hub
@@ -44,13 +44,13 @@ jobs:
           sudo apt update && sudo apt install -y skopeo
 
       - name: ☁️ Set up Cloud SDK
-        uses: google-github-actions/setup-gcloud@v0.6.1
+        uses: google-github-actions/setup-gcloud@v1.0.1
         with:
           version: 393.0.0
 
       - name: 🔐 Authenticate to Google Cloud
         id: "auth"
-        uses: google-github-actions/auth@v0.8.3
+        uses: google-github-actions/auth@v1.0.0
         with:
           token_format: "access_token"
           workload_identity_provider: ${{env.WORKLOAD_IDENTITY_POOL_ID}}
