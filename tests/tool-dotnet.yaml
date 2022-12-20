@@ -3,4 +3,4 @@
   entrypoint: [bash, -i, -c]
   assert:
   - status == 0
-  - stdout.indexOf("Microsoft.AspNetCore.App 6.0.2") != -1
+  - stdout.indexOf("Microsoft.AspNetCore.App 7.0.0") != -1
