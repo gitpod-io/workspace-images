@@ -33,8 +33,8 @@
   command: [cargo add --help]
   assert:
   - status == 0
-  - stdout.indexOf("cargo-add") != -1 ||
-    stderr.indexOf("cargo-add") != -1
+  - stdout.indexOf("cargo add") != -1 ||
+    stderr.indexOf("cargo add") != -1
 - desc: it should have workspaces subcommand for cargo
   entrypoint: [bash, -i, -c]
   command: [cargo workspaces --help]
