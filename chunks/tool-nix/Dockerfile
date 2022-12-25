@@ -9,7 +9,7 @@ ENV NIX_VERSION=${NIX_VERSION}
 USER root
 
 # Dazzle does not rebuild a layer until one of its lines are changed. Increase this counter to rebuild this layer.
-ENV TRIGGER_REBUILD=1
+ENV TRIGGER_REBUILD=2
 
 RUN addgroup --system nixbld \
   && adduser gitpod nixbld \
@@ -40,3 +40,8 @@ RUN mkdir -p /home/gitpod/.config/direnv \
   && . /home/gitpod/.nix-profile/etc/profile.d/nix.sh \
   && nix-env -i direnv \
   && direnv hook bash >> /home/gitpod/.bashrc
+  
+# Install devenv
+RUN . /home/gitpod/.nix-profile/etc/profile.d/nix.sh \
+  && cachix use devenv \
+  && nix-env -if https://github.com/cachix/devenv/tarball/v0.5
