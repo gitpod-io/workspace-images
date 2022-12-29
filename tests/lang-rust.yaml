@@ -26,19 +26,13 @@
   command: [cargo watch --help]
   assert:
   - status == 0
-  - stdout.indexOf("cargo-watch") != -1 ||
-    stderr.indexOf("cargo-watch") != -1
 - desc: it should have one of edit(add, rm, upgrade, set-version) subcommand(s) for cargo
   entrypoint: [bash, -i, -c]
   command: [cargo add --help]
   assert:
   - status == 0
-  - stdout.indexOf("cargo-add") != -1 ||
-    stderr.indexOf("cargo-add") != -1
 - desc: it should have workspaces subcommand for cargo
   entrypoint: [bash, -i, -c]
   command: [cargo workspaces --help]
   assert:
   - status == 0
-  - stdout.indexOf("cargo-workspaces") != -1 ||
-    stderr.indexOf("cargo-workspaces") != -1
