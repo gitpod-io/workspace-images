@@ -1,7 +1,4 @@
 variants:
-  - name: "3.6"
-    args:
-      PYTHON_VERSION: 3.6.15
   - name: "3.7"
     args:
       PYTHON_VERSION: 3.7.13
