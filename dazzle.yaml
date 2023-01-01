@@ -103,16 +103,21 @@ combiner:
       - base
       chunks:
         - lang-ruby:3.0
-    - name: ruby-3
-      ref:
-      - base
-      chunks:
-        - lang-ruby:3.1
     - name: ruby-3.1
       ref:
       - base
       chunks:
         - lang-ruby:3.1
+    - name: ruby-3.2
+      ref:
+      - base
+      chunks:
+        - lang-ruby:3.2
+    - name: ruby-3
+      ref:
+      - base
+      chunks:
+        - lang-ruby:3.2
     - name: rust
       ref:
       - base

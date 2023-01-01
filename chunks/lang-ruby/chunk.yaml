@@ -8,3 +8,6 @@ variants:
   - name: "3.1"
     args:
       RUBY_VERSION: 3.1.2
+  - name: "3.2"
+    args:
+      RUBY_VERSION: 3.2.0
