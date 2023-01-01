@@ -21,6 +21,7 @@ sync:
     - ruby-3
     - ruby-3.0
     - ruby-3.1
+    - ruby-3.2
     - rust
     - dotnet
     - postgres
