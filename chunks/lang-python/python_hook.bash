@@ -106,5 +106,4 @@ unset -f pyenv_gitpod_init vscode::add_settings
 # Do not init when sourced internally from `pyenv`
 if test ! -v PYENV_DIR; then {
 	eval "$(pyenv init -)"
-	eval "$(pyenv virtualenv-init -)"
 }; fi
