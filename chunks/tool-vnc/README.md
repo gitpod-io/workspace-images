@@ -36,6 +36,14 @@ This image could be used for:
 - Some CLIs try to launch browser auth by default, it could help in that.
 - GUI application development. Or just simply to run any Linux GUI application.
 
+You can set the VNC server display resolution through the `TIGERVNC_GEOMETRY` variable. So for example, you could have such a custom dockerfile:
+
+```dockerfile
+FROM gitpod/workspace-full-vnc
+
+ENV TIGERVNC_GEOMETRY=1280x800
+```
+
 For more details, check the [Dockerfile](./Dockerfile)
 
 ## To be aware of
