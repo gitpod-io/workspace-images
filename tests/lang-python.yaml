@@ -41,20 +41,13 @@
     - status == 0
     - stdout.indexOf("/workspace/.pyenv_mirror") != -1
 
-- desc: "`pyenv install <ver>` should use $HOME/.pyenv/versions/ for imagebuild env"
+# https://github.com/gitpod-io/workspace-images/issues/1000
+- desc: "`pyenv install <ver>` should use $HOME/.pyenv/versions/ for imagebuild env and /workspace/.pyenv_mirror/fakeroot/versions/ for workspace-session env and multi-version shims should work"
   entrypoint: [bash, -c]
   command:
     [
-      ver=3.9.0; pyenv install $ver && test -e $PYENV_ROOT/versions/$ver,
-    ]
-  assert:
-    - status == 0
-
-- desc: "`pyenv install <ver>` should use /workspace/.pyenv_mirror/fakeroot/versions/ for workspace-session env and multi-version shims should work"
-  entrypoint: [env, GITPOD_REPO_ROOT=/workspace, bash, -ci]
-  command:
-    [
-      ver=3.9.0; pyenv install $ver && test -d $GP_PYENV_FAKEROOT/versions/$ver && test -L $PYENV_ROOT/versions/$ver && pip install cowsay && pyenv global $(pyenv version-name) $ver && cowsay Gitpod,
+      ver=2.1.3; origdir="$PYENV_ROOT/versions/$ver" newVdir="/workspace/.pyenv_mirror/fakeroot/versions";
+      pyenv install $ver && test -e "$origdir" && mkdir -p "$newVdir" && mv "$origdir" "$newVdir" && GITPOD_REPO_ROOT=/workspace bash -ci "pyenv install -s $ver && pip install cowsay && pyenv global $(pyenv version-name) $ver && cowsay Gitpod",
     ]
   assert:
     - status == 0

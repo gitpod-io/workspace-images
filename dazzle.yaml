@@ -26,7 +26,7 @@ combiner:
       chunks:
         - lang-c
         - lang-clojure
-        - lang-go:1.19.4
+        - lang-go:1.19.5
         - lang-java:11
         - lang-node:18
         - lang-python:3.8
@@ -45,7 +45,7 @@ combiner:
       ref:
       - base
       chunks:
-        - lang-go:1.19.4
+        - lang-go:1.19.5
     - name: nix
       ref:
       - base
@@ -88,6 +88,11 @@ combiner:
       - base
       chunks:
         - lang-python:3.10
+    - name: python-3.11
+      ref:
+      - base
+      chunks:
+        - lang-python:3.11
     - name: ruby-2
       ref:
       - base
@@ -98,16 +103,21 @@ combiner:
       - base
       chunks:
         - lang-ruby:3.0
-    - name: ruby-3
-      ref:
-      - base
-      chunks:
-        - lang-ruby:3.1
     - name: ruby-3.1
       ref:
       - base
       chunks:
         - lang-ruby:3.1
+    - name: ruby-3.2
+      ref:
+      - base
+      chunks:
+        - lang-ruby:3.2
+    - name: ruby-3
+      ref:
+      - base
+      chunks:
+        - lang-ruby:3.2
     - name: rust
       ref:
       - base
