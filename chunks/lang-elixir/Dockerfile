@@ -9,6 +9,6 @@ ENV TRIGGER_REBUILD=1
 RUN cd /tmp \
 	&& wget https://packages.erlang-solutions.com/erlang-solutions_2.0_all.deb \
 	&& dpkg -i erlang-solutions_2.0_all.deb \
-	&& install-packages elixir
+	&& install-packages elixir esl-erlang
 
 USER gitpod
