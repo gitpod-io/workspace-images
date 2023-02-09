@@ -8,19 +8,24 @@ USER gitpod
 # Dazzle does not rebuild a layer until one of its lines are changed. Increase this counter to rebuild this layer.
 ENV TRIGGER_REBUILD=1
 
-RUN curl -fsSL https://rvm.io/mpapis.asc | gpg --import - \
-    && curl -fsSL https://rvm.io/pkuczynski.asc | gpg --import - \
-    && curl -fsSL https://get.rvm.io | bash -s stable \
-    && bash -lc " \
-        rvm requirements \
-        && rvm install ${RUBY_VERSION} \
-        && rvm use ${RUBY_VERSION} --default \
-        && rvm rubygems current \
-        && gem install bundler --no-document \
-        && gem install solargraph --no-document" \
-    && echo '[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*' >> /home/gitpod/.bashrc.d/70-ruby
-RUN echo "rvm_gems_path=/workspace/.rvm" > ~/.rvmrc
+RUN curl -fsSL https://rvm.io/mpapis.asc | gpg --import -
+RUN curl -fsSL https://rvm.io/pkuczynski.asc | gpg --import -
+RUN curl -fsSL https://get.rvm.io | bash -s stable
 
-ENV GEM_HOME=/workspace/.rvm
-ENV GEM_PATH=$GEM_HOME:$GEM_PATH
-ENV PATH=/workspace/.rvm/bin:$PATH
+# ENV GEM_HOME=/home/gitpod/.rvm
+# ENV GEM_PATH=$GEM_HOME:$GEM_PATH
+ENV PATH=/home/gitpod/.rvm/bin:$PATH
+
+RUN rvm requirements
+
+# TODO: remove me once fixed, https://github.com/rvm/rvm/issues/5209#issuecomment-1114159447
+# another option: https://github.com/rvm/rvm/issues/5209#issuecomment-1134927685 or sudo apt install libssl-dev=1.1.1l-1ubuntu1.4
+RUN rvm pkg install openssl
+
+# RUN rvm install $RUBY_VERSION --with-openssl-dir=$HOME/.rvm/user
+# RUN rvm use $RUBY_VERSION --default
+# RUN rvm rubygems current
+# RUN gem install bundler --no-document
+# RUN gem install solargraph --no-document
+# RUN echo '[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*' >> /home/gitpod/.bashrc.d/70-ruby
+# RUN echo "rvm_gems_path=/workspace/.rvm" > ~/.rvmrc
