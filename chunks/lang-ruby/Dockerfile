@@ -12,20 +12,21 @@ RUN curl -fsSL https://rvm.io/mpapis.asc | gpg --import -
 RUN curl -fsSL https://rvm.io/pkuczynski.asc | gpg --import -
 RUN curl -fsSL https://get.rvm.io | bash -s stable
 
-# ENV GEM_HOME=/home/gitpod/.rvm
-# ENV GEM_PATH=$GEM_HOME:$GEM_PATH
+ENV GEM_HOME=/workspace/.rvm
+ENV GEM_PATH=$GEM_HOME:$GEM_PATH
 ENV PATH=/home/gitpod/.rvm/bin:$PATH
 
-RUN rvm requirements
-
-# TODO: remove me once fixed, https://github.com/rvm/rvm/issues/5209#issuecomment-1114159447
+# the version of openssl changed in Jammy, some versions of Ruby need an older version
+# https://github.com/rvm/rvm/issues/5209#issuecomment-1114159447
 # another option: https://github.com/rvm/rvm/issues/5209#issuecomment-1134927685 or sudo apt install libssl-dev=1.1.1l-1ubuntu1.4
-RUN rvm pkg install openssl
+RUN bash -lc " \
+        rvm requirements \
+        && rvm pkg install openssl \
+        && rvm install ${RUBY_VERSION} --with-openssl-dir=$HOME/.rvm/usr --default \
+        && rvm alias create default $RUBY_VERSION \
+        && rvm rubygems current \
+        && gem install bundler --no-document \
+        && gem install solargraph --no-document"
 
-# RUN rvm install $RUBY_VERSION --with-openssl-dir=$HOME/.rvm/user
-# RUN rvm use $RUBY_VERSION --default
-# RUN rvm rubygems current
-# RUN gem install bundler --no-document
-# RUN gem install solargraph --no-document
-# RUN echo '[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*' >> /home/gitpod/.bashrc.d/70-ruby
-# RUN echo "rvm_gems_path=/workspace/.rvm" > ~/.rvmrc
+RUN echo '[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*' >> /home/gitpod/.bashrc.d/70-ruby
+RUN echo "rvm_gems_path=/workspace/.rvm" > ~/.rvmrc

@@ -93,11 +93,6 @@ combiner:
       - base
       chunks:
         - lang-python:3.11
-    - name: ruby-2
-      ref:
-      - base
-      chunks:
-        - lang-ruby:2.7
     - name: ruby-3.0
       ref:
       - base

@@ -1,13 +1,12 @@
-- desc: it should run ruby
+- desc: it should have ruby
   command: [ruby --version]
   entrypoint: [bash, -i, -c]
   assert:
-  - status == 0
   - stdout.indexOf("ruby") != -1
-  - stdout.indexOf("2.7.7") != -1 ||
-    stdout.indexOf("3.0.4") != -1 ||
+  - stdout.indexOf("3.0.5") != -1 ||
     stdout.indexOf("3.1.3") != -1 ||
     stdout.indexOf("3.2.1") != -1
+  - status == 0
 - desc: it should have rvm
   command: [rvm --version]
   entrypoint: [bash, -i, -c]
