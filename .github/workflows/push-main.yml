@@ -23,6 +23,8 @@ jobs:
       GAR_IMAGE_REGISTRY: europe-docker.pkg.dev
       DH_IMAGE_REGISTRY: registry.hub.docker.com
       IAM_SERVICE_ACCOUNT: workspace-images-gha-sa@gitpod-artifacts.iam.gserviceaccount.com
+      DAZZLE_VERSION: 0.1.15
+      BUILDKIT_VERSION: 0.11.2
 
     steps:
       - name: 📥 Checkout workspace-images
@@ -43,7 +45,7 @@ jobs:
 
       - name: 🔆 Install dazzle
         run: |
-          curl -sSL https://github.com/gitpod-io/dazzle/releases/download/v0.1.14/dazzle_0.1.14_Linux_x86_64.tar.gz | sudo tar -xvz -C /usr/local/bin
+          curl -sSL https://github.com/gitpod-io/dazzle/releases/download/v${{env.DAZZLE_VERSION}}/dazzle_${{env.DAZZLE_VERSION}}_Linux_x86_64.tar.gz | sudo tar -xvz -C /usr/local/bin
 
       - name: 🔆 Install skopeo
         run: |
@@ -56,7 +58,7 @@ jobs:
 
       - name: 🏗️ Setup buildkit
         run: |
-          curl -sSL https://github.com/moby/buildkit/releases/download/v0.11.2/buildkit-v0.11.2.linux-amd64.tar.gz | sudo tar xvz -C /usr
+          curl -sSL https://github.com/moby/buildkit/releases/download/v${{env.BUILDKIT_VERSION}}/buildkit-v${{env.BUILDKIT_VERSION}}.linux-amd64.tar.gz | sudo tar xvz -C /usr
           sudo buildkitd --oci-worker=true --oci-worker-net=host --debug --group docker &
           sudo su -c "while ! test -S /run/buildkit/buildkitd.sock; do sleep 0.1; done"
           sudo chmod +777 /run/buildkit/buildkitd.sock
