@@ -1,12 +1,12 @@
-- desc: it should run mongodb shell
-  command: [mongo --version]
+- desc: it should run mongosh
+  command: [mongosh --version]
   entrypoint: [bash, -i, -c]
   assert:
   - status == 0
-  - stdout.indexOf("MongoDB shell version v5.0.2") != -1
-- desc: it should run mongodb shell
+  - stdout.indexOf("1.8.0") != -1
+- desc: it should run mongod
   command: [mongod --version]
   entrypoint: [bash, -i, -c]
   assert:
   - status == 0
-  - stdout.indexOf("db version v5.0.2") != -1
+  - stdout.indexOf("db version v6.0.4") != -1
