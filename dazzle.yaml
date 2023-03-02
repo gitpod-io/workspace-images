@@ -28,7 +28,7 @@ combiner:
         - lang-clojure
         - lang-go:1.19.5
         - lang-java:11
-        - lang-node:16
+        - lang-node:18
         - lang-python:3.8
         - lang-ruby:3.1
         - lang-rust
@@ -55,13 +55,13 @@ combiner:
       ref:
       - base
       chunks:
-        - lang-node:18
+        - lang-node:19
         - tool-chrome
     - name: node-lts
       ref:
       - base
       chunks:
-        - lang-node:16
+        - lang-node:18
         - tool-chrome
     - name: python
       ref:
