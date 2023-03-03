@@ -150,13 +150,33 @@ combiner:
         - lang-java:17
     - name: yugabytedb
       ref:
-      - full
+      - base
       chunks:
+        - lang-c
+        - lang-clojure
+        - lang-go:1.19.5
+        - lang-java:11
+        - lang-node:18
+        - lang-ruby:3.2
+        - lang-rust
+        - tool-brew
+        - tool-nginx
+        - tool-nix:2.11.0
         - tool-yugabytedb:2.14
     - name: yugabytedb-preview
       ref:
-      - full
+      - base
       chunks:
+        - lang-c
+        - lang-clojure
+        - lang-go:1.19.5
+        - lang-java:11
+        - lang-node:18
+        - lang-ruby:3.2
+        - lang-rust
+        - tool-brew
+        - tool-nginx
+        - tool-nix:2.11.0
         - tool-yugabytedb:2.15
   envvars:
     - name: PATH

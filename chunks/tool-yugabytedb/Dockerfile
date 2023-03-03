@@ -7,6 +7,7 @@ ARG YB_VERSION
 ARG YB_BUILD
 ARG YB_BIN_PATH=/usr/local/yugabyte
 ARG ROLE=gitpod
+ARG PYTHON_VERSION
 
 USER $ROLE
 # create bin and data path
@@ -21,6 +22,17 @@ RUN curl -sSLo ./yugabyte.tar.gz https://downloads.yugabyte.com/releases/${YB_VE
   && tar -xvf yugabyte.tar.gz -C $YB_BIN_PATH --strip-components=1 \
   && chmod +x $YB_BIN_PATH/bin/* \
   && rm ./yugabyte.tar.gz
+
+# python is a required dependency of ycqlsh
+# but it doesn't support Python 3.10+ due to https://github.com/yugabyte/cqlsh/issues/11, install 3.9 for now
+# when building yugabyte combos, if our base is full, related python chunk tests fail
+# so, use base as the combo ref, add chunks, but ignore Python chunk and install manually
+ENV PATH="$HOME/.pyenv/bin:$HOME/.pyenv/shims:$PATH"
+ENV PYENV_ROOT="$HOME/.pyenv"
+RUN git clone https://github.com/pyenv/pyenv.git ~/.pyenv \
+	&& git -C ~/.pyenv checkout ff93c58babd813066bf2d64d004a5cee33c0f27b \
+	&& pyenv install ${PYTHON_VERSION} \
+	&& pyenv global ${PYTHON_VERSION}
 
 # configure the interpreter
 RUN ["/usr/local/yugabyte/bin/post_install.sh"]
