@@ -29,8 +29,8 @@ combiner:
         - lang-go:1.19.5
         - lang-java:11
         - lang-node:18
-        - lang-python:3.8
-        - lang-ruby:3.1
+        - lang-python:3.11
+        - lang-ruby:3.2
         - lang-rust
         - tool-brew
         - tool-nginx
