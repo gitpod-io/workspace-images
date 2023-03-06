@@ -159,7 +159,7 @@ e.g.
     # fetch keyring over https connection and unpack it using gpg's --dearmor option
     curl -fsSL https://apt.my-secure.org/my-unofficial-repo.gpg.key | sudo gpg --dearmor -o /usr/share/keyrings/my-unofficial-repo.gpg.key
     # and then add them to a apt key sources list.
-    echo "deb [signed-by=/usr/share/keyrings/my-unofficial-repo.gpg.key] http://apt.my-secure.org/focal/ \
+    echo "deb [signed-by=/usr/share/keyrings/my-unofficial-repo.gpg.key] http://apt.my-secure.org/jammy/ \
     my-unofficial-repo-toolchain main" | sudo tee /etc/apt/sources.list.d/my-unofficial-repo.list > /dev/null
     ```
 

@@ -54,7 +54,6 @@ Each contains a set of chunks: a common base, and a language, and includes Docke
 - [`gitpod/workspace-node`](https://hub.docker.com/r/gitpod/workspace-node) ✅
 - [`gitpod/workspace-node-lts`](https://hub.docker.com/r/gitpod/workspace-node-lts) ✅
 - [`gitpod/workspace-python`](https://hub.docker.com/r/gitpod/workspace-python) ✅
-- [`gitpod/workspace-ruby-2`](https://hub.docker.com/r/gitpod/workspace-ruby-2) ✅
 - [`gitpod/workspace-ruby-3`](https://hub.docker.com/r/gitpod/workspace-ruby-3) ✅
 - [`gitpod/workspace-ruby-3.0`](https://hub.docker.com/r/gitpod/workspace-ruby-3.0) ✅
 - [`gitpod/workspace-ruby-3.1`](https://hub.docker.com/r/gitpod/workspace-ruby-3.1) ✅
@@ -87,6 +86,7 @@ These images are no longer being published:
 
 - gitpod/workspace-python-3.6 (please use [`gitpod/workspace-python-3.7`](https://hub.docker.com/r/gitpod/workspace-python-3.7) instead)
 - gitpod/workspace-postgresql (please use [`gitpod/workspace-postgres`](https://hub.docker.com/r/gitpod/workspace-postgres) instead)
+- gitpod/workspace-ruby-2 (please use [`gitpod/workspace-ruby-3.2`](https://hub.docker.com/r/gitpod/workspace-ruby-3.2) instead)
 
 ## Contributing
 
