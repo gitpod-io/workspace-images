@@ -36,6 +36,9 @@ ENV LANG=en_US.UTF-8
 ### Update and upgrade the base image ###
 RUN upgrade-packages
 
+## Remove `use_pty` option for sudo.
+RUN sed -i '/Defaults\tuse_pty/d' /etc/sudoers
+
 ### Git ###
 RUN add-apt-repository -y ppa:git-core/ppa
 RUN install-packages git git-lfs
