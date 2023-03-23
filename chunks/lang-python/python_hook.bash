@@ -5,13 +5,13 @@
 function pyenv_gitpod_init() {
 	if test -e "$GITPOD_REPO_ROOT"; then {
 		export PYENV_HOOK_PATH="$HOME/.gp_pyenv.d"
-		export GP_PYENV_MIRROR="/workspace/.pyenv_mirror"
-		export GP_PYENV_FAKEROOT="$GP_PYENV_MIRROR/fakeroot"
-		export PYTHONUSERBASE="$GP_PYENV_MIRROR/user/current"
+		export PYENV_MIRROR="/workspace/.pyenv_mirror"
+		export PYENV_FAKEROOT="$PYENV_MIRROR/fakeroot"
+		export PYTHONUSERBASE="$PYENV_MIRROR/user/current"
 		export PYTHONUSERBASE_VERSION_FILE="${PYTHONUSERBASE%/*}/.mounted_version"
-		export PIP_CACHE_DIR="$GP_PYENV_MIRROR/pip_cache"
+		export PIP_CACHE_DIR="$PYENV_MIRROR/pip_cache"
 
-		if test ! -v GP_PYENV_INIT; then {
+		if test ! -v PYENV_INIT; then {
 
 			function vscode::add_settings() (
 				# From https://github.com/axonasif/dotfiles/blob/main/src/utils/common.sh
@@ -59,7 +59,7 @@ function pyenv_gitpod_init() {
 			local target version_dir
 			(
 				shopt -s nullglob
-				for version_dir in "$GP_PYENV_FAKEROOT/versions/"*; do {
+				for version_dir in "$PYENV_FAKEROOT/versions/"*; do {
 					target="$PYENV_ROOT/versions/${version_dir##*/}"
 					mkdir -p "$target" 2>/dev/null
 					if ! mountpoint -q "$target" && ! sudo mount --bind "$version_dir" "$target" 2>/dev/null; then {
@@ -70,7 +70,7 @@ function pyenv_gitpod_init() {
 			)
 
 			# Persistent `pyenv global` version
-			local p_version_file="$GP_PYENV_FAKEROOT/version"
+			local p_version_file="$PYENV_FAKEROOT/version"
 			local o_version_file="$PYENV_ROOT/version"
 			if test ! -e "$p_version_file"; then {
 				mkdir -p "${p_version_file%/*}"
@@ -93,10 +93,10 @@ function pyenv_gitpod_init() {
 				}
 			JSON
 
-		}; fi && export GP_PYENV_INIT=true
+		}; fi && export PYENV_INIT=true
 
 		# Poetry customizations
-		export POETRY_CACHE_DIR="$GP_PYENV_MIRROR/poetry"
+		export POETRY_CACHE_DIR="$PYENV_MIRROR/poetry"
 	}; fi
 }
 
