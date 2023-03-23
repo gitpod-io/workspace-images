@@ -15,7 +15,7 @@ PYENV_ROOT="$PYENV_FAKEROOT" # Temporarily hijack PYENV_ROOT
 
 function after_job() {
 	PYENV_ROOT="$ORIG_PYENV_ROOT"
-	unset PYENV_INIT
+	rm -rf "$PYENV_INIT_LOCK"
 	# shellcheck disable=SC1090
 	source "$HOME/.bashrc.d/"*-python
 	# pyenv-rehash && PYENV_VERSION="$ver" pip install --upgrade pip

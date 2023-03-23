@@ -10,14 +10,11 @@ function pyenv_gitpod_init() {
 		export PYTHONUSERBASE="$PYENV_MIRROR/user/current"
 		export PYTHONUSERBASE_VERSION_FILE="${PYTHONUSERBASE%/*}/.mounted_version"
 		export PIP_CACHE_DIR="$PYENV_MIRROR/pip_cache"
+		export PYENV_INIT_LOCK="/tmp/.pyenv_init.lock"
 
-		if test ! -v PYENV_INIT; then {
+		if mkdir "$PYENV_INIT_LOCK" 2>/dev/null; then {
 
-			function vscode::add_settings() (
-				# Redirect stdin and stderr to logfile and exit on error/undefined-var
-				exec >>"/tmp/.${FUNCNAME[0]}.log" && exec 2>&1 && set -eu
-				if ! mkdir "/tmp/.vscs_add.lock" 2>/dev/null; then return; fi # Atomic lock
-
+			function vscode::add_settings() {
 				input="$(
 					printf '{ "python.defaultInterpreterPath": "%s", "python.terminal.activateEnvironment": false }\n' "$HOME/.pyenv/shims/python"
 				)"
@@ -25,12 +22,12 @@ function pyenv_gitpod_init() {
 				for vscode_machine_settings_file in "$@"; do {
 					# Create the vscode machine settings file if it doesnt exist
 					if test ! -e "$vscode_machine_settings_file"; then {
-						mkdir -p "${vscode_machine_settings_file%/*}"
+						mkdir -p "${vscode_machine_settings_file%/*}" 2>/dev/null || return
 						touch "$vscode_machine_settings_file"
 					}; fi
 
 					# Check json syntax
-					if test ! -s "$vscode_machine_settings_file" || ! jq -reM '""' "$vscode_machine_settings_file" 1>/dev/null; then {
+					if test ! -s "$vscode_machine_settings_file" || ! jq -reM '""' "$vscode_machine_settings_file" >/dev/null 2>&1; then {
 						printf '%s\n' "$input" >"$vscode_machine_settings_file"
 					}; else {
 						# Remove any trailing commas
@@ -44,7 +41,7 @@ function pyenv_gitpod_init() {
 					}; fi
 
 				}; done
-			)
+			}
 
 			# Restore installed python versions
 			local target version_dir
@@ -79,7 +76,7 @@ function pyenv_gitpod_init() {
 			# Set $HOME/.pyenv/shims/python as the default Interpreter for ms-python.python VSCode extension
 			vscode::add_settings "/workspace/.vscode-remote/data/Machine/settings.json" "$HOME/.vscode-server/data/Machine/settings.json"
 
-		}; fi && export PYENV_INIT=true
+		}; fi
 
 		# Poetry customizations
 		export POETRY_CACHE_DIR="$PYENV_MIRROR/poetry"
