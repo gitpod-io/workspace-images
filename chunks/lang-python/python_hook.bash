@@ -11,6 +11,7 @@ function pyenv_gitpod_init() {
 		export PYTHONUSERBASE_VERSION_FILE="${PYTHONUSERBASE%/*}/.mounted_version"
 		export PIP_CACHE_DIR="$PYENV_MIRROR/pip_cache"
 		export PYENV_INIT_LOCK="/tmp/.pyenv_init.lock"
+		local pyenv_init_done="$PYENV_INIT_LOCK/done"
 
 		if mkdir "$PYENV_INIT_LOCK" 2>/dev/null; then {
 
@@ -22,7 +23,7 @@ function pyenv_gitpod_init() {
 				for vscode_machine_settings_file in "$@"; do {
 					# Create the vscode machine settings file if it doesnt exist
 					if test ! -e "$vscode_machine_settings_file"; then {
-						mkdir -p "${vscode_machine_settings_file%/*}" 2>/dev/null || return
+						mkdir -p "${vscode_machine_settings_file%/*}" || return
 						touch "$vscode_machine_settings_file"
 					}; fi
 
@@ -74,8 +75,11 @@ function pyenv_gitpod_init() {
 			pyenv global 1>/dev/null
 
 			# Set $HOME/.pyenv/shims/python as the default Interpreter for ms-python.python VSCode extension
-			vscode::add_settings "/workspace/.vscode-remote/data/Machine/settings.json" "$HOME/.vscode-server/data/Machine/settings.json"
+			vscode::add_settings "/workspace/.vscode-remote/data/Machine/settings.json" "$HOME/.vscode-server/data/Machine/settings.json" >/dev/null 2>&1
 
+			touch "$pyenv_init_done"
+		}; else {
+			until test -e "$pyenv_init_done"; do sleep 0.2; done
 		}; fi
 
 		# Poetry customizations
