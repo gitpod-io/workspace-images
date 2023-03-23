@@ -14,25 +14,15 @@ function pyenv_gitpod_init() {
 		if test ! -v PYENV_INIT; then {
 
 			function vscode::add_settings() (
-				# From https://github.com/axonasif/dotfiles/blob/main/src/utils/common.sh
-				exec >>"/tmp/.${FUNCNAME[0]}.log" && exec 2>&1
-				set -eu
-				local lockfile="/tmp/.vscs_add.lock"
-				trap 'rm -f $lockfile $tmp_file || :;:' ERR SIGINT RETURN EXIT
-				while test -e "$lockfile" && sleep 0.2; do {
-					continue
-				}; done
-				touch "$lockfile"
+				# Redirect stdin and stderr to logfile and exit on error/undefined-var
+				exec >>"/tmp/.${FUNCNAME[0]}.log" && exec 2>&1 && set -eu
+				if ! mkdir "/tmp/.vscs_add.lock" 2>/dev/null; then return; fi # Atomic lock
 
-				# Read from standard input
-				read -t0.5 -u0 -r -d '' input || :
-				if test -z "${input:-}"; then {
-					return 1
-				}; fi
+				input="$(
+					printf '{ "python.defaultInterpreterPath": "%s", "python.terminal.activateEnvironment": false }\n' "$HOME/.pyenv/shims/python"
+				)"
 
 				for vscode_machine_settings_file in "$@"; do {
-					local tmp_file="${vscode_machine_settings_file%/*}/.tmp"
-
 					# Create the vscode machine settings file if it doesnt exist
 					if test ! -e "$vscode_machine_settings_file"; then {
 						mkdir -p "${vscode_machine_settings_file%/*}"
@@ -44,9 +34,10 @@ function pyenv_gitpod_init() {
 						printf '%s\n' "$input" >"$vscode_machine_settings_file"
 					}; else {
 						# Remove any trailing commas
-						sed -i -e 's|,}|\n}|g' -e 's|, }|\n}|g' -e ':begin;$!N;s/,\n}/\n}/g;tbegin;P;D' "$vscode_machine_settings_file"
+						sed -i -e 's|,}| }|g' -e 's|, }| }|g' -e ':begin;$!N;s/,\n}/ \n}/g;tbegin;P;D' "$vscode_machine_settings_file"
 
 						# Merge the input settings with machine settings.json
+						tmp_file="${vscode_machine_settings_file%/*}/.tmp$$"
 						cp -a "$vscode_machine_settings_file" "$tmp_file"
 						jq -s '.[0] * .[1]' - "$tmp_file" <<<"$input" >"$vscode_machine_settings_file"
 						rm -f "$tmp_file"
@@ -86,12 +77,7 @@ function pyenv_gitpod_init() {
 			pyenv global 1>/dev/null
 
 			# Set $HOME/.pyenv/shims/python as the default Interpreter for ms-python.python VSCode extension
-			vscode::add_settings "/workspace/.vscode-remote/data/Machine/settings.json" "$HOME/.vscode-server/data/Machine/settings.json" <<-JSON
-				{
-					"python.defaultInterpreterPath": "$HOME/.pyenv/shims/python",
-					"python.terminal.activateEnvironment": false
-				}
-			JSON
+			vscode::add_settings "/workspace/.vscode-remote/data/Machine/settings.json" "$HOME/.vscode-server/data/Machine/settings.json"
 
 		}; fi && export PYENV_INIT=true
 
