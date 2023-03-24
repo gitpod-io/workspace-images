@@ -12,7 +12,7 @@ if test -e "${GITPOD_REPO_ROOT:-}" && test "${BASH_SOURCE[1]}" == "$PYENV_ROOT/l
 	# }; fi
 	pyenv_version="${PYENV_VERSION%%:*}"
 	system_python_userbase="$PYTHONUSERBASE"
-	userbase_dir="$GP_PYENV_MIRROR/user"
+	userbase_dir="$PYENV_MIRROR/user"
 	versioned_python_userbase_dir="$userbase_dir/$pyenv_version"
 	mounted_version_file="$PYTHONUSERBASE_VERSION_FILE"
 
