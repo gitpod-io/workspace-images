@@ -3,7 +3,7 @@
 ## Give user variant higher priority
 # shellcheck disable=SC2154
 for version in "${versions[@]}"; do {
-	_check_upath="${GP_PYENV_MIRROR}/user/${version}/bin/$PYENV_COMMAND"
+	_check_upath="${PYENV_MIRROR}/user/${version}/bin/$PYENV_COMMAND"
 	if test -x "$_check_upath"; then {
 		# shellcheck disable=SC2034
 		PYENV_COMMAND_PATH="$_check_upath"
@@ -17,7 +17,7 @@ for version in "${versions[@]}"; do {
 function pyenv-prefix {
 	# Add user prefix paths when called by pyenv-prefix
 	if test "${BASH_SOURCE[1]}" == "$PYENV_ROOT/libexec/pyenv-whence"; then {
-		local target="${GP_PYENV_MIRROR}/user/$1"
+		local target="${PYENV_MIRROR}/user/$1"
 		if test -e "$target"; then {
 			echo "$target"
 			return

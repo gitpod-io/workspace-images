@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# export PYTHONPATH="${GP_PYENV_MIRROR}/site/${PYENV_VERSION}" # `pip install` will use this path.
+# export PYTHONPATH="${PYENV_MIRROR}/site/${PYENV_VERSION}" # `pip install` will use this path.
 # # Do not set PIP_TARGET when `--user` arg is passed to `pip install` to avoid
 # ## ERROR: Can not combine '--user' and '--target'.
 # if [[ ! "$*" =~ pip[0-9]?\ install.*--user ]]; then {
@@ -18,7 +18,7 @@ if test "$pyenv_version" != "$mounted_version"; then {
 }; fi
 
 # For pyenv-global multiple-version shims
-if [[ "$PYENV_VERSION" =~ : ]] && [[ "$PYENV_COMMAND_PATH" =~ "$GP_PYENV_MIRROR"/user ]] && [[ "$(<"$PYENV_COMMAND_PATH")" =~ \#\!("${GP_PYENV_FAKEROOT}"|"$PYENV_ROOT")/versions/([0-9]+(\.[0-9]+)*)/bin ]]; then {
+if [[ "$PYENV_VERSION" =~ : ]] && [[ "$PYENV_COMMAND_PATH" =~ "$PYENV_MIRROR"/user ]] && [[ "$(<"$PYENV_COMMAND_PATH")" =~ \#\!("${PYENV_FAKEROOT}"|"$PYENV_ROOT")/versions/([0-9]+(\.[0-9]+)*)/bin ]]; then {
 	multi_shim_version="${BASH_REMATCH[2]}"
 	if test "$mounted_version" != "$multi_shim_version"; then {
 		export PYTHONUSERBASE="${PYTHONUSERBASE%/*}/$multi_shim_version"

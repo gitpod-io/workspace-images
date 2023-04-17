@@ -11,6 +11,9 @@ ENV PATH="$HOME/.pyenv/bin:$HOME/.pyenv/shims:$PATH"
 ENV PIPENV_VENV_IN_PROJECT=true
 ENV PYENV_ROOT="$HOME/.pyenv"
 
+# configure the default intepreter for PyCharm
+ENV PYCHARM_PYTHON_PATH="$HOME/.pyenv/shims/python"
+
 RUN sudo install-packages \
 	# Install python compiling dependencies for pyenv
 	python3-pip make build-essential libssl-dev zlib1g-dev \
