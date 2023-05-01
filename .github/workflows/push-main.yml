@@ -23,8 +23,8 @@ jobs:
       GAR_IMAGE_REGISTRY: europe-docker.pkg.dev
       DH_IMAGE_REGISTRY: registry.hub.docker.com
       IAM_SERVICE_ACCOUNT: workspace-images-gha-sa@gitpod-artifacts.iam.gserviceaccount.com
-      DAZZLE_VERSION: 0.1.16
-      BUILDKIT_VERSION: 0.11.4
+      DAZZLE_VERSION: 0.1.17
+      BUILDKIT_VERSION: 0.11.6
 
     steps:
       - name: 📥 Checkout workspace-images
