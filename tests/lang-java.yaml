@@ -11,7 +11,7 @@
   command: [sdk default java 17.0.7.fx-zulu && java -version && mvn -v]
   assert:
   - status == 0
-  - stderr.indexOf('openjdk version "17."') != -1
+  - stderr.indexOf('openjdk version \"17.') != -1
   - stdout.indexOf("Apache Maven") != -1
 - desc: it should run maven
   command: [mvn -v]
