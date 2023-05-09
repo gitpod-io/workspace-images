@@ -44,7 +44,7 @@ jobs:
           sudo apt update && sudo apt install -y skopeo
 
       - name: ☁️ Set up Cloud SDK
-        uses: google-github-actions/setup-gcloud@v1.1.0
+        uses: google-github-actions/setup-gcloud@v1.1.1
         with:
           version: 393.0.0
 
