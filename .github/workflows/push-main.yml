@@ -105,26 +105,36 @@ jobs:
 
       - name: 📋 Copy images with tag in the Artifact Registry
         run: |
+          upload_image() {
+              local IMAGE_TAG=$1
+
+              (sudo skopeo copy --format=oci --dest-oci-accept-uncompressed-layers --retry-times=2 \
+              docker://${{ env.GAR_IMAGE_REGISTRY }}/gitpod-artifacts/docker-dev/workspace-base-images:$IMAGE_TAG \
+              docker://${{ env.GAR_IMAGE_REGISTRY }}/gitpod-artifacts/docker-dev/workspace-$IMAGE_TAG:${{ env.TIMESTAMP_TAG }} &)
+
+              (sudo skopeo copy --format=oci --dest-oci-accept-uncompressed-layers  --retry-times=2 \
+              docker://${{ env.GAR_IMAGE_REGISTRY }}/gitpod-artifacts/docker-dev/workspace-base-images:$IMAGE_TAG \
+              docker://${{ env.GAR_IMAGE_REGISTRY }}/gitpod-artifacts/docker-dev/workspace-$IMAGE_TAG:latest &)
+
+              wait
+          }
+
+          MAX_PARALLEL=10
+          declare -a UPLOAD_PIDS=()
           IMAGE_TAGS=$(cat .github/sync-containers.yml | yq '.sync.images."workspace-base-images"|join(" ")' -r)
-          COPY_JOBS_PIDS=""
-          for IMAGE_TAG in $IMAGE_TAGS;
-          do
-            sudo skopeo copy --format=oci --dest-oci-accept-uncompressed-layers \
-            docker://${{ env.GAR_IMAGE_REGISTRY }}/gitpod-artifacts/docker-dev/workspace-base-images:$IMAGE_TAG \
-            docker://${{ env.GAR_IMAGE_REGISTRY }}/gitpod-artifacts/docker-dev/workspace-$IMAGE_TAG:${{ env.TIMESTAMP_TAG }} &
 
-            COPY_JOBS_PIDS="$COPY_JOBS_PIDS $!"
+          for image_tag in "${IMAGE_TAGS[@]}"; do
+              upload_image "$image_tag" &
 
-            sudo skopeo copy --format=oci --dest-oci-accept-uncompressed-layers \
-            docker://${{ env.GAR_IMAGE_REGISTRY }}/gitpod-artifacts/docker-dev/workspace-base-images:$IMAGE_TAG \
-            docker://${{ env.GAR_IMAGE_REGISTRY }}/gitpod-artifacts/docker-dev/workspace-$IMAGE_TAG:latest &
+              UPLOAD_PIDS+=($!)
 
-            COPY_JOBS_PIDS="$COPY_JOBS_PIDS $!"
+              if [ ${#UPLOAD_PIDS[@]} -eq $MAX_PARALLEL ]; then
+                # Wait for the first background process in the array
+                wait "${UPLOAD_PIDS[0]}"
 
-          done
-
-          for COPY_JOBS_PID in $COPY_JOBS_PIDS; do
-              wait $COPY_JOBS_PID || exit 1
+                # Remove the first element from the array
+                UPLOAD_PIDS=("${UPLOAD_PIDS[@]:1}")
+              fi
           done
 
       - name: ✍🏽 Login to Docker Hub using skopeo
