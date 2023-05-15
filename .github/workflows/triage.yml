@@ -1,58 +1,15 @@
-name: Issue and PR Triage
+name: Issue Triage
 on:
-  pull_request:
-    types: [opened]
   issues:
     types: [opened]
 jobs:
   triage:
-    name: Triage issue/PR
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     steps:
-      - name: Add team label
-        uses: andymckay/labeler@1.0.4
+      - name: checkout
+        uses: actions/checkout@v3
+
+      - name: add label
+        uses: actions-ecosystem/action-add-labels@v1
         with:
-          add-labels: "team: workspace"
-
-      - name: Get project data
-        if: github.event_name == 'issues'
-        env:
-          GITHUB_TOKEN: ${{ secrets.LABELER_TOKEN }}
-          ORGANIZATION: gitpod-io
-          PROJECT_NUMBER: 16
-        run: |
-          gh api graphql -f query='
-            query($org: String!, $number: Int!) {
-              organization(login: $org){
-                id
-                projectNext(number: $number) {
-                  id
-                  fields(first:20) {
-                    nodes {
-                      id
-                      name
-                      settings
-                    }
-                  }
-                }
-              }
-            }' -f org=$ORGANIZATION -F number=$PROJECT_NUMBER > project_data.json
-
-          echo 'PROJECT_ID='$(jq '.data.organization.projectNext.id' project_data.json) >> $GITHUB_ENV
-          echo 'STATUS_FIELD_ID='$(jq '.data.organization.projectNext.fields.nodes[] | select(.name== "Status") | .id' project_data.json) >> $GITHUB_ENV
-          echo 'IN_PROGRESS_OPTION_ID='$(jq '.data.organization.projectNext.fields.nodes[] | select(.name== "Status") |.settings | fromjson.options[] | select(.name=="In Progress") |.id' project_data.json) >> $GITHUB_ENV
-
-      - name: Add Issue to project
-        if: github.event_name == 'issues'
-        env:
-          GITHUB_TOKEN: ${{ secrets.LABELER_TOKEN }}
-          ISSUE_ID: ${{ github.event.issue.node_id }}
-        run: |
-          gh api graphql -f query='
-            mutation($project:ID!, $issue:ID!) {
-              addProjectNextItem(input: {projectId: $project, contentId: $issue}) {
-                projectNextItem {
-                  id
-                }
-              }
-            }' -f project=$PROJECT_ID -f issue=$ISSUE_ID --jq '.data.addProjectNextItem.projectNextItem.id'
+          labels: "team: ide"
