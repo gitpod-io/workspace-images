@@ -198,3 +198,33 @@ The final step to make sure your newly added image gets published is to update t
 
 1. **[.github/sync-containers.yml](.github/sync-containers.yml)** : To publish images from local registry to GAR.
 1. **[.github/promote-images.yml](.github/promote-images.yml)** : To copy images from GAR to Docker Hub.
+
+### Manually testing within a workspace
+
+If you want to manually test with a debug workspace, you can do the following:
+1. Open a Gitpod workspace with your Pull Request
+1. Using the provided script, build the combo you want to test
+    ```bash
+    ./build-combo.sh full # replace "full" with your combo's name from dazzle.yaml
+    ```
+1. Pull the image locally
+    ```bash
+    docker pull localhost:5000/dazzle:full # again, replace "full" here
+    ```
+1. Create a testing directory where you'll test your repo (e.g. `test/`)
+1. Create a `.gitpod.yml` and a corresponding `gitpod.Dockerfile`:
+    ```yml
+    # test/.gitpod.yml
+    image:
+        file: gitpod.Dockerfile
+    ```
+    ```Dockerfile
+    # test/gitpod.Dockerfile
+    FROM localhost:5000/dazzle:full # replace "full" with your own 
+    # ... optionally, more steps here
+1. Test using `gp validate`:
+    ```bash
+    gp validate --workspace-folder="/workspace/workspace-images/test"
+    ```
+
+If you want to change something and re-test, you will want to do steps 1,2 and 6 again. 
