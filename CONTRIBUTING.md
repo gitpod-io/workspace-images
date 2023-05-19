@@ -222,7 +222,7 @@ If you want to manually test with a debug workspace, you can do the following:
     # test/gitpod.Dockerfile
     FROM localhost:5000/dazzle:full # replace "full" with your own 
     # ... optionally, more steps here
-1. Test using `gp validate`:
+1. Now you can test using [`gp validate`](https://www.gitpod.io/docs/references/gitpod-cli#validate). This will open a debug workspace where you can try out your changes:
     ```bash
     gp validate --workspace-folder="/workspace/workspace-images/test"
     ```
