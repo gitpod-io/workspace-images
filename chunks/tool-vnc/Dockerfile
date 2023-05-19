@@ -18,12 +18,16 @@ RUN git clone --depth 1 https://github.com/novnc/noVNC.git /opt/novnc \
 	&& find /opt/novnc -type d -name '.git' -exec rm -rf '{}' + \
 	&& sudo -H pip3 install numpy
 COPY novnc-index.html /opt/novnc/index.html
+COPY gp-vncsession /usr/bin/
 
 # Add VNC startup script
-COPY gp-vncsession /usr/bin/
-RUN chmod 0755 "$(which gp-vncsession)" \
-	&& printf '%s\n' 'export DISPLAY=:0' \
-	'test -e "$GITPOD_REPO_ROOT" && gp-vncsession' >> "$HOME/.bashrc"
+COPY <<EOF /home/gitpod/.bashrc.d/500-vnc
+export DISPLAY=:0
+test -e "$GITPOD_REPO_ROOT" && gp-vncsession
+EOF
+
+RUN chmod 0755 "$(which gp-vncsession)"
+
 # Add X11 dotfiles
 COPY --chown=gitpod:gitpod .xinitrc $HOME/
 
