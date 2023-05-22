@@ -14,7 +14,7 @@ We upgraded to support [dazzle v2](https://github.com/gitpod-io/dazzle) and buil
 
 ## Summary
 
-- **Operating System**: Ubuntu 20.04.4 LTS
+- **Operating System**: Ubuntu 22.04.2 LTS
 - **OS Type**: Linux
 - **Architecture**: x86_64
 
