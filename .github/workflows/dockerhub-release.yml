@@ -44,13 +44,13 @@ jobs:
           sudo apt update && sudo apt install -y skopeo
 
       - name: ☁️ Set up Cloud SDK
-        uses: google-github-actions/setup-gcloud@v1.1.0
+        uses: google-github-actions/setup-gcloud@v1.1.1
         with:
           version: 393.0.0
 
       - name: 🔐 Authenticate to Google Cloud
         id: "auth"
-        uses: google-github-actions/auth@v1.0.0
+        uses: google-github-actions/auth@v1.1.1
         with:
           token_format: "access_token"
           workload_identity_provider: ${{env.WORKLOAD_IDENTITY_POOL_ID}}

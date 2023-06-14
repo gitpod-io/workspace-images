@@ -23,8 +23,8 @@ jobs:
       GAR_IMAGE_REGISTRY: europe-docker.pkg.dev
       DH_IMAGE_REGISTRY: registry.hub.docker.com
       IAM_SERVICE_ACCOUNT: workspace-images-gha-sa@gitpod-artifacts.iam.gserviceaccount.com
-      DAZZLE_VERSION: 0.1.16
-      BUILDKIT_VERSION: 0.11.4
+      DAZZLE_VERSION: 0.1.17
+      BUILDKIT_VERSION: 0.11.6
 
     steps:
       - name: 📥 Checkout workspace-images
@@ -64,13 +64,13 @@ jobs:
           sudo chmod +777 /run/buildkit/buildkitd.sock
 
       - name: ☁️ Set up Cloud SDK
-        uses: google-github-actions/setup-gcloud@v1.1.0
+        uses: google-github-actions/setup-gcloud@v1.1.1
         with:
           version: 393.0.0
 
       - name: 🔐 Authenticate to Google Cloud
         id: "auth"
-        uses: google-github-actions/auth@v1.0.0
+        uses: google-github-actions/auth@v1.1.1
         with:
           token_format: "access_token"
           access_token_lifetime: "43200s"
@@ -105,26 +105,36 @@ jobs:
 
       - name: 📋 Copy images with tag in the Artifact Registry
         run: |
+          upload_image() {
+              local IMAGE_TAG=$1
+
+              (sudo skopeo copy --format=oci --dest-oci-accept-uncompressed-layers --retry-times=2 \
+              docker://${{ env.GAR_IMAGE_REGISTRY }}/gitpod-artifacts/docker-dev/workspace-base-images:$IMAGE_TAG \
+              docker://${{ env.GAR_IMAGE_REGISTRY }}/gitpod-artifacts/docker-dev/workspace-$IMAGE_TAG:${{ env.TIMESTAMP_TAG }} &)
+
+              (sudo skopeo copy --format=oci --dest-oci-accept-uncompressed-layers  --retry-times=2 \
+              docker://${{ env.GAR_IMAGE_REGISTRY }}/gitpod-artifacts/docker-dev/workspace-base-images:$IMAGE_TAG \
+              docker://${{ env.GAR_IMAGE_REGISTRY }}/gitpod-artifacts/docker-dev/workspace-$IMAGE_TAG:latest &)
+
+              wait
+          }
+
+          MAX_PARALLEL=10
+          declare -a UPLOAD_PIDS=()
           IMAGE_TAGS=$(cat .github/sync-containers.yml | yq '.sync.images."workspace-base-images"|join(" ")' -r)
-          COPY_JOBS_PIDS=""
-          for IMAGE_TAG in $IMAGE_TAGS;
-          do
-            sudo skopeo copy --format=oci --dest-oci-accept-uncompressed-layers \
-            docker://${{ env.GAR_IMAGE_REGISTRY }}/gitpod-artifacts/docker-dev/workspace-base-images:$IMAGE_TAG \
-            docker://${{ env.GAR_IMAGE_REGISTRY }}/gitpod-artifacts/docker-dev/workspace-$IMAGE_TAG:${{ env.TIMESTAMP_TAG }} &
 
-            COPY_JOBS_PIDS="$COPY_JOBS_PIDS $!"
+          for image_tag in "${IMAGE_TAGS[@]}"; do
+              upload_image "$image_tag" &
 
-            sudo skopeo copy --format=oci --dest-oci-accept-uncompressed-layers \
-            docker://${{ env.GAR_IMAGE_REGISTRY }}/gitpod-artifacts/docker-dev/workspace-base-images:$IMAGE_TAG \
-            docker://${{ env.GAR_IMAGE_REGISTRY }}/gitpod-artifacts/docker-dev/workspace-$IMAGE_TAG:latest &
+              UPLOAD_PIDS+=($!)
 
-            COPY_JOBS_PIDS="$COPY_JOBS_PIDS $!"
+              if [ ${#UPLOAD_PIDS[@]} -eq $MAX_PARALLEL ]; then
+                # Wait for the first background process in the array
+                wait "${UPLOAD_PIDS[0]}"
 
-          done
-
-          for COPY_JOBS_PID in $COPY_JOBS_PIDS; do
-              wait $COPY_JOBS_PID || exit 1
+                # Remove the first element from the array
+                UPLOAD_PIDS=("${UPLOAD_PIDS[@]:1}")
+              fi
           done
 
       - name: ✍🏽 Login to Docker Hub using skopeo
