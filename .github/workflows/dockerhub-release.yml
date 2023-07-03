@@ -34,14 +34,18 @@ jobs:
           sudo apt-get install python3-pip
           sudo pip3 install yq
 
-      - name: 🔆 Install skopeo
+      - name: 🔆 Setup skopeo
         run: |
-          . /etc/os-release
-          # Update ca-certificates to avoid issues with letsencrypt SSL certificates
-          sudo apt update && sudo apt --only-upgrade install ca-certificates -y
-          echo "deb https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/xUbuntu_${VERSION_ID}/ /" | sudo tee /etc/apt/sources.list.d/devel:kubic:libcontainers:stable.list
-          curl -L https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/xUbuntu_${VERSION_ID}/Release.key | sudo apt-key add -
-          sudo apt update && sudo apt install -y skopeo
+          # Generate a temporal file to store skopeo auth
+          echo "SKOPEO_AUTH_FILE=$(mktemp)" >> $GITHUB_ENV
+          # Build a fake skopeo script to run a container
+          cat <<'EOF' > /usr/local/bin/skopeo
+          #/bin/bash
+
+          docker run --rm -v $SKOPEO_AUTH_FILE:/skopeo.auth -e REGISTRY_AUTH_FILE=/skopeo.auth quay.io/skopeo/stable:v1.12.0 "$@"
+          EOF
+
+          chmod +x /usr/local/bin/skopeo
 
       - name: ☁️ Set up Cloud SDK
         uses: google-github-actions/setup-gcloud@v1.1.1
@@ -58,7 +62,7 @@ jobs:
 
       - name: ✍🏽 Login to GAR using skopeo
         run: |
-          sudo skopeo login -u oauth2accesstoken --password=${{ steps.auth.outputs.access_token }} ${{env.GAR_IMAGE_REGISTRY}}
+          sudo -E skopeo login -u oauth2accesstoken --password=${{ steps.auth.outputs.access_token }} ${{env.GAR_IMAGE_REGISTRY}}
 
       - name: ✍🏽 Login to Docker Hub using skopeo
         env:
