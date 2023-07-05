@@ -5,6 +5,15 @@ combiner:
         - dep-cacert-update
         - tool-docker
         - tool-tailscale
+    - name: gitpod-dev
+      ref:
+      - base
+      chunks:
+        - lang-c
+        - lang-go:1.20
+        - lang-java:11
+        - lang-node:18
+        - tool-brew
     - name: c
       ref:
       - base
@@ -178,16 +187,6 @@ combiner:
         - tool-nginx
         - tool-nix:2.11.0
         - tool-yugabytedb:2.15
-    - name: gitpod-dev
-      ref:
-      - base
-      chunks:
-        - lang-c
-        - lang-go:1.20
-        - lang-java:11
-        - lang-node:18
-        - lang-python:3.11
-        - tool-brew
   envvars:
     - name: PATH
       action: merge-unique
