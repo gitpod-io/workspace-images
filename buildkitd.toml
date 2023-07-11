@@ -1,4 +1,10 @@
 root = "/workspace/buildkit"
 
 [worker.oci]
-gckeepstorage = 40000
+  enabled = true
+  platforms = [ "linux/amd64" ]
+  snapshotter = "auto"
+  rootless = false
+  gc = true
+  gckeepstorage = 40000
+  max-parallelism = 16

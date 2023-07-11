@@ -5,6 +5,15 @@ combiner:
         - dep-cacert-update
         - tool-docker
         - tool-tailscale
+    - name: gitpod-dev
+      ref:
+      - base
+      chunks:
+        - lang-c
+        - lang-go:1.20
+        - lang-java:11
+        - lang-node:18
+        - tool-brew
     - name: c
       ref:
       - base
