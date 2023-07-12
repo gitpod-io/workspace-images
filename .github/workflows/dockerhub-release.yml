@@ -45,7 +45,10 @@ jobs:
           cat <<EOF | sudo tee /usr/local/bin/skopeo > /dev/null
           #/bin/bash
 
-          docker run --rm -v $SKOPEO_AUTH_FILE:/skopeo.auth -e REGISTRY_AUTH_FILE=/skopeo.auth quay.io/skopeo/stable:v1.12.0 "\$@"
+          docker run --rm \
+            --mount type=bind,source=$SKOPEO_AUTH_FILE,target=/skopeo.auth \
+            -e REGISTRY_AUTH_FILE=/skopeo.auth \
+            quay.io/skopeo/stable:v1.12.0 "\$@"
           EOF
 
           sudo chmod +x /usr/local/bin/skopeo
