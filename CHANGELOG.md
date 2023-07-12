@@ -2,6 +2,10 @@
 
 A curated, chronologically ordered list of notable changes in [Gitpod's default workspace images](https://hub.docker.com/u/gitpod).
 
+## 2023-07-11
+
+- Bump Go to 1.20 to `1.20.6` and Go 1.19 `1.19.11`
+
 ## 2022-02-01
 
 - Release workspace-full latest tag built using dazzle v2
@@ -78,4 +82,5 @@ A curated, chronologically ordered list of notable changes in [Gitpod's default 
 - Upgrade Node.js from `v10` → `v12 LTS` (to pin a specific version, see [this workaround](https://github.com/gitpod-io/workspace-images/pull/178#issuecomment-602465333))
 
 ---
+
 Inspired by [keepachangelog.com](https://keepachangelog.com/).
