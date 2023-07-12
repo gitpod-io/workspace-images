@@ -46,8 +46,8 @@ jobs:
           #/bin/bash
 
           docker run --rm \
-            -v $SKOPEO_AUTH_FILE=/skopeo.auth \
-            -e REGISTRY_AUTH_FILE=/skopeo.auth/auth \
+            -v $SKOPEO_AUTH_FILE=$HOME/.docker \
+            -e REGISTRY_AUTH_FILE=$HOME/.docker/auth \
             quay.io/skopeo/stable:v1.12.0 "\$@"
           EOF
 
@@ -90,8 +90,7 @@ jobs:
           IMAGES=$(cat .github/promote-images.yml | yq '."europe-docker.pkg.dev/gitpod-artifacts/docker-dev"."images-by-tag-regex"|keys[]' -r)
           for IMAGE in $IMAGES;
           do
-            sudo -E skopeo copy --src-authfile /skopeo.auth/auth --dest-authfile /skopeo.auth/auth \
-            --format=oci --dest-oci-accept-uncompressed-layers \
+            sudo -E skopeo copy --format=oci --dest-oci-accept-uncompressed-layers \
             docker://${{ env.GAR_IMAGE_REGISTRY }}/gitpod-artifacts/docker-dev/$IMAGE:latest \
             docker://${{ env.DH_IMAGE_REGISTRY }}/gitpod/$IMAGE:latest
           done
