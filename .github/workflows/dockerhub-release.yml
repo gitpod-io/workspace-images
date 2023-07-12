@@ -37,24 +37,24 @@ jobs:
       - name: 🔆 Setup skopeo
         run: |
           # Generate a temporal file to store skopeo auth
-          SKOPEO_AUTH_FILE=$(mktemp)
+          SKOPEO_AUTH_FILE=$(mktemp -d)
           # to test locally
           # export GITHUB_ENV=$(mktemp)
-          echo "SKOPEO_AUTH_FILE=${SKOPEO_AUTH_FILE}" >> $GITHUB_ENV
+          echo "SKOPEO_AUTH_FILE=${SKOPEO_AUTH_FILE}/auth" >> $GITHUB_ENV
           # Build a fake skopeo script to run a container
           cat <<EOF | sudo tee /usr/local/bin/skopeo > /dev/null
           #/bin/bash
 
           docker run --rm \
-            --mount type=bind,source=$SKOPEO_AUTH_FILE,target=/skopeo.auth \
-            -e REGISTRY_AUTH_FILE=/skopeo.auth \
+            -v $SKOPEO_AUTH_FILE=/skopeo.auth \
+            -e REGISTRY_AUTH_FILE=/skopeo.auth/auth \
             quay.io/skopeo/stable:v1.12.0 "\$@"
           EOF
 
           sudo chmod +x /usr/local/bin/skopeo
 
           # don't fail parsing the file while it contains empty creds the first time
-          echo "{}" > $SKOPEO_AUTH_FILE
+          echo "{}" > $SKOPEO_AUTH_FILE/auth
 
       - name: ☁️ Set up Cloud SDK
         uses: google-github-actions/setup-gcloud@v1.1.1
