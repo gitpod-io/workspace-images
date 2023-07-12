@@ -39,10 +39,10 @@ jobs:
           # Generate a temporal file to store skopeo auth
           echo "SKOPEO_AUTH_FILE=$(mktemp)" >> $GITHUB_ENV
           # Build a fake skopeo script to run a container
-          cat <<'EOF' > /usr/local/bin/skopeo
+          cat <<EOF > /usr/local/bin/skopeo
           #/bin/bash
 
-          docker run --rm -v $SKOPEO_AUTH_FILE:/skopeo.auth -e REGISTRY_AUTH_FILE=/skopeo.auth quay.io/skopeo/stable:v1.12.0 "$@"
+          docker run --rm -v $SKOPEO_AUTH_FILE:/skopeo.auth -e REGISTRY_AUTH_FILE=/skopeo.auth quay.io/skopeo/stable:v1.12.0 "\$@"
           EOF
 
           chmod +x /usr/local/bin/skopeo
