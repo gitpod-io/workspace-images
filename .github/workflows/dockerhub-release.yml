@@ -47,6 +47,9 @@ jobs:
 
           chmod +x /usr/local/bin/skopeo
 
+          # delete the file, so skopeo doesn't try parsing it, initially
+          rm $SKOPEO_AUTH_FILE
+
       - name: ☁️ Set up Cloud SDK
         uses: google-github-actions/setup-gcloud@v1.1.1
         with:
@@ -61,6 +64,8 @@ jobs:
           service_account: ${{env.IAM_SERVICE_ACCOUNT}}
 
       - name: ✍🏽 Login to GAR using skopeo
+        env:
+          SKOPEO_AUTH_FILE: ${{env.SKOPEO_AUTH_FILE}}
         run: |
           sudo -E skopeo login -u oauth2accesstoken --password=${{ steps.auth.outputs.access_token }} ${{env.GAR_IMAGE_REGISTRY}}
 
@@ -68,10 +73,13 @@ jobs:
         env:
           docker_user: ${{ secrets.DOCKERHUB_USER_NAME }}
           docker_password: ${{ secrets.DOCKERHUB_ACCESS_TOKEN }}
+          SKOPEO_AUTH_FILE: ${{env.SKOPEO_AUTH_FILE}}
         run: |
           sudo -E skopeo login -u ${{ env.docker_user }} --password=${{ env.docker_password }} ${{ env.DH_IMAGE_REGISTRY }}
 
       - name: 🐳 Sync latest tag of images to Docker Hub
+        env:
+          SKOPEO_AUTH_FILE: ${{env.SKOPEO_AUTH_FILE}}
         run: |
           IMAGES=$(cat .github/promote-images.yml | yq '."europe-docker.pkg.dev/gitpod-artifacts/docker-dev"."images-by-tag-regex"|keys[]' -r)
           for IMAGE in $IMAGES;
