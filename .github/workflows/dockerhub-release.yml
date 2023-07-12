@@ -37,7 +37,8 @@ jobs:
       - name: 🔆 Setup skopeo
         run: |
           # Generate a temporal file to store skopeo auth
-          echo "SKOPEO_AUTH_FILE=$(mktemp)" >> $GITHUB_ENV
+          SKOPEO_AUTH_FILE=$(mktemp)
+          echo "SKOPEO_AUTH_FILE=${SKOPEO_AUTH_FILE}" >> $GITHUB_ENV
           # Build a fake skopeo script to run a container
           cat <<'EOF' > /usr/local/bin/skopeo
           #/bin/bash
@@ -48,7 +49,7 @@ jobs:
           chmod +x /usr/local/bin/skopeo
 
           # delete the file, so skopeo doesn't try parsing it, initially
-          rm $SKOPEO_AUTH_FILE
+          rm "${SKOPEO_AUTH_FILE}"
 
       - name: ☁️ Set up Cloud SDK
         uses: google-github-actions/setup-gcloud@v1.1.1
