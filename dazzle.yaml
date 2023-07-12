@@ -5,6 +5,15 @@ combiner:
         - dep-cacert-update
         - tool-docker
         - tool-tailscale
+    - name: gitpod-dev
+      ref:
+      - base
+      chunks:
+        - lang-c
+        - lang-go:1.20
+        - lang-java:11
+        - lang-node:18
+        - tool-brew
     - name: c
       ref:
       - base
@@ -26,7 +35,7 @@ combiner:
       chunks:
         - lang-c
         - lang-clojure
-        - lang-go:1.19.5
+        - lang-go:1.20
         - lang-java:11
         - lang-node:18
         - lang-python:3.11
@@ -45,7 +54,7 @@ combiner:
       ref:
       - base
       chunks:
-        - lang-go:1.19.5
+        - lang-go:1.20
     - name: nix
       ref:
       - base
@@ -154,7 +163,7 @@ combiner:
       chunks:
         - lang-c
         - lang-clojure
-        - lang-go:1.19.5
+        - lang-go:1.20
         - lang-java:11
         - lang-node:18
         - lang-ruby:3.2
@@ -169,7 +178,7 @@ combiner:
       chunks:
         - lang-c
         - lang-clojure
-        - lang-go:1.19.5
+        - lang-go:1.20
         - lang-java:11
         - lang-node:18
         - lang-ruby:3.2

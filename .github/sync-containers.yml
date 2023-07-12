@@ -30,3 +30,4 @@ sync:
     - java-17
     - yugabytedb
     - yugabytedb-preview
+    - gitpod-dev

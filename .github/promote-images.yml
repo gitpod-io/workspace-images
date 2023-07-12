@@ -33,3 +33,4 @@
     workspace-java-17: "20.*"
     workspace-yugabytedb: "20.*"
     workspace-yugabytedb-preview: "20.*"
+    workspace-gitpod-dev: "20.*"
