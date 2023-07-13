@@ -64,7 +64,7 @@ jobs:
           #/bin/bash
 
           PROMOTE_IMAGES=$(mktemp -d)
-          cp .github/promote-images.yml "${PROMOTE_IMAGES}"
+          cp "${GITHUB_WORKSPACE}/.github/promote-images.yml" "${PROMOTE_IMAGES}"
 
           docker run --rm \
             -v "${SKOPEO_AUTH_DIR}":/skopeo.auth \
@@ -200,4 +200,4 @@ jobs:
             sudo -E skopeo sync \
             --src yaml \
             --dest docker \
-            .github/promote-images.yml "${DH_IMAGE_REGISTRY}/gitpod"
+            /.github/promote-images.yml "${DH_IMAGE_REGISTRY}/gitpod"
