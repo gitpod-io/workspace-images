@@ -136,11 +136,13 @@ jobs:
         env:
           SKOPEO_AUTH_DIR: ${{env.SKOPEO_AUTH_DIR}}
           GAR_IMAGE_REGISTRY: ${{env.GAR_IMAGE_REGISTRY}}
-          TIMESTAMP_TAG: ${{ env.TIMESTAMP_TAG }}
+          TIMESTAMP_TAG: ${{env.TIMESTAMP_TAG}}
         run: |
           set -e
           upload_image() {
               local IMAGE_TAG=$1
+
+              echo "Uploading $IMAGE_TAG at $(date -u +'%Y-%m-%d %H:%M:%S')"
 
               # upload timestamped image
               (sudo -E skopeo copy --format=oci --dest-oci-accept-uncompressed-layers --retry-times=2 \
