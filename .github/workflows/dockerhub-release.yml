@@ -22,6 +22,7 @@ jobs:
       GAR_IMAGE_REGISTRY: europe-docker.pkg.dev
       DH_IMAGE_REGISTRY: registry.hub.docker.com
       IAM_SERVICE_ACCOUNT: workspace-images-gha-sa@gitpod-artifacts.iam.gserviceaccount.com
+      SKOPEO_VERSION: 1.12.0
 
     steps:
       - name: 📥 Checkout workspace-images
@@ -35,6 +36,8 @@ jobs:
           sudo pip3 install yq
 
       - name: 🔆 Setup skopeo
+        env:
+          SKOPEO_VERSION: ${{env.SKOPEO_VERSION}}
         run: |
           # Generate a temporal file to store skopeo auth
           SKOPEO_AUTH_DIR=$(mktemp -d)
@@ -48,7 +51,7 @@ jobs:
           docker run --rm \
             -v $SKOPEO_AUTH_DIR:/skopeo.auth \
             -e REGISTRY_AUTH_FILE=/skopeo.auth/auth \
-            quay.io/skopeo/stable:v1.12.0 "\$@"
+            quay.io/skopeo/stable:v$SKOPEO_VERSION "\$@"
           EOF
 
           sudo chmod +x /usr/local/bin/skopeo
