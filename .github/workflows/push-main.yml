@@ -55,20 +55,22 @@ jobs:
           SKOPEO_VERSION: ${{env.SKOPEO_VERSION}}
         run: |
           # Generate a temporal file to store skopeo auth
+          # Any step using skopeo needs SKOPEO_AUTH_DIR env var
           SKOPEO_AUTH_DIR=$(mktemp -d)
           # to test locally
           # export GITHUB_ENV=$(mktemp)
           echo "SKOPEO_AUTH_DIR=${SKOPEO_AUTH_DIR}" >> $GITHUB_ENV
+          # Any step using skopeo needs SKOPEO_SYNC_FILES env var
+          SKOPEO_SYNC_FILES=$(mktemp -d)
+          echo "SKOPEO_SYNC_FILES=${SKOPEO_SYNC_FILES}" >> $GITHUB_ENV
+          cp "${GITHUB_WORKSPACE}/.github/promote-images.yml" "${SKOPEO_SYNC_FILES}"
           # Build a fake skopeo script to run a container
           cat <<EOF | sudo tee /usr/local/bin/skopeo > /dev/null
           #/bin/bash
 
-          PROMOTE_IMAGES=$(mktemp -d)
-          cp "${GITHUB_WORKSPACE}/.github/promote-images.yml" "${PROMOTE_IMAGES}"
-
           docker run --rm \
             -v "${SKOPEO_AUTH_DIR}":/skopeo.auth \
-            -v "${PROMOTE_IMAGES}":/.github \
+            -v "${SKOPEO_SYNC_FILES}":/.github \
             -e REGISTRY_AUTH_FILE=/skopeo.auth/auth \
             quay.io/skopeo/stable:v"${SKOPEO_VERSION}" "\$@"
           EOF
@@ -105,6 +107,7 @@ jobs:
         env:
           SKOPEO_AUTH_DIR: ${{env.SKOPEO_AUTH_DIR}}
           GAR_IMAGE_REGISTRY: ${{env.GAR_IMAGE_REGISTRY}}
+          SKOPEO_SYNC_FILES: ${env.SKOPEO_SYNC_FILES}
         run: |
           sudo -E skopeo login -u oauth2accesstoken --password=${{ steps.auth.outputs.access_token }} $GAR_IMAGE_REGISTRY
 
@@ -141,6 +144,7 @@ jobs:
           SKOPEO_AUTH_DIR: ${{env.SKOPEO_AUTH_DIR}}
           GAR_IMAGE_REGISTRY: ${{env.GAR_IMAGE_REGISTRY}}
           TIMESTAMP_TAG: ${{env.TIMESTAMP_TAG}}
+          SKOPEO_SYNC_FILES: ${{env.SKOPEO_SYNC_FILES}}
         run: |
           set -e
           upload_image() {
@@ -190,12 +194,14 @@ jobs:
           DOCKERHUB_USER_NAME: ${{secrets.DOCKERHUB_USER_NAME}}
           DOCKERHUB_ACCESS_TOKEN: ${{secrets.DOCKERHUB_ACCESS_TOKEN}}
           DH_IMAGE_REGISTRY: ${{env.DH_IMAGE_REGISTRY}}
+          SKOPEO_SYNC_FILES: ${{env.SKOPEO_SYNC_FILES}}
         run: |
           sudo -E skopeo login -u "${DOCKERHUB_USER_NAME}" --password="${DOCKERHUB_ACCESS_TOKEN}" "${DH_IMAGE_REGISTRY}"
 
       - name: 🐳 Sync images with specific tags to Docker Hub
         env:
           DH_IMAGE_REGISTRY: ${{env.DH_IMAGE_REGISTRY}}
+          SKOPEO_SYNC_FILES: ${{env.SKOPEO_SYNC_FILES}}
         run: |
             sudo -E skopeo sync \
             --src yaml \
