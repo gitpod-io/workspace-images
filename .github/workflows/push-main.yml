@@ -148,7 +148,7 @@ jobs:
               docker://$GAR_IMAGE_REGISTRY/gitpod-artifacts/docker-dev/workspace-$IMAGE_TAG:$TIMESTAMP_TAG &)
 
               # upload latest image
-              (sudo -E skopeo copy --format=oci --dest-oci-accept-uncompressed-layers  --retry-times=2 \
+              (sudo -E skopeo copy --format=oci --dest-oci-accept-uncompressed-layers --retry-times=2 \
               docker://$GAR_IMAGE_REGISTRY/gitpod-artifacts/docker-dev/workspace-base-images:$IMAGE_TAG \
               docker://$GAR_IMAGE_REGISTRY/gitpod-artifacts/docker-dev/workspace-$IMAGE_TAG:latest &)
 
