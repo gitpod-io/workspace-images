@@ -63,8 +63,12 @@ jobs:
           cat <<EOF | sudo tee /usr/local/bin/skopeo > /dev/null
           #/bin/bash
 
+          PROMOTE_IMAGES=$(mktemp -d)
+          cp .github/promote-images.yml "${PROMOTE_IMAGES}"
+
           docker run --rm \
             -v "${SKOPEO_AUTH_DIR}":/skopeo.auth \
+            -v "${PROMOTE_IMAGES}":/.github \
             -e REGISTRY_AUTH_FILE=/skopeo.auth/auth \
             quay.io/skopeo/stable:v"${SKOPEO_VERSION}" "\$@"
           EOF
