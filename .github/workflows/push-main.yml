@@ -48,7 +48,7 @@ jobs:
         env:
           DAZZLE_VERSION: ${{env.DAZZLE_VERSION}}
         run: |
-          curl -sSL https://github.com/gitpod-io/dazzle/releases/download/v$DAZZLE_VERSION/dazzle_$DAZZLE_VERSION_Linux_x86_64.tar.gz | sudo tar -xvz -C /usr/local/bin
+          curl -sSL "https://github.com/gitpod-io/dazzle/releases/download/v${DAZZLE_VERSION}/dazzle_${DAZZLE_VERSION}_Linux_x86_64.tar.gz" | sudo tar -xvz -C /usr/local/bin
 
       - name: 🔆 Install skopeo
         env:
@@ -64,9 +64,9 @@ jobs:
           #/bin/bash
 
           docker run --rm \
-            -v $SKOPEO_AUTH_DIR:/skopeo.auth \
+            -v "${SKOPEO_AUTH_DIR}":/skopeo.auth \
             -e REGISTRY_AUTH_FILE=/skopeo.auth/auth \
-            quay.io/skopeo/stable:v$SKOPEO_VERSION "\$@"
+            quay.io/skopeo/stable:v"${SKOPEO_VERSION}" "\$@"
           EOF
 
           sudo chmod +x /usr/local/bin/skopeo
@@ -78,7 +78,7 @@ jobs:
         env:
           BUILDKIT_VERSION: ${{env.BUILDKIT_VERSION}}
         run: |
-          curl -sSL https://github.com/moby/buildkit/releases/download/v$BUILDKIT_VERSION/buildkit-v$BUILDKIT_VERSION.linux-amd64.tar.gz | sudo tar xvz -C /usr
+          curl -sSL "https://github.com/moby/buildkit/releases/download/v${BUILDKIT_VERSION}/buildkit-v${BUILDKIT_VERSION}.linux-amd64.tar.gz" | sudo tar xvz -C /usr
           sudo buildkitd --oci-worker=true --oci-worker-net=host --debug --group docker &
           sudo su -c "while ! test -S /run/buildkit/buildkitd.sock; do sleep 0.1; done"
           sudo chmod +777 /run/buildkit/buildkitd.sock
@@ -114,14 +114,14 @@ jobs:
         env:
           GAR_IMAGE_REGISTRY: ${{env.GAR_IMAGE_REGISTRY}}
         run: |
-          dazzle build $GAR_IMAGE_REGISTRY/gitpod-artifacts/docker-dev/workspace-base-images --chunked-without-hash
-          dazzle build $GAR_IMAGE_REGISTRY/gitpod-artifacts/docker-dev/workspace-base-images
+          dazzle build "${GAR_IMAGE_REGISTRY}/gitpod-artifacts/docker-dev/workspace-base-images" --chunked-without-hash
+          dazzle build "${GAR_IMAGE_REGISTRY}/gitpod-artifacts/docker-dev/workspace-base-images"
 
       - name: 🖇️ Dazzle combine
         env:
           GAR_IMAGE_REGISTRY: ${{env.GAR_IMAGE_REGISTRY}}
         run: |
-          dazzle combine $GAR_IMAGE_REGISTRY/gitpod-artifacts/docker-dev/workspace-base-images --all
+          dazzle combine "${GAR_IMAGE_REGISTRY}/gitpod-artifacts/docker-dev/workspace-base-images" --all
 
       - name: 🕰️ Create timestamp tag
         id: create-timestamp-tag
@@ -146,13 +146,13 @@ jobs:
 
               # upload timestamped image
               (sudo -E skopeo copy --format=oci --dest-oci-accept-uncompressed-layers --retry-times=2 \
-              docker://$GAR_IMAGE_REGISTRY/gitpod-artifacts/docker-dev/workspace-base-images:$IMAGE_TAG \
-              docker://$GAR_IMAGE_REGISTRY/gitpod-artifacts/docker-dev/workspace-$IMAGE_TAG:$TIMESTAMP_TAG &)
+              "docker://${GAR_IMAGE_REGISTRY}/gitpod-artifacts/docker-dev/workspace-base-images:${IMAGE_TAG}" \
+              "docker://${GAR_IMAGE_REGISTRY}/gitpod-artifacts/docker-dev/workspace-${IMAGE_TAG}:${TIMESTAMP_TAG}" &)
 
               # upload latest image
               (sudo -E skopeo copy --format=oci --dest-oci-accept-uncompressed-layers --retry-times=2 \
-              docker://$GAR_IMAGE_REGISTRY/gitpod-artifacts/docker-dev/workspace-base-images:$IMAGE_TAG \
-              docker://$GAR_IMAGE_REGISTRY/gitpod-artifacts/docker-dev/workspace-$IMAGE_TAG:latest &)
+              "docker://${GAR_IMAGE_REGISTRY}/gitpod-artifacts/docker-dev/workspace-base-images:${IMAGE_TAG}" \
+              "docker://${GAR_IMAGE_REGISTRY}/gitpod-artifacts/docker-dev/workspace-${IMAGE_TAG}:latest" &)
 
               wait
           }
@@ -187,7 +187,7 @@ jobs:
           DOCKERHUB_ACCESS_TOKEN: ${{secrets.DOCKERHUB_ACCESS_TOKEN}}
           DH_IMAGE_REGISTRY: ${{env.DH_IMAGE_REGISTRY}}
         run: |
-          sudo -E skopeo login -u $DOCKERHUB_USER_NAME --password=$DOCKERHUB_ACCESS_TOKEN $DH_IMAGE_REGISTRY
+          sudo -E skopeo login -u "${DOCKERHUB_USER_NAME}" --password="${DOCKERHUB_ACCESS_TOKEN}" "${DH_IMAGE_REGISTRY}"
 
       - name: 🐳 Sync images with specific tags to Docker Hub
         env:
@@ -196,4 +196,4 @@ jobs:
             sudo -E skopeo sync \
             --src yaml \
             --dest docker \
-            .github/promote-images.yml $DH_IMAGE_REGISTRY/gitpod
+            .github/promote-images.yml "${DH_IMAGE_REGISTRY}/gitpod"
