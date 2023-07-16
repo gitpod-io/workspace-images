@@ -150,7 +150,7 @@ jobs:
 
           IFS=' ' read -r -a IMAGE_TAGS < <(yq '.sync.images."workspace-base-images"|join(" ")' .github/sync-containers.yml)
           UPLOADS=$(printf "./.github/workflows/push-main/upload_image.sh %s\n" "${IMAGE_TAGS[@]}")
-          echo "${UPLOADS}" | xargs -I CMD -P 10 -n 1 \
+          echo "${UPLOADS}" | xargs -0 -I CMD -P 10 -n 1 \
           env SKOPEO_AUTH_DIR="${SKOPEO_AUTH_DIR}" GAR_IMAGE_REGISTRY="${GAR_IMAGE_REGISTRY}" TIMESTAMP_TAG="${TIMESTAMP_TAG}" SKOPEO_SYNC_FILES="${SKOPEO_SYNC_FILES}" \
           bash -c CMD --
 
