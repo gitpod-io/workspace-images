@@ -146,48 +146,27 @@ jobs:
           TIMESTAMP_TAG: ${{env.TIMESTAMP_TAG}}
           SKOPEO_SYNC_FILES: ${{env.SKOPEO_SYNC_FILES}}
         run: |
-          set -e
+          set -eo pipefail
           upload_image() {
               local IMAGE_TAG=$1
 
-              echo "Uploading $IMAGE_TAG at $(date -u +'%Y-%m-%d %H:%M:%S')"
+              echo "Uploading ${IMAGE_TAG} at $(date -u +'%Y-%m-%d %H:%M:%S')"
 
               # upload timestamped image
-              (sudo -E skopeo copy --format=oci --dest-oci-accept-uncompressed-layers --retry-times=2 \
+              sudo -E skopeo copy --format=oci --dest-oci-accept-uncompressed-layers --retry-times=2 \
               "docker://${GAR_IMAGE_REGISTRY}/gitpod-artifacts/docker-dev/workspace-base-images:${IMAGE_TAG}" \
-              "docker://${GAR_IMAGE_REGISTRY}/gitpod-artifacts/docker-dev/workspace-${IMAGE_TAG}:${TIMESTAMP_TAG}" &)
+              "docker://${GAR_IMAGE_REGISTRY}/gitpod-artifacts/docker-dev/workspace-${IMAGE_TAG}:${TIMESTAMP_TAG}"
 
               # upload latest image
-              (sudo -E skopeo copy --format=oci --dest-oci-accept-uncompressed-layers --retry-times=2 \
+              sudo -E skopeo copy --format=oci --dest-oci-accept-uncompressed-layers --retry-times=2 \
               "docker://${GAR_IMAGE_REGISTRY}/gitpod-artifacts/docker-dev/workspace-base-images:${IMAGE_TAG}" \
-              "docker://${GAR_IMAGE_REGISTRY}/gitpod-artifacts/docker-dev/workspace-${IMAGE_TAG}:latest" &)
-
-              wait
+              "docker://${GAR_IMAGE_REGISTRY}/gitpod-artifacts/docker-dev/workspace-${IMAGE_TAG}:latest"
           }
 
-          MAX_PARALLEL=10
-          declare -a UPLOAD_PIDS=()
-          IMAGE_TAGS=$(yq -r '.sync.images."workspace-base-images"|join(" ")' .github/sync-containers.yml)
+          IFS=' ' read -r -a IMAGE_TAGS < <(yq '.sync.images."workspace-base-images"|join(" ")' .github/sync-containers.yml)
+          UPLOADS=$(printf "upload_image %s\n" "${IMAGE_TAGS[@]}")
+          echo "${UPLOADS}" | xargs -I CMD -P 10 -n 1 bash -c CMD
 
-          for image_tag in "${IMAGE_TAGS[@]}"; do
-              upload_image "$image_tag" &
-
-              UPLOAD_PIDS+=($!)
-
-              if [ ${#UPLOAD_PIDS[@]} -eq $MAX_PARALLEL ]; then
-                # Wait for the first background process in the array
-                wait "${UPLOAD_PIDS[0]}"
-
-                status=$?
-                if [ $status -ne 0 ]; then
-                  echo "Upload job failed with exit code $status"
-                  exit 1
-                fi
-
-                # Remove the first element from the array
-                UPLOAD_PIDS=("${UPLOAD_PIDS[@]:1}")
-              fi
-          done
 
       - name: ✍🏽 Login to Docker Hub using skopeo
         env:
