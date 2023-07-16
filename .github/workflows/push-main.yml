@@ -146,27 +146,13 @@ jobs:
           TIMESTAMP_TAG: ${{env.TIMESTAMP_TAG}}
           SKOPEO_SYNC_FILES: ${{env.SKOPEO_SYNC_FILES}}
         run: |
-          set -eo pipefail
-          upload_image() {
-              local IMAGE_TAG=$1
-
-              echo "Uploading ${IMAGE_TAG} at $(date -u +'%Y-%m-%d %H:%M:%S')"
-
-              # upload timestamped image
-              sudo -E skopeo copy --format=oci --dest-oci-accept-uncompressed-layers --retry-times=2 \
-              "docker://${GAR_IMAGE_REGISTRY}/gitpod-artifacts/docker-dev/workspace-base-images:${IMAGE_TAG}" \
-              "docker://${GAR_IMAGE_REGISTRY}/gitpod-artifacts/docker-dev/workspace-${IMAGE_TAG}:${TIMESTAMP_TAG}"
-
-              # upload latest image
-              sudo -E skopeo copy --format=oci --dest-oci-accept-uncompressed-layers --retry-times=2 \
-              "docker://${GAR_IMAGE_REGISTRY}/gitpod-artifacts/docker-dev/workspace-base-images:${IMAGE_TAG}" \
-              "docker://${GAR_IMAGE_REGISTRY}/gitpod-artifacts/docker-dev/workspace-${IMAGE_TAG}:latest"
-          }
+          set -euo pipefail
 
           IFS=' ' read -r -a IMAGE_TAGS < <(yq '.sync.images."workspace-base-images"|join(" ")' .github/sync-containers.yml)
-          UPLOADS=$(printf "upload_image %s\n" "${IMAGE_TAGS[@]}")
-          echo "${UPLOADS}" | xargs -I CMD -P 10 -n 1 bash -c CMD
-
+          UPLOADS=$(printf "./.github/workflows/push-main/upload_image.sh %s\n" "${IMAGE_TAGS[@]}")
+          echo "${UPLOADS}" | xargs -I CMD -P 10 -n 1 \
+          env SKOPEO_AUTH_DIR="${SKOPEO_AUTH_DIR}" GAR_IMAGE_REGISTRY="${GAR_IMAGE_REGISTRY}" TIMESTAMP_TAG="${TIMESTAMP_TAG}" SKOPEO_SYNC_FILES="${SKOPEO_SYNC_FILES}" \
+          bash -c CMD --
 
       - name: ✍🏽 Login to Docker Hub using skopeo
         env:
