@@ -153,7 +153,9 @@ jobs:
           for IMAGE_TAG in "${IMAGE_TAGS_ARR[@]}"; do
               UPLOADS_STRING+=$(printf "./.github/workflows/push-main/upload_image.sh %s%s" ${IMAGE_TAG}'\n')
           done
-          echo -e "${UPLOADS_STRING}" | xargs -0 -I CMD -P 10 -n 1 \
+          # remove the trailing newline
+          UPLOADS_STRING="${UPLOADS_STRING::-2}"
+          echo -e "${UPLOADS_STRING}" | xargs -I CMD -P 10 -n 1 \
           env SKOPEO_AUTH_DIR="${SKOPEO_AUTH_DIR}" GAR_IMAGE_REGISTRY="${GAR_IMAGE_REGISTRY}" TIMESTAMP_TAG="${TIMESTAMP_TAG}" SKOPEO_SYNC_FILES="${SKOPEO_SYNC_FILES}" \
           bash -c CMD --
 
