@@ -137,6 +137,7 @@ jobs:
 
       - name: 🔧 Setup copy tools
         run: |
+          # this installs yq 3
           sudo pip3 install yq
 
       - name: 📋 Copy images with tag in the Artifact Registry
@@ -148,7 +149,7 @@ jobs:
         run: |
           set -euo pipefail
 
-          IFS=' ' read -r -a IMAGE_TAGS_ARR < <(yq '.sync.images."workspace-base-images"|join(" ")' ./.github/sync-containers.yml)
+          IFS=$'\n' read -r -d '' -a IMAGE_TAGS_ARR < <(yq -r '.sync.images."workspace-base-images"[]' ./.github/sync-containers.yml && printf '\0')
           UPLOADS_STRING=""
           for IMAGE_TAG in "${IMAGE_TAGS_ARR[@]}"; do
               UPLOADS_STRING+=$(printf "./.github/workflows/push-main/upload_image.sh %s%s" ${IMAGE_TAG}'\n')
