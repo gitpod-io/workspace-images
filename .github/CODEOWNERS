@@ -1,22 +1,22 @@
 # default owners
 # anything defined (below) will override
-* @gitpod-io/engineering-ide
+* @gitpod-io/team-experience
 
 # changes to workflows and codeowners
-/.github @gitpod-io/engineering-ide @gitpod-io/engineering-workspace
+/.github @gitpod-io/team-experience @gitpod-io/team-engine
 
 # the workflow to add latest tag on dockerhub
 # workspace team must own, its part of the workspace-clusters release
-/.github/workflows/dockerhub-release.yml @gitpod-io/engineering-workspace
+/.github/workflows/dockerhub-release.yml @gitpod-io/team-engine
 
 # changes to our base "chunk"
 # leaving workspace team here, for now, to monitor changes
-/base @gitpod-io/engineering-ide @gitpod-io/engineering-workspace
+/base @gitpod-io/team-experience @gitpod-io/team-engine
 
 # changes to docker chunk
 # leaving workspace team here, for now, to monitor changes impacting the docker in workspace experience
-/chunks/tool/docker @gitpod-io/engineering-ide @gitpod-io/engineering-workspace
+/chunks/tool/docker @gitpod-io/team-experience @gitpod-io/team-engine
 
 # our definition for combinations
 # leaving workspace team here, for now, to monitor changes to full combo
-dazzle.yaml @gitpod-io/engineering-ide @gitpod-io/engineering-workspace
+dazzle.yaml @gitpod-io/team-experience @gitpod-io/team-engine
