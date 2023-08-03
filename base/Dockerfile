@@ -1,5 +1,7 @@
 FROM buildpack-deps:jammy
 
+ENV TRIGGER_REBUILD=1
+
 COPY install-packages upgrade-packages /usr/bin/
 
 ### base ###
