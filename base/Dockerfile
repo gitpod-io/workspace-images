@@ -1,6 +1,4 @@
-FROM buildpack-deps:jammy
-
-ENV TRIGGER_REBUILD=1
+FROM buildpack-deps:jammy@sha256:9b7ec77e64b6837e10968f9e2b0760af52fe7da4f66c1d008532f2bb80c0f1e2
 
 COPY install-packages upgrade-packages /usr/bin/
 
