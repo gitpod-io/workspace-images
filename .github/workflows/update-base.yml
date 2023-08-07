@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
   schedule:
     # Every Monday at midnight
-    - cron: "0 0 * * 1"
+    - cron: "0 0 * * 4"
 
 jobs:
   update:
