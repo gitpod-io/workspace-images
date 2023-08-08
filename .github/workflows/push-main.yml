@@ -24,7 +24,7 @@ jobs:
       DH_IMAGE_REGISTRY: registry.hub.docker.com
       IAM_SERVICE_ACCOUNT: workspace-images-gha-sa@gitpod-artifacts.iam.gserviceaccount.com
       DAZZLE_VERSION: 0.1.17
-      BUILDKIT_VERSION: 0.11.6
+      BUILDKIT_VERSION: 0.12.1
       SKOPEO_VERSION: 1.12.0
 
     steps:
