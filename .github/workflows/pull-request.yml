@@ -29,7 +29,7 @@ jobs:
 
       - name: 🔧 Setup pre-commit
         run: |
-          sudo apt-get install python3-pip shellcheck
+          sudo apt-get install --yes python3-pip shellcheck
           curl -sSL https://github.com/mvdan/sh/releases/download/v3.5.0/shfmt_v3.5.0_linux_amd64 -o shfmt
           sudo mv shfmt /usr/local/bin/shfmt && sudo chmod +x /usr/local/bin/shfmt
           sudo pip3 install pre-commit
