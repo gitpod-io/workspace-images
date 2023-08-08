@@ -3,8 +3,8 @@ name: Update base image base
 on:
   workflow_dispatch:
   schedule:
-    # Every Monday at midnight
-    - cron: "0 0 * * 4"
+    # Every Thursday at midnight
+    - cron: "0 0 * * THU"
 
 jobs:
   update:
