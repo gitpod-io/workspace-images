@@ -10,7 +10,7 @@ combiner:
       - base
       chunks:
         - lang-c
-        - lang-go:1.20
+        - lang-go:1.21
         - lang-java:11
         - lang-node:18
         - tool-brew
