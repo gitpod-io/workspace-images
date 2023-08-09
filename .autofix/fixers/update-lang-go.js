@@ -10,13 +10,14 @@ exports.register = async (fixers) => {
 
   const patchVersionReplacements = {};
   for (const line of stdout.split('\n').slice(1,-1)) {
-    const match = line.trim().match(/^go(\d+\.\d+\.)(\d+)$/);
+    const match = line.trim().match(/^go(\d+\.\d+)\.(\d+)$/);
     if (!match) {
       continue;
     }
 
-    const pattern = match[1].replace(/\./g, '\\.') + '[0-9][0-9]*';
-    patchVersionReplacements[pattern] = 'go' + match[1] + match[2];
+    // Only capturing major and minor versions in the pattern
+    const pattern = match[1].replace(/\./g, '\\.') + '\\.[0-9][0-9]*';
+    patchVersionReplacements[pattern] = match[1] + '.' + match[2];
   }
 
   fixers[0].push({
