@@ -5,6 +5,15 @@ combiner:
         - dep-cacert-update
         - tool-docker
         - tool-tailscale
+    - name: gitpod-dev
+      ref:
+      - base
+      chunks:
+        - lang-c
+        - lang-go:1.20
+        - lang-java:11
+        - lang-node:18
+        - tool-brew
     - name: c
       ref:
       - base
@@ -26,11 +35,11 @@ combiner:
       chunks:
         - lang-c
         - lang-clojure
-        - lang-go:1.19.3
+        - lang-go:1.20
         - lang-java:11
-        - lang-node:16
-        - lang-python:3.8
-        - lang-ruby:3.1
+        - lang-node:18
+        - lang-python:3.11
+        - lang-ruby:3.2
         - lang-rust
         - tool-brew
         - tool-nginx
@@ -45,7 +54,7 @@ combiner:
       ref:
       - base
       chunks:
-        - lang-go:1.19.3
+        - lang-go:1.20
     - name: nix
       ref:
       - base
@@ -55,13 +64,13 @@ combiner:
       ref:
       - base
       chunks:
-        - lang-node:18
+        - lang-node:19
         - tool-chrome
     - name: node-lts
       ref:
       - base
       chunks:
-        - lang-node:16
+        - lang-node:18
         - tool-chrome
     - name: python
       ref:
@@ -88,26 +97,31 @@ combiner:
       - base
       chunks:
         - lang-python:3.10
-    - name: ruby-2
+    - name: python-3.11
       ref:
       - base
       chunks:
-        - lang-ruby:2.7
+        - lang-python:3.11
     - name: ruby-3.0
       ref:
       - base
       chunks:
         - lang-ruby:3.0
-    - name: ruby-3
-      ref:
-      - base
-      chunks:
-        - lang-ruby:3.1
     - name: ruby-3.1
       ref:
       - base
       chunks:
         - lang-ruby:3.1
+    - name: ruby-3.2
+      ref:
+      - base
+      chunks:
+        - lang-ruby:3.2
+    - name: ruby-3
+      ref:
+      - base
+      chunks:
+        - lang-ruby:3.2
     - name: rust
       ref:
       - base
@@ -145,14 +159,34 @@ combiner:
         - lang-java:17
     - name: yugabytedb
       ref:
-      - full
+      - base
       chunks:
-        - tool-yugabytedb:2.14
+        - lang-c
+        - lang-clojure
+        - lang-go:1.20
+        - lang-java:11
+        - lang-node:18
+        - lang-ruby:3.2
+        - lang-rust
+        - tool-brew
+        - tool-nginx
+        - tool-nix:2.11.0
+        - tool-yugabytedb:2.18
     - name: yugabytedb-preview
       ref:
-      - full
+      - base
       chunks:
-        - tool-yugabytedb:2.15
+        - lang-c
+        - lang-clojure
+        - lang-go:1.20
+        - lang-java:11
+        - lang-node:18
+        - lang-ruby:3.2
+        - lang-rust
+        - tool-brew
+        - tool-nginx
+        - tool-nix:2.11.0
+        - tool-yugabytedb:2.19
   envvars:
     - name: PATH
       action: merge-unique

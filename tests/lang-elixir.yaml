@@ -2,5 +2,5 @@
   command: [elixir,--version]
   assert:
   - status == 0
-  - stdout.indexOf("Erlang/OTP 2") != -1
-  - stdout.indexOf("Elixir 1.13.") != -1
+  - stdout.indexOf("Erlang/OTP 25") != -1
+  - stdout.indexOf("Elixir 1.13.4") != -1

@@ -3,8 +3,24 @@ on:
   pull_request:
 
 jobs:
+  create-runner:
+    uses: gitpod-io/gce-github-runner/.github/workflows/create-vm.yml@main
+    secrets:
+      runner_token: ${{ secrets.SELF_HOSTED_GITHUB_RUNNER_TOKEN }}
+      gcp_credentials: ${{ secrets.SELF_HOSTED_GITHUB_RUNNER_GCP_CREDENTIALS }}
+    concurrency:
+      group: ${{ github.ref == 'refs/heads/main' && github.run_id || github.sha }}-create-runner
+      cancel-in-progress: false
+
   build:
-    runs-on: ubuntu-latest
+    runs-on: ${{ needs.create-runner.outputs.label }}
+    needs: create-runner
+    concurrency:
+      group: ${{ github.ref == 'refs/heads/main' && github.run_id || github.sha }}-build
+      cancel-in-progress: true
+    env:
+      DAZZLE_VERSION: 0.1.17
+      BUILDKIT_VERSION: 0.11.6
     steps:
       - name: 📥 Checkout workspace-images
         uses: actions/checkout@v3
@@ -13,7 +29,7 @@ jobs:
 
       - name: 🔧 Setup pre-commit
         run: |
-          sudo apt-get install python3-pip shellcheck
+          sudo apt-get install --yes python3-pip shellcheck
           curl -sSL https://github.com/mvdan/sh/releases/download/v3.5.0/shfmt_v3.5.0_linux_amd64 -o shfmt
           sudo mv shfmt /usr/local/bin/shfmt && sudo chmod +x /usr/local/bin/shfmt
           sudo pip3 install pre-commit
@@ -24,11 +40,11 @@ jobs:
 
       - name: 🔆 Install dazzle
         run: |
-          curl -sSL https://github.com/gitpod-io/dazzle/releases/download/v0.1.12/dazzle_0.1.12_Linux_x86_64.tar.gz | sudo tar -xvz -C /usr/local/bin
+          curl -sSL https://github.com/gitpod-io/dazzle/releases/download/v${{env.DAZZLE_VERSION}}/dazzle_${{env.DAZZLE_VERSION}}_Linux_x86_64.tar.gz | sudo tar -xvz -C /usr/local/bin
 
       - name: 🏗️ Setup buildkit
         run: |
-          curl -sSL https://github.com/moby/buildkit/releases/download/v0.10.4/buildkit-v0.10.4.linux-amd64.tar.gz | sudo tar xvz -C /usr
+          curl -sSL https://github.com/moby/buildkit/releases/download/v${{env.BUILDKIT_VERSION}}/buildkit-v${{env.BUILDKIT_VERSION}}.linux-amd64.tar.gz | sudo tar xvz -C /usr
           sudo buildkitd --oci-worker=true --oci-worker-net=host --debug --group docker &
           sudo su -c "while ! test -S /run/buildkit/buildkitd.sock; do sleep 0.1; done"
           sudo chmod +777 /run/buildkit/buildkitd.sock
@@ -60,3 +76,15 @@ jobs:
       - name: 🖇️ Dazzle combine
         run: |
           dazzle combine localhost:5000/workspace-base-images --all
+
+  delete-runner:
+    if: always()
+    needs:
+      - create-runner
+      - build
+    uses: gitpod-io/gce-github-runner/.github/workflows/delete-vm.yml@main
+    secrets:
+      gcp_credentials: ${{ secrets.SELF_HOSTED_GITHUB_RUNNER_GCP_CREDENTIALS }}
+    with:
+      runner-label: ${{ needs.create-runner.outputs.label }}
+      machine-zone: ${{ needs.create-runner.outputs.machine-zone }}

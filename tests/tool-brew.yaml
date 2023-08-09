@@ -7,7 +7,13 @@
   command: [brew, doctor]
   assert:
   - stderr.indexOf("error") == -1
+  - status == 0
 - desc: it should have valid configuration
   command: [brew, config]
   assert:
+  - status == 0
+- desc: it should have cmake
+  command: [cmake, --version]
+  assert:
+  - stderr.indexOf("cmake version") == -1
   - status == 0

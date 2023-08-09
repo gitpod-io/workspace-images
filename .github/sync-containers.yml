@@ -16,10 +16,11 @@ sync:
     - python-3.8
     - python-3.9
     - python-3.10
-    - ruby-2
+    - python-3.11
     - ruby-3
     - ruby-3.0
     - ruby-3.1
+    - ruby-3.2
     - rust
     - dotnet
     - postgres
@@ -29,3 +30,4 @@ sync:
     - java-17
     - yugabytedb
     - yugabytedb-preview
+    - gitpod-dev
