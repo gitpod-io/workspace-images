@@ -99,4 +99,3 @@ You can follow the detailed guide on how to contribute [here](CONTRIBUTING.md).
 - **Announcements**: Significant changes and breaking updates are announced through the [CHANGELOG.md](/CHANGELOG.md) file with details.
 - **Recently Merged Changes**: For checking new features or updates staged for next deployment that don't warrant everyone's attention, browse through the [merged pull requests](https://github.com/gitpod-io/workspace-images/pulls?q=is%3Apr+is%3Amerged).
 - **Image Updates**: Every Monday, [a GitHub action](https://github.com/gitpod-io/workspace-images/actions/workflows/dockerhub-release.yml?query=is%3Asuccess) automatically builds and updates the images based on the `main` branch. Once built, these images are made available on [Gitpod's Docker Hub](https://hub.docker.com/u/gitpod).
-
