@@ -41,6 +41,8 @@ RUN upgrade-packages
 
 ### Git ###
 RUN add-apt-repository -y ppa:git-core/ppa
+# https://github.com/git-lfs/git-lfs/blob/main/INSTALLING.md
+RUN curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh | bash
 RUN install-packages git git-lfs
 
 ### Gitpod user ###
