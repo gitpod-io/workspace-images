@@ -72,26 +72,6 @@ combiner:
       chunks:
         - lang-node:18
         - tool-chrome
-    - name: python
-      ref:
-      - base
-      chunks:
-        - lang-python:3.8
-    - name: python-3.7
-      ref:
-      - base
-      chunks:
-        - lang-python:3.7
-    - name: python-3.8
-      ref:
-      - base
-      chunks:
-        - lang-python:3.8
-    - name: python-3.9
-      ref:
-      - base
-      chunks:
-        - lang-python:3.9
     - name: python-3.10
       ref:
       - base
