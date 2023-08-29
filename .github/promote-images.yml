@@ -1,7 +1,7 @@
 # Sync all the iamges that are tagged using date time stamp
 # format +%Y-%m-%d-%H-%M-%S e.g. 2022-02-22-10-10-54.
 # Use simple regex for readability. Since we tag all images with year
-# We use a regex rule: Any tag that starts with '20'.
+# We use a regex rule: Any tag that starts with '2023'.
 "europe-docker.pkg.dev/gitpod-artifacts/docker-dev":
   images-by-tag-regex:
     workspace-base: "2023.*"
