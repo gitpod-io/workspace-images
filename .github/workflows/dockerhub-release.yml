@@ -12,8 +12,9 @@ jobs:
   # Click New environment, set the name production, and click Configure environment.
   # Check the "Required reviewers" box and enter at least one user or team name.
   promote-latest:
+    if: (github.event_name == 'schedule') || (github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main')
     runs-on: ubuntu-latest
-    environment: "production-restricted"
+    environment: "production"
     permissions:
       contents: "read"
       id-token: "write"
@@ -97,3 +98,29 @@ jobs:
             docker://${{ env.GAR_IMAGE_REGISTRY }}/gitpod-artifacts/docker-dev/$IMAGE:latest \
             docker://${{ env.DH_IMAGE_REGISTRY }}/gitpod/$IMAGE:latest
           done
+  notify:
+    needs: promote-latest
+    runs-on: ubuntu-latest
+    steps:
+      - name: The release was successful
+        id: slack
+        if: needs.promote-latest.result == 'success'
+        uses: slackapi/slack-github-action@v1.24.0
+        with:
+          payload: |
+            {
+              "text": "The release was successful :rocket:"
+            }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.RELEASE_NOTIFY_WEBHOOK }}
+      - name: The release was not successful
+        id: slack
+        if: needs.promote-latest.result != 'success'
+        uses: slackapi/slack-github-action@v1.24.0
+        with:
+          payload: |
+            {
+              "text": "${{ format('The release had trouble :construction:, the result was: {0}', needs.promote-latest.result) }}"
+            }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.RELEASE_NOTIFY_WEBHOOK }}
