@@ -103,7 +103,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: The release was successful
-        id: slack
+        id: slack-success
         if: needs.promote-latest.result == 'success'
         uses: slackapi/slack-github-action@v1.24.0
         with:
@@ -114,7 +114,7 @@ jobs:
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.RELEASE_NOTIFY_WEBHOOK }}
       - name: The release was not successful
-        id: slack
+        id: slack-failure
         if: needs.promote-latest.result != 'success'
         uses: slackapi/slack-github-action@v1.24.0
         with:
