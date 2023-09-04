@@ -99,6 +99,7 @@ jobs:
             docker://${{ env.DH_IMAGE_REGISTRY }}/gitpod/$IMAGE:latest
           done
   notify:
+    if: always()
     needs: promote-latest
     runs-on: ubuntu-latest
     steps:
