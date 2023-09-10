@@ -27,7 +27,7 @@ jobs:
 
     steps:
       - name: 📥 Checkout workspace-images
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           repository: gitpod-io/workspace-images
 
