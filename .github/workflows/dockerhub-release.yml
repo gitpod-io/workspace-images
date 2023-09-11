@@ -99,7 +99,7 @@ jobs:
             docker://${{ env.DH_IMAGE_REGISTRY }}/gitpod/$IMAGE:latest
           done
   notify:
-    if: always()
+    if: always() && ((github.event_name == 'schedule') || (github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main'))
     needs: promote-latest
     runs-on: ubuntu-latest
     steps:
