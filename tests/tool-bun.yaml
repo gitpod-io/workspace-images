@@ -1,0 +1,4 @@
+- desc: "bun binary should work"
+  command: [bun, --version]
+  assert:
+  - status == 0

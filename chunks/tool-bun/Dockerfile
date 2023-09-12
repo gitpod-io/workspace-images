@@ -2,7 +2,7 @@ ARG base
 FROM ${base}
 
 ENV BUN_INSTALL="${HOME}/.bun"
-ENV PATH="${BUN_INSTALL}:${PATH}"
+ENV PATH="${BUN_INSTALL}/bin:${PATH}"
 
 # Install bun
 RUN curl -fsSL https://bun.sh/install | bash
