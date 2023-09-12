@@ -44,6 +44,7 @@ combiner:
         - tool-brew
         - tool-nginx
         - tool-nix:2.11.0
+        - tool-bun
     - name: full-vnc
       ref:
       - full
