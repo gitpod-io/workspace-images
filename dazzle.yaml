@@ -44,7 +44,6 @@ combiner:
         - tool-brew
         - tool-nginx
         - tool-nix:2.11.0
-        - tool-bun
     - name: full-vnc
       ref:
       - full
@@ -168,6 +167,11 @@ combiner:
         - tool-nginx
         - tool-nix:2.11.0
         - tool-yugabytedb:2.19
+    - name: bun
+      ref:
+      - full
+      chunks:
+        - tool-bun
   envvars:
     - name: PATH
       action: merge-unique
