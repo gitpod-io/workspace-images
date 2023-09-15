@@ -35,7 +35,7 @@ combiner:
       chunks:
         - lang-c
         - lang-clojure
-        - lang-go:1.20
+        - lang-go:1.21
         - lang-java:11
         - lang-node:18
         - lang-python:3.11
