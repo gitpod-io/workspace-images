@@ -46,8 +46,8 @@
   entrypoint: [bash, -c]
   command:
     [
-      ver=2.1.3; origdir="$PYENV_ROOT/versions/$ver" newVdir="/workspace/.pyenv_mirror/fakeroot/versions";
-      pyenv install $ver && test -e "$origdir" && mkdir -p "$newVdir" && mv "$origdir" "$newVdir" && GITPOD_REPO_ROOT=/workspace bash -ci "pyenv install -s $ver && pip install cowsay && pyenv global $(pyenv version-name) $ver && cowsay Gitpod",
+      ver=2.7.18; origdir="$PYENV_ROOT/versions/$ver" newVdir="/workspace/.pyenv_mirror/fakeroot/versions";
+      pyenv install $ver && test -e "$origdir" && mkdir -p "$newVdir" && mv "$origdir" "$newVdir" && GITPOD_REPO_ROOT=/workspace bash -ci "pyenv install -s $ver && pip install cowsay && pyenv global $(pyenv version-name) $ver && cowsay --text Gitpod",
     ]
   assert:
     - status == 0
