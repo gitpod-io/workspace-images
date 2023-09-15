@@ -2,9 +2,14 @@
 
 A curated, chronologically ordered list of notable changes in [Gitpod's default workspace images](https://hub.docker.com/u/gitpod).
 
+## 2023-09-15
+
+- Bump the default Go version in all images to `1.21`
+- Bump Go 1.21 to `1.21.1`
+
 ## 2023-07-11
 
-- Bump Go to 1.20 to `1.20.6` and Go 1.19 `1.19.11`
+- Bump Go 1.20 to `1.20.6` and Go 1.19 `1.19.11`
 
 ## 2022-02-01
 
