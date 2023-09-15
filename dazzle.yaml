@@ -169,7 +169,7 @@ combiner:
         - tool-yugabytedb:2.19
     - name: bun
       ref:
-      - full
+      - base
       chunks:
         - tool-bun
   envvars:
