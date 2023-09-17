@@ -31,3 +31,4 @@
     workspace-yugabytedb: "2023.*"
     workspace-yugabytedb-preview: "2023.*"
     workspace-gitpod-dev: "2023.*"
+    workspace-bun: "2023.*"

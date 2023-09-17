@@ -28,3 +28,4 @@ sync:
     - yugabytedb
     - yugabytedb-preview
     - gitpod-dev
+    - bun
