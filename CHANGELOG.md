@@ -2,6 +2,10 @@
 
 A curated, chronologically ordered list of notable changes in [Gitpod's default workspace images](https://hub.docker.com/u/gitpod).
 
+## 2023-09-18
+
+- Bump Rust to `1.72.0`
+
 ## 2023-09-15
 
 - Bump the default Go version in all images to `1.21`

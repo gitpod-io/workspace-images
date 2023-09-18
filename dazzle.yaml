@@ -40,7 +40,7 @@ combiner:
         - lang-node:18
         - lang-python:3.11
         - lang-ruby:3.2
-        - lang-rust
+        - lang-rust:1
         - tool-brew
         - tool-nginx
         - tool-nix:2.11.0
@@ -106,7 +106,7 @@ combiner:
       ref:
       - base
       chunks:
-        - lang-rust
+        - lang-rust:1
     - name: dotnet
       ref:
       - full
@@ -147,7 +147,7 @@ combiner:
         - lang-java:11
         - lang-node:18
         - lang-ruby:3.2
-        - lang-rust
+        - lang-rust:1
         - tool-brew
         - tool-nginx
         - tool-nix:2.11.0
@@ -162,7 +162,7 @@ combiner:
         - lang-java:11
         - lang-node:18
         - lang-ruby:3.2
-        - lang-rust
+        - lang-rust:1
         - tool-brew
         - tool-nginx
         - tool-nix:2.11.0
