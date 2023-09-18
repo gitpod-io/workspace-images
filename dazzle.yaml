@@ -167,6 +167,11 @@ combiner:
         - tool-nginx
         - tool-nix:2.11.0
         - tool-yugabytedb:2.19
+    - name: bun
+      ref:
+      - base
+      chunks:
+        - tool-bun
   envvars:
     - name: PATH
       action: merge-unique
