@@ -20,7 +20,7 @@ jobs:
       cancel-in-progress: true
     env:
       DAZZLE_VERSION: 0.1.17
-      BUILDKIT_VERSION: 0.12.1
+      BUILDKIT_VERSION: 0.12.2
     steps:
       - name: 📥 Checkout workspace-images
         uses: actions/checkout@v4
