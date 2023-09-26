@@ -8,7 +8,7 @@ ENV TRIGGER_REBUILD=2
 
 RUN curl -fsSL https://apt.llvm.org/llvm-snapshot.gpg.key | sudo gpg --dearmor -o /usr/share/keyrings/llvm-archive-keyring.gpg \
     && echo "deb [signed-by=/usr/share/keyrings/llvm-archive-keyring.gpg] http://apt.llvm.org/jammy/ \
-    llvm-toolchain-jammy-15 main" | sudo tee /etc/apt/sources.list.d/llvm.list > /dev/null \
+    llvm-toolchain-jammy-17 main" | sudo tee /etc/apt/sources.list.d/llvm.list > /dev/null \
     && apt update \
     && install-packages \
         clang \
