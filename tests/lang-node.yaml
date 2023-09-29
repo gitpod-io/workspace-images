@@ -20,12 +20,12 @@
   entrypoint: [bash, -i, -c]
   assert:
   - status == 0
-- desc: it should yarn work
+- desc: it should have working yarn
   command: [yarn global add envinfo]
   entrypoint: [bash, -i, -c]
   assert:
   - status == 0
-- desc: it should pnpm work
+- desc: it should have working pnpm
   command: [pnpm i -g envinfo]
   entrypoint: [bash, -i, -c]
   assert:
