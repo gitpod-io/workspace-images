@@ -64,7 +64,7 @@ combiner:
       ref:
       - base
       chunks:
-        - lang-node:19
+        - lang-node:20
         - tool-chrome
     - name: node-lts
       ref:
