@@ -2,6 +2,10 @@
 
 A curated, chronologically ordered list of notable changes in [Gitpod's default workspace images](https://hub.docker.com/u/gitpod).
 
+## 2023-10-02
+
+- For `workspace-node`, deprecate Node 19 in favor of Node 20
+
 ## 2023-09-18
 
 - Bump Rust to `1.72.0`
