@@ -84,7 +84,7 @@ Each contains a set of chunks: a common base, and a language, and includes Docke
 
 These images are no longer being published:
 
-- gitpod/workspace-python-3.6 (please use [`gitpod/workspace-python-3.7`](https://hub.docker.com/r/gitpod/workspace-python-3.7) instead)
+- gitpod/workspace-python-3.9 or older (please use [`gitpod/workspace-python-3.11`](https://hub.docker.com/r/gitpod/workspace-python-3.11) instead)
 - gitpod/workspace-postgresql (please use [`gitpod/workspace-postgres`](https://hub.docker.com/r/gitpod/workspace-postgres) instead)
 - gitpod/workspace-ruby-2 (please use [`gitpod/workspace-ruby-3.2`](https://hub.docker.com/r/gitpod/workspace-ruby-3.2) instead)
 
@@ -93,3 +93,9 @@ These images are no longer being published:
 You can follow the detailed guide on how to contribute [here](CONTRIBUTING.md).
 
 [![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/gitpod-io/workspace-images)
+
+## Where to follow new updates
+
+- **Announcements**: Significant changes and breaking updates are announced through the [CHANGELOG.md](/CHANGELOG.md) file with details.
+- **Recently Merged Changes**: For checking new features or updates staged for next deployment that don't warrant everyone's attention, browse through the [merged pull requests](https://github.com/gitpod-io/workspace-images/pulls?q=is%3Apr+is%3Amerged).
+- **Image Updates**: Every Monday, [a GitHub action](https://github.com/gitpod-io/workspace-images/actions/workflows/dockerhub-release.yml?query=is%3Asuccess) automatically builds and updates the images based on the `main` branch. Once built, these images are made available on [Gitpod's Docker Hub](https://hub.docker.com/u/gitpod).

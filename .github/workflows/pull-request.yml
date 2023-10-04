@@ -20,10 +20,10 @@ jobs:
       cancel-in-progress: true
     env:
       DAZZLE_VERSION: 0.1.17
-      BUILDKIT_VERSION: 0.11.6
+      BUILDKIT_VERSION: 0.12.2
     steps:
       - name: 📥 Checkout workspace-images
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           repository: gitpod-io/workspace-images
 

@@ -1,0 +1,4 @@
+variants:
+  - name: "1"
+    args:
+      RUST_VERSION: 1.72.1

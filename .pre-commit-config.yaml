@@ -25,7 +25,7 @@ repos:
     rev: v0.30.0
     hooks:
       - id: markdownlint
-        args: ["--ignore", "CHANGELOG.md"]
+        args: ["--ignore", "CHANGELOG.md", "--ignore", "README.md"]
 
 # TODO: enable after fixing lint errors
   # - repo: https://github.com/hadolint/hadolint

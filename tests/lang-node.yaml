@@ -4,7 +4,7 @@
   assert:
   - status == 0
   - stdout.indexOf("v18")  != -1 ||
-    stdout.indexOf("v19")  != -1
+    stdout.indexOf("v20")  != -1
 - desc: it should have yarn
   command: [yarn --version]
   entrypoint: [bash, -i, -c]
@@ -20,12 +20,12 @@
   entrypoint: [bash, -i, -c]
   assert:
   - status == 0
-- desc: it should yarn work
+- desc: it should have working yarn
   command: [yarn global add envinfo]
   entrypoint: [bash, -i, -c]
   assert:
   - status == 0
-- desc: it should pnpm work
+- desc: it should have working pnpm
   command: [pnpm i -g envinfo]
   entrypoint: [bash, -i, -c]
   assert:

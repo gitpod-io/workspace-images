@@ -10,7 +10,7 @@ combiner:
       - base
       chunks:
         - lang-c
-        - lang-go:1.20
+        - lang-go:1.21
         - lang-java:11
         - lang-node:18
         - tool-brew
@@ -35,12 +35,12 @@ combiner:
       chunks:
         - lang-c
         - lang-clojure
-        - lang-go:1.20
+        - lang-go:1.21
         - lang-java:11
         - lang-node:18
         - lang-python:3.11
         - lang-ruby:3.2
-        - lang-rust
+        - lang-rust:1
         - tool-brew
         - tool-nginx
         - tool-nix:2.11.0
@@ -54,7 +54,7 @@ combiner:
       ref:
       - base
       chunks:
-        - lang-go:1.20
+        - lang-go:1.21
     - name: nix
       ref:
       - base
@@ -64,7 +64,7 @@ combiner:
       ref:
       - base
       chunks:
-        - lang-node:19
+        - lang-node:20
         - tool-chrome
     - name: node-lts
       ref:
@@ -72,26 +72,6 @@ combiner:
       chunks:
         - lang-node:18
         - tool-chrome
-    - name: python
-      ref:
-      - base
-      chunks:
-        - lang-python:3.8
-    - name: python-3.7
-      ref:
-      - base
-      chunks:
-        - lang-python:3.7
-    - name: python-3.8
-      ref:
-      - base
-      chunks:
-        - lang-python:3.8
-    - name: python-3.9
-      ref:
-      - base
-      chunks:
-        - lang-python:3.9
     - name: python-3.10
       ref:
       - base
@@ -126,7 +106,7 @@ combiner:
       ref:
       - base
       chunks:
-        - lang-rust
+        - lang-rust:1
     - name: dotnet
       ref:
       - full
@@ -163,11 +143,11 @@ combiner:
       chunks:
         - lang-c
         - lang-clojure
-        - lang-go:1.20
+        - lang-go:1.21
         - lang-java:11
         - lang-node:18
         - lang-ruby:3.2
-        - lang-rust
+        - lang-rust:1
         - tool-brew
         - tool-nginx
         - tool-nix:2.11.0
@@ -178,15 +158,20 @@ combiner:
       chunks:
         - lang-c
         - lang-clojure
-        - lang-go:1.20
+        - lang-go:1.21
         - lang-java:11
         - lang-node:18
         - lang-ruby:3.2
-        - lang-rust
+        - lang-rust:1
         - tool-brew
         - tool-nginx
         - tool-nix:2.11.0
         - tool-yugabytedb:2.19
+    - name: bun
+      ref:
+      - base
+      chunks:
+        - tool-bun:1
   envvars:
     - name: PATH
       action: merge-unique
