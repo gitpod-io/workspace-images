@@ -11,11 +11,14 @@ RUN curl -fsSL https://apt.llvm.org/llvm-snapshot.gpg.key | sudo gpg --dearmor -
     llvm-toolchain-jammy-17 main" | sudo tee /etc/apt/sources.list.d/llvm.list > /dev/null \
     && apt update \
     && install-packages \
-        clang \
-        clangd \
-        clang-format \
-        clang-tidy \
+        clang-17 \
+        clangd-17 \
+        clang-format-17 \
+        clang-tidy-17 \
         gdb \
-        lld
+        lld-17
+
+RUN sudo update-alternatives --install /usr/bin/clang clang /usr/lib/llvm-17/bin/clang 100 \
+    && sudo update-alternatives --install /usr/bin/clang++ clang++ /usr/lib/llvm-17/bin/clang++ 100
 
 USER gitpod
