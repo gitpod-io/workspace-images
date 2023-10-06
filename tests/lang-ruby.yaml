@@ -3,9 +3,9 @@
   entrypoint: [bash, -i, -c]
   assert:
   - stdout.indexOf("ruby") != -1
-  - stdout.indexOf("3.0.5") != -1 ||
-    stdout.indexOf("3.1.3") != -1 ||
-    stdout.indexOf("3.2.1") != -1
+  - stdout.indexOf("3.0.6") != -1 ||
+    stdout.indexOf("3.1.4") != -1 ||
+    stdout.indexOf("3.2.2") != -1
   - status == 0
 - desc: it should have rvm
   command: [rvm --version]

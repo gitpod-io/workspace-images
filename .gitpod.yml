@@ -40,5 +40,3 @@ github:
     branches: true
     pullRequests: true
     pullRequestsFromForks: true
-    addCheck: true
-    addComment: true
