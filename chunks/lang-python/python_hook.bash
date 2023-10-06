@@ -74,7 +74,7 @@ function pyenv_gitpod_init() {
 			# Init userbase hook
 			pyenv global 1>/dev/null
 
-			# Set $HOME/.pyenv/shims/python as the default Interpreter for ms-python.python VSCode extension
+			# Set $HOME/.pyenv/shims/python as the default Interpreter for ms-python.python VS Code extension
 			vscode::add_settings "/workspace/.vscode-remote/data/Machine/settings.json" "$HOME/.vscode-server/data/Machine/settings.json" >/dev/null 2>&1
 
 			touch "$pyenv_init_done"
