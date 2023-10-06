@@ -52,7 +52,7 @@
   assert:
     - status == 0
 
-- desc: "VSCode Python settings are correctly applied"
+- desc: "VS Code Python settings are correctly applied"
   entrypoint: [env, GITPOD_REPO_ROOT=/workspace/test, bash, -lic]
   command: [rm /tmp/.vscs_add.lock; for sj in "$HOME/.vscode-server/data/Machine/settings.json" "/workspace/.vscode-remote/data/Machine/settings.json"; do mkdir -p $(dirname "$sj") "$GITPOD_REPO_ROOT" && touch "$sj" && bash -lic 'true' && if ! grep -q 'python' "$sj"; then exit 1; fi; done]
   assert:

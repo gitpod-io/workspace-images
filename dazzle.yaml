@@ -38,7 +38,7 @@ combiner:
         - lang-go:1.21
         - lang-java:11
         - lang-node:18
-        - lang-python:3.11
+        - lang-python:3.12
         - lang-ruby:3.2
         - lang-rust:1
         - tool-brew
@@ -72,11 +72,11 @@ combiner:
       chunks:
         - lang-node:18
         - tool-chrome
-    - name: python-3.10
+    - name: python-3.12
       ref:
       - base
       chunks:
-        - lang-python:3.10
+        - lang-python:3.12
     - name: python-3.11
       ref:
       - base

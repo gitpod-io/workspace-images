@@ -5,6 +5,9 @@ A curated, chronologically ordered list of notable changes in [Gitpod's default 
 ## 2023-10-06
 
 - Upgrade Clang to `17.0.2`
+- Deprecate `gitpod/workspace-python-3.10`
+- Introduce `gitpod/workspace-python-3.12`
+- Bump default Python version in `workspace:full` to `3.12.0`
 
 ## 2023-10-02
 
