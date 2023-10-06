@@ -18,7 +18,9 @@ RUN curl -fsSL https://apt.llvm.org/llvm-snapshot.gpg.key | sudo gpg --dearmor -
         gdb \
         lld-17
 
-RUN sudo update-alternatives --install /usr/bin/clang clang /usr/lib/llvm-17/bin/clang 100 \
-    && sudo update-alternatives --install /usr/bin/clang++ clang++ /usr/lib/llvm-17/bin/clang++ 100
+RUN sudo update-alternatives --install /usr/bin/clangd clangd /usr/bin/clangd-17 100 \
+    && sudo update-alternatives --install /usr/bin/clang-tidy clang-tidy /usr/bin/clang-tidy-17 100 \
+    && sudo update-alternatives --install /usr/bin/clang-format clang-format /usr/bin/clang-format-17 100 \
+    && sudo update-alternatives --install /usr/bin/lld lld /usr/bin/lld-17 100
 
 USER gitpod
