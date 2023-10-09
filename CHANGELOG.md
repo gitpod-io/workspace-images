@@ -4,6 +4,7 @@ A curated, chronologically ordered list of notable changes in [Gitpod's default 
 
 ## 2023-10-09
 
+- Bump Rust to `1.73.0`
 - Upgrade Clang to `17.0.2`
 
 ## 2023-10-06
