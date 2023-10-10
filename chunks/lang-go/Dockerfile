@@ -23,7 +23,8 @@ RUN go install -v github.com/uudashr/gopkgs/cmd/gopkgs@v2 \
 && go install -v github.com/go-delve/delve/cmd/dlv@latest \
 && go install -v github.com/golangci/golangci-lint/cmd/golangci-lint@latest \
 && go install -v golang.org/x/tools/gopls@latest \
-&& go install -v honnef.co/go/tools/cmd/staticcheck@latest
+&& go install -v honnef.co/go/tools/cmd/staticcheck@latest \
+&& go clean -cache -modcache
 
 RUN sudo rm -rf $GOPATH/src $GOPATH/pkg $HOME/.cache/go $HOME/.cache/go-build && \
     printf '%s\n' 'export GOPATH=/workspace/go' \
