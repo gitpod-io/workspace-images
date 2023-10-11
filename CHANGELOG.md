@@ -2,6 +2,10 @@
 
 A curated, chronologically ordered list of notable changes in [Gitpod's default workspace images](https://hub.docker.com/u/gitpod).
 
+## 2023-10-12
+
+- Reintroduce `gitpod/workspace-python-3.10`, `gitpod/workspace-python-3.9` and `gitpod/workspace-python-3.8`
+
 ## 2023-10-09
 
 - Bump Rust to `1.73.0`
