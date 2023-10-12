@@ -1,9 +1,11 @@
 const os = require('os');
 
-function sortSemVer(arr, reverse = false) {
-  let semVerArr = arr.map(i => i.replace(/(\d+)/g, m => +m + 100000)).sort(); // +m is just a short way of converting the match to int
-  if (reverse)
-      semVerArr = semVerArr.reverse();
+// Adapted from https://stackoverflow.com/a/71331716/10199319 (CC BY-SA 4.0)
+function sortVersions(versionArray, reverse = false) {
+  let semVerArr = versionArray.map(i => i.replace(/(\d+)/g, m => +m + 100000)).sort(); // +m is just a short way of converting the match to int
+  if (reverse) {
+    semVerArr = semVerArr.reverse();
+  }
 
   return semVerArr.map(i => i.replace(/(\d+)/g, m => +m - 100000))
 }
@@ -12,7 +14,7 @@ exports.register = async (fixers) => {
   const response = await fetch("https://raw.githubusercontent.com/endoflife-date/release-data/main/releases/python.json");
   const data = await response.json();
 
-  const versions = sortSemVer(Object.keys(data));
+  const versions = sortVersions(Object.keys(data));
 
   const patchVersionReplacements = {};
   for (const version of versions) {
