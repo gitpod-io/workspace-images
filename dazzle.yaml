@@ -82,6 +82,21 @@ combiner:
       - base
       chunks:
         - lang-python:3.11
+    - name: python-3.10
+      ref:
+      - base
+      chunks:
+        - lang-python:3.10
+    - name: python-3.9
+      ref:
+      - base
+      chunks:
+        - lang-python:3.9
+    - name: python-3.8
+      ref:
+      - base
+      chunks:
+        - lang-python:3.8
     - name: ruby-3.0
       ref:
       - base
