@@ -2,6 +2,8 @@ name: Run Autofix
 on:
   schedule:
     - cron:  '0 2 * * MON-FRI' # every workday at 2AM
+  workflow_dispatch:
+
 jobs:
   build:
     runs-on: ubuntu-latest
