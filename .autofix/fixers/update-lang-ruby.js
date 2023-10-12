@@ -20,10 +20,10 @@ exports.register = async (fixers) => {
   }
 
   fixers[0].push({
-    id: 'update-lang-go',
+    id: 'update-lang-ruby',
     cmd: Object.keys(patchVersionReplacements).map(pattern => {
-      return `sed ${os.type() === 'Darwin' ? '-i "" -E' : '-i -e'} "s/\\(RUBY_VERSION.*\\)${pattern}/\\1${patchVersionReplacements[pattern]}/g" chunks/lang-ruby/chunk.yaml`;
-    }).join('\n'),
-    description: 'update lang go',
+    return `sed ${os.type() === 'Darwin' ? '-i "" -E' : '-i -e'} "s/\\(RUBY_VERSION.*\\)${pattern}/\\1${patchVersionReplacements[pattern]}/g" chunks/lang-ruby/chunk.yaml`;
+  }).join('\n'),
+    description: 'update lang ruby',
   });
 };
