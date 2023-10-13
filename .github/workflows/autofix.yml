@@ -18,7 +18,7 @@ jobs:
 
     - name: Run autofix
       run: |
-        npm -g autofix
+        npm -g autofix@0.6.0
         autofix --branches --pull-request
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
