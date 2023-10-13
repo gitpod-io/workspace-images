@@ -11,7 +11,7 @@ ENV RUST_VERSION=${RUST_VERSION}
 
 ENV PATH=$HOME/.cargo/bin:$PATH
 
-RUN curl -fsSL https://sh.rustup.rs | sh -s -- -y --profile minimal --no-modify-path --default-toolchain ${RUST_VERSION} \
+RUN curl -fsSL https://sh.rustup.rs | sh -s -- -y --no-modify-path --default-toolchain ${RUST_VERSION} \
         -c rls rust-analysis rust-src rustfmt clippy \
     && for cmp in rustup cargo; do rustup completions bash "$cmp" > "$HOME/.local/share/bash-completion/completions/$cmp"; done \
     && printf '%s\n'    'export CARGO_HOME=/workspace/.cargo' \
