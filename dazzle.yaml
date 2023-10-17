@@ -12,7 +12,7 @@ combiner:
         - lang-c
         - lang-go:1.21
         - lang-java:11
-        - lang-node:18
+        - lang-node:20
         - tool-brew
     - name: c
       ref:
@@ -37,7 +37,7 @@ combiner:
         - lang-clojure
         - lang-go:1.21
         - lang-java:11
-        - lang-node:18
+        - lang-node:20
         - lang-python:3.12
         - lang-ruby:3.2
         - lang-rust:1
@@ -64,9 +64,15 @@ combiner:
       ref:
       - base
       chunks:
-        - lang-node:20
+        - lang-node:21
         - tool-chrome
     - name: node-lts
+      ref:
+      - base
+      chunks:
+        - lang-node:20
+        - tool-chrome
+    - name: node-18
       ref:
       - base
       chunks:
@@ -160,7 +166,7 @@ combiner:
         - lang-clojure
         - lang-go:1.21
         - lang-java:11
-        - lang-node:18
+        - lang-node:20
         - lang-ruby:3.2
         - lang-rust:1
         - tool-brew
@@ -175,7 +181,7 @@ combiner:
         - lang-clojure
         - lang-go:1.21
         - lang-java:11
-        - lang-node:18
+        - lang-node:20
         - lang-ruby:3.2
         - lang-rust:1
         - tool-brew

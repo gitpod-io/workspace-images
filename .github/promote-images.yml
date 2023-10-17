@@ -14,6 +14,7 @@
     workspace-nix: "2023.*"
     workspace-node: "2023.*"
     workspace-node-lts: "2023.*"
+    workspace-node-18: "2023.*"
     workspace-python: "2023.*"
     workspace-python-3.8: "2023.*"
     workspace-python-3.9: "2023.*"
