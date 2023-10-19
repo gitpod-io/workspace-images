@@ -11,6 +11,7 @@ sync:
     - nix
     - node
     - node-lts
+    - node-18
     - python
     - python-3.8
     - python-3.9

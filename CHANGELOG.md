@@ -2,6 +2,12 @@
 
 A curated, chronologically ordered list of notable changes in [Gitpod's default workspace images](https://hub.docker.com/u/gitpod).
 
+## 2023-10-19
+
+- Node 20 replaces Node 18 as the current LTS
+- Introduce Node `21.0.0` in `workspace-node`
+- Introduce `workspace-node-18` for those, who aren't ready to upgrade just yet
+
 ## 2023-10-12
 
 - Reintroduce `gitpod/workspace-python-3.10`, `gitpod/workspace-python-3.9` and `gitpod/workspace-python-3.8`

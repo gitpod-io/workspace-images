@@ -5,3 +5,6 @@ variants:
   - name: "20"
     args:
       NODE_VERSION: 20.8.1
+  - name: "21"
+    args:
+      NODE_VERSION: 21.0.0
