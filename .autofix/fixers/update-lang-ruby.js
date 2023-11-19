@@ -16,6 +16,9 @@ exports.register = async (fixers) => {
     const segments = version.split('.');
     const prefix = segments.slice(0, -1).join('\\.');
     const pattern = prefix + '\\.[0-9][0-9]*';
+    if (Object.keys(patchVersionReplacements).includes(pattern)) {
+      continue;
+    }
     patchVersionReplacements[pattern] = version;
   }
 
