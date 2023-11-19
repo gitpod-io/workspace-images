@@ -1,11 +1,17 @@
 variants:
   - name: "2.18"
     args:
-      YB_VERSION: 2.18.1.0
-      YB_BUILD: 84
+      YB_VERSION: 2.18.4.2
+      YB_BUILD: 2
       PYTHON_VERSION: 3.9
   - name: "2.19"
     args:
-      YB_VERSION: 2.19.0.0
-      YB_BUILD: 190
+      YB_VERSION: 2.19.3.0
+      YB_BUILD: 140
       PYTHON_VERSION: 3.9
+  - name: "2.20"
+    args:
+      YB_VERSION: 2.20.0.0
+      YB_BUILD: 76
+      PYTHON_VERSION: 3.9
+      
