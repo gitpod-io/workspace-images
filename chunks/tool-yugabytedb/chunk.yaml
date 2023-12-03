@@ -14,4 +14,3 @@ variants:
       YB_VERSION: 2.20.0.0
       YB_BUILD: 76
       PYTHON_VERSION: 3.9
-
