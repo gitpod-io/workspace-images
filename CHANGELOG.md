@@ -5,6 +5,7 @@ A curated, chronologically ordered list of notable changes in [Gitpod's default 
 ## 2023-12-12
 
 - Bump Rust to `1.74.1`
+- Bump Go `1.21` to `1.21.5`
 
 ## 2023-10-19
 
