@@ -2,6 +2,10 @@
 
 A curated, chronologically ordered list of notable changes in [Gitpod's default workspace images](https://hub.docker.com/u/gitpod).
 
+## 2023-12-12
+
+- Bump Rust to `1.74.1`
+
 ## 2023-10-19
 
 - Node 20 replaces Node 18 as the current LTS
