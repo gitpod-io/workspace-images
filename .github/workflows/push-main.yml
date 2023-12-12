@@ -103,13 +103,13 @@ jobs:
           sudo chmod +777 /run/buildkit/buildkitd.sock
 
       - name: ☁️ Set up Cloud SDK
-        uses: google-github-actions/setup-gcloud@v1.1.1
+        uses: google-github-actions/setup-gcloud@v2.0.0
         with:
           version: 393.0.0
 
       - name: 🔐 Authenticate to Google Cloud
         id: "auth"
-        uses: google-github-actions/auth@v1.2.0
+        uses: google-github-actions/auth@v2.0.0
         with:
           token_format: "access_token"
           access_token_lifetime: "43200s"
