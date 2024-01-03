@@ -2,6 +2,10 @@
 
 A curated, chronologically ordered list of notable changes in [Gitpod's default workspace images](https://hub.docker.com/u/gitpod).
 
+## 2024-01-03
+
+- Bump .NET to `8.0`
+
 ## 2023-12-12
 
 - Bump Rust to `1.74.1`
