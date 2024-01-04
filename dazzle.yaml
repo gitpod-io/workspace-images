@@ -130,9 +130,24 @@ combiner:
         - lang-rust:1
     - name: dotnet
       ref:
-      - full
+        - full
       chunks:
-        - tool-dotnet
+        - tool-dotnet:8
+    - name: dotnet-6
+      ref:
+        - full
+      chunks:
+        - tool-dotnet:6
+    - name: dotnet-7
+      ref:
+        - full
+      chunks:
+        - tool-dotnet:7
+    - name: dotnet-8
+      ref:
+        - full
+      chunks:
+        - tool-dotnet:8
     - name: postgres
       ref:
       - full

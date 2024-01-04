@@ -24,6 +24,9 @@ sync:
     - ruby-3.2
     - rust
     - dotnet
+    - dotnet-6
+    - dotnet-7
+    - dotnet-8
     - postgres
     - mysql
     - mongodb

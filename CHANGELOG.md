@@ -6,6 +6,11 @@ A curated, chronologically ordered list of notable changes in [Gitpod's default 
 
 - Bump docker-compose to `2.23.3`
 
+## 2024-01-03
+
+- Bump `workspace-dotnet` to `8.0`
+- Introduce `workspace-dotnet-6`, `workspace-dotnet-7` and `workspace-dotnet-8`
+
 ## 2023-12-12
 
 - Bump Rust to `1.74.1`

@@ -2,5 +2,7 @@
   command: [dotnet --info]
   entrypoint: [bash, -i, -c]
   assert:
-  - status == 0
-  - stdout.indexOf("Microsoft.AspNetCore.App 7.0.0") != -1
+    - status == 0
+    - stdout.indexOf("Microsoft.AspNetCore.App 8.0") != -1 ||
+      stdout.indexOf("Microsoft.AspNetCore.App 7.0") != -1 ||
+      stdout.indexOf("Microsoft.AspNetCore.App 6.0") != -1
