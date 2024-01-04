@@ -1,0 +1,11 @@
+# Version list: https://dotnet.microsoft.com/en-us/download/dotnet
+variants:
+  - name: "6"
+    args:
+      DOTNET_VERSION: 6.0.125
+  - name: "7"
+    args:
+      DOTNET_VERSION: 7.0.404
+  - name: "8"
+    args:
+      DOTNET_VERSION: 8.0.100
