@@ -2,6 +2,10 @@
 
 A curated, chronologically ordered list of notable changes in [Gitpod's default workspace images](https://hub.docker.com/u/gitpod).
 
+## 2024-01-04
+
+- Bump docker-compose to `2.23.3`
+
 ## 2024-01-03
 
 - Bump `workspace-dotnet` to `8.0`
