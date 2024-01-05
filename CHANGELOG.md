@@ -2,6 +2,11 @@
 
 A curated, chronologically ordered list of notable changes in [Gitpod's default workspace images](https://hub.docker.com/u/gitpod).
 
+## 2024-01-05
+
+- Introduce `workspace-ruby-3.3`
+- Bump the Ruby version in `workspace-ruby-3.3`
+
 ## 2024-01-04
 
 - Bump docker-compose to `2.23.3`

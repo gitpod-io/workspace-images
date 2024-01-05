@@ -25,6 +25,7 @@
     workspace-ruby-3.0: "2024.*"
     workspace-ruby-3.1: "2024.*"
     workspace-ruby-3.2: "2024.*"
+    workspace-ruby-3.3: "2024.*"
     workspace-rust: "2024.*"
     workspace-dotnet: "2024.*"
     workspace-dotnet-6: "2024.*"
