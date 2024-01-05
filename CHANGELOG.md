@@ -5,6 +5,7 @@ A curated, chronologically ordered list of notable changes in [Gitpod's default 
 ## 2024-01-04
 
 - Bump Rust to `1.75.0`
+- Bump docker-compose to `2.23.3`
 
 ## 2024-01-03
 
