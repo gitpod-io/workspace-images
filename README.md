@@ -44,7 +44,7 @@ You can refer to this [document to setup a custom docker image](https://www.gitp
 
 These are lightweight compared to `gitpod/workspace-full`.
 
-Each contains a set of chunks: a common base, and a language, and includes Docker and Tailscale.
+Each contains a set of chunks: a common base and a language / tool. Every image also comes with Docker and Tailscale preinstalled.
 
 - [`gitpod/workspace-c`](https://hub.docker.com/r/gitpod/workspace-c) ✅
 - [`gitpod/workspace-clojure`](https://hub.docker.com/r/gitpod/workspace-clojure) ✅
@@ -65,6 +65,9 @@ Each contains a set of chunks: a common base, and a language, and includes Docke
 - [`gitpod/workspace-ruby-3.1`](https://hub.docker.com/r/gitpod/workspace-ruby-3.1) ✅
 - [`gitpod/workspace-rust`](https://hub.docker.com/r/gitpod/workspace-rust) ✅
 - [`gitpod/workspace-elixir`](https://hub.docker.com/r/gitpod/workspace-elixir) ✅
+- [`gitpod/workspace-nix`](https://hub.docker.com/r/gitpod/workspace-nix) ✅
+- [`gitpod/workspace-yugabytedb`](https://hub.docker.com/r/gitpod/workspace-yugabytedb) ✅
+- [`gitpod/workspace-yugabytedb-preview`](https://hub.docker.com/r/gitpod/workspace-yugabytedb-preview) ✅
 
 #### Versions we'll maintain
 

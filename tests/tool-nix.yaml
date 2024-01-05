@@ -8,7 +8,7 @@
   entrypoint: [bash, -i, -c]
   assert:
   - status == 0
-  - stdout.indexOf("2.11.0") != -1
+  - stdout.indexOf("2.19.2") != -1
 - desc: it should set PROMPT_COMMAND with _direnv_hook
   command: [echo $PROMPT_COMMAND]
   entrypoint: [bash, -i, -c]
