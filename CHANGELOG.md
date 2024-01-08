@@ -2,7 +2,7 @@
 
 A curated, chronologically ordered list of notable changes in [Gitpod's default workspace images](https://hub.docker.com/u/gitpod).
 
-## 2024-01-05
+## 2024-01-08
 
 - Bump nix to `2.19.2`
 
