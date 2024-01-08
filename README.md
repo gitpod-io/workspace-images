@@ -14,7 +14,7 @@ We upgraded to support [dazzle v2](https://github.com/gitpod-io/dazzle) and buil
 
 ## Summary
 
-- **Operating System**: Ubuntu 22.04.2 LTS
+- **Operating System**: Ubuntu 22.04.3 LTS
 - **OS Type**: Linux
 - **Architecture**: x86_64
 
@@ -63,6 +63,8 @@ Each contains a set of chunks: a common base, and a language, and includes Docke
 - [`gitpod/workspace-ruby-3`](https://hub.docker.com/r/gitpod/workspace-ruby-3) ✅
 - [`gitpod/workspace-ruby-3.0`](https://hub.docker.com/r/gitpod/workspace-ruby-3.0) ✅
 - [`gitpod/workspace-ruby-3.1`](https://hub.docker.com/r/gitpod/workspace-ruby-3.1) ✅
+- [`gitpod/workspace-ruby-3.2`](https://hub.docker.com/r/gitpod/workspace-ruby-3.2) ✅
+- [`gitpod/workspace-ruby-3.3`](https://hub.docker.com/r/gitpod/workspace-ruby-3.3) ✅
 - [`gitpod/workspace-rust`](https://hub.docker.com/r/gitpod/workspace-rust) ✅
 - [`gitpod/workspace-elixir`](https://hub.docker.com/r/gitpod/workspace-elixir) ✅
 
@@ -71,7 +73,7 @@ Each contains a set of chunks: a common base, and a language, and includes Docke
 For images dedicated to Java, Node, Python and Ruby, their lifecycle generally works as follows:
 
 - If an image does not have a version in its name, we try to keep it at its latest stable version
-- If an image is versioned (like `workspace-python-3.12`), we'll support it until it reached End of Life
+- If an image is versioned (like `workspace-python-3.12`), we'll support it until it reaches End of Life
 
 ### 🎬 No upgrade planned
 
