@@ -43,7 +43,7 @@ combiner:
         - lang-rust:1
         - tool-brew
         - tool-nginx
-        - tool-nix:2.11.0
+        - tool-nix:2
     - name: full-vnc
       ref:
       - full
@@ -59,7 +59,7 @@ combiner:
       ref:
       - base
       chunks:
-        - tool-nix:2.11.0
+        - tool-nix:2
     - name: node
       ref:
       - base
@@ -191,7 +191,7 @@ combiner:
         - lang-rust:1
         - tool-brew
         - tool-nginx
-        - tool-nix:2.11.0
+        - tool-nix:2
         - tool-yugabytedb:2.18
     - name: yugabytedb-preview
       ref:
@@ -206,7 +206,7 @@ combiner:
         - lang-rust:1
         - tool-brew
         - tool-nginx
-        - tool-nix:2.11.0
+        - tool-nix:2
         - tool-yugabytedb:2.19
     - name: bun
       ref:
