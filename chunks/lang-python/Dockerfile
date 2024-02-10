@@ -35,6 +35,11 @@ RUN sudo install-packages \
 	&& curl -sSL https://install.python-poetry.org | python \
 	&& sudo rm -rf /tmp/*
 
+# update `setuptools` used by our virtual environment
+RUN bash -c "source /home/gitpod/.local/share/pypoetry/venv/bin/activate \
+	&& pip install --upgrade setuptools \
+	&& deactivate"
+
 COPY --chown=gitpod:gitpod pyenv.d $HOME/.gp_pyenv.d
 COPY --chown=gitpod:gitpod userbase.bash $HOME/.gp_pyenv.d
 COPY --chown=gitpod:gitpod python_hook.bash $HOME/.bashrc.d/60-python
