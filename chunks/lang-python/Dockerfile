@@ -36,9 +36,9 @@ RUN sudo install-packages \
 	&& sudo rm -rf /tmp/*
 
 # update `setuptools` used by our virtual environment
-RUN  source /home/gitpod/.local/share/pypoetry/venv/bin/activate \
+RUN bash -c "source /home/gitpod/.local/share/pypoetry/venv/bin/activate \
 	&& pip install --upgrade setuptools \
-	&& deactivate
+	&& deactivate"
 
 COPY --chown=gitpod:gitpod pyenv.d $HOME/.gp_pyenv.d
 COPY --chown=gitpod:gitpod userbase.bash $HOME/.gp_pyenv.d
