@@ -14,7 +14,7 @@ exports.register = async (fixers) => {
   const response = await fetch("https://raw.githubusercontent.com/endoflife-date/release-data/main/releases/python.json");
   const data = await response.json();
 
-  const versions = sortVersions(Object.keys(data));
+  const versions = sortVersions(Object.keys(data.versions));
 
   const patchVersionReplacements = {};
   for (const version of versions) {
