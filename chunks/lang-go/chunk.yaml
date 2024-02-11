@@ -1,4 +1,4 @@
 variants:
   - name: "1.21"
     args:
-      GO_VERSION: 1.21.6
+      GO_VERSION: 1.21.7
