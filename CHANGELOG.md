@@ -4,7 +4,7 @@ A curated, chronologically ordered list of notable changes in [Gitpod's default 
 
 ## 2024-02-11
 
-- Bump Go to `1.22.1`
+- Bump Go to `1.22.0`
 
 ## 2024-02-09
 
