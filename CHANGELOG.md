@@ -2,6 +2,10 @@
 
 A curated, chronologically ordered list of notable changes in [Gitpod's default workspace images](https://hub.docker.com/u/gitpod).
 
+## 2024-02-11
+
+- Bump Go to `1.22.0`
+
 ## 2024-02-09
 
 - Bump Rust to `1.76.0`
@@ -67,7 +71,7 @@ A curated, chronologically ordered list of notable changes in [Gitpod's default 
 
 ## 2023-07-11
 
-- Bump Go 1.20 to `1.20.6` and Go 1.19 `1.19.11`
+- Bump Go 1.20 to `1.20.6` and Go 1.19 to `1.19.11`
 
 ## 2022-02-01
 
