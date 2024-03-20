@@ -7,10 +7,10 @@ variants:
       PYTHON_VERSION: 3.11.8
   - name: "3.10"
     args:
-      PYTHON_VERSION: 3.10.13
+      PYTHON_VERSION: 3.10.14
   - name: "3.9"
     args:
-      PYTHON_VERSION: 3.9.18
+      PYTHON_VERSION: 3.9.19
   - name: "3.8"
     args:
-      PYTHON_VERSION: 3.8.18
+      PYTHON_VERSION: 3.8.19
