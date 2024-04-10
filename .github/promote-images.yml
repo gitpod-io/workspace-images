@@ -22,7 +22,6 @@
     workspace-python-3.11: "2024.*"
     workspace-python-3.12: "2024.*"
     workspace-ruby-3: "2024.*"
-    workspace-ruby-3.0: "2024.*"
     workspace-ruby-3.1: "2024.*"
     workspace-ruby-3.2: "2024.*"
     workspace-ruby-3.3: "2024.*"
