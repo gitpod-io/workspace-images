@@ -61,7 +61,6 @@ Each contains a set of chunks: a common base and a language / tool. Every image 
 - [`gitpod/workspace-python-3.11`](https://hub.docker.com/r/gitpod/workspace-python-3.11) ✅
 - [`gitpod/workspace-python-3.12`](https://hub.docker.com/r/gitpod/workspace-python-3.12) ✅
 - [`gitpod/workspace-ruby-3`](https://hub.docker.com/r/gitpod/workspace-ruby-3) ✅
-- [`gitpod/workspace-ruby-3.0`](https://hub.docker.com/r/gitpod/workspace-ruby-3.0) ✅
 - [`gitpod/workspace-ruby-3.1`](https://hub.docker.com/r/gitpod/workspace-ruby-3.1) ✅
 - [`gitpod/workspace-ruby-3.2`](https://hub.docker.com/r/gitpod/workspace-ruby-3.2) ✅
 - [`gitpod/workspace-ruby-3.3`](https://hub.docker.com/r/gitpod/workspace-ruby-3.3) ✅

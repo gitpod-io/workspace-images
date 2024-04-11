@@ -2,6 +2,10 @@
 
 A curated, chronologically ordered list of notable changes in [Gitpod's default workspace images](https://hub.docker.com/u/gitpod).
 
+## 2024-04-10
+
+- Deprecate `gitpod/workspace-ruby-3.0`
+
 ## 2024-04-03
 
 - Bump Bun to `1.1.0`

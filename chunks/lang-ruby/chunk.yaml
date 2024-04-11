@@ -1,7 +1,4 @@
 variants:
-  - name: "3.0"
-    args:
-      RUBY_VERSION: 3.0.6
   - name: "3.1"
     args:
       RUBY_VERSION: 3.1.4
