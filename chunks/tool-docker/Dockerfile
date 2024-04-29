@@ -11,7 +11,7 @@ RUN curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor
     && echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu \
     $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null \
     && apt update \
-    && install-packages docker-ce docker-ce-cli containerd.io docker-buildx-plugin
+    && install-packages docker-ce=5:26.0.1-1~ubuntu.22.04~jammy docker-ce-cli=5:26.0.1-1~ubuntu.22.04~jammy containerd.io docker-buildx-plugin
 
 RUN curl -o /usr/local/bin/docker-compose -fsSL https://github.com/docker/compose/releases/download/v2.24.1/docker-compose-linux-$(uname -m) \
     && chmod +x /usr/local/bin/docker-compose && mkdir -p /usr/local/lib/docker/cli-plugins && \
