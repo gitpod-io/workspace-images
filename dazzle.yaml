@@ -173,6 +173,11 @@ combiner:
       - base
       chunks:
         - lang-java:17
+    - name: java-21
+      ref:
+      - base
+      chunks:
+        - lang-java:21
     - name: yugabytedb
       ref:
       - base

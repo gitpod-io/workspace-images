@@ -32,6 +32,7 @@ sync:
     - mongodb
     - java-11
     - java-17
+    - java-21
     - yugabytedb
     - yugabytedb-preview
     - gitpod-dev
