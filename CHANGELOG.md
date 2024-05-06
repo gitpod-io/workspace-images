@@ -2,9 +2,9 @@
 
 A curated, chronologically ordered list of notable changes in [Gitpod's default workspace images](https://hub.docker.com/u/gitpod).
 
-## 2024-05-03
-
+## 2024-05-06
 - Bump Rust to `1.78.0`
+- Introduce `workspace-java-21`
 
 ## 2024-04-29
 
