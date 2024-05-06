@@ -1,4 +1,4 @@
 variants:
   - name: "1"
     args:
-      RUST_VERSION: 1.77.2
+      RUST_VERSION: 1.78.0
