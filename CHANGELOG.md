@@ -2,6 +2,10 @@
 
 A curated, chronologically ordered list of notable changes in [Gitpod's default workspace images](https://hub.docker.com/u/gitpod).
 
+## 2024-05-03
+
+- Introduce `workspace-java-21`
+
 ## 2024-04-29
 
 - Temporarily pin the version of Docker. Refer to [19662](https://github.com/gitpod-io/gitpod/issues/19662#issuecomment-2083388559) for more detail.

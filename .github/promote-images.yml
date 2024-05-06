@@ -35,6 +35,7 @@
     workspace-mongodb: "2024.*"
     workspace-java-11: "2024.*"
     workspace-java-17: "2024.*"
+    workspace-java-21: "2024.*"
     workspace-yugabytedb: "2024.*"
     workspace-yugabytedb-preview: "2024.*"
     workspace-gitpod-dev: "2024.*"
