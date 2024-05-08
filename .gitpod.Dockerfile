@@ -16,3 +16,4 @@ RUN curl -sSL https://github.com/mvdan/sh/releases/download/v3.5.1/shfmt_v3.5.1_
 RUN install-packages shellcheck \
     && pip3 install pre-commit
 RUN curl -sSL https://github.com/mikefarah/yq/releases/download/v4.22.1/yq_linux_amd64 -o /usr/bin/yq && chmod +x /usr/bin/yq
+RUN npm install -g renovate

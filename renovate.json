@@ -1,5 +1,12 @@
 {
   "extends": [
     "config:base"
+  ],
+  "packageRules": [
+    {
+      "matchDatasources": ["docker"],
+      "matchPackageNames": ["docker-ce"],
+      "allowedVersions": "!24.0.9"
+    }
   ]
 }
