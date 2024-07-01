@@ -16,7 +16,8 @@ RUN curl -fsSL https://apt.llvm.org/llvm-snapshot.gpg.key | sudo gpg --dearmor -
         clang-format-18 \
         clang-tidy-18 \
         gdb \
-        lld-18
+        lld-18 \
+        libclang-18-dev
 
 RUN sudo update-alternatives --install /usr/bin/clang clang /usr/lib/llvm-18/bin/clang 100 \
     && sudo update-alternatives --install /usr/bin/clang++ clang++ /usr/lib/llvm-18/bin/clang++ 100 \
