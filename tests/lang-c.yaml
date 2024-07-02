@@ -13,8 +13,8 @@
   assert:
   - status == 0
 - desc: it should have major version
-  command: [npx envinfo]
+  command: [clang --version]
   entrypoint: [bash, -i, -c]
   assert:
   - status == 0
-  - stdout.indexOf("Clang:\s18") != -1
+  - stdout.indexOf("clang\sversion\s18") != -1
