@@ -2,6 +2,10 @@
 
 A curated, chronologically ordered list of notable changes in [Gitpod's default workspace images](https://hub.docker.com/u/gitpod).
 
+## 2024-07-01
+
+- Bump Clang to `18` and enable ASAN Support.
+
 ## 2024-06-17
 
 - Bump Rust to `1.79.0`

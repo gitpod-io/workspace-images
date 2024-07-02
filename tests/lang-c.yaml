@@ -12,3 +12,8 @@
   command: [wc,/etc/apt/sources.list.d/llvm.list]
   assert:
   - status == 0
+- desc: it should have major version
+  command: [clang,--version]
+  assert:
+  - status == 0
+  - stdout.indexOf("clang version 18") != -1
