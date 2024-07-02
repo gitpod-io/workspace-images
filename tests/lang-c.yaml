@@ -12,3 +12,9 @@
   command: [wc,/etc/apt/sources.list.d/llvm.list]
   assert:
   - status == 0
+- desc: it should have major version
+  command: [npx envinfo]
+  entrypoint: [bash, -i, -c]
+  assert:
+  - status == 0
+  - stdout.indexOf("Clang:\s18") != -1
