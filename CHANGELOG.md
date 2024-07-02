@@ -4,7 +4,7 @@ A curated, chronologically ordered list of notable changes in [Gitpod's default 
 
 ## 2024-07-01
 
-- Bump Clang to `18`
+- Bump Clang to `18` and enable ASAN Support.
 
 ## 2024-06-17
 
