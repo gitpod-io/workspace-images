@@ -2,6 +2,11 @@
 
 A curated, chronologically ordered list of notable changes in [Gitpod's default workspace images](https://hub.docker.com/u/gitpod).
 
+## 2024-08-06
+
+- Introduce `workspace-node-20` and `workspace-node-22`
+- Deprecate `workspace-node-21` since it has reached EoL
+
 ## 2024-07-01
 
 - Bump Clang to `18` and enable ASAN Support.

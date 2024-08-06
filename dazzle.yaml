@@ -64,7 +64,7 @@ combiner:
       ref:
       - base
       chunks:
-        - lang-node:21
+        - lang-node:22
         - tool-chrome
     - name: node-lts
       ref:
@@ -77,6 +77,18 @@ combiner:
       - base
       chunks:
         - lang-node:18
+        - tool-chrome
+    - name: node-20
+      ref:
+      - base
+      chunks:
+        - lang-node:20
+        - tool-chrome
+    - name: node-22
+      ref:
+      - base
+      chunks:
+        - lang-node:22
         - tool-chrome
     - name: python-3.12
       ref:
