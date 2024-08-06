@@ -70,7 +70,7 @@ combiner:
       ref:
       - base
       chunks:
-        - lang-node:22
+        - lang-node:20
         - tool-chrome
     - name: node-18
       ref:
