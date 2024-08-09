@@ -11,7 +11,7 @@ ENV PATH="$HOME/.pyenv/bin:$HOME/.pyenv/shims:$PATH"
 ENV PIPENV_VENV_IN_PROJECT=true
 ENV PYENV_ROOT="$HOME/.pyenv"
 
-# configure the default intepreter for PyCharm
+# configure the default interpreter for PyCharm
 ENV PYCHARM_PYTHON_PATH="$HOME/.pyenv/shims/python"
 
 RUN sudo install-packages \
