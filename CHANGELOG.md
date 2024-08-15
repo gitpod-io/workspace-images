@@ -2,10 +2,6 @@
 
 A curated, chronologically ordered list of notable changes in [Gitpod's default workspace images](https://hub.docker.com/u/gitpod).
 
-## 2024-08-14
-
-- Bump Go to `1.23.0`
-
 ## 2024-08-06
 
 - Introduce `workspace-node-20` and `workspace-node-22`
