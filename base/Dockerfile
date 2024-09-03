@@ -32,6 +32,7 @@ RUN yes | unminimize \
         ssl-cert \
         fish \
         zsh \
+        rlwrap \
     && locale-gen en_US.UTF-8
 
 ENV LANG=en_US.UTF-8
