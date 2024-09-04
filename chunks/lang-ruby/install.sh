@@ -10,6 +10,7 @@ rvm requirements \
 && rvm rubygems current \
 && gem install bundler --no-document"
 
+# Ruby 3.3 is not yet supported by solargraph https://github.com/castwide/solargraph/issues/706
 if ! grep -q "3.3." <<<"${RUBY_VERSION}"; then
 	bash -lc "gem install solargraph --no-document"
 fi
