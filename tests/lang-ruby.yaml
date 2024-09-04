@@ -16,3 +16,8 @@
   entrypoint: [bash, -i, -c]
   assert:
   - stdout.indexOf("rvm") != -1
+- desc: it should have solargraph
+  command: [solargraph --version]
+  entrypoint: [bash, -i, -c]
+  assert:
+  - stdout.indexOf("0.") != -1
