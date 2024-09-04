@@ -13,6 +13,7 @@ RUN yes | unminimize \
         bash-completion \
         build-essential \
         ninja-build \
+        clang \
         htop \
         iputils-ping \
         jq \
