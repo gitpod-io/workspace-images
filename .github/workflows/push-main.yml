@@ -190,6 +190,7 @@ jobs:
             sudo -E skopeo sync \
             --src yaml \
             --retry-times=2 \
+            --keep-going \
             --dest docker \
             /.github/promote-images.yml "${DH_IMAGE_REGISTRY}/gitpod"
 
