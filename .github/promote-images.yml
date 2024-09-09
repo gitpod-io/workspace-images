@@ -30,7 +30,6 @@
     workspace-rust: "2024.*"
     workspace-dotnet: "2024.*"
     workspace-dotnet-6: "2024.*"
-    workspace-dotnet-7: "2024.*"
     workspace-dotnet-8: "2024.*"
     workspace-postgres: "2024.*"
     workspace-mysql: "2024.*"

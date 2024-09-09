@@ -150,11 +150,6 @@ combiner:
         - full
       chunks:
         - tool-dotnet:6
-    - name: dotnet-7
-      ref:
-        - full
-      chunks:
-        - tool-dotnet:7
     - name: dotnet-8
       ref:
         - full
