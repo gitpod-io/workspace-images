@@ -30,8 +30,8 @@ RUN curl -sSLo ./yugabyte.tar.gz https://downloads.yugabyte.com/releases/${YB_VE
 ENV PATH="$HOME/.pyenv/bin:$HOME/.pyenv/shims:$PATH"
 ENV PYENV_ROOT="$HOME/.pyenv"
 RUN git clone https://github.com/pyenv/pyenv.git ~/.pyenv \
-  # v2.4.10
-  && git -C ~/.pyenv checkout 9ecd803bffaffb949fbdd8c70cb086227f6a3202 \
+  # v2.4.12
+  && git -C ~/.pyenv checkout 2e658d3e3574074ba24ffd10ad67b1c8e2ff717d \
   && pyenv install ${PYTHON_VERSION} \
   && pyenv global ${PYTHON_VERSION}
 

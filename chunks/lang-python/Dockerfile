@@ -21,8 +21,8 @@ RUN sudo install-packages \
 	libncursesw5-dev xz-utils tk-dev libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev \
 	# Install PYENV
 	&& git clone https://github.com/pyenv/pyenv.git ~/.pyenv \
-	# v2.4.10
-	&& git -C ~/.pyenv checkout 9ecd803bffaffb949fbdd8c70cb086227f6a3202 \
+	# v2.4.12
+	&& git -C ~/.pyenv checkout 2e658d3e3574074ba24ffd10ad67b1c8e2ff717d \
 	&& pyenv install ${PYTHON_VERSION} \
 	&& pyenv global ${PYTHON_VERSION} \
 	&& for exec in global; do printf '%s\n' 'source "$HOME/.gp_pyenv.d/userbase.bash"' >> "$PYENV_ROOT/libexec/pyenv-$exec"; done \
