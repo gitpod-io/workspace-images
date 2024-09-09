@@ -27,7 +27,6 @@ sync:
     - rust
     - dotnet
     - dotnet-6
-    - dotnet-7
     - dotnet-8
     - postgres
     - mysql
