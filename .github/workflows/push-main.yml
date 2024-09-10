@@ -76,6 +76,12 @@ jobs:
           # Any step using skopeo needs SKOPEO_SYNC_FILES env var
           SKOPEO_SYNC_FILES=$(mktemp -d)
           echo "SKOPEO_SYNC_FILES=${SKOPEO_SYNC_FILES}" >> $GITHUB_ENV
+
+          # limit what we push as time stamped images to images built in the current year and month only
+          current_year=$(date +%Y)
+          current_month=$(date +%m)
+          sed -i "s/CURRENT_YEAR/$current_year/g; s/CURRENT_MONTH/$current_month/g" "${GITHUB_WORKSPACE}/.github/promote-images.yml"
+
           cp "${GITHUB_WORKSPACE}/.github/promote-images.yml" "${SKOPEO_SYNC_FILES}"
           # Build a fake skopeo script to run a container
           cat <<EOF | sudo tee /usr/local/bin/skopeo > /dev/null
