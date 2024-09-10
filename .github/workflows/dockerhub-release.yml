@@ -23,7 +23,7 @@ jobs:
       GAR_IMAGE_REGISTRY: europe-docker.pkg.dev
       DH_IMAGE_REGISTRY: registry.hub.docker.com
       IAM_SERVICE_ACCOUNT: workspace-images-gha-sa@gitpod-artifacts.iam.gserviceaccount.com
-      SKOPEO_VERSION: 1
+      SKOPEO_VERSION: 1.15.2
 
     steps:
       - name: 📥 Checkout workspace-images
