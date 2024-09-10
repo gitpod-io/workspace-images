@@ -38,7 +38,7 @@ jobs:
       IAM_SERVICE_ACCOUNT: workspace-images-gha-sa@gitpod-artifacts.iam.gserviceaccount.com
       DAZZLE_VERSION: 0.1.17
       BUILDKIT_VERSION: 0.12.3
-      SKOPEO_VERSION: 1
+      SKOPEO_VERSION: 1.15.2
 
     steps:
       - name: 📥 Checkout workspace-images
