@@ -91,11 +91,6 @@ jobs:
         env:
           SKOPEO_AUTH_DIR: ${{env.SKOPEO_AUTH_DIR}}
         run: |
-          # limit what we promote to latest for the current year only
-          current_year=$(date +%Y)
-          current_month=""
-          sed -i "s/CURRENT_YEAR/$current_year/g; s/CURRENT_MONTH/$current_month/g" "${GITHUB_WORKSPACE}/.github/promote-images.yml"
-
           IMAGES=$(cat .github/promote-images.yml | yq '."europe-docker.pkg.dev/gitpod-artifacts/docker-dev"."images-by-tag-regex"|keys[]' -r)
           for IMAGE in $IMAGES;
           do
