@@ -4,7 +4,7 @@
 # We use a regex rule: Any tag that starts with 'CURRENT_YEAR-CURRENT_MONTH'.
 "europe-docker.pkg.dev/gitpod-artifacts/docker-dev":
   images-by-tag-regex:
-    workspace-base: "TIMESTAMP_TAG*"
+    workspace-base: "TIMESTAMP_TAG"
     workspace-c: "TIMESTAMP_TAG"
     workspace-clojure: "TIMESTAMP_TAG"
     workspace-elixir: "TIMESTAMP_TAG"
