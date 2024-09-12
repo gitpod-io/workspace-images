@@ -63,6 +63,11 @@ jobs:
         run: |
           curl -sSL "https://github.com/gitpod-io/dazzle/releases/download/v${DAZZLE_VERSION}/dazzle_${DAZZLE_VERSION}_Linux_x86_64.tar.gz" | sudo tar -xvz -C /usr/local/bin
 
+      - name: 🕰️ Create timestamp tag
+        id: create-timestamp-tag
+        run: |
+          echo "TIMESTAMP_TAG=$(date '+%Y-%m-%d-%H-%M-%S')" >> $GITHUB_ENV
+
       - name: 🔆 Install skopeo
         env:
           SKOPEO_VERSION: ${{env.SKOPEO_VERSION}}
@@ -80,7 +85,7 @@ jobs:
           # limit what we push as time stamped images to images built in the current year and month only
           current_year=$(date +%Y)
           current_month=$(date +%m)
-          sed -i "s/CURRENT_YEAR/$current_year/g; s/CURRENT_MONTH/$current_month/g" "${GITHUB_WORKSPACE}/.github/promote-images.yml"
+          sed -i "s/TIMESTAMP_TAG/$TIMESTAMP_TAG/g" "${GITHUB_WORKSPACE}/.github/promote-images.yml"
 
           cp "${GITHUB_WORKSPACE}/.github/promote-images.yml" "${SKOPEO_SYNC_FILES}"
           # Build a fake skopeo script to run a container
@@ -148,11 +153,6 @@ jobs:
           GAR_IMAGE_REGISTRY: ${{env.GAR_IMAGE_REGISTRY}}
         run: |
           dazzle combine "${GAR_IMAGE_REGISTRY}/gitpod-artifacts/docker-dev/workspace-base-images" --all
-
-      - name: 🕰️ Create timestamp tag
-        id: create-timestamp-tag
-        run: |
-          echo "TIMESTAMP_TAG=$(date '+%Y-%m-%d-%H-%M-%S')" >> $GITHUB_ENV
 
       - name: 🔧 Setup copy tools
         run: |
