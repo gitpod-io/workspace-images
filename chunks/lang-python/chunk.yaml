@@ -1,7 +1,7 @@
 variants:
   - name: "3.12"
     args:
-      PYTHON_VERSION: 3.12.6
+      PYTHON_VERSION: 3.12.7
   - name: "3.11"
     args:
       PYTHON_VERSION: 3.11.10
