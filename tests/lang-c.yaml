@@ -16,4 +16,4 @@
   command: [clang,--version]
   assert:
   - status == 0
-  - stdout.indexOf("clang version 18") != -1
+  - stdout.indexOf("clang version 19") != -1
