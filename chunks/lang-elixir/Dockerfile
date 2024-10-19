@@ -20,9 +20,9 @@ RUN echo ". "$HOME/.asdf/asdf.sh"" >> /home/gitpod/.bashrc.d/100-asdf
 RUN echo ". "$HOME/.asdf/completions/asdf.bash"" >> /home/gitpod/.bashrc.d/100-asdf
 ENV PATH=/home/gitpod/.asdf/bin:/home/gitpod/.asdf/shims:$PATH
 
-RUN asdf plugin-add erlang https://github.com/asdf-vm/asdf-erlang.git
-RUN asdf plugin-add elixir https://github.com/asdf-vm/asdf-elixir.git
-RUN asdf install erlang 25.2.2
-RUN asdf install elixir 1.13.4-otp-25
-RUN asdf global erlang 25.2.2
-RUN asdf global elixir 1.13.4-otp-25
+RUN asdf plugin-add erlang https://github.com/asdf-vm/asdf-erlang.git \
+    && asdf plugin-add elixir https://github.com/asdf-vm/asdf-elixir.git \
+    && asdf install erlang 25.2.2 \
+    && asdf install elixir 1.13.4-otp-25 \
+    && asdf global erlang 25.2.2 \
+    && asdf global elixir 1.13.4-otp-25
