@@ -90,6 +90,11 @@ combiner:
       chunks:
         - lang-node:22
         - tool-chrome
+    - name: python-3.13
+      ref:
+      - base
+      chunks:
+        - lang-python:3.13
     - name: python-3.12
       ref:
       - base
@@ -110,11 +115,6 @@ combiner:
       - base
       chunks:
         - lang-python:3.9
-    - name: python-3.8
-      ref:
-      - base
-      chunks:
-        - lang-python:3.8
     - name: ruby-3.1
       ref:
       - base
