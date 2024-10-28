@@ -1,10 +1,10 @@
 variants:
   - name: "11"
     args:
-      JAVA_VERSION: 11.0.24.fx-zulu
+      JAVA_VERSION: 11.0.25.fx-zulu
   - name: "17"
     args:
-      JAVA_VERSION: 17.0.12.fx-zulu
+      JAVA_VERSION: 17.0.13.fx-zulu
   - name: "21"
     args:
-      JAVA_VERSION: 21.0.4.fx-zulu
+      JAVA_VERSION: 21.0.5.fx-zulu
