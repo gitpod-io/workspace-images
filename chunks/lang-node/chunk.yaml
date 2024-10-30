@@ -7,4 +7,4 @@ variants:
       NODE_VERSION: 20.18.0
   - name: "22"
     args:
-      NODE_VERSION: 22.10.0
+      NODE_VERSION: 22.11.0
