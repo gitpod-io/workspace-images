@@ -2,6 +2,12 @@
 
 A curated, chronologically ordered list of notable changes in [Gitpod's default workspace images](https://hub.docker.com/u/gitpod).
 
+## 2024-10-31 🎃
+
+- Bump the `workspace-node-lts` image to Node `22.11.0`
+- Bump the `workspace-node` image to Node `23.1.0`
+- Introduce `workspace-node-23`
+
 ## 2024-10-22
 
 - Deprecate `workspace-python-3.8`
