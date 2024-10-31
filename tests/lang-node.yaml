@@ -5,7 +5,8 @@
   - status == 0
   - stdout.indexOf("v18")  != -1 ||
     stdout.indexOf("v20")  != -1 ||
-    stdout.indexOf("v22")  != -1
+    stdout.indexOf("v22")  != -1 ||
+    stdout.indexOf("v23")  != -1
 - desc: it should have yarn
   command: [yarn --version]
   entrypoint: [bash, -i, -c]

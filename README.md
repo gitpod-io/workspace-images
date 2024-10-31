@@ -57,6 +57,7 @@ Each contains a set of chunks: a common base and a language / tool. Every image 
 - [`gitpod/workspace-node-18`](https://hub.docker.com/r/gitpod/workspace-node-18) ✅
 - [`gitpod/workspace-node-20`](https://hub.docker.com/r/gitpod/workspace-node-20) ✅
 - [`gitpod/workspace-node-22`](https://hub.docker.com/r/gitpod/workspace-node-22) ✅
+- [`gitpod/workspace-node-23`](https://hub.docker.com/r/gitpod/workspace-node-23) ✅
 - [`gitpod/workspace-python`](https://hub.docker.com/r/gitpod/workspace-python) ✅
 - [`gitpod/workspace-python-3.9`](https://hub.docker.com/r/gitpod/workspace-python-3.9) ✅
 - [`gitpod/workspace-python-3.10`](https://hub.docker.com/r/gitpod/workspace-python-3.10) ✅
