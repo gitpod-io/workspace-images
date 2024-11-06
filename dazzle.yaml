@@ -11,7 +11,7 @@ combiner:
       chunks:
         - lang-c
         - lang-go:1.23
-        - lang-java:11
+        - lang-java:23
         - lang-node:22
         - tool-brew
     - name: c
@@ -36,7 +36,7 @@ combiner:
         - lang-c
         - lang-clojure
         - lang-go:1.23
-        - lang-java:11
+        - lang-java:23
         - lang-node:22
         - lang-python:3.12
         - lang-ruby:3.2
@@ -196,6 +196,11 @@ combiner:
       - base
       chunks:
         - lang-java:21
+    - name: java-23
+      ref:
+      - base
+      chunks:
+        - lang-java:23
     - name: yugabytedb
       ref:
       - base
@@ -203,7 +208,7 @@ combiner:
         - lang-c
         - lang-clojure
         - lang-go:1.23
-        - lang-java:11
+        - lang-java:13
         - lang-node:22
         - lang-ruby:3.2
         - lang-rust:1
@@ -218,7 +223,7 @@ combiner:
         - lang-c
         - lang-clojure
         - lang-go:1.23
-        - lang-java:11
+        - lang-java:23
         - lang-node:22
         - lang-ruby:3.2
         - lang-rust:1
