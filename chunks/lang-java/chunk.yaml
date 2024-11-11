@@ -8,3 +8,6 @@ variants:
   - name: "21"
     args:
       JAVA_VERSION: 21.0.5.fx-zulu
+  - name: "23"
+    args:
+      JAVA_VERSION: 23.0.1.fx-zulu
