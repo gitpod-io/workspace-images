@@ -2,6 +2,10 @@
 
 A curated, chronologically ordered list of notable changes in [Gitpod's default workspace images](https://hub.docker.com/u/gitpod).
 
+## 2024-11-11
+
+- Introduce `workspace-java-23`
+
 ## 2024-10-31 🎃
 
 - Bump the `workspace-node-lts` image to Node `22.11.0`
