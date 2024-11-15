@@ -106,7 +106,7 @@ jobs:
       - name: The release was successful
         id: slack-success
         if: needs.promote-latest.result == 'success'
-        uses: slackapi/slack-github-action@v1.27.1
+        uses: slackapi/slack-github-action@v2.0.0
         with:
           payload: |
             {
@@ -117,7 +117,7 @@ jobs:
       - name: The release was not successful
         id: slack-failure
         if: needs.promote-latest.result != 'success'
-        uses: slackapi/slack-github-action@v1.27.1
+        uses: slackapi/slack-github-action@v2.0.0
         with:
           payload: |
             {
