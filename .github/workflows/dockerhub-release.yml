@@ -108,20 +108,17 @@ jobs:
         if: needs.promote-latest.result == 'success'
         uses: slackapi/slack-github-action@v2.0.0
         with:
+          webhook-type: incoming-webhook
+          webhook: ${{ secrets.RELEASE_NOTIFY_WEBHOOK }}
           payload: |
-            {
-              "text": "The release was successful :rocket:"
-            }
-        env:
-          SLACK_WEBHOOK_URL: ${{ secrets.RELEASE_NOTIFY_WEBHOOK }}
+            text: "The release was successful :rocket:"
+
       - name: The release was not successful
         id: slack-failure
         if: needs.promote-latest.result != 'success'
         uses: slackapi/slack-github-action@v2.0.0
         with:
+          webhook-type: incoming-webhook
+          webhook: ${{ secrets.RELEASE_NOTIFY_WEBHOOK }}
           payload: |
-            {
-              "text": "${{ format('The release had trouble :construction:, the result was: {0}', needs.promote-latest.result) }}"
-            }
-        env:
-          SLACK_WEBHOOK_URL: ${{ secrets.RELEASE_NOTIFY_WEBHOOK }}
+            text: ${{ format('The release had trouble :construction:, the result was: {0}', needs.promote-latest.result) }}
