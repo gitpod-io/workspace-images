@@ -1,39 +1,39 @@
 FROM buildpack-deps:jammy@sha256:9c6387be70924dc253a6c5594fd11bf8c90a19528442ee8b0b4040362bf1a662
 
 # Dazzle does not rebuild a layer until one of its lines are changed. Increase this counter to rebuild this layer.
-ENV TRIGGER_REBUILD=1
+ENV TRIGGER_REBUILD=2
 
 COPY install-packages upgrade-packages /usr/bin/
 
 ### base ###
 RUN yes | unminimize \
     && install-packages \
-        zip \
-        unzip \
-        bash-completion \
-        build-essential \
-        ninja-build \
-        clang \
-        htop \
-        iputils-ping \
-        jq \
-        less \
-        locales \
-        man-db \
-        nano \
-        ripgrep \
-        software-properties-common \
-        sudo \
-        stow \
-        time \
-        emacs-nox \
-        vim \
-        multitail \
-        lsof \
-        ssl-cert \
-        fish \
-        zsh \
-        rlwrap \
+    zip \
+    unzip \
+    bash-completion \
+    build-essential \
+    ninja-build \
+    clang \
+    htop \
+    iputils-ping \
+    jq \
+    less \
+    locales \
+    man-db \
+    nano \
+    ripgrep \
+    software-properties-common \
+    sudo \
+    stow \
+    time \
+    emacs-nox \
+    vim \
+    multitail \
+    lsof \
+    ssl-cert \
+    fish \
+    zsh \
+    rlwrap \
     && locale-gen en_US.UTF-8
 
 ENV LANG=en_US.UTF-8
