@@ -13,7 +13,7 @@ function log::info() {
 	printf 'info[%s]: %s\n' "${0##*/}" "$@"
 }
 
-if test ! -e /tmp/.X0-lock; then {
+if test ! -d /tmp/.X11-unix; then {
 	: "${DISPLAY:=":0"}"
 	export DISPLAY
 	VNC_PORT=5900
@@ -47,12 +47,12 @@ if test ! -e /tmp/.X0-lock; then {
 	## Create .xinit
 	# log::info 'Creating .xinit script'
 	# printf '%s\n' '#!/bin/sh' 'exec dbus-launch --exit-with-session xfce4-session;' > $HOME/.xinitrc;
-	chmod 755 "$HOME/.xinitrc"
+	# chmod 755 "$HOME/.xinitrc"
 
 	# Start vncserver
 	log::info "Starting tigerVNC server on port $VNC_PORT"
 	# vncserver -kill "${DISPLAY}"
-	start_service "$(command -v vncserver)" -geometry "${TIGERVNC_GEOMETRY:-1920x1080}" -SecurityTypes None $DISPLAY
+	start_service "$(command -v vncserver)" -geometry "${TIGERVNC_GEOMETRY:-1920x1080}" -SecurityTypes None "${DISPLAY}"
 
 	# Wait
 	log::info "Waiting for the desktop to be fully loaded ..."
