@@ -1,4 +1,4 @@
 variants:
   - name: "1"
     args:
-      BUN_VERSION: 1.1.43
+      BUN_VERSION: 1.1.45
