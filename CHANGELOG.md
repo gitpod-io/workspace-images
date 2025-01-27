@@ -2,6 +2,10 @@
 
 A curated, chronologically ordered list of notable changes in [Gitpod's default workspace images](https://hub.docker.com/u/gitpod).
 
+## 2025-01-27
+
+- Bump Bun to `1.2`
+
 ## 2025-01-13 🎆
 
 - Bump Rust to `1.84.0`
