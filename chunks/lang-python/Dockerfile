@@ -22,7 +22,7 @@ RUN sudo install-packages \
 	# Install PYENV
 	&& git clone https://github.com/pyenv/pyenv.git ~/.pyenv \
 	# v2.4.16
-	&& git -C ~/.pyenv checkout 0f8b2b2b848ea080b0e01a707910c272ec4ce736 \
+	&& git -C ~/.pyenv checkout b3dad5887e1daef68a73360546082ad4eb4b82b8 \
 	&& pyenv install ${PYTHON_VERSION} \
 	&& pyenv global ${PYTHON_VERSION} \
 	&& for exec in global; do printf '%s\n' 'source "$HOME/.gp_pyenv.d/userbase.bash"' >> "$PYENV_ROOT/libexec/pyenv-$exec"; done \
