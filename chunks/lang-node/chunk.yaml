@@ -4,10 +4,10 @@ variants:
       NODE_VERSION: 18.20.6
   - name: "20"
     args:
-      NODE_VERSION: 20.18.2
+      NODE_VERSION: 20.18.3
   - name: "22"
     args:
-      NODE_VERSION: 22.13.1
+      NODE_VERSION: 22.14.0
   - name: "23"
     args:
       NODE_VERSION: 23.7.0
