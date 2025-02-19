@@ -1,0 +1,73 @@
+#!/bin/bash
+set -eu
+
+function start_service() {
+	local executable="$1" && shift
+	local executable_name="${executable##*/}"
+	local args=("$@")
+	start-stop-daemon --make-pidfile --pidfile "/tmp/${executable_name}.pid" --remove-pidfile \
+		--quiet --background --start \
+		--startas "$BASH" -- -c "exec $executable ${args[*]} > /tmp/${executable_name}.log 2>&1"
+}
+function log::info() {
+	printf 'info[%s]: %s\n' "${0##*/}" "$@"
+}
+
+if test ! -e /tmp/.X0-lock; then {
+	: "${DISPLAY:=":0"}"
+	export DISPLAY
+	VNC_PORT=5900
+	NOVNC_PORT=6080
+
+	# fix: Allocate 4GB shmem to avoid many GUI app crash (e.g google-chrome)
+	# shellcheck disable=SC2015
+	if ! mount | grep '/dev/shm.*size=4194304k' 1>/dev/null; then {
+		sudo mount -t tmpfs shm -osize=4096m /dev/shm && log::info "Increased shmem to 4GB" ||
+			log::info "Failed to increase shmem"
+	}; fi
+
+	# Start dbus daemon
+	# sudo mkdir -p -m 0755 /run/dbus
+	# if test ! -e /run/dbus/pid || test ! -e "/proc/$(</run/dbus/pid)"; then {
+	# 	log::info "Spawning dbus system daemon"
+	# 	sudo dbus-daemon --system --fork
+	# }; fi
+	log::info "$(sudo service dbus start | xargs)"
+
+	## Custom session for tigervnc
+	# sudo mkdir -p -m0755 /etc/X11/tigervnc /usr/share/xsessions;
+	# sudo ln -srf "$HOME/.xinitrc" /etc/X11/tigervnc/Xsession;
+	# printf '%s\n' '[Desktop Entry]' 'Name=Xsession' \
+	#                 'Exec=/etc/X11/tigervnc/Xsession'| sudo tee /usr/share/xsessions/xfce4.desktop;
+
+	## Custom config for tigervnc
+	# mkdir -p -m0755 $HOME/.vnc;
+	# printf '%s\n' 'session=xfce4' "geometry=${TIGERVNC_GEOMETRY:-1920x1080}" > $HOME/.vnc/config
+
+	## Create .xinit
+	# log::info 'Creating .xinit script'
+	# printf '%s\n' '#!/bin/sh' 'exec dbus-launch --exit-with-session xfce4-session;' > $HOME/.xinitrc;
+	chmod 755 "$HOME/.xinitrc"
+
+	# Start vncserver
+	log::info "Starting tigerVNC server on port $VNC_PORT"
+	# vncserver -kill "${DISPLAY}"
+	start_service "$(command -v vncserver)" -geometry "${TIGERVNC_GEOMETRY:-1920x1080}" -SecurityTypes None $DISPLAY
+
+	# Wait
+	log::info "Waiting for the desktop to be fully loaded ..."
+	until pgrep xfdesktop 1>/dev/null; do {
+		sleep 0.2
+	}; done
+
+	# Start web vncclient
+	# no_vnc_cmd="bash novnc_proxy --vnc localhost:${VNC_PORT} --listen ${NOVNC_PORT}"
+	# if ! pgrep -f "$no_vnc_cmd" 1>/dev/null; then {
+	# 	log::info "Starting noVNC web client on $NOVNC_PORT"
+	# 	{ cd /opt/novnc/utils && $no_vnc_cmd 2>&1; } >/tmp/novnc.log 2>&1 &
+	# 	disown
+	# }; fi
+	log::info "Starting noVNC web client on port $NOVNC_PORT"
+	start_service "$BASH" /opt/novnc/utils/novnc_proxy --vnc localhost:${VNC_PORT} --listen ${NOVNC_PORT}
+
+}; fi
