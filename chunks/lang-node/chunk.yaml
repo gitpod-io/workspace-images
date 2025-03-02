@@ -10,4 +10,4 @@ variants:
       NODE_VERSION: 22.14.0
   - name: "23"
     args:
-      NODE_VERSION: 23.8.0
+      NODE_VERSION: 23.9.0
