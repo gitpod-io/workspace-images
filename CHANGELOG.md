@@ -2,6 +2,9 @@
 
 A curated, chronologically ordered list of notable changes in [Gitpod's default workspace images](https://hub.docker.com/u/gitpod).
 
+## 2025-03-24
+
+- Bump Go to `1.24.1`
 
 ## 2025-02-24
 
