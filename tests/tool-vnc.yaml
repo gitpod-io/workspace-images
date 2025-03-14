@@ -5,6 +5,7 @@
   - stdout.indexOf("/bin/vncserver") != -1
 
 - desc: "the vnc session should start"
+  entrypoint: [env, GITPOD_REPO_ROOT=/workspace, bash, -c]
   command: [gp-vncsession]
   assert:
   - status == 0
