@@ -10,7 +10,7 @@ combiner:
       - base
       chunks:
         - lang-c
-        - lang-go:1.23
+        - lang-go:1.24
         - lang-java:11
         - lang-node:22
         - tool-brew
@@ -35,7 +35,7 @@ combiner:
       chunks:
         - lang-c
         - lang-clojure
-        - lang-go:1.23
+        - lang-go:1.24
         - lang-java:11
         - lang-node:22
         - lang-python:3.12
@@ -54,7 +54,7 @@ combiner:
       ref:
       - base
       chunks:
-        - lang-go:1.23
+        - lang-go:1.24
     - name: nix
       ref:
       - base
@@ -207,7 +207,7 @@ combiner:
       chunks:
         - lang-c
         - lang-clojure
-        - lang-go:1.23
+        - lang-go:1.24
         - lang-java:11
         - lang-node:22
         - lang-ruby:3.2
@@ -222,7 +222,7 @@ combiner:
       chunks:
         - lang-c
         - lang-clojure
-        - lang-go:1.23
+        - lang-go:1.24
         - lang-java:11
         - lang-node:22
         - lang-ruby:3.2
