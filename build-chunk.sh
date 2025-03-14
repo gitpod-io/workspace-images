@@ -30,7 +30,7 @@ function extract_variants() {
 	if [[ ! -f "chunks/${chunk_name}/chunk.yaml" ]]; then
 		variants+=("${chunk_name}")
 	else
-		for variant in $(yq '.variants[].name' -r <"chunks/${chunk_name}/chunk.yaml"); do
+		for variant in $(yq '.variants[].name' "chunks/${chunk_name}/chunk.yaml"); do
 			variants+=("${chunk_name}:${variant}")
 		done
 	fi

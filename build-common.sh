@@ -30,7 +30,7 @@ function get_available_chunks() {
 	for chunk in $chunk_defs; do
 		local chunkYaml="chunks/${chunk}/chunk.yaml"
 		if [[ -f "$chunkYaml" ]]; then
-			variants=$(yq e '.variants[].name' "$chunkYaml")
+			variants=$(yq '.variants[].name' "$chunkYaml")
 			for variant in $variants; do
 				echo "$chunk:$variant"
 			done

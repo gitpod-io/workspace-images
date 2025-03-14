@@ -168,7 +168,7 @@ jobs:
         run: |
           set -euo pipefail
 
-          IFS=$'\n' read -r -d '' -a IMAGE_TAGS_ARR < <(yq -r '.sync.images."workspace-base-images"[]' ./.github/sync-containers.yml && printf '\0')
+          IFS=$'\n' read -r -d '' -a IMAGE_TAGS_ARR < <(yq '.sync.images."workspace-base-images"[]' ./.github/sync-containers.yml && printf '\0')
           UPLOADS_STRING=""
           for IMAGE_TAG in "${IMAGE_TAGS_ARR[@]}"; do
               UPLOADS_STRING+=$(printf "./.github/workflows/push-main/upload_image.sh %s%s" ${IMAGE_TAG}'\n')

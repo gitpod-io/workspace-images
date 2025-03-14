@@ -9,7 +9,7 @@ function build_combination() {
 	combination=$1
 
 	local exists
-	exists="$(yq e '.combiner.combinations[] | select (.name=="'"$combination"'")' dazzle.yaml)"
+	exists="$(yq '.combiner.combinations[] | select (.name=="'"$combination"'")' dazzle.yaml)"
 	if [[ -z "$exists" ]]; then
 		echo "combination is not defined"
 		exit 1
@@ -30,7 +30,7 @@ function get_refs() {
 	local ref=$1
 	echo "$ref"
 
-	refs="$(yq e '.combiner.combinations[] | select (.name=="'"$ref"'") | .ref[]' dazzle.yaml)"
+	refs="$(yq '.combiner.combinations[] | select (.name=="'"$ref"'") | .ref[]' dazzle.yaml)"
 	if [[ -z "$refs" ]]; then
 		return
 	fi
@@ -43,7 +43,7 @@ function get_refs() {
 function get_chunks() {
 	# shellcheck disable=SC2068
 	for ref in $@; do
-		chunks=$(yq e '.combiner.combinations[] | select (.name=="'"$ref"'") | .chunks[]' dazzle.yaml)
+		chunks=$(yq '.combiner.combinations[] | select (.name=="'"$ref"'") | .chunks[]' dazzle.yaml)
 		echo "$chunks"
 	done
 }

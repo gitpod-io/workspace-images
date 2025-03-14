@@ -91,7 +91,7 @@ jobs:
         env:
           SKOPEO_AUTH_DIR: ${{env.SKOPEO_AUTH_DIR}}
         run: |
-          IMAGES=$(cat .github/promote-images.yml | yq '."europe-docker.pkg.dev/gitpod-artifacts/docker-dev"."images-by-tag-regex"|keys[]' -r)
+          IMAGES=$(cat .github/promote-images.yml | yq '."europe-docker.pkg.dev/gitpod-artifacts/docker-dev"."images-by-tag-regex"|keys[]')
           for IMAGE in $IMAGES;
           do
             sudo -E skopeo copy --format=oci --dest-oci-accept-uncompressed-layers --retry-times=5 \
