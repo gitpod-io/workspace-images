@@ -34,6 +34,7 @@ RUN sudo install-packages \
 	twine \
 	# Install poetry
 	&& curl -sSL https://install.python-poetry.org | python \
+ 	&& curl -LsSf https://astral.sh/uv/install.sh | sh \
 	&& sudo rm -rf /tmp/*
 
 # update `setuptools` used by our virtual environment
