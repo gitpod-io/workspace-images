@@ -1,0 +1,33 @@
+services: 
+  buildkitd:
+    image: docker.io/moby/buildkit:latest
+    command: ["--addr", "tcp://0.0.0.0:1234"]
+    networks:
+      -  "dazzle-net"
+    ports: 
+      - "1234:1234"
+      
+  registry:
+    image: registry:2
+    networks:
+      -  "dazzle-net"
+    expose:
+      - "5000"
+    ports: 
+      - "5000:5000"
+      
+  workspace-images:
+    image: workspace-images
+    depends_on:
+      - buildkitd
+      - registry
+    environment:
+      DAZZLE_BUILDKITD_ADDR=tcp://buildkitd:5000
+    networks:
+      - "dazzle-net"
+    profiles:
+      - cmd
+
+
+networks:
+  dazzle-net: {}
