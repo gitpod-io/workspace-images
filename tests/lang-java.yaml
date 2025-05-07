@@ -10,7 +10,7 @@
     stderr.indexOf("23.0.")    != -1
 - desc: it should have a functioning java 17 installed
   entrypoint: [env, GITPOD_REPO_ROOT=/workspace, bash, -ci]
-  command: [sdk default java 17.0.14.fx-zulu && java -version && mvn -v]
+  command: [sdk default java 17.0.15.fx-zulu && java -version && mvn -v]
   assert:
   - status == 0
   - stderr.indexOf('openjdk version \"17.') != -1
