@@ -106,7 +106,7 @@ jobs:
       - name: The release was successful
         id: slack-success
         if: needs.promote-latest.result == 'success'
-        uses: slackapi/slack-github-action@v2.0.0
+        uses: slackapi/slack-github-action@v2.1.0
         with:
           webhook-type: incoming-webhook
           webhook: ${{ secrets.RELEASE_NOTIFY_WEBHOOK }}
@@ -116,7 +116,7 @@ jobs:
       - name: The release was not successful
         id: slack-failure
         if: needs.promote-latest.result != 'success'
-        uses: slackapi/slack-github-action@v2.0.0
+        uses: slackapi/slack-github-action@v2.1.0
         with:
           webhook-type: incoming-webhook
           webhook: ${{ secrets.RELEASE_NOTIFY_WEBHOOK }}
