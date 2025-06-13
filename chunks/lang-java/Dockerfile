@@ -17,7 +17,7 @@ RUN curl -fsSL "https://get.sdkman.io" | bash \
     && sdk default java ${JAVA_VERSION} \
     && sdk install gradle \
     # 4.x requires Java 17+ https://maven.apache.org/docs/history.html
-    && sdk install maven 3.9.9 \
+    && sdk install maven 3.9.10 \
     && sdk flush archives \
     && sdk flush temp \
     && mkdir /home/gitpod/.m2 \
