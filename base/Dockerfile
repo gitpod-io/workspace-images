@@ -1,4 +1,4 @@
-FROM buildpack-deps:jammy@sha256:df036a189b1838a58a9d590ff339225b0fb110eefab237cf582f42807b175574
+FROM buildpack-deps:jammy@sha256:5396af43ad900e5c10f816c57ad4cf4c44e4ff4cc19131ab67b420d44b542257
 
 # Dazzle does not rebuild a layer until one of its lines are changed. Increase this counter to rebuild this layer.
 ENV TRIGGER_REBUILD=2
