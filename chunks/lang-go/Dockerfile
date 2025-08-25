@@ -6,7 +6,7 @@ ARG GO_VERSION
 USER gitpod
 
 # Dazzle does not rebuild a layer until one of its lines are changed. Increase this counter to rebuild this layer.
-ENV TRIGGER_REBUILD=1
+ENV TRIGGER_REBUILD=2
 ENV GO_VERSION=${GO_VERSION}
 ENV GOPATH=$HOME/go-packages
 ENV GOROOT=$HOME/go
