@@ -21,7 +21,7 @@ function pyenv_gitpod_init() {
 				)"
 
 				for vscode_machine_settings_file in "$@"; do {
-					# Create the vscode machine settings file if it doesnt exist
+					# Create the vscode machine settings file if it doesn't exist
 					if test ! -e "$vscode_machine_settings_file"; then {
 						mkdir -p "${vscode_machine_settings_file%/*}" || return
 						touch "$vscode_machine_settings_file"
