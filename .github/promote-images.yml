@@ -38,7 +38,7 @@
     workspace-java-11: "TIMESTAMP_TAG"
     workspace-java-17: "TIMESTAMP_TAG"
     workspace-java-21: "TIMESTAMP_TAG"
-    workspace-java-23: "TIMESTAMP_TAG"
+    workspace-java-25: "TIMESTAMP_TAG"
     workspace-yugabytedb: "TIMESTAMP_TAG"
     workspace-yugabytedb-preview: "TIMESTAMP_TAG"
     workspace-gitpod-dev: "TIMESTAMP_TAG"
