@@ -52,7 +52,7 @@ Each contains a set of chunks: a common base and a language / tool. Every image 
 - [`gitpod/workspace-java-11`](https://hub.docker.com/r/gitpod/workspace-java-11) ✅
 - [`gitpod/workspace-java-17`](https://hub.docker.com/r/gitpod/workspace-java-17) ✅
 - [`gitpod/workspace-java-21`](https://hub.docker.com/r/gitpod/workspace-java-21) ✅
-- [`gitpod/workspace-java-21`](https://hub.docker.com/r/gitpod/workspace-java-23) ✅
+- [`gitpod/workspace-java-23`](https://hub.docker.com/r/gitpod/workspace-java-23) ✅
 - [`gitpod/workspace-node`](https://hub.docker.com/r/gitpod/workspace-node) ✅
 - [`gitpod/workspace-node-lts`](https://hub.docker.com/r/gitpod/workspace-node-lts) ✅
 - [`gitpod/workspace-node-18`](https://hub.docker.com/r/gitpod/workspace-node-18) ✅
