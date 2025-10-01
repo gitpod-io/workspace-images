@@ -19,6 +19,7 @@ tasks:
     description: 'Waits for registry to be ready and displays build commands'
     triggeredBy:
       - postDevcontainerStart
+      - manual
     command: |
       # Wait for registry port to be available
       while ! curl -s http://localhost:5000/v2/ >/dev/null 2>&1; do sleep 1; done
