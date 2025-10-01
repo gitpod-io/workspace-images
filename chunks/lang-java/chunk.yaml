@@ -13,4 +13,4 @@ variants:
       JAVA_VERSION: 23.0.2.fx-zulu
   - name: "25"
     args:
-      JAVA_VERSION: 25.0.0.fx-zulu
+      JAVA_VERSION: 25.fx-zulu
