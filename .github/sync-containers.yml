@@ -36,6 +36,7 @@ sync:
     - java-17
     - java-21
     - java-23
+    - java-25
     - yugabytedb
     - yugabytedb-preview
     - gitpod-dev

@@ -1,0 +1,31 @@
+{
+  "name": "workspace-images",
+  "build": {
+    "dockerfile": "Dockerfile"
+  },
+  "features": {
+    "ghcr.io/devcontainers/features/docker-in-docker:2": {}
+  },
+  "remoteUser": "gitpod",
+  "containerUser": "gitpod",
+  "workspaceFolder": "/workspace/workspace-images",
+  "workspaceMount": "source=${localWorkspaceFolder},target=/workspace/workspace-images,type=bind",
+  "forwardPorts": [
+    5000
+  ],
+  "portsAttributes": {
+    "5000": {
+      "label": "Port 5000",
+      "onAutoForward": "ignore",
+      "elevateIfNeeded": true
+    }
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-azuretools.vscode-docker",
+        "timonwong.shellcheck"
+      ]
+    }
+  }
+}
