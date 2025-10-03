@@ -1,0 +1,38 @@
+tasks:
+  start-buildkitd:
+    name: 'Start buildkitd daemon'
+    description: 'Starts the buildkit daemon for Docker image building'
+    triggeredBy:
+      - postDevcontainerStart
+    command: |
+      sudo /usr/bin/buildkitd --debug --config ./buildkitd.toml --group gitpod
+  start-docker-registry:
+    name: 'Start local Docker registry'
+    description: 'Starts a local Docker registry on port 5000 for dazzle builds'
+    triggeredBy:
+      - postDevcontainerStart
+    command: |
+      mkdir -p /workspace/registry
+      docker run -p 5000:5000 --name registry --rm -v /workspace/registry:/var/lib/registry registry:2
+  display-build-instructions:
+    name: 'Display dazzle build instructions'
+    description: 'Waits for registry to be ready and displays build commands'
+    triggeredBy:
+      - postDevcontainerStart
+      - manual
+    command: |
+      # Wait for registry port to be available
+      while ! curl -s http://localhost:5000/v2/ >/dev/null 2>&1; do sleep 1; done
+      REPO=localhost:5000/dazzle
+      echo "To build specific chunks and combine them 'time ./build-chunk.sh -c chunk1 -c chunk2:variant1.2.3 -n combo'"
+      echo "To build all the chunks and combinations 'time ./build-all.sh'"
+      echo "To build a specific combination 'time ./build-combo.sh combo'"
+      echo "To list image chunks 'dazzle project image-name $REPO'"
+      echo "To list hashes for image chunks 'dazzle project hash $REPO'"
+      echo "To print the combined image manifest 'dazzle project manifest $REPO'"
+  install-precommit-hooks:
+    name: 'Install pre-commit hooks'
+    description: 'Installs pre-commit git hooks for code quality checks'
+    triggeredBy:
+      - postDevcontainerStart
+    command: pre-commit install

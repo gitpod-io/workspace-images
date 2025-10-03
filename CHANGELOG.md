@@ -2,6 +2,10 @@
 
 A curated, chronologically ordered list of notable changes in [Gitpod's default workspace images](https://hub.docker.com/u/gitpod).
 
+## 2025-09-30
+
+- Introduce `workspace-java-25`
+
 ## 2025-05-26
 
 - Bump Rust to `1.87.0`
