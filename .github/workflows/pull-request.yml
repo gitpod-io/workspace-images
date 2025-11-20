@@ -23,7 +23,7 @@ jobs:
       BUILDKIT_VERSION: 0.12.3
     steps:
       - name: 📥 Checkout workspace-images
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
         with:
           repository: gitpod-io/workspace-images
 
