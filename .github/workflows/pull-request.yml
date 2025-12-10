@@ -22,7 +22,9 @@ jobs:
           df -h
 
       - name: 📥 Checkout workspace-images
-        uses: actions/checkout@v5
+        uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # pin@v5
+        with:
+          repository: gitpod-io/workspace-images
 
       - name: 🔧 Setup pre-commit
         run: |
@@ -55,13 +57,13 @@ jobs:
       # A hack as GH action does not allow you to force override cache storing if there was a cache hit
       # https://github.com/actions/cache/issues/628#issuecomment-986118455
       - name: 🗄️ Force Save Registry Cache Per Sha
-        uses: actions/cache@v4
+        uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # pin@v4
         with:
           path: ~/registry
           key: ${{ runner.os }}-pull-request-cache-${{ github.sha }}
 
       - name: 🗄️ Restore Registry Cache
-        uses: actions/cache@v4
+        uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # pin@v4
         with:
           path: ~/registry
           key: ${{ runner.os }}-pull-request-cache-${{ github.sha }}

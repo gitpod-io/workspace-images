@@ -27,7 +27,7 @@ jobs:
 
     steps:
       - name: 📥 Checkout workspace-images
-        uses: actions/checkout@v5
+        uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # pin@v5
         with:
           repository: gitpod-io/workspace-images
 
@@ -61,13 +61,13 @@ jobs:
           echo "{}" > $SKOPEO_AUTH_DIR/auth
 
       - name: ☁️ Set up Cloud SDK
-        uses: google-github-actions/setup-gcloud@v3.0.1
+        uses: google-github-actions/setup-gcloud@aa5489c8933f4cc7a4f7d45035b3b1440c9c10db # pin@v3.0.1
         with:
           version: 393.0.0
 
       - name: 🔐 Authenticate to Google Cloud
         id: "auth"
-        uses: google-github-actions/auth@v3.0.0
+        uses: google-github-actions/auth@7c6bc770dae815cd3e89ee6cdf493a5fab2cc093 # pin@v3.0.0
         with:
           token_format: "access_token"
           workload_identity_provider: ${{env.WORKLOAD_IDENTITY_POOL_ID}}
@@ -106,7 +106,7 @@ jobs:
       - name: The release was successful
         id: slack-success
         if: needs.promote-latest.result == 'success'
-        uses: slackapi/slack-github-action@v2.1.1
+        uses: slackapi/slack-github-action@91efab103c0de0a537f72a35f6b8cda0ee76bf0a # pin@v2.1.1
         with:
           webhook-type: incoming-webhook
           webhook: ${{ secrets.RELEASE_NOTIFY_WEBHOOK }}
@@ -116,7 +116,7 @@ jobs:
       - name: The release was not successful
         id: slack-failure
         if: needs.promote-latest.result != 'success'
-        uses: slackapi/slack-github-action@v2.1.1
+        uses: slackapi/slack-github-action@91efab103c0de0a537f72a35f6b8cda0ee76bf0a # pin@v2.1.1
         with:
           webhook-type: incoming-webhook
           webhook: ${{ secrets.RELEASE_NOTIFY_WEBHOOK }}
