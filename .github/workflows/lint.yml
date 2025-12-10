@@ -9,7 +9,7 @@ jobs:
   lint:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
-      - uses: cschleiden/actions-linter@v1
+      - uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # pin@v5
+      - uses: cschleiden/actions-linter@1282bc2497ca41be7846b12393d54945a7d63267 # pin@v1
         with:
           workflows: '[".github/workflows/*.yaml"]'
