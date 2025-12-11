@@ -6,15 +6,6 @@ on:
       - main
 
 jobs:
-  create-runner:
-    uses: gitpod-io/gce-github-runner/.github/workflows/create-vm.yml@main
-    secrets:
-      runner_token: ${{ secrets.SELF_HOSTED_GITHUB_RUNNER_TOKEN }}
-      gcp_credentials: ${{ secrets.SELF_HOSTED_GITHUB_RUNNER_GCP_CREDENTIALS }}
-    concurrency:
-      group: ${{ github.ref == 'refs/heads/main' && github.run_id || github.sha }}-create-runner
-      cancel-in-progress: false
-
   # Build images using artifactory as image registry.
   # To implement manual approvals, the workflow uses an Environment.
   #
@@ -22,8 +13,7 @@ jobs:
   # Click New environment, set the name production, and click Configure environment.
   # Check the "Required reviewers" box and enter at least one user or team name.
   sync:
-    runs-on: ${{ needs.create-runner.outputs.label }}
-    needs: create-runner
+    runs-on: ubuntu-latest
     concurrency:
       group: ${{ github.ref == 'refs/heads/main' && github.run_id || github.sha }}-sync
       cancel-in-progress: true
@@ -199,15 +189,3 @@ jobs:
             --keep-going \
             --dest docker \
             /.github/promote-images.yml "${DH_IMAGE_REGISTRY}/gitpod"
-
-  delete-runner:
-    if: always()
-    needs:
-      - create-runner
-      - sync
-    uses: gitpod-io/gce-github-runner/.github/workflows/delete-vm.yml@main
-    secrets:
-      gcp_credentials: ${{ secrets.SELF_HOSTED_GITHUB_RUNNER_GCP_CREDENTIALS }}
-    with:
-      runner-label: ${{ needs.create-runner.outputs.label }}
-      machine-zone: ${{ needs.create-runner.outputs.machine-zone }}

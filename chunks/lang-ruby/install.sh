@@ -8,5 +8,5 @@ rvm requirements \
 && rvm install \"${RUBY_VERSION}\" --default \
 && rvm alias create default \"${RUBY_VERSION}\" \
 && rvm rubygems current \
-&& gem install bundler --no-document \
+&& gem install 'bundler:~>2.0' --no-document \
 && gem install solargraph --no-document"
