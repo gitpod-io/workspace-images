@@ -20,6 +20,7 @@ jobs:
       run: |
         cd .autofix
         npm ci --ignore-scripts
-        npm run autofix
+        cd ..
+        .autofix/node_modules/.bin/autofix --branches --pull-request
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
