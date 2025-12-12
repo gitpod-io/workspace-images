@@ -1,0 +1,12 @@
+{
+  "name": "workspace-images-autofix",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Autofix tooling for workspace-images",
+  "scripts": {
+    "autofix": "autofix --branches --pull-request"
+  },
+  "dependencies": {
+    "autofix": "0.6.0"
+  }
+}

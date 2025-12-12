@@ -18,7 +18,8 @@ jobs:
 
     - name: Run autofix
       run: |
-        npm install -g --ignore-scripts autofix@0.6.0
-        autofix --branches --pull-request
+        cd .autofix
+        npm ci --ignore-scripts
+        npm run autofix
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
