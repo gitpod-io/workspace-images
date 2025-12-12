@@ -1,5 +1,9 @@
 FROM gitpod/workspace-full:latest
 
+# Disable npm/yarn lifecycle scripts for security
+RUN npm config set ignore-scripts true --location=user && \
+    echo 'ignore-scripts true' >> ~/.yarnrc
+
 ENV RETRIGGER=5
 
 ENV BUILDKIT_VERSION=0.12.3
