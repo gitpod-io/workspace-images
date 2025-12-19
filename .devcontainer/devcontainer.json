@@ -10,6 +10,7 @@
   "containerUser": "gitpod",
   "workspaceFolder": "/workspace/workspace-images",
   "workspaceMount": "source=${localWorkspaceFolder},target=/workspace/workspace-images,type=bind",
+  "postCreateCommand": "NPX_PATH=$(which npx) && sudo rm -f \"$NPX_PATH\" && echo '#!/bin/sh' | sudo tee \"$NPX_PATH\" > /dev/null && echo 'echo \"npx is disabled for security reasons. Use explicit package installation instead.\" >&2' | sudo tee -a \"$NPX_PATH\" > /dev/null && echo 'exit 1' | sudo tee -a \"$NPX_PATH\" > /dev/null && sudo chmod +x \"$NPX_PATH\"",
   "forwardPorts": [
     5000
   ],
