@@ -52,7 +52,7 @@ if test ! -e /tmp/.X0-lock; then {
 	# Start vncserver
 	log::info "Starting tigerVNC server on port $VNC_PORT"
 	# vncserver -kill "${DISPLAY}"
-	start_service "$(command -v vncserver)" -geometry "${TIGERVNC_GEOMETRY:-1920x1080}" -SecurityTypes None $DISPLAY
+	start_service "$(command -v vncserver)" -geometry "${TIGERVNC_GEOMETRY:-1920x1080}" -SecurityTypes None "$DISPLAY"
 
 	# Wait
 	log::info "Waiting for the desktop to be fully loaded ..."
