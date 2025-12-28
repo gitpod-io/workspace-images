@@ -6,7 +6,7 @@ USER gitpod
 # Dazzle does not rebuild a layer until one of its lines are changed. Increase this counter to rebuild this layer.
 # Note that us using the actual desired version does not enforce it, it merely serves as a stamp
 # for what the latest version was when we last rebuilt the layer
-ENV TRIGGER_REBUILD="4.6.17"
+ENV TRIGGER_REBUILD="5.0.7"
 
 RUN mkdir ~/.cache && /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 ENV PATH=/home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin/:$PATH
