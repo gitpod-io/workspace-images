@@ -13,7 +13,7 @@ RUN curl -fsSL "https://get.sdkman.io" | bash \
     && sed -i 's/sdkman_selfupdate_enable=true/sdkman_selfupdate_enable=false/g' /home/gitpod/.sdkman/etc/config \
     && sed -i 's/sdkman_selfupdate_feature=true/sdkman_selfupdate_feature=false/g' /home/gitpod/.sdkman/etc/config \
     && sdk install java ${JAVA_VERSION} \
-    && sdk install java 17.0.16.fx-zulu \
+    && sdk install java 17.0.17.fx-zulu \
     && sdk default java ${JAVA_VERSION} \
     && sdk install gradle \
     # 4.x requires Java 17+ https://maven.apache.org/docs/history.html
