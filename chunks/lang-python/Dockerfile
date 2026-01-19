@@ -32,8 +32,8 @@ RUN sudo install-packages \
 	setuptools wheel virtualenv pipenv pylint rope flake8 \
 	mypy autopep8 pep8 pylama pydocstyle bandit notebook \
 	twine \
-	# Install poetry
-	&& curl -sSL https://install.python-poetry.org | python \
+	# Install poetry (pin to 2.2.1 for Python 3.9 compatibility)
+	&& curl -sSL https://install.python-poetry.org | POETRY_VERSION=2.2.1 python \
  	&& curl -LsSf https://astral.sh/uv/install.sh | sh \
 	&& sudo rm -rf /tmp/*
 
