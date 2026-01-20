@@ -2,6 +2,13 @@
 
 A curated, chronologically ordered list of notable changes in [Gitpod's default workspace images](https://hub.docker.com/u/gitpod).
 
+## 2026-01-20
+
+- Remove `gitpod/workspace-python-3.9` (Python 3.9 reached EOL October 2025)
+- Bump `gitpod/workspace-python` and `gitpod/workspace-full` to Python 3.13
+- Bump pyenv to v2.6.20
+- Bump `gitpod/workspace-yugabytedb` images to Python 3.10
+
 ## 2025-09-30
 
 - Introduce `workspace-java-25`

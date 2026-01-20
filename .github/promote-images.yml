@@ -19,7 +19,6 @@
     workspace-node-22: "TIMESTAMP_TAG"
     workspace-node-23: "TIMESTAMP_TAG"
     workspace-python: "TIMESTAMP_TAG"
-    workspace-python-3.9: "TIMESTAMP_TAG"
     workspace-python-3.10: "TIMESTAMP_TAG"
     workspace-python-3.11: "TIMESTAMP_TAG"
     workspace-python-3.12: "TIMESTAMP_TAG"

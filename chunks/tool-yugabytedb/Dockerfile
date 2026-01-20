@@ -24,14 +24,13 @@ RUN curl -sSLo ./yugabyte.tar.gz https://downloads.yugabyte.com/releases/${YB_VE
   && rm ./yugabyte.tar.gz
 
 # python is a required dependency of ycqlsh
-# but it doesn't support Python 3.10+ due to https://github.com/yugabyte/cqlsh/issues/11, install 3.9 for now
 # when building yugabyte combos, if our base is full, related python chunk tests fail
 # so, use base as the combo ref, add chunks, but ignore Python chunk and install manually
 ENV PATH="$HOME/.pyenv/bin:$HOME/.pyenv/shims:$PATH"
 ENV PYENV_ROOT="$HOME/.pyenv"
 RUN git clone https://github.com/pyenv/pyenv.git ~/.pyenv \
-  # v2.6.10
-  && git -C ~/.pyenv checkout a419b003b4615bef05098865bb97e0fbc428095e \
+  # v2.6.20
+  && git -C ~/.pyenv checkout 3441980e83bb1c5fdb2f1734ae4dab694d10ef71 \
   && pyenv install ${PYTHON_VERSION} \
   && pyenv global ${PYTHON_VERSION}
 

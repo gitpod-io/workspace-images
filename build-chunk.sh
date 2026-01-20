@@ -1,6 +1,6 @@
 #!/bin/bash
 set -euo pipefail
-trap ctrl_c EXIT
+trap '[[ -f .dazzle.yaml.orig ]] && cp .dazzle.yaml.orig dazzle.yaml' EXIT
 
 # shellcheck source=/dev/null
 source build-common.sh
