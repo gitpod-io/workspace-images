@@ -4,6 +4,7 @@ tasks:
     description: 'Starts the buildkit daemon for Docker image building'
     triggeredBy:
       - postDevcontainerStart
+      - postEnvironmentStart
     command: |
       sudo /usr/bin/buildkitd --debug --config ./buildkitd.toml --group gitpod
   start-docker-registry:
@@ -11,6 +12,7 @@ tasks:
     description: 'Starts a local Docker registry on port 5000 for dazzle builds'
     triggeredBy:
       - postDevcontainerStart
+      - postEnvironmentStart
     command: |
       mkdir -p /workspace/registry
       docker run -p 5000:5000 --name registry --rm -v /workspace/registry:/var/lib/registry registry:2
@@ -19,6 +21,7 @@ tasks:
     description: 'Waits for registry to be ready and displays build commands'
     triggeredBy:
       - postDevcontainerStart
+      - postEnvironmentStart
       - manual
     command: |
       # Wait for registry port to be available
