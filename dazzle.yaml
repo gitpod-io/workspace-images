@@ -38,7 +38,7 @@ combiner:
         - lang-go:1.24
         - lang-java:11
         - lang-node:22
-        - lang-python:3.12
+        - lang-python:3.13
         - lang-ruby:3.2
         - lang-rust:1
         - tool-brew
