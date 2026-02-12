@@ -2,6 +2,12 @@
 
 A curated, chronologically ordered list of notable changes in [Gitpod's default workspace images](https://hub.docker.com/u/gitpod).
 
+## 2026-02-12
+
+- Introduce `gitpod/workspace-node-24` and `gitpod/workspace-node-25`
+- Bump `gitpod/workspace-node-lts` and `gitpod/workspace-full` to Node.js 24
+- Bump `gitpod/workspace-node` to Node.js 25
+
 ## 2026-01-20
 
 - Remove `gitpod/workspace-python-3.9` (Python 3.9 reached EOL October 2025)
