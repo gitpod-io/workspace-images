@@ -14,3 +14,6 @@ variants:
   - name: "24"
     args:
       NODE_VERSION: 24.13.0
+  - name: "25"
+    args:
+      NODE_VERSION: 25.6.1
