@@ -90,19 +90,19 @@ combiner:
       chunks:
         - lang-node:22
         - tool-chrome
-    - name: "node-23"
+    - name: node-23
       ref:
       - base
       chunks:
         - lang-node:23
         - tool-chrome
-    - name: "node-24"
+    - name: node-24
       ref:
       - base
       chunks:
         - lang-node:24
         - tool-chrome
-    - name: "node-25"
+    - name: node-25
       ref:
       - base
       chunks:
