@@ -13,7 +13,7 @@ variants:
       NODE_VERSION: 23.11.1
   - name: "24"
     args:
-      NODE_VERSION: 24.13.0
+      NODE_VERSION: 24.13.1
   - name: "25"
     args:
       NODE_VERSION: 25.6.1
