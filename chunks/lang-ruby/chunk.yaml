@@ -4,7 +4,7 @@ variants:
       RUBY_VERSION: 3.1.7
   - name: "3.2"
     args:
-      RUBY_VERSION: 3.2.10
+      RUBY_VERSION: 3.2.11
   - name: "3.3"
     args:
-      RUBY_VERSION: 3.3.10
+      RUBY_VERSION: 3.3.12
